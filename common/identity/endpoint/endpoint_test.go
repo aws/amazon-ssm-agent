@@ -26,40 +26,47 @@ import (
 var logMock = log.NewMockLog()
 
 var regionServiceDomainMap = map[string]string{
-	"af-south-1":     "amazonaws.com",    // CPT
-	"ap-east-1":      "amazonaws.com",    // HKG
-	"ap-northeast-1": "amazonaws.com",    // NRT
-	"ap-northeast-2": "amazonaws.com",    // ICN
-	"ap-northeast-3": "amazonaws.com",    // KIX
-	"ap-south-1":     "amazonaws.com",    // BOM
-	"ap-southeast-1": "amazonaws.com",    // SIN
-	"ap-southeast-2": "amazonaws.com",    // SYD
-	"ap-southeast-3": "amazonaws.com",    // CGK
-	"ca-central-1":   "amazonaws.com",    // YUL
-	"cn-north-1":     "amazonaws.com.cn", // BJS
-	"cn-northwest-1": "amazonaws.com.cn", // ZHY
-	"eu-central-1":   "amazonaws.com",    // FRA
-	"eu-north-1":     "amazonaws.com",    // ARN
-	"eu-south-1":     "amazonaws.com",    // MXP
-	"eu-west-1":      "amazonaws.com",    // DUB
-	"eu-west-2":      "amazonaws.com",    // LHR
-	"eu-west-3":      "amazonaws.com",    // CDG
-	"me-south-1":     "amazonaws.com",    // BAH
-	"sa-east-1":      "amazonaws.com",    // GRU
-	"us-east-1":      "amazonaws.com",    // IAD
-	"us-east-2":      "amazonaws.com",    // CMH
-	"us-gov-east-1":  "amazonaws.com",    // OSU
-	"us-gov-west-1":  "amazonaws.com",    // PDT
-	"us-iso-east-1":  "c2s.ic.gov",       // DCA
-	"us-iso-west-1":  "c2s.ic.gov",       // APA
-	"us-isob-east-1": "sc2s.sgov.gov",    // LCK
-	"us-west-1":      "amazonaws.com",    // SFO
-	"us-west-2":      "amazonaws.com",    // PDX
+	"af-south-1":      "amazonaws.com",    // CPT
+	"ap-east-1":       "amazonaws.com",    // HKG
+	"ap-northeast-1":  "amazonaws.com",    // NRT
+	"ap-northeast-2":  "amazonaws.com",    // ICN
+	"ap-northeast-3":  "amazonaws.com",    // KIX
+	"ap-south-1":      "amazonaws.com",    // BOM
+	"ap-southeast-1":  "amazonaws.com",    // SIN
+	"ap-southeast-2":  "amazonaws.com",    // SYD
+	"ap-southeast-3":  "amazonaws.com",    // CGK
+	"ca-central-1":    "amazonaws.com",    // YUL
+	"cn-north-1":      "amazonaws.com.cn", // BJS
+	"cn-northwest-1":  "amazonaws.com.cn", // ZHY
+	"eu-central-1":    "amazonaws.com",    // FRA
+	"eu-north-1":      "amazonaws.com",    // ARN
+	"eu-south-1":      "amazonaws.com",    // MXP
+	"eu-west-1":       "amazonaws.com",    // DUB
+	"eu-west-2":       "amazonaws.com",    // LHR
+	"eu-west-3":       "amazonaws.com",    // CDG
+	"me-south-1":      "amazonaws.com",    // BAH
+	"sa-east-1":       "amazonaws.com",    // GRU
+	"us-east-1":       "amazonaws.com",    // IAD
+	"us-east-2":       "amazonaws.com",    // CMH
+	"us-gov-east-1":   "amazonaws.com",    // OSU
+	"us-gov-west-1":   "amazonaws.com",    // PDT
+	"us-iso-east-1":   "c2s.ic.gov",       // DCA
+	"us-iso-west-1":   "c2s.ic.gov",       // APA
+	"eu-isoe-west-1":  "cloud.adc-e.uk",   // NCL
+	"eusc-de-east-1":  "amazonaws.eu",     // THF
+	"us-isof-east-1":  "csp.hci.ic.gov",   // LTW
+	"us-isof-south-1": "csp.hci.ic.gov",   // ALE
+	"us-isob-east-1":  "sc2s.sgov.gov",    // LCK
+	"us-west-1":       "amazonaws.com",    // SFO
+	"us-west-2":       "amazonaws.com",    // PDX
 
 	"us-future-1":      "amazonaws.com",
 	"cn-future-1":      "amazonaws.com.cn",
-	"us-isob-future-1": "sc2s.sgov.gov",
 	"us-iso-future-1":  "c2s.ic.gov",
+	"us-isob-future-1": "sc2s.sgov.gov",
+	"us-isof-future-1": "csp.hci.ic.gov",
+	"eu-isoe-future-1": "cloud.adc-e.uk",
+	"eusc-de-future-1": "amazonaws.eu",
 }
 
 var testServices = []string{

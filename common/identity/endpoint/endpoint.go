@@ -27,6 +27,9 @@ var regionPrefixServiceDomain = map[string]string{
 	"cn-":      "amazonaws.com.cn",
 	"us-iso-":  "c2s.ic.gov",
 	"us-isob-": "sc2s.sgov.gov",
+	"us-isof-": "csp.hci.ic.gov",
+	"eu-isoe-": "cloud.adc-e.uk",
+	"eusc-de-": "amazonaws.eu",
 }
 
 // default service domain if prefix does not exist in awsFallbackServiceDomain map
