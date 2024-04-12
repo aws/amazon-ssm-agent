@@ -1,5 +1,10 @@
 Latest
 ===============
+- Remove yum as package manager in linux install/uninstall script
+- Verify TrustedInstaller status before posting WindowsUpdate information in aws:softwareInventory plugin
+
+3.3.217.0
+===============
 - Add alternative outputs for agent package generation scripts
 - Add support for Oracle 8.8 & 8.9, Rocky 8.8 & 8.9, AlmaLinux 8.8 & 8.9, and RHEL 8.9 & 9.3
 - Fix flaky integration test
