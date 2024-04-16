@@ -18,7 +18,6 @@ package diagnosticsutil
 
 import (
 	"fmt"
-	"os/user"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
@@ -33,20 +32,6 @@ const (
 	// newlineCharacter is the system specific newline character
 	newlineCharacter = "\n"
 )
-
-// IsRunningElevatedPermissions checks if the ssm-cli is being executed as administrator
-func IsRunningElevatedPermissions() error {
-	currentUser, err := user.Current()
-	if err != nil {
-		return err
-	}
-
-	if currentUser.Username == ExpectedServiceRunningUser {
-		return nil
-	} else {
-		return fmt.Errorf("get-diagnostics needs to be executed by  %s", ExpectedServiceRunningUser)
-	}
-}
 
 // AssumeAgentEnvironmentProxy is a noop on darwin because there is no other special proxy configuration
 func AssumeAgentEnvironmentProxy() {

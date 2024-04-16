@@ -6,7 +6,6 @@ package utility
 import (
 	"fmt"
 	"os"
-	"os/user"
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -21,20 +20,6 @@ const (
 	// AgentBinary is the name of agent binary
 	AgentBinary = appconfig.DefaultAgentName
 )
-
-// IsRunningElevatedPermissions checks if the ssm-setup-cli is being executed as administrator
-func IsRunningElevatedPermissions() error {
-	currentUser, err := user.Current()
-	if err != nil {
-		return err
-	}
-
-	if currentUser.Username == ExpectedServiceRunningUser {
-		return nil
-	} else {
-		return fmt.Errorf("ssm-setup-cli needs to be executed by %s", ExpectedServiceRunningUser)
-	}
-}
 
 // HasRootPermissions shows whether the folder path has root permission
 func HasRootPermissions(folderPath string) (bool, error) {

@@ -43,6 +43,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/utility"
 	agentVersioning "github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
+	utilityCmn "github.com/aws/amazon-ssm-agent/common/utility"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/cihub/seelog"
 )
@@ -78,7 +79,7 @@ var (
 	getVerificationManager  = managers.GetVerificationManager
 	getDownloadManager      = managers.GetDownloadManager
 	startAgent              = servicemanagers.StartAgent
-	hasElevatedPermissions  = utility.IsRunningElevatedPermissions
+	hasElevatedPermissions  = utilityCmn.IsRunningElevatedPermissions
 
 	osExecutable         = os.Executable
 	evalSymLinks         = filepath.EvalSymlinks

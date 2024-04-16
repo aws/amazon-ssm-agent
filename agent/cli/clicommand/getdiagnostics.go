@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	_ "github.com/aws/amazon-ssm-agent/agent/cli/diagnostics"
 	"github.com/aws/amazon-ssm-agent/agent/cli/diagnosticsutil"
+	"github.com/aws/amazon-ssm-agent/common/utility"
 )
 
 const (
@@ -285,7 +286,7 @@ func (c *GetDiagnosticsCommand) Execute(subcommands []string, parameters map[str
 	}
 
 	// Check if cli is running as admin/root
-	err = diagnosticsutil.IsRunningElevatedPermissions()
+	err = utility.IsRunningElevatedPermissions()
 	if err != nil {
 		return nil, err.Error()
 	}

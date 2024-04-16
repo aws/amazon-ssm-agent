@@ -37,6 +37,8 @@ const (
 
 	// newlineCharacter is the system specific newline character
 	newlineCharacter = "\r\n"
+
+	defaultCommandTimeOut = 30 * time.Second
 )
 
 var powershellArgs = []string{"-InputFormat", "None", "-Noninteractive", "-NoProfile", "-ExecutionPolicy", "unrestricted"}
@@ -50,24 +52,6 @@ func executePowershellScriptWithTimeout(timeout time.Duration, scriptPath string
 	args := append(powershellArgs, "-File", scriptPath)
 	args = append(args, scriptArgs...)
 	return ExecuteCommandWithTimeout(timeout, appconfig.PowerShellPluginCommandName, args...)
-}
-
-// IsRunningElevatedPermissions checks if the ssm-cli is being executed as administrator
-func IsRunningElevatedPermissions() error {
-	checkAdminCmd := `([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')`
-	output, err := executePowershellCommandWithTimeout(2*time.Second, checkAdminCmd)
-
-	if err != nil {
-		return fmt.Errorf("failed to check permissions: %s", err)
-	}
-
-	if output == "True" {
-		return nil
-	} else if output == "False" {
-		return fmt.Errorf("get-diagnostics needs to be executed by administrator")
-	} else {
-		return fmt.Errorf("unexpected permission check output: %s", output)
-	}
 }
 
 func isHttpOrHttpsProxyConfigured(proxyEnv map[string]string) bool {

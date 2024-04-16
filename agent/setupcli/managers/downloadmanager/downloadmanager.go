@@ -246,7 +246,7 @@ func (d *downloadManager) readVersionFromURL(versionURL string) (string, error) 
 
 	var content string
 	err = backOffRetry(func() error {
-		httpTimeout := 15 * time.Second
+		httpTimeout := 30 * time.Second
 		tr := network.GetDefaultTransport(d.log, appconfig.DefaultConfig())
 		client := &http.Client{
 			Transport: tr,

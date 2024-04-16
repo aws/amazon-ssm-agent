@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/user"
 	"path"
 	"path/filepath"
 	"strings"
@@ -38,20 +37,6 @@ const (
 	// newlineCharacter is the system specific newline character
 	newlineCharacter = "\n"
 )
-
-// IsRunningElevatedPermissions checks if the ssm-cli is being executed as administrator
-func IsRunningElevatedPermissions() error {
-	currentUser, err := user.Current()
-	if err != nil {
-		return err
-	}
-
-	if currentUser.Username == ExpectedServiceRunningUser {
-		return nil
-	} else {
-		return fmt.Errorf("get-diagnostics needs to be executed by %s", ExpectedServiceRunningUser)
-	}
-}
 
 // AssumeAgentEnvironmentProxy reads the amazon-ssm-agent environment variables and assumes the same proxy settings
 func AssumeAgentEnvironmentProxy() {
