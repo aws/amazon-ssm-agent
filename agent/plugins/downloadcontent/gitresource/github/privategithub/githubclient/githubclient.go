@@ -22,7 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource"
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v61/github"
 	gitcontext "golang.org/x/net/context"
 )
 

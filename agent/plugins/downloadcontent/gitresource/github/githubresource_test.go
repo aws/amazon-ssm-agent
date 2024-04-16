@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	githubclientmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient/mock"
-	"github.com/google/go-github/github"
+	"github.com/google/go-github/v61/github"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
