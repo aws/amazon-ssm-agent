@@ -1,5 +1,9 @@
 Latest
 ===============
+- Update AWS GO SDK to v1.51.20
+
+3.3.337.0
+===============
 - Remove yum as package manager in linux install/uninstall script
 - Verify TrustedInstaller status before posting WindowsUpdate information in aws:softwareInventory plugin
 
