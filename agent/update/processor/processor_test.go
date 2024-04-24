@@ -939,7 +939,7 @@ func TestValidateUpdateParam_FailedAttemptDowngrade_AllowDowngradeFalse(t *testi
 	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
 	assert.True(t, updateDetail.RequiresUninstall)
 
-	assert.Contains(t, updateDetail.StandardOut, "to an older version, please enable allow downgrade to proceed")
+	assert.Contains(t, updateDetail.StandardOut, "Updating 3.0.0.0 to an older version 2.0.0.0, please enable allow downgrade to proceed")
 	assert.Equal(t, "", updateDetail.StandardError)
 }
 

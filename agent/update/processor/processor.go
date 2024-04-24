@@ -354,7 +354,7 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 
 		if !updateDetail.AllowDowngrade {
 			logger.Warnf("Downgrade is not enabled, please enable downgrade to perform this update")
-			return mgr.failed(updateDetail, logger, updateconstants.ErrorAttemptToDowngrade, fmt.Sprintf("Updating %v to an older version, please enable allow downgrade to proceed", updateDetail.TargetVersion), true)
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorAttemptToDowngrade, fmt.Sprintf("Updating %v to an older version %v, please enable allow downgrade to proceed", updateDetail.SourceVersion, updateDetail.TargetVersion), true)
 		}
 	}
 
