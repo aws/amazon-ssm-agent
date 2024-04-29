@@ -1,5 +1,14 @@
 Latest
 ===============
+- Upgrade go-github version from v8 to v61
+- Increase timeouts in SSM-Setup-CLI
+- Fix darwin build issue in SSM-Setup-CLI
+- Fix the command builder bug to handle space char in input value
+- Fix an inaccurate log when validating allowDowngrade parameter during Agent update
+- Signing SSM Agent vended Windows executables
+
+3.3.380.0
+===============
 - Update AWS GO SDK to v1.51.20
 
 3.3.337.0
