@@ -123,7 +123,14 @@ func (h *HealthCheck) updateHealth() {
 		}
 	}()
 
-	log.Infof("%s reporting agent health.", name)
+	log.Infof("%s %s reporting agent health.", func() string {
+		instanceID, err := h.context.Identity().ShortInstanceID()
+		if err != nil {
+			log.Errorf("Failed to get instance ID: %v", err)
+			return ""
+		}
+		return instanceID
+	}(), name)
 
 	appConfig := h.context.AppConfig()
 	var isEC2, isECS, isOnPrem bool
