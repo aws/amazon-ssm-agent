@@ -361,7 +361,7 @@ func performOnpremSteps(log log.T, packageManager packagemanagers.IPackageManage
 	}
 	err = downloadManager.DownloadLatestSSMSetupCLI(setupCLIArtifactsPath, latestExecutableCheckSum)
 	if err != nil {
-		return fmt.Errorf("error downloading latest SSM-Setup-CLI executable: %v", err)
+		return fmt.Errorf("error while verifying installed ssm-setup-cli checksum: %v", err)
 	}
 
 	err = installAndVerifyAgent(log, packageManager, verificationManager, serviceManager, downloadManager, setupCLIArtifactsPath, isNano)

@@ -261,7 +261,7 @@ func (suite *DownloadManagerTestSuite) TestDownloadManager_DownloadLatestSSMSetu
 	expectedLatestSSMSetupCLIURL := "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/latest/linux_amd64/ssm-setup-cli"
 	err := downloadMgr.DownloadLatestSSMSetupCLI("temp1", checkSum)
 
-	assert.Contains(suite.T(), err.Error(), "checksum validation for ssm-setup-cli fail", "should throw error")
+	assert.Contains(suite.T(), err.Error(), "checksum mismatch with latest ssm-setup-cli", "should throw error")
 	assert.Contains(suite.T(), actualSSMSetupCLIURL, expectedLatestSSMSetupCLIURL, "mismatched version URL")
 }
 

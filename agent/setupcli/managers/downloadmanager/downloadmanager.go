@@ -189,7 +189,7 @@ func (d *downloadManager) DownloadLatestSSMSetupCLI(artifactsStorePath string, e
 	}
 
 	if downloadedCLICheckSum != expectedSetupCLICheckSum {
-		return fmt.Errorf("checksum validation for ssm-setup-cli fail: %v", err)
+		return fmt.Errorf("checksum mismatch with latest ssm-setup-cli. Please retry after downloading latest ssm-setup-cli")
 	}
 
 	logger.Infof("Downloaded SSM-Setup-CLI successfully")
