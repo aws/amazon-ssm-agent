@@ -1,5 +1,9 @@
 Latest
 ===============
+- Update SSM-Setup-CLI logs related to checksum validation of latest version
+
+3.3.418.0
+===============
 - Upgrade go-github version from v8 to v61
 - Increase timeouts in SSM-Setup-CLI
 - Fix darwin build issue in SSM-Setup-CLI
