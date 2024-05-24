@@ -33,9 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
-	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
@@ -456,72 +454,59 @@ func checkAlreadyInstalled(
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
 func selectService(context context.T, tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error) {
-	region, _ := context.Identity().Region()
-	serviceEndpoint := input.Repository
 	response := &ssm.GetManifestOutput{}
 	var err error
-	var s3Endpoint string
-	if s3Endpoint, err = s3util.GetS3Endpoint(context, region); err != nil {
-		tracer.CurrentTrace().AppendErrorf("Failed to generate s3 endpoint - %v.", err.Error())
-		return nil, err
-	}
 
-	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(context, tracer, s3Endpoint, serviceEndpoint, region) {
-		// This indicates that it would be the birdwatcher service.
-		// Before creating an object of type birdwatcher here, check if the name is of document arn. If it is, return with a Document type service
-		if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
+	// Before creating an object of type birdwatcher here, check if the name is of document arn. If it is, return with a Document type service
+	if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
+		*isDocumentArchive = true
+		// return a new object of type document
+		return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
+	}
+	if input.Version != "" {
+		// Birdwatcher version pattern and document version name pattern is different. If the pattern doesn't match Birdwatcher,
+		// we assume document and continue, since birdwatcher will error out with ValidationException.
+		// This could also happen if there is a typo in the birdwatcher version, but we assume Document and continue.
+		if !regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
 			*isDocumentArchive = true
 			// return a new object of type document
 			return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
 		}
-		if input.Version != "" {
-			// Birdwatcher version pattern and document version name pattern is different. If the pattern doesn't match Birdwatcher,
-			// we assume document and continue, since birdwatcher will error out with ValidationException.
-			// This could also happen if there is a typo in the birdwatcher version, but we assume Document and continue.
-			if !regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
-				*isDocumentArchive = true
-				// return a new object of type document
-				return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
-			}
-		}
-
-		// If not, make a call to GetManifest and try to figure out if it is birdwatcher or document archive.
-		version := input.Version
-		if packageservice.IsLatest(version) {
-			version = packageservice.Latest
-		}
-		response, err = birdwatcherFacade.GetManifest(
-			&ssm.GetManifestInput{
-				PackageName:    &input.Name,
-				PackageVersion: &version,
-			},
-		)
-
-		// If the error returned is the "ResourceNotFoundException", create a service with document archive
-		// if any other response, create a service of birdwatcher type
-		if err != nil {
-			if strings.Contains(err.Error(), resourceNotFoundException) {
-				*isDocumentArchive = true
-				// return a new object of type document
-				return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
-			} else {
-				tracer.CurrentTrace().AppendErrorf("Error returned for GetManifest - %v.", err.Error())
-				return nil, err
-			}
-		}
-
-		*isDocumentArchive = false
-
-		// return a new object of type birdwatcher
-		birdWatcherArchiveContext := make(map[string]string)
-		birdWatcherArchiveContext["packageName"] = input.Name
-		birdWatcherArchiveContext["packageVersion"] = input.Version
-		birdWatcherArchiveContext["manifest"] = *response.Manifest
-		return birdwatcherservice.NewBirdwatcherArchive(context, birdwatcherFacade, localrepo, birdWatcherArchiveContext), nil
 	}
 
-	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
-	return ssms3.New(context, s3Endpoint, serviceEndpoint, region), nil
+	// If not, make a call to GetManifest and try to figure out if it is birdwatcher or document archive.
+	version := input.Version
+	if packageservice.IsLatest(version) {
+		version = packageservice.Latest
+	}
+	response, err = birdwatcherFacade.GetManifest(
+		&ssm.GetManifestInput{
+			PackageName:    &input.Name,
+			PackageVersion: &version,
+		},
+	)
+
+	// If the error returned is the "ResourceNotFoundException", create a service with document archive
+	// if any other response, create a service of birdwatcher type
+	if err != nil {
+		if strings.Contains(err.Error(), resourceNotFoundException) {
+			*isDocumentArchive = true
+			// return a new object of type document
+			return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
+		} else {
+			tracer.CurrentTrace().AppendErrorf("Error returned for GetManifest - %v.", err.Error())
+			return nil, err
+		}
+	}
+
+	*isDocumentArchive = false
+
+	// return a new object of type birdwatcher
+	birdWatcherArchiveContext := make(map[string]string)
+	birdWatcherArchiveContext["packageName"] = input.Name
+	birdWatcherArchiveContext["packageVersion"] = input.Version
+	birdWatcherArchiveContext["manifest"] = *response.Manifest
+	return birdwatcherservice.NewBirdwatcherArchive(context, birdwatcherFacade, localrepo, birdWatcherArchiveContext), nil
 }
 
 // Execute runs the plugin operation and returns output
