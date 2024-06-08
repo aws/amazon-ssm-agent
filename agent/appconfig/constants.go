@@ -248,8 +248,8 @@ const (
 	DefaultRunAsUserName = "ssm-user"
 )
 
-// Default deny list IP addresses for remote host port forwarding: IMDS ipv4, IMDS ipv6, VPC ipv4, VPC ipv6, Amazon Time Sync Service, Amazon Windows license activation
-var DefaultDeniedPortForwardingRemoteIPs = []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "169.254.169.250"}
+// Default deny list IP addresses for remote host port forwarding: IMDS (ipv4, ipv6); VPC (ipv4, ipv6); Amazon Time Sync (ipv4, ipv6); Amazon Windows license activation (2x ipv4, ipv6)
+var DefaultDeniedPortForwardingRemoteIPs = []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "fd00:ec2::123", "169.254.169.250", "169.254.169.251", "fd00:ec2::240"}
 
 // Document versions that are supported by this Agent version.
 // Note that 1.1 and 2.1 are deprecated schemas and hence are not added here.
