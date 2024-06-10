@@ -1,5 +1,13 @@
 Latest
 ===============
+- Agent updater attempts yum install/uninstall before falling back to attempt with rpm
+- Updated golang.org/x/net from v0.19.0 to v0.26.0
+- Upgrade GoLang to version 1.21.11
+- Add IPv6 addresses for NTP and EC2Config to default DenyList
+- Update Distributor to only use Systems Manager APIs to fetch package contents
+
+3.3.484.0
+===============
 - Update SSM-Setup-CLI logs related to checksum validation of latest version
 
 3.3.418.0
