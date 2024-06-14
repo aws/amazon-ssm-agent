@@ -132,8 +132,7 @@ set_hostname() {
 get_list_of_computers() {
     check_for_write_protect ldapsearch
     LDAP_BASE_DN=$(echo $DIRECTORY_NAME | awk -F\. '{ for (i = 1; i <= NF; i++) { if (i != NF) printf "DC=%s,",$i ; else printf "DC=%s", $i} }')
-    DIRNAME_UPPER=$(echo "$DIRECTORY_NAME" | tr [:lower:] [:upper:])
-    ldapsearch -H ldap://$DIRECTORY_NAME -b $LDAP_BASE_DN 'objectClass=computer' -D "$DOMAIN_USERNAME@$DIRNAME_UPPER" -w "$DOMAIN_PASSWORD"  | grep "cn:" | sed 's/cn://g'
+    ldapsearch -H ldap://$DIRECTORY_NAME -b $LDAP_BASE_DN 'objectClass=computer' -D "$DOMAIN_USERNAME@$REALM" -w "$DOMAIN_PASSWORD"  | grep "cn:" | sed 's/cn://g'
 }
 
 cleanup_temp_files() {
@@ -832,7 +831,7 @@ do_domainjoin() {
        # Use username@RemoteTrustedDir (Active Directory Trust) to join
        echo "do_domainjoin(): Found directory in username as username@directory"
     else
-       DOMAIN_USERNAME=${DOMAIN_USERNAME}@${DIRECTORY_NAME}
+       DOMAIN_USERNAME=${DOMAIN_USERNAME}@${REALM}
     fi
 
     IS_VERSION_ID_2022="FALSE"
@@ -840,12 +839,11 @@ do_domainjoin() {
         IS_VERSION_ID_2022="TRUE"
     fi
     if [ ${LINUX_DISTRO} == "AMAZON_LINUX" -a ${IS_VERSION_ID_2022} == "TRUE" ]; then
-       DIRNAME_UPPER=$(echo "$DIRECTORY_NAME" | tr [:lower:] [:upper:])
        # Add kinit as a workaround for this issue:
        #     WARNING: The option -k|--kerberos is deprecated!
        USERNAME=$(echo ${DOMAIN_USERNAME} | sed 's/@.*$//g')
        check_for_write_protect kinit
-       echo ${DOMAIN_PASSWORD} | kinit -V ${USERNAME}@${DIRNAME_UPPER}
+       echo ${DOMAIN_PASSWORD} | kinit -V ${USERNAME}@${REALM}
     fi
 
     check_for_write_protect realm
