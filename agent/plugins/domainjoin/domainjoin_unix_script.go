@@ -829,7 +829,7 @@ do_domainjoin() {
 
     if echo "$DOMAIN_USERNAME" | grep "@" 2>&1 > /dev/null; then
        # Use username@RemoteTrustedDir (Active Directory Trust) to join
-       echo "do_domainjoin(): Found directory in username as username@directory"
+       echo "do_domainjoin(): Found directory/realm in username as username@directory"
     else
        DOMAIN_USERNAME=${DOMAIN_USERNAME}@${REALM}
     fi
