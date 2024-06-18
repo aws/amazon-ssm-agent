@@ -69,6 +69,23 @@ func NewMockDefaultWithConfig(config appconfig.SsmagentConfig) *Mock {
 	return ctx
 }
 
+// NewMockDefaultWithOwnLogMock returns an instance of Mock with own log.
+func NewMockDefaultWithOwnLogMock(log log.BasicT) *Mock {
+	ctx := new(Mock)
+	config := appconfig.SsmagentConfig{}
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
+	appconst := appconfig.AppConstants{
+		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
+		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
+	}
+	ctx.On("Log").Return(log)
+	ctx.On("AppConfig").Return(config)
+	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
+	ctx.On("Identity").Return(agentIdentity)
+	ctx.On("AppConstants").Return(&appconst)
+	return ctx
+}
+
 // NewMockDefaultWithContext returns an instance of Mock with specified context.
 func NewMockDefaultWithContext(context []string) *Mock {
 	ctx := new(Mock)

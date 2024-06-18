@@ -1,9 +1,13 @@
 package idempotency
 
 import (
+	"fmt"
 	"path/filepath"
 	"testing"
 	"time"
+
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/stretchr/testify/mock"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -53,6 +57,35 @@ func (suite *IdeopotencyTestSuite) TestIdempotency_IsDocumentAlreadyReceived_Whe
 	}
 	exists := IsDocumentAlreadyReceived(suite.mockContext, docState)
 	assert.False(suite.T(), exists)
+}
+
+func (suite *IdeopotencyTestSuite) TestIdempotency_Idempotency_Failed() {
+	loggerMock := logmocks.NewEmptyLogMock()
+	errorVar := fmt.Errorf("test")
+	loggerMock.On("Warnf", "could not create idempotency directory: %v", mock.Anything).Once()
+	suite.mockContext = contextmocks.NewMockDefaultWithOwnLogMock(loggerMock)
+	suite.mockContext.On("Log").Return(loggerMock)
+	makeDirs = func(destinationDir string) (err error) {
+		return errorVar
+	}
+	CreateIdempotencyDirectory(suite.mockContext)
+
+	// reset to default
+	suite.mockContext = mockContext
+}
+
+func (suite *IdeopotencyTestSuite) TestIdempotency_Idempotency_Success() {
+	loggerMock := logmocks.NewEmptyLogMock()
+	loggerMock.On("Info", []interface{}{"Successfully created Idempotent directory"}).Once()
+	suite.mockContext = contextmocks.NewMockDefaultWithOwnLogMock(loggerMock)
+	suite.mockContext.On("Log").Return(loggerMock)
+	makeDirs = func(destinationDir string) (err error) {
+		return nil
+	}
+	CreateIdempotencyDirectory(suite.mockContext)
+
+	// reset to default
+	suite.mockContext = mockContext
 }
 
 func (suite *IdeopotencyTestSuite) TestIdempotency_IsDocumentAlreadyReceived_WhenItDoesExist() {

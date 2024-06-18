@@ -120,3 +120,15 @@ func getIdempotencyDirectory(context context.T) string {
 		shortInstanceID,
 		appconfig.IdempotencyDirName)
 }
+
+// CreateIdempotencyDirectory creates idempotency directory and logs warn message if could not be created
+// This function passes if the directory is already present
+func CreateIdempotencyDirectory(idemCtx context.T) {
+	context := idemCtx.With("[" + Name + "]")
+	log := context.Log()
+	if err := makeDirs(getIdempotencyDirectory(context)); err != nil {
+		log.Warnf("could not create idempotency directory: %v", err)
+		return
+	}
+	log.Info("Successfully created Idempotent directory")
+}

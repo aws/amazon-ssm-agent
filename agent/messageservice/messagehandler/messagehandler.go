@@ -120,6 +120,8 @@ func (mh *MessageHandler) Initialize() (err error) {
 		processor.InvalidDocumentId:  InvalidDocument,
 		processor.UnsupportedDocType: UnexpectedDocumentType,
 	}
+	// Creates idempotency directory if not present
+	idempotency.CreateIdempotencyDirectory(mh.context)
 	if mh.persistedCommandDeletionJob == nil {
 		if mh.persistedCommandDeletionJob, err = scheduler.Every(idempotencyFileDeletionTimeout).Minutes().NotImmediately().Run(func() {
 			mh.context.Log().Info("started idempotency deletion thread")
