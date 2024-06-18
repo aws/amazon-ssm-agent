@@ -342,7 +342,7 @@ check_awscli_install_dir() {
 ########## Install components ####################
 ##################################################
 install_components() {
-    LINUX_DISTRO=$(cat /etc/os-release | grep NAME | awk -F'=' '{print $2}')
+    LINUX_DISTRO=$(cat /etc/os-release | grep NAME | awk -F'=' '{print $2}' | head -1)
     LINUX_DISTRO_VERSION_ID=$(cat /etc/os-release | grep VERSION_ID | awk -F'=' '{print $2}' | tr -d '"')
     if [ -z $LINUX_DISTRO_VERSION_ID ]; then
        echo "**Failed : Unsupported OS version $LINUX_DISTRO : $LINUX_DISTRO_VERSION_ID"
@@ -360,7 +360,7 @@ install_components() {
         check_for_write_protect yum
         yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for CentOS" && return 1; fi
-    elif grep -e 'Red Hat' /etc/os-release 1>/dev/null 2>/dev/null; then
+    elif grep -E -e 'Red Hat|Rocky' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='RHEL'
         RHEL_MAJOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $1}')
         RHEL_MINOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $2}')
@@ -831,7 +831,14 @@ do_domainjoin() {
        # Use username@RemoteTrustedDir (Active Directory Trust) to join
        echo "do_domainjoin(): Found directory/realm in username as username@directory"
     else
-       DOMAIN_USERNAME=${DOMAIN_USERNAME}@${REALM}
+
+        if [ ${LINUX_DISTRO} == "RHEL" ]; then
+            # Redhat and deriviatives require domain portion to be upper case, ie use Kerberos Realm
+            # https://access.redhat.com/solutions/5592351
+            DOMAIN_USERNAME=${DOMAIN_USERNAME}@${REALM}
+        else
+            DOMAIN_USERNAME=${DOMAIN_USERNAME}@${DIRECTORY_NAME}
+        fi
     fi
 
     IS_VERSION_ID_2022="FALSE"
