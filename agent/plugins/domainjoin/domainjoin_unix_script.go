@@ -831,7 +831,6 @@ do_domainjoin() {
        # Use username@RemoteTrustedDir (Active Directory Trust) to join
        echo "do_domainjoin(): Found directory/realm in username as username@directory"
     else
-
         if [ ${LINUX_DISTRO} == "RHEL" ]; then
             # Redhat and deriviatives require domain portion to be upper case, ie use Kerberos Realm
             # https://access.redhat.com/solutions/5592351
