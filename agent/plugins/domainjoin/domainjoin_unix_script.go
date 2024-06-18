@@ -361,6 +361,8 @@ install_components() {
         yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for CentOS" && return 1; fi
     elif grep -E -e 'Red Hat|Rocky' /etc/os-release 1>/dev/null 2>/dev/null; then
+        # Rocky Linux is an open-source enterprise operating system designed to be 100% bug-for-bug compatible with Red Hat Enterprise Linux and therefore should be treated the same as Red Hat
+        # https://rockylinux.org/
         LINUX_DISTRO='RHEL'
         RHEL_MAJOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $1}')
         RHEL_MINOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $2}')
