@@ -41,6 +41,11 @@ const (
 	errorOccurredMessage    = "There was an error running %v, err: %v"
 )
 
+var (
+	readAllText = fileutil.ReadAllText
+	fileExists  = fileutil.Exists
+)
+
 // this structure is similar to the /etc/os-release file
 type osRelease struct {
 	NAME       string
@@ -76,7 +81,7 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 	name = notAvailableMessage
 	version = notAvailableMessage
 
-	if fileutil.Exists(centosReleaseFile) {
+	if fileExists(centosReleaseFile) {
 		// CentOS has incomplete information in the osReleaseFile
 		// and there fore needs to be before osReleaseFile exist check
 		log.Debugf(fetchingDetailsMessage, centosReleaseFile)
@@ -99,7 +104,7 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 	}
 	if !(strings.EqualFold(name, notAvailableMessage)) || !(strings.EqualFold(version, notAvailableMessage)) {
 		return
-	} else if fileutil.Exists(bottlerocketReleaseFile) {
+	} else if fileExists(bottlerocketReleaseFile) {
 		// Bottlerocket's osReleaseFile contains information from its
 		// control container's base OS, with the Bottlerocket data
 		// stored in a separate bottlerocketReleasefile and therefore
@@ -115,7 +120,7 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 
 		name = contents.NAME
 		version = contents.VERSION_ID
-	} else if fileutil.Exists(osReleaseFile) {
+	} else if fileExists(osReleaseFile) {
 
 		log.Debugf(fetchingDetailsMessage, osReleaseFile)
 		contents := new(osRelease)
@@ -129,12 +134,12 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 		name = contents.NAME
 		version = contents.VERSION_ID
 
-	} else if fileutil.Exists(systemReleaseFile) {
+	} else if fileExists(systemReleaseFile) {
 		// We want to fall back to legacy behaviour in case some older versions of
 		// linux distributions do not have the or-release file
 		log.Debugf(fetchingDetailsMessage, systemReleaseFile)
 
-		contents, err = fileutil.ReadAllText(systemReleaseFile)
+		contents, err = readAllText(systemReleaseFile)
 		log.Debugf(commandOutputMessage, contents)
 
 		if err != nil {
@@ -151,7 +156,8 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
 			if len(data) >= 2 {
-				version = strings.TrimSpace(data[1])
+				versionData := strings.Split(data[1], "(")
+				version = strings.TrimSpace(versionData[0])
 			}
 		} else if strings.Contains(contents, "CentOS") {
 			data := strings.Split(contents, "release")
@@ -184,10 +190,10 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 				version = strings.TrimSpace(data[1])
 			}
 		}
-	} else if fileutil.Exists(redhatReleaseFile) {
+	} else if fileExists(redhatReleaseFile) {
 		log.Debugf(fetchingDetailsMessage, redhatReleaseFile)
 
-		contents, err = fileutil.ReadAllText(redhatReleaseFile)
+		contents, err = readAllText(redhatReleaseFile)
 		log.Debugf(commandOutputMessage, contents)
 
 		if err != nil {
