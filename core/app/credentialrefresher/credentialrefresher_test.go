@@ -593,11 +593,8 @@ func (a awsTestError) OrigErr() error  { return fmt.Errorf("SomeErr") }
 func (a awsTestError) Code() string    { return a.errCode }
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *testing.T) {
-	const ec2MaxLongSleepDuration = 30 * time.Minute
-	const ec2MinLongSleepDuration = 25 * time.Minute
-
-	const maxLongSleepDuration = 26 * time.Hour
-	const minLongSleepDuration = 24 * time.Hour
+	const maxLongSleepDuration = 30 * time.Minute
+	const minLongSleepDuration = 25 * time.Minute
 
 	const minSleepDuration = 1 * time.Second
 	const maxSleepDuration = 10 * time.Second
@@ -619,8 +616,8 @@ func Test_credentialsRefresher_retrieveCredsWithRetry_ValidateSleepDuration(t *t
 			TestName:         "EC2IdentityEC2LongSleepOnAccessDenied",
 			IdentityType:     ec2.IdentityType,
 			Error:            fmt.Errorf("ADE: %w", awsTestError{ErrCodeAccessDeniedException}),
-			MinSleepDuration: ec2MinLongSleepDuration,
-			MaxSleepDuration: ec2MaxLongSleepDuration,
+			MinSleepDuration: minLongSleepDuration,
+			MaxSleepDuration: maxLongSleepDuration,
 		},
 		{
 			TestName:         "EC2IdentityEC2DefaultSleepOnInvalidInstanceId",
@@ -776,8 +773,8 @@ func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
 		assert.NotNil(t, seconds, "No Panic in backoff jitter")
 	}
 	maxSeconds := getDefaultBackoffRetryJitterSleepDuration(16).Seconds()
-	assert.True(t, 1 <= minSeconds && minSeconds <= 3, "wrong min value for backoff jitter")
-	assert.True(t, 18*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for backoff jitter")
+	assert.True(t, 1 <= minSeconds && minSeconds <= 3, "wrong min value for default backoff jitter")
+	assert.True(t, 25*60 <= maxSeconds && maxSeconds <= 30*60, "wrong max value for default backoff jitter")
 
 	minSeconds = getEC2DefaultSSMSleepDuration(0).Seconds()
 	for i := 0; i < 17; i++ {
@@ -789,16 +786,6 @@ func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
 	assert.True(t, 300 <= minSeconds && minSeconds <= 300, "wrong min value for ec2 pre default jitter")
 	assert.True(t, 3200 <= maxSeconds && maxSeconds <= 3600, "wrong max value for ec2 pre default jitter")
 
-	minSeconds = getEc2LongSleepDuration(0).Seconds()
-	for i := 0; i < 17; i++ {
-		seconds := getEc2LongSleepDuration(i)
-		assert.True(t, seconds >= 0, "non negative value not allowed")
-		assert.NotNil(t, seconds, "No Panic in ec2 long sleep jitter")
-	}
-	maxSeconds = getEc2LongSleepDuration(16).Seconds()
-	assert.True(t, 24*60 <= minSeconds && minSeconds <= 30*60, "wrong min value for ec2 long sleep jitter")
-	assert.True(t, 24*60 <= maxSeconds && maxSeconds <= 30*60, "wrong max value for ec2 long sleep jitter")
-
 	minSeconds = getMediumBackoffRetryJitterSleepDuration(0).Seconds()
 	for i := 0; i < 17; i++ {
 		seconds := getMediumBackoffRetryJitterSleepDuration(i)
@@ -806,8 +793,8 @@ func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
 		assert.NotNil(t, seconds, "No Panic in ec2 medium sleep jitter")
 	}
 	maxSeconds = getMediumBackoffRetryJitterSleepDuration(16).Seconds()
-	assert.True(t, 10 <= minSeconds && minSeconds <= 30, "wrong min value for ec2 medium sleep jitter")
-	assert.True(t, 18*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for ec2 medium sleep jitter")
+	assert.True(t, 10 <= minSeconds && minSeconds <= 30, "wrong min value for medium sleep jitter")
+	assert.True(t, 25*60 <= maxSeconds && maxSeconds <= 30*60, "wrong max value for medium sleep jitter")
 
 	minSeconds = getLongSleepDuration(0).Seconds()
 	for i := 0; i < 17; i++ {
@@ -816,8 +803,8 @@ func TestCredUtilityFunctions_sleepRetry_minMaxTesting(t *testing.T) {
 		assert.NotNil(t, seconds, "No Panic in long sleep jitter")
 	}
 	maxSeconds = getLongSleepDuration(16).Seconds()
-	assert.True(t, 24*60*60 <= minSeconds && minSeconds <= 26*60*60, "wrong min value for long sleep jitter")
-	assert.True(t, 24*60*60 <= maxSeconds && maxSeconds <= 26*60*60, "wrong max value for long sleep jitter")
+	assert.True(t, 25*60 <= minSeconds && minSeconds <= 30*60, "wrong min value for long sleep jitter")
+	assert.True(t, 25*60 <= maxSeconds && maxSeconds <= 30*60, "wrong max value for long sleep jitter")
 }
 
 func Test_credentialsRefresher_retrieveCredsWithRetry_OnpremRetry2000TimesNoExitUntilSuccess(t *testing.T) {

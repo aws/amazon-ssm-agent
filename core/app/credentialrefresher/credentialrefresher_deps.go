@@ -16,6 +16,8 @@ const (
 	ErrCodeMachineFingerprintDoesNotMatch = ssm.ErrCodeMachineFingerprintDoesNotMatch
 	ErrAllOtherAWSErrors                  = "ErrAllOtherAWSErrors"
 	ErrAllOtherNonAWSErrors               = "ErrAllOtherNonAWSErrors"
+	maxSleepDurationSeconds               = 1800 // 30 minutes cap on sleep duration.
+	maxSleepDurationJitterSeconds         = 300  // 5 minutes jitter on max sleep
 )
 
 type getBackoffDurationFunc func(attemptNumber int) time.Duration
@@ -27,8 +29,8 @@ var identityGetDurationMaps = map[string]map[string]getBackoffDurationFunc{
 
 // Sleep up to 30 minutes to retry access denied exceptions on EC2
 var ec2ErrorCodeGetBackoffDurationMap = map[string]getBackoffDurationFunc{
-	ErrCodeAccessDeniedException:          getEc2LongSleepDuration,
-	ErrCodeMachineFingerprintDoesNotMatch: getEc2LongSleepDuration,
+	ErrCodeAccessDeniedException:          getLongSleepDuration,
+	ErrCodeMachineFingerprintDoesNotMatch: getLongSleepDuration,
 	ErrAllOtherAWSErrors:                  getEC2DefaultSSMSleepDuration,
 	ErrAllOtherNonAWSErrors:               getEC2DefaultSSMSleepDuration,
 }
@@ -44,28 +46,26 @@ var onPremErrorCodeGetBackoffDurationMap = map[string]getBackoffDurationFunc{
 // getDefaultBackoffRetryJitterSleepDuration returns sleep duration with 2^retry_count formula with 20% of it value as jitter
 func getDefaultBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 	expBackoff := math.Pow(2, float64(retryCount))
-	return time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*0.2)))) * time.Second
+	sleepTimeInSeconds := int(expBackoff) + rand.Intn(int(math.Ceil(expBackoff*0.2)))
+	if sleepTimeInSeconds > maxSleepDurationSeconds {
+		sleepTimeInSeconds = maxSleepDurationSeconds - rand.Intn(maxSleepDurationJitterSeconds)
+	}
+	return time.Duration(sleepTimeInSeconds) * time.Second
 }
 
 // getMediumBackoffRetryJitterSleepDuration returns sleep duration with 2^retry_count formula with 20% of it value as jitter
 // with additional 10-20 seconds added to it.
 func getMediumBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
 	expBackoff := math.Pow(2, float64(retryCount))
-	sleepDuration := time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*0.2)))) * time.Second
-	sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
-	return sleepDuration
+	sleepTimeInSeconds := int(expBackoff) + rand.Intn(int(math.Ceil(expBackoff*0.2))) + 10 + rand.Intn(10)
+	if sleepTimeInSeconds > maxSleepDurationSeconds {
+		sleepTimeInSeconds = maxSleepDurationSeconds - rand.Intn(maxSleepDurationJitterSeconds)
+	}
+	return time.Duration(sleepTimeInSeconds) * time.Second
 }
 
-// getLongSleepDuration returns sleep duration between 24 hrs and 26 hrs
+// getLongSleepDuration returns sleep duration between 25 minutes and 30 minutes
 func getLongSleepDuration(retryCount int) time.Duration {
-	// Sleep 24 hours with random jitter of up to 2 hour if error is
-	// non-retryable to make sure we spread retries for large de-registered fleets
-	jitter := time.Second * time.Duration(rand.Intn(7200))
-	return 24*time.Hour + jitter
-}
-
-// getEc2LongSleepDuration returns sleep duration between 25 minutes and 30 minutes
-func getEc2LongSleepDuration(retryCount int) time.Duration {
 	// Sleep 25 minutes with random jitter of up to 5 minutes on AuthN/AuthZ failures
 	// to make sure we spread role token requests from instances not yet onboarded to Default Host Management
 	jitter := time.Second * time.Duration(rand.Intn(300))
