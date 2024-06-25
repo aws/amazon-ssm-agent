@@ -258,13 +258,16 @@ func TestExeCommandSucceeded(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		_, _, err := util.ExeCommand(logger,
-			test.cmd,
-			test.workingDir,
-			appconfig.UpdaterArtifactsRoot,
-			test.stdOut,
-			test.stdErr,
-			test.isAsync)
+		commandInput := CommandExecutionSettings{
+			Log:         logger,
+			Cmd:         strings.Fields(test.cmd),
+			WorkingDir:  test.workingDir,
+			UpdaterRoot: appconfig.UpdaterArtifactsRoot,
+			StdOut:      test.stdOut,
+			StdErr:      test.stdErr,
+			IsAsync:     test.isAsync,
+		}
+		_, _, err := util.ExeCommand(&commandInput)
 
 		if test.expectingError {
 			assert.Error(t, err)
@@ -601,7 +604,7 @@ func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_Whe
 	}
 
 	command := &exec.Cmd{}
-	utility.setCommandEnvironmentVariables(command)
+	utility.setCommandEnvironmentVariables(command, nil)
 
 	expectedProfileVar := fmt.Sprintf("AWS_PROFILE=%s", expectedShareProfile)
 	expectedSharedFileVar := fmt.Sprintf("AWS_SHARED_CREDENTIALS_FILE=%s", expectedShareFile)

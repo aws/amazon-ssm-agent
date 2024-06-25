@@ -51,6 +51,8 @@ var (
 	getDirectoryNames      = fileutil.GetDirectoryNames
 	deleteDirectory        = os.RemoveAll
 	getStableManifestURL   = updateutil.GetStableURLFromManifestURL
+	getFileNamesLaterThan  = fileutil.GetFileNamesUnsortedLaterThan
+	moveFile               = fileutil.MoveFile
 )
 
 const (
@@ -58,6 +60,7 @@ const (
 	defaultStderrFileName      = "stderr"
 	defaultSSMAgentName        = "amazon-ssm-agent"
 	defaultSelfUpdateMessageID = "aws.ssm.self-update-agent.i-instanceid"
+	installationDirectory      = "installationDir"
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
@@ -637,16 +640,19 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, updateDetail 
 	uninstallRetryCount := 3
 	uninstallRetryDelay := 1000     // 1 second
 	uninstallRetryDelayBase := 2000 // 2 seconds
+	input := &updateutil.CommandExecutionSettings{
+		Log:         log,
+		Cmd:         strings.Fields(uninstallPath),
+		WorkingDir:  workDir,
+		UpdaterRoot: updateDetail.UpdateRoot,
+		StdOut:      updateDetail.StdoutFileName,
+		StdErr:      updateDetail.StderrFileName,
+		IsAsync:     false,
+		Env:         getCommandEnv(log, updateDetail.UpdateRoot),
+	}
 	// Uninstall version - TODO - move the retry logic to ExeCommand while cleaning that function
 	for retryCounter := 1; retryCounter <= uninstallRetryCount; retryCounter++ {
-		_, exitCode, err = mgr.util.ExeCommand(
-			log,
-			uninstallPath,
-			workDir,
-			updateDetail.UpdateRoot,
-			updateDetail.StdoutFileName,
-			updateDetail.StderrFileName,
-			false)
+		_, exitCode, err = mgr.util.ExeCommand(input)
 		if err == nil {
 			break
 		}
@@ -684,18 +690,22 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 	}
 	defaultTimeOut := mgr.util.GetExecutionTimeOut()
 
+	input := &updateutil.CommandExecutionSettings{
+		Log:         log,
+		Cmd:         strings.Fields(installerPath),
+		WorkingDir:  workDir,
+		UpdaterRoot: updateDetail.UpdateRoot,
+		StdOut:      updateDetail.StdoutFileName,
+		StdErr:      updateDetail.StderrFileName,
+		IsAsync:     false,
+		Env:         getCommandEnv(log, updateDetail.UpdateRoot),
+	}
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
 		updateExecutionTimeoutIfNeeded(retryCounter, defaultTimeOut, mgr.util)
 		if retryCounter == installRetryCount && strings.Contains(mgr.Info.GetInstallScriptName(), "snap") {
 			log.Info("execute command and fetch error output for agent install using snap")
 			var errBytes *bytes.Buffer
-			_, exitCode, _, errBytes, err = mgr.util.ExecCommandWithOutput(
-				log,
-				installerPath,
-				workDir,
-				updateDetail.UpdateRoot,
-				updateDetail.StdoutFileName,
-				updateDetail.StderrFileName)
+			_, exitCode, _, errBytes, err = mgr.util.ExecCommandWithOutput(input)
 			if err != nil && errBytes != nil && errBytes.Len() != 0 {
 				if strings.Contains(errBytes.String(), "snap \"amazon-ssm-agent\" has running apps") {
 					log.Errorf("command failure for agent installed using snap: %v", err)
@@ -703,14 +713,7 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 				}
 			}
 		} else {
-			_, exitCode, err = mgr.util.ExeCommand(
-				log,
-				installerPath,
-				workDir,
-				updateDetail.UpdateRoot,
-				updateDetail.StdoutFileName,
-				updateDetail.StderrFileName,
-				false)
+			_, exitCode, err = mgr.util.ExeCommand(input)
 		}
 		if err == nil {
 			break
@@ -767,6 +770,7 @@ func getInstalledVersions(updateDetail *UpdateDetail, path string) string {
 
 // cleanAgentArtifacts deletes leftover files from update folders (amazon-ssm-agent, amazon-ssm-agent-updater and downloads folder)
 func cleanAgentArtifacts(log log.T, updateDetail *UpdateDetail) {
+	moveCleanInstallationDir(log, updateDetail)
 	_ = cleanAgentUpdaterDir(log, updateDetail)
 	cleanUpdateDownloadDir(log)
 }

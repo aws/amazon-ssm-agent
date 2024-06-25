@@ -162,16 +162,17 @@ func runUpdateAgent(
 	//Execute updater, hand over the update process
 	workDir := updateutil.UpdateArtifactFolder(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
-
+	commandInput := &updateutil.CommandExecutionSettings{
+		Log:         log,
+		Cmd:         cmd,
+		WorkingDir:  workDir,
+		UpdaterRoot: appconfig.UpdaterArtifactsRoot,
+		StdOut:      pluginConfig.StdoutFileName,
+		StdErr:      pluginConfig.StderrFileName,
+		IsAsync:     true,
+	}
 	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
-		pid, _, err = util.ExeCommandWithSlice(
-			log,
-			cmd,
-			workDir,
-			appconfig.UpdaterArtifactsRoot,
-			pluginConfig.StdoutFileName,
-			pluginConfig.StderrFileName,
-			true)
+		pid, _, err = util.ExeCommandWithSlice(commandInput)
 		if err == nil {
 			break
 		}

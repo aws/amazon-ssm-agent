@@ -11,12 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package processor contains the methods for update ssm agent.
-// It also provides methods for sendReply and updateInstanceInfo
-
 //go:build e2e
 // +build e2e
 
+// Package processor contains the methods for update ssm agent.
+// It also provides methods for sendReply and updateInstanceInfo
 package processor
 
 import (
@@ -25,8 +24,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-
-	"github.com/aws/amazon-ssm-agent/common/identity"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -45,6 +42,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 	updates3utilmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -2026,14 +2024,14 @@ func (u *utilityStub) CreateUpdateDownloadFolder() (folder string, err error) {
 	return "rootfolder", nil
 }
 
-func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error) {
+func (u *utilityStub) ExeCommand(commandExecSettings *updateutil.CommandExecutionSettings) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error) {
 	if u.controller.failExeCommand {
 		return -1, exitCode, fmt.Errorf("cannot run script")
 	}
 	return 1, exitCode, nil
 }
 
-func (u *utilityStub) ExecCommandWithOutput(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string) (pid int, exitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
+func (u *utilityStub) ExecCommandWithOutput(commandExecSettings *updateutil.CommandExecutionSettings) (pid int, exitCode updateconstants.UpdateScriptExitCode, stdoutBytes *bytes.Buffer, errorBytes *bytes.Buffer, cmdErr error) {
 	var errBytes bytes.Buffer
 	errBytes.WriteString("snap \"amazon-ssm-agent\" has running apps")
 	if u.controller.failExeCommand {

@@ -304,6 +304,25 @@ func GetDirectoryNamesUnsortedOlderThan(srcPath string, olderThan *time.Time) ([
 	return directories, nil
 }
 
+// GetFileNamesUnsortedLaterThan returns directory name unsorted ioutil.ReadDir uses sorting to sort the directory names
+// if date value passed in laterThan param, this function returns all files after the passed time.
+func GetFileNamesUnsortedLaterThan(srcPath string, laterThan *time.Time) ([]string, error) {
+	var err error
+	fileNames := make([]string, 0)
+	fileInfoList, err := getAllDirectoriesWithFileInfo(srcPath)
+	if err != nil {
+		return fileNames, err
+	}
+	for _, fileInfo := range fileInfoList {
+		if !fileInfo.Mode().IsDir() {
+			if laterThan == nil || (laterThan != nil && fileInfo.ModTime().After(*laterThan)) {
+				fileNames = append(fileNames, fileInfo.Name())
+			}
+		}
+	}
+	return fileNames, nil
+}
+
 // GetDirectoryNames returns the names of all directories under a give srcPath
 func GetDirectoryNames(srcPath string) (directories []string, err error) {
 	if list, err := ioutil.ReadDir(srcPath); err == nil {

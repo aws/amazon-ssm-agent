@@ -1,4 +1,4 @@
-// Copyright 2023 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2024 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -20,9 +20,19 @@
 package processor
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 func updateExecutionTimeoutIfNeeded(retryCount int, defaultTimeOut int, updateUtil updateutil.T) {
 	return
+}
+
+func getCommandEnv(log log.T, rootDir string) []string {
+	return nil
+}
+
+// moveCleanInstallationDir is a dummy function for unix
+func moveCleanInstallationDir(log log.T, updateDetail *UpdateDetail) {
+	log.Info("Skipping move of files from update installation directory")
 }
