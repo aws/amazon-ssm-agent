@@ -437,8 +437,8 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 		log.Debugf("pushing AgentJob message %s to MessageHandler incoming message chan", agentMessage.MessageId.String())
 		errorCode := mgs.messageHandler.Submit(docState)
 		if errorCode != "" {
+			log.Warnf("dropping message %v because of error code %v", docState.DocumentInformation.DocumentID, errorCode)
 			if _, ok := mgs.ackSkipCodes[errorCode]; ok {
-				log.Warnf("dropping message %v because of error code %v", docState.DocumentInformation.DocumentID, errorCode)
 				mgs.buildAgentJobAckMessageAndSend(agentMessage.MessageId, docState.DocumentInformation.MessageID, agentMessage.CreatedDate, errorCode)
 				return
 			}

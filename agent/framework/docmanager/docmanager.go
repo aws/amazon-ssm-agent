@@ -423,7 +423,6 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 
 		sessionOrchestrationPath := filepath.Join(orchestrationRootDir, dirName)
 
-		log.Debugf("Checking session orchestration directory: %v", sessionOrchestrationPath)
 		if isOlderThan(log, sessionOrchestrationPath, retentionDurationHours) {
 			log.Debugf("Attempting deletion of session orchestration directory: %v", sessionOrchestrationPath)
 
