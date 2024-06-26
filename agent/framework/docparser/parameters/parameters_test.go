@@ -73,23 +73,86 @@ type ReplaceParamTestCase struct {
 }
 
 func TestReplaceParameter_SingleOccurrence(t *testing.T) {
+	parameters := map[string]interface{}{
+		"p1": "name",
+	}
 	assert.Equal(t, "A name",
-		ReplaceParameter("A {{ p1 }}", "p1", "name"))
+		ReplaceParameter("A {{ p1 }}", parameters, nil))
 }
 
 func TestReplaceParameter_MultipleOccurrences(t *testing.T) {
+	parameters := map[string]interface{}{
+		"p1": "name",
+	}
 	assert.Equal(t, "A name is a name",
-		ReplaceParameter("A {{p1 }} is a {{ p1}}", "p1", "name"))
+		ReplaceParameter("A {{p1 }} is a {{ p1}}", parameters, nil))
 }
 
 func TestReplaceParameter_EscapesDollarSignsToAvoidBackreferences(t *testing.T) {
+	parameters := map[string]interface{}{
+		"Path": "C:\\$Recycle.Bin",
+	}
 	assert.Equal(t, "Write-Host 'C:\\$Recycle.Bin'",
-		ReplaceParameter("Write-Host '{{Path}}'", "Path", "C:\\$Recycle.Bin"))
+		ReplaceParameter("Write-Host '{{Path}}'", parameters, nil))
 }
 
 func TestReplaceParameter_LeavesEscapedDollarSigns(t *testing.T) {
+	parameters := map[string]interface{}{
+		"Path": "C:\\$$Recycle.Bin",
+	}
 	assert.Equal(t, "Write-Host 'C:\\$Recycle.Bin'",
-		ReplaceParameter("Write-Host '{{ Path }}'", "Path", "C:\\$$Recycle.Bin"))
+		ReplaceParameter("Write-Host '{{ Path }}'", parameters, nil))
+}
+
+func TestReplaceParameter_embedded_parameter(t *testing.T) {
+	parameters := map[string]interface{}{
+		"p1": "{{p2}}",
+		"p2": "p2-value",
+	}
+	assert.Equal(t, " we have embedded {{p2}} and p2-value, should not see 2 p2-value in result",
+		ReplaceParameter(" we have embedded {{p1}} and {{p2}}, should not see 2 {{p2}} in result", parameters, nil))
+}
+
+func TestReplaceParameter_novalue_parameter(t *testing.T) {
+	parameters := map[string]interface{}{
+		"p1": "p1-value",
+		"p2": "p2-value",
+	}
+	assert.Equal(t, " we have p1-value and p2-value, but no {{p3}}",
+		ReplaceParameter(" we have {{p1}} and {{p2}}, but no {{p3}}", parameters, nil))
+}
+
+func TestReplaceParameter_start_and_end(t *testing.T) {
+
+	parameters := map[string]interface{}{
+		"p1": "p1-value",
+		"p2": "p2-value",
+	}
+	assert.Equal(t, "p1-value and p2-value",
+		ReplaceParameter("{{p1}} and {{p2}}", parameters, nil))
+}
+
+func TestReplaceParameter_no_parameter(t *testing.T) {
+
+	parameters := map[string]interface{}{
+		"p1": "p1-value",
+		"p2": "p2-value",
+	}
+	assert.Equal(t, "there is no parameter",
+		ReplaceParameter("there is no parameter", parameters, nil))
+}
+
+func TestReplaceParameter_json(t *testing.T) {
+	type testStructure struct {
+		S string
+		I int
+	}
+	parameters := map[string]interface{}{
+		"p1": "p1-value",
+		"p2": testStructure{S: "p2-string", I: 10},
+	}
+	assert.Equal(t, `p1-value and {"S":"p2-string","I":10}`,
+		ReplaceParameter("{{p1}} and {{p2}}", parameters, nil))
 }
 
 func TestReplaceParameters(t *testing.T) {
