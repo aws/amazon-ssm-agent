@@ -69,6 +69,7 @@ type T interface {
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
 	UpdateInstallDelayer(ctx context.T, updateRoot string) error
 	LoadUpdateDocumentState(ctx context.T, commandId string) error
+	VerifyInstalledVersion(log log.T, targetVersion string) updateconstants.ErrorCode
 	UpdateExecutionTimeOut(int)
 	GetExecutionTimeOut() int
 }
@@ -452,6 +453,12 @@ func (util *Utility) IsWorkerRunning(log log.T) (result bool, err error) {
 	}
 
 	return false, nil
+}
+
+// VerifyInstalledVersion verifies whether the expected version is installed on Windows instance.
+// For linux, this function always return true
+func (util *Utility) VerifyInstalledVersion(log log.T, targetVersion string) updateconstants.ErrorCode {
+	return verifyVersion(log, targetVersion)
 }
 
 // WaitForServiceToStart wait for service to start and returns is service started

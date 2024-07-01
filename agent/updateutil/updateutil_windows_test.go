@@ -23,7 +23,9 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	logPkg "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -118,4 +120,56 @@ func TestDeleteFile(t *testing.T) {
 	}
 	removePluginState(logMock, "root1", exponentialBackOff)
 	assert.True(t, visited)
+}
+
+func TestVerifyVersion_Success(t *testing.T) {
+	expectedVersion := "3.2.0.0"
+	getVersionThroughRegistryKeyRef = func(log logPkg.T) string {
+		return expectedVersion
+	}
+	getVersionThroughWMIRef = func(log logPkg.T) string {
+		return expectedVersion
+	}
+	logMock := log.NewMockLog()
+	errCode := verifyVersion(logMock, expectedVersion)
+	assert.Equal(t, updateconstants.ErrorCode(""), errCode)
+}
+
+func TestVerifyVersion_Failed_WMIC(t *testing.T) {
+	expectedVersion := "3.2.0.0"
+	getVersionThroughRegistryKeyRef = func(log logPkg.T) string {
+		return expectedVersion
+	}
+	getVersionThroughWMIRef = func(log logPkg.T) string {
+		return ""
+	}
+	logMock := log.NewMockLog()
+	errCode := verifyVersion(logMock, expectedVersion)
+	assert.Equal(t, updateconstants.ErrorInstTargetVersionNotFoundViaWMIC, errCode)
+}
+
+func TestVerifyVersion_Failed_Registry(t *testing.T) {
+	expectedVersion := "3.2.0.0"
+	getVersionThroughRegistryKeyRef = func(log logPkg.T) string {
+		return ""
+	}
+	getVersionThroughWMIRef = func(log logPkg.T) string {
+		return expectedVersion
+	}
+	logMock := log.NewMockLog()
+	errCode := verifyVersion(logMock, expectedVersion)
+	assert.Equal(t, updateconstants.ErrorInstTargetVersionNotFoundViaReg, errCode)
+}
+
+func TestVerifyVersion_Failed_Both(t *testing.T) {
+	getVersionThroughRegistryKeyRef = func(log logPkg.T) string {
+		return ""
+	}
+	getVersionThroughWMIRef = func(log logPkg.T) string {
+		return ""
+	}
+	logMock := log.NewMockLog()
+	expectedVersion := "3.2.0.0"
+	errCode := verifyVersion(logMock, expectedVersion)
+	assert.Equal(t, updateconstants.ErrorInstTargetVersionNotFoundViaReg, errCode)
 }

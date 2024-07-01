@@ -657,3 +657,7 @@ func (u *fakeUtility) LoadUpdateDocumentState(ctx context.T, commandId string) e
 func (u *fakeUtility) UpdateInstallDelayer(ctx context.T, updateRoot string) error {
 	return nil
 }
+
+func (u *fakeUtility) VerifyInstalledVersion(log log.T, targetVersion string) updateconstants.ErrorCode {
+	return ""
+}

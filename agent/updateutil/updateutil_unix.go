@@ -22,6 +22,8 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -75,4 +77,8 @@ func ResolveUpdateRoot(sourceVersion string) (string, error) {
 	}
 
 	return legacyUpdaterArtifactsRoot, nil
+}
+
+func verifyVersion(log log.T, targetVersion string) updateconstants.ErrorCode {
+	return "" // blank indicates success
 }

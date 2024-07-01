@@ -538,7 +538,7 @@ func verifyInstallation(mgr *updateManager, log log.T, updateDetail *UpdateDetai
 	if isRollback {
 		version = updateDetail.SourceVersion
 	}
-	log.Infof("Initiating update health check")
+	log.Info("Initiating Agent service check")
 	if isRunning, err = mgr.util.WaitForServiceToStart(log, mgr.Info, version); err != nil || !isRunning {
 		if !isRollback {
 			message := updateutil.BuildMessage(err,
@@ -570,8 +570,17 @@ func verifyInstallation(mgr *updateManager, log log.T, updateDetail *UpdateDetai
 		return mgr.failed(updateDetail, log, updateconstants.ErrorCannotStartService, message, false)
 	}
 
-	log.Infof("%v is running", updateDetail.PackageName)
 	if !isRollback {
+		// initiate rollback when agent installation is not complete
+		if versionInstalledErrCode := mgr.util.VerifyInstalledVersion(log, version); versionInstalledErrCode != "" {
+			message := updateutil.BuildMessage(nil,
+				"failed to identify installed target agent version: %v",
+				updateDetail.TargetVersion)
+			updateDetail.AppendError(log, message)
+			// we will receive 2 kind of error code - ErrorInstTargetVersionNotFoundViaReg and ErrorInstTargetVersionNotFoundViaWMIC
+			return mgr.failed(updateDetail, log, versionInstalledErrCode, message, false)
+		}
+		log.Infof("%v is running", updateDetail.PackageName)
 		return mgr.succeeded(updateDetail, log)
 	}
 

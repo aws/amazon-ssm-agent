@@ -1615,6 +1615,50 @@ func TestVerifyInstallationFailedGetInstanceInfo(t *testing.T) {
 	assert.Equal(t, Completed, updateDetail.State)
 }
 
+func TestVerifyInstallation_VersionCheck_Success(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	control := &stubControl{serviceIsRunning: true, isVersionFound: true}
+	updater := createUpdaterStubs(control)
+	updateDetail := createUpdateDetail(Installed)
+	isRollbackCalled := false
+
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		isRollbackCalled = true
+		return nil
+	}
+
+	// action
+	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, isRollbackCalled)
+	assert.Equal(t, updateDetail.State, Completed)
+}
+
+func TestVerifyInstallation_VersionCheck_Failed(t *testing.T) {
+	// setup
+	var logger = logmocks.NewMockLog()
+	control := &stubControl{serviceIsRunning: true, isVersionFound: false}
+	updater := createUpdaterStubs(control)
+	updateDetail := createUpdateDetail(Installed)
+	isRollbackCalled := false
+
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		isRollbackCalled = true
+		return nil
+	}
+
+	// action
+	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, isRollbackCalled)
+	assert.Equal(t, updateDetail.State, Completed)
+}
+
 func TestVerifyInstallationCannotStartAgent(t *testing.T) {
 	// setup
 	var logger = logmocks.NewMockLog()
@@ -2006,6 +2050,7 @@ type stubControl struct {
 	serviceIsRunning               bool
 	failExeCommand                 bool
 	waitForServiceVersion          string
+	isVersionFound                 bool
 }
 
 func (s *stubControl) getWaitForServiceVersion() string {
@@ -2057,4 +2102,8 @@ func (u *utilityStub) WaitForServiceToStart(log log.T, i updateinfo.T, targetVer
 		return true, nil
 	}
 	return false, nil
+}
+
+func (u *utilityStub) VerifyInstalledVersion(log log.T, targetVersion string) bool {
+	return u.controller.isVersionFound
 }

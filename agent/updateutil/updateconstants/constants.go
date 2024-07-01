@@ -280,6 +280,12 @@ const (
 	// ErrorCannotStartService represents Cannot start Ec2Config service
 	ErrorCannotStartService ErrorCode = "ErrorCannotStartService"
 
+	// ErrorInstTargetVersionNotFoundViaReg represents that the target agent version could not be found using Registry
+	ErrorInstTargetVersionNotFoundViaReg ErrorCode = "ErrorInstTargetVersionNotFoundViaReg"
+
+	// ErrorInstTargetVersionNotFoundViaWMIC represents that the target agent version could not be found using WMIC
+	ErrorInstTargetVersionNotFoundViaWMIC ErrorCode = "ErrorInstTargetVersionNotFoundViaWMIC"
+
 	// ErrorCannotStopService represents Cannot stop Ec2Config service
 	ErrorCannotStopService ErrorCode = "ErrorCannotStopService"
 
