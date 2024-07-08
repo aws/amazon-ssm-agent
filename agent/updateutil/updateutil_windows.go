@@ -339,10 +339,10 @@ func ResolveUpdateRoot(sourceVersion string) (string, error) {
 
 func verifyVersion(log log.T, targetVersion string) updateconstants.ErrorCode {
 	log.Infof("Verifying Agent version using Registry")
-	registryCurrentAgentVersion := getVersionThroughRegistryKey(log)
+	registryCurrentAgentVersion := getVersionThroughRegistryKeyRef(log)
 	if targetVersion == registryCurrentAgentVersion {
 		log.Infof("Verifying Agent version using WMI query")
-		wmiCurrentAgentVersion := getVersionThroughWMI(log)
+		wmiCurrentAgentVersion := getVersionThroughWMIRef(log)
 		if targetVersion == wmiCurrentAgentVersion {
 			return "" // return blank when success
 		}
