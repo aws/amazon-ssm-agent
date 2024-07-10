@@ -1,5 +1,22 @@
 Latest
 ===============
+- Add enhancements related to KMS sessions
+- Add support for RHEL 8.10 & 9.4
+- Allow in-place upgrade for hybrid distributor packages
+- Fix idempotency not found error during agent startup
+- Fix bug that could cause unexpected behavior during parameter replacement in document
+- Gather metrics during agent version validation in Windows agent update
+- Make long sleep for onprem same as long sleep for EC2, and cap sleep time at 30 minutes for OnPrem instances
+- Migrated snap package builder from core18 to core22
+- Parse version from OS release file correctly when contains special chars
+- Suppress logs from the go-routine that checks the session manager's orchestration directory
+- Update go git dependency to v5.12.0
+- Update seelog config to have default time format with Milliseconds
+- Update TMP/TEMP env variable during windows installer launch in Updater
+- Upgrade GoLang to version 1.21.12
+
+3.3.551.0
+===============
 - Agent updater attempts yum install/uninstall before falling back to attempt with rpm
 - Updated golang.org/x/net from v0.19.0 to v0.26.0
 - Upgrade GoLang to version 1.21.11
