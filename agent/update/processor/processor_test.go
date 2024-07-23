@@ -1348,6 +1348,12 @@ func TestProceedUpdate(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	isVerifyCalled := false
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
@@ -1366,6 +1372,7 @@ func TestProceedUpdate(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, updateDetail.State, Installed)
 	assert.True(t, isVerifyCalled)
+	assert.True(t, isWaitForCloudInitCalled)
 }
 
 func TestProceedUpdateWithDowngrade(t *testing.T) {
@@ -1376,6 +1383,12 @@ func TestProceedUpdateWithDowngrade(t *testing.T) {
 	updateDetail.RequiresUninstall = true
 	isVerifyCalled := false
 	isUninstallCalled := false
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
@@ -1395,6 +1408,7 @@ func TestProceedUpdateWithDowngrade(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
+	assert.True(t, isWaitForCloudInitCalled)
 	assert.True(t, isVerifyCalled)
 	assert.True(t, isUninstallCalled)
 	assert.Equal(t, updateDetail.State, Installed)
@@ -1407,6 +1421,12 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateInstall(t *testing.T) {
 	updateDetail := createUpdateDetail(Staged)
 	isInstallCalled := false
 	invalidPlatform := "Invalid Platform"
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
@@ -1421,6 +1441,7 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateInstall(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
+	assert.True(t, isWaitForCloudInitCalled)
 	assert.True(t, isInstallCalled)
 	assert.Equal(t, updateDetail.State, Completed)
 	assert.Equal(t, updateDetail.Result, contracts.ResultStatusFailed)
@@ -1435,6 +1456,12 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateUninstall(t *testing.T) 
 	updateDetail.RequiresUninstall = true
 	isUnInstallCalled := false
 	invalidPlatform := "Invalid Platform"
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 
 	// stub install for updater
 	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
@@ -1450,6 +1477,7 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateUninstall(t *testing.T) 
 
 	// assert
 	assert.NoError(t, err)
+	assert.True(t, isWaitForCloudInitCalled)
 	assert.True(t, isUnInstallCalled)
 	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
@@ -1463,6 +1491,12 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackUninstall(t *testing.T
 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 	invalidPlatform := "Invalid Platform"
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
@@ -1486,8 +1520,10 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackUninstall(t *testing.T
 
 	// assert
 	assert.NoError(t, err)
-	assert.True(t, isUninstallCalled)
-	assert.False(t, isVerifyCalled, isInstallCalled)
+	assert.False(t, isWaitForCloudInitCalled, "Updater waited for cloud-init on rollback")
+	assert.True(t, isUninstallCalled, "Updater did not uninstall the agent on rollback")
+	assert.False(t, isInstallCalled, "Updater installed the agent on rollback")
+	assert.False(t, isVerifyCalled, "Updater verified agent installation on rollback")
 	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
 
@@ -1499,8 +1535,12 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackInstall(t *testing.T) 
 	updateDetail := createUpdateDetail(Rollback)
 	invalidPlatform := "Invalid Platform"
 
-	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
+	isVerifyCalled, isInstallCalled, isUninstallCalled, isWaitForCloudInitCalled := false, false, false, false
 
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
@@ -1522,8 +1562,10 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackInstall(t *testing.T) 
 
 	// assert
 	assert.NoError(t, err)
-	assert.True(t, isUninstallCalled, isInstallCalled)
-	assert.False(t, isVerifyCalled)
+	assert.False(t, isWaitForCloudInitCalled, "Updater waited for cloud-init on rollback")
+	assert.True(t, isUninstallCalled, "Updater did not uninstall the agent on rollback")
+	assert.True(t, isInstallCalled, "Updater did not install the agent on rollback")
+	assert.False(t, isVerifyCalled, "Updater verified agent installation on rollback")
 	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
 
@@ -1535,6 +1577,12 @@ func TestProceedUpdateWithDowngradeFailUninstall(t *testing.T) {
 	updateDetail.RequiresUninstall = true
 	isVerifyCalled := false
 	isUninstallCalled := false
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
@@ -1554,8 +1602,9 @@ func TestProceedUpdateWithDowngradeFailUninstall(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
-	assert.False(t, isVerifyCalled)
-	assert.True(t, isUninstallCalled)
+	assert.True(t, isWaitForCloudInitCalled, "Updater did not wait for cloud-init")
+	assert.True(t, isUninstallCalled, "Updater did not uninstall the agent")
+	assert.False(t, isVerifyCalled, "Updater verified agent installation")
 	assert.Equal(t, Completed, updateDetail.State)
 }
 
@@ -1565,6 +1614,12 @@ func TestProceedUpdateFailInstall(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Staged)
 	isRollbackCalled := false
+	isWaitForCloudInitCalled := false
+
+	waitForCloudInit = func(log log.T, timeoutSeconds int) error {
+		isWaitForCloudInitCalled = true
+		return nil
+	}
 
 	// stub install for updater
 	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
@@ -1581,6 +1636,7 @@ func TestProceedUpdateFailInstall(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
+	assert.True(t, isWaitForCloudInitCalled, "Updater did not wait for cloud-init")
 	assert.True(t, isRollbackCalled)
 	assert.Equal(t, updateDetail.State, Rollback)
 }
@@ -1772,7 +1828,9 @@ func TestRollbackInstallation(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
-	assert.True(t, isVerifyCalled, isInstallCalled, isUninstallCalled)
+	assert.True(t, isVerifyCalled)
+	assert.True(t, isInstallCalled)
+	assert.True(t, isUninstallCalled)
 	assert.Equal(t, updateDetail.State, RolledBack)
 }
 
@@ -1804,7 +1862,8 @@ func TestRollbackInstallationFailUninstall(t *testing.T) {
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isUninstallCalled)
-	assert.False(t, isInstallCalled, isVerifyCalled)
+	assert.False(t, isInstallCalled)
+	assert.False(t, isVerifyCalled)
 }
 
 func TestRollbackInstallationFailInstall(t *testing.T) {
@@ -1834,7 +1893,8 @@ func TestRollbackInstallationFailInstall(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
-	assert.True(t, isUninstallCalled, isInstallCalled)
+	assert.True(t, isUninstallCalled)
+	assert.True(t, isInstallCalled)
 	assert.False(t, isVerifyCalled)
 }
 
@@ -1976,7 +2036,8 @@ func TestProceedUpdate_SnapdIssue_RollbackInstall(t *testing.T) {
 
 	// assert
 	assert.NoError(t, err)
-	assert.True(t, isUninstallCalled, isInstallCalled)
+	assert.True(t, isUninstallCalled)
+	assert.True(t, isInstallCalled)
 	assert.False(t, isVerifyCalled)
 	assert.True(t, strings.Contains(updateDetail.StandardOut, snapdIssue))
 }

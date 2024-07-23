@@ -18,6 +18,7 @@ package processor
 import (
 	"bytes"
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/common/utility"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -53,6 +54,7 @@ var (
 	getStableManifestURL   = updateutil.GetStableURLFromManifestURL
 	getFileNamesLaterThan  = fileutil.GetFileNamesUnsortedLaterThan
 	moveFile               = fileutil.MoveFile
+	waitForCloudInit       = utility.WaitForCloudInit
 )
 
 const (
@@ -61,6 +63,7 @@ const (
 	defaultSSMAgentName        = "amazon-ssm-agent"
 	defaultSelfUpdateMessageID = "aws.ssm.self-update-agent.i-instanceid"
 	installationDirectory      = "installationDir"
+	cloudInitWaitSeconds       = 600
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
@@ -466,8 +469,12 @@ func downloadPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail)
 
 // proceedUpdate starts update process
 func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+	if err := waitForCloudInit(log, cloudInitWaitSeconds); err != nil {
+		log.Warnf("error waiting for cloud-init: %v", err)
+	}
+
 	log.Infof(
-		"Attemping to upgrade from %v to %v",
+		"Attempting to upgrade from %v to %v",
 		updateDetail.SourceVersion,
 		updateDetail.TargetVersion)
 

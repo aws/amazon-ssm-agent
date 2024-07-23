@@ -19,6 +19,7 @@ package utility
 import (
 	"context"
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"os/exec"
 	"strings"
 	"time"
@@ -35,6 +36,11 @@ var (
 )
 
 var powershellArgs = []string{"-InputFormat", "None", "-Noninteractive", "-NoProfile", "-ExecutionPolicy", "unrestricted"}
+
+// WaitForCloudInit is a no-op on windows and returns nil
+func WaitForCloudInit(log log.T, timeoutSeconds int) error {
+	return nil
+}
 
 // IsRunningElevatedPermissions checks if current user is administrator
 func IsRunningElevatedPermissions() error {
