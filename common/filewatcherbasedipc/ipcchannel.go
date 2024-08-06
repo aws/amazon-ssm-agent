@@ -78,12 +78,12 @@ func CreateFileWatcherChannel(log log.T, identity identity.IAgentIdentity, mode 
 	}
 	for _, val := range list {
 		if val.Name() == filename {
-			log.Infof("channel: %v found", filename)
+			log.Debugf("channel: %v found", filename)
 			f, err := NewFileWatcherChannel(log, mode, path.Join(rootChannelDir, filename), shouldReadRetry)
 			return f, err, true
 		}
 	}
-	log.Infof("channel: %v not found, creating a new file channel...", filename)
+	log.Debugf("channel: %v not found, creating a new file channel...", filename)
 	f, err := NewFileWatcherChannel(log, mode, path.Join(rootChannelDir, filename), shouldReadRetry)
 	return f, err, false
 }

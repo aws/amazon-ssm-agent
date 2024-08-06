@@ -146,7 +146,7 @@ func (h *HealthCheck) updateHealth() {
 	var ssmConnectionChannel = ""
 	channel := ssmconnectionchannel.GetConnectionChannel()
 	ssmConnectionChannel = string(channel)
-	log.Infof("got SSM connection channel value: %v", ssmConnectionChannel)
+	log.Debugf("got SSM connection channel value: %v", ssmConnectionChannel)
 
 	var err error
 	//TODO when will status become inactive?

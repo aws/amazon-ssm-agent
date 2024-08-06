@@ -87,7 +87,7 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 		}
 	}()
 
-	log.Infof("inter process communication started at %v", ipc.GetPath())
+	log.Debugf("inter process communication started at %v", ipc.GetPath())
 	requestedStop := false
 	inboundClosed := false
 	//TODO add timer, if IPC is unresponsive to Close(), force return
@@ -143,7 +143,7 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 		case datagram, more := <-ipc.GetMessage():
 			if !more {
 				//safe close
-				log.Info("ipc channel closed, stop messaging worker")
+				log.Debug("ipc channel closed, stop messaging worker")
 				return
 			}
 

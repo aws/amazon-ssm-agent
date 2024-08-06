@@ -74,8 +74,8 @@ type fileWatcherChannel struct {
 /*
 	Create a file channel, a file channel is identified by its unique name
 	name is the path where the watcher directory is created
- 	Only Master channel has the privilege to remove the dir at close time
-    shouldReadRetry - is this flag is set to true, it will use fileReadWithRetry function to read
+	Only Master channel has the privilege to remove the dir at close time
+	shouldReadRetry - is this flag is set to true, it will use fileReadWithRetry function to read
 */
 func NewFileWatcherChannel(logger log.T, mode Mode, name string, shouldReadRetry bool) (*fileWatcherChannel, error) {
 
@@ -242,7 +242,7 @@ func (ch *fileWatcherChannel) Close() {
 		return
 	}
 	log := ch.logger
-	log.Infof("channel %v requested close", ch.path)
+	log.Debugf("channel %v requested close", ch.path)
 
 	completedWatcherCleanup := make(chan bool, 1)
 
@@ -417,13 +417,13 @@ func (ch *fileWatcherChannel) watch() {
 		}
 	}()
 
-	log.Infof("%v listener started on path: %v", ch.mode, ch.path)
+	log.Debugf("%v listener started on path: %v", ch.mode, ch.path)
 	//drain all the current messages in the dir
 	ch.consumeAll()
 	for {
 		select {
 		case <-ch.watcherClosedChan:
-			log.Infof("Closed the file watcher listener thread")
+			log.Debugf("Closed the file watcher listener thread")
 			return
 		case event, ok := <-ch.watcher.Events:
 			if !ok {

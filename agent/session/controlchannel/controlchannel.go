@@ -252,7 +252,7 @@ func controlChannelIncomingMessageHandler(context context.T,
 		log.Debugf("Invalid AgentMessage: %s, err: %v.", agentMessage.MessageId, err)
 		return err
 	}
-	log.Infof("received message through control channel %v", agentMessage.MessageId)
+	log.Debugf("received message through control channel %v", agentMessage.MessageId)
 	incomingAgentMessageChan <- *agentMessage
 	return nil
 }

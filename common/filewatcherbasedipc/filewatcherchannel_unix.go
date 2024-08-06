@@ -29,7 +29,7 @@ func (ch *fileWatcherChannel) cleanUpWatcher(completedWatcherCleanup chan bool, 
 		if msg := recover(); msg != nil {
 			log.Errorf("file watcher remove/close panics: %v", msg)
 		}
-		log.Infof("channel %v closed", ch.path)
+		log.Debugf("channel %v closed", ch.path)
 	}()
 	//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
 	//TODO: Should test various platforms by removing the below Remove() as it is being called inside Close() again. Following the previous developer for now based on the above comment.

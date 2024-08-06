@@ -190,11 +190,11 @@ exitLoopLabel:
 		select {
 		case job, ok := <-p.jobQueue:
 			if !ok {
-				p.log.Info("JobQueue has been closed")
+				p.log.Debug("JobQueue has been closed")
 				break exitLoopLabel
 			}
 			p.ReleaseBufferToken(job.id)
-			p.log.Infof("Got job %s, starting worker", job.id)
+			p.log.Debugf("Got job %s, starting worker", job.id)
 			workerCount++
 			go func() {
 				defer p.workerDone()
@@ -215,7 +215,7 @@ exitLoopLabel:
 		workerCount--
 	}
 
-	p.log.Info("All workers have finished and pool has been put into shutdown")
+	p.log.Debug("All workers have finished and pool has been put into shutdown")
 	close(p.jobHandlerDone)
 }
 

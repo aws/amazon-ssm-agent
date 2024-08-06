@@ -157,7 +157,7 @@ func validateAndReplaceSessionDocumentParameters(context context.T, params map[s
 		}
 	}
 
-	log.Info("Validating SSM parameters")
+	log.Debug("Validating SSM parameters")
 	// Validates SSM parameters
 	if err := parameterstore.ValidateSSMParameters(context, docContent.Parameters, validParameters, ""); err != nil {
 		return err
@@ -466,7 +466,7 @@ func getValidatedParameters(context context.T, params map[string]interface{}, do
 		}
 	}
 
-	log.Info("Validating SSM parameters")
+	log.Debug("Validating SSM parameters")
 	// Validates SSM parameters
 	if err := parameterstore.ValidateSSMParameters(context, docContent.Parameters, validParameters, docContent.InvokedPlugin); err != nil {
 		return err

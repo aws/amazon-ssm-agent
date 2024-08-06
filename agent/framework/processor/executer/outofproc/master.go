@@ -109,7 +109,7 @@ func (e *OutOfProcExecuter) Run(
 				}
 				//save the overall result and signal called that Executer is done
 				store.Save(*e.docState)
-				log.Info("Executer closed")
+				log.Debug("Executer closed")
 				close(resChan)
 			}()
 			e.messaging(log, ipc, resChan, cancelFlag, stopTimer)

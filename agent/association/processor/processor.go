@@ -99,7 +99,7 @@ func NewAssociationProcessor(context context.T) *Processor {
 func (p *Processor) ModuleExecute() {
 	log := p.context.Log()
 	associationFrequenceMinutes := p.context.AppConfig().Ssm.AssociationFrequencyMinutes
-	log.Info("Starting association polling")
+	log.Debug("Starting association polling")
 	log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
 	var job *scheduler.Job
 	var err error
@@ -129,7 +129,7 @@ func (p *Processor) InitializeAssociationProcessor() {
 		p.resChan = resChan
 	}
 
-	log.Info("Launching response handler")
+	log.Debug("Launching response handler")
 	go p.listenToResponses()
 
 	if err := p.proc.InitialProcessing(false); err != nil {
@@ -137,9 +137,9 @@ func (p *Processor) InitializeAssociationProcessor() {
 		return
 	}
 
-	log.Info("Initializing association scheduling service")
+	log.Debug("Initializing association scheduling service")
 	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
-	log.Info("Association scheduling service initialized")
+	log.Debug("Association scheduling service initialized")
 }
 
 // SetPollJob represents setter for PollJob

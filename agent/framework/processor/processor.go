@@ -143,7 +143,7 @@ func NewWorkerProcessorSpec(ctx context.T, workerLimit int, assignedDocType cont
 		workerProcessorSpecObj.bufferLimit = 1
 	}
 	if assignedDocType == "" {
-		logger.Infof("empty worker type assigned, assigning random doc type")
+		logger.Debug("empty worker type assigned, assigning random doc type")
 		workerProcessorSpecObj.assignedDocType = "nodoctype" // dummy value
 	}
 	return workerProcessorSpecObj
@@ -186,7 +186,7 @@ func (p *EngineProcessor) Start() (resChan chan contracts.DocumentResult, err er
 		return nil, fmt.Errorf("EngineProcessor is not initialized")
 	}
 	log := context.Log()
-	log.Info("Starting")
+	log.Debug("Starting")
 
 	resChan = p.resChan
 	return
@@ -199,7 +199,7 @@ func (p *EngineProcessor) InitialProcessing(skipDocumentIfExpired bool) (err err
 	}
 	log := context.Log()
 
-	log.Info("Initial processing")
+	log.Debug("Initial processing")
 
 	// preloading pending files is added here to handle the below case:
 	// In-progress documents starts submission by pushing it to the pending state.
@@ -612,7 +612,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 			if res.LastPlugin == "" {
 				log.Infof("sending document: %v complete response", documentID)
 			} else {
-				log.Infof("sending reply for plugin update: %v", res.LastPlugin)
+				log.Debugf("sending reply for plugin update: %v", res.LastPlugin)
 			}
 
 			final = &res
@@ -626,7 +626,7 @@ func processCommand(context context.T, executerCreator ExecuterCreator, cancelFl
 			//hand off the message to Service
 			resChan <- res
 
-			log.Info("Done")
+			log.Debugf("Process status for document %v done", documentID)
 		}()
 	}
 	//TODO add shutdown as API call, move cancelFlag out of task pool; cancelFlag to contracts, nobody else above runplugins needs to create cancelFlag.

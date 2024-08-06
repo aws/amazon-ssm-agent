@@ -76,9 +76,9 @@ func (mgs *MGSInteractor) deleteFailedReply(log log.T, fileName string) {
 // sendFailedReplies loads replies from local disk and send it again to the service, if it fails no action is needed
 func (mgs *MGSInteractor) sendFailedReplies() {
 	log := mgs.context.Log()
-	log.Info("send failed reply thread started")
+	log.Debug("send failed reply thread started")
 	defer func() {
-		log.Info("send failed reply thread done")
+		log.Debug("send failed reply thread done")
 		if msg := recover(); msg != nil {
 			log.Errorf("sendFailedReplies panicked: %v", msg)
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
@@ -180,12 +180,12 @@ func (mgs *MGSInteractor) startUpdateReplyFileWatcher() {
 		log.Errorf("Error adding directory to watcher: %v", err)
 	}
 
-	log.Infof("Starting MGS update reply file watcher")
+	log.Debug("Starting MGS update reply file watcher")
 	for {
 		select {
 		case event, ok := <-watcher.Events:
 			if !ok {
-				log.Info("Update file watcher closed")
+				log.Debug("Update file watcher closed")
 				return
 			}
 			if mgs.isUpdateWriteEvent(event) {
@@ -196,7 +196,7 @@ func (mgs *MGSInteractor) startUpdateReplyFileWatcher() {
 			}
 		case err, ok := <-watcher.Errors:
 			if !ok {
-				log.Info("Update file watcher closed")
+				log.Debug("Update file watcher closed")
 				return
 			}
 			log.Errorf("Error in MGS update reply file watcher: %v", err)
@@ -323,8 +323,8 @@ func (mgs *MGSInteractor) processReply(result *agentReplyLocalContract) {
 	log := mgs.context.Log()
 	mgs.sendReplyProp.replyAckChan.Store(agentMessageUUID, replyAckChan)
 	totalNoOfRetries := docResult.GetNumberOfContinuousRetries()
-	log.Infof("started reply processing - %v", agentMessageUUID)
-	defer log.Infof("ended reply processing - %v", agentMessageUUID)
+	log.Debugf("started reply processing - %v", agentMessageUUID)
+	defer log.Debugf("ended reply processing - %v", agentMessageUUID)
 	log.Tracef("reply received for processing %+v", result)
 
 externalLoop:
@@ -368,9 +368,9 @@ externalLoop:
 func (mgs *MGSInteractor) startReplyProcessingQueue() {
 	replyThreadCount := 0
 	logger := mgs.context.Log()
-	logger.Infof("started reply processing queue")
+	logger.Debugf("started reply processing queue")
 	defer func() {
-		logger.Infof("ended reply processing queue")
+		logger.Debugf("ended reply processing queue")
 		if r := recover(); r != nil {
 			logger.Errorf("reply queue handler panic: \n%v", r)
 			logger.Errorf("Stacktrace:\n%s", debug.Stack())
@@ -395,7 +395,7 @@ exitLoopLabel:
 				break exitLoopLabel
 			}
 			commandId := res.documentResult.GetResult().MessageID
-			logger.Infof("Got reply msg Id %s for %v %v, starting reply thread", res.documentResult.GetMessageUUID().String(), res.documentResult.GetName(), commandId)
+			logger.Debugf("Got reply msg Id %s for %v %v, starting reply thread", res.documentResult.GetMessageUUID().String(), res.documentResult.GetName(), commandId)
 			replyThreadCount++
 			go func(resLocalContract *agentReplyLocalContract) {
 				defer func() {

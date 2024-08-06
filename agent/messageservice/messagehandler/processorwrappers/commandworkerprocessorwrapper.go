@@ -80,7 +80,7 @@ func (cpw *CommandWorkerProcessorWrapper) Initialize(outputChan map[contracts.Up
 	cpw.mutex.Lock()
 	defer cpw.mutex.Unlock()
 	if cpw.commandResultChan != nil {
-		cpw.context.Log().Infof("processor already initialized %v", cpw.name)
+		cpw.context.Log().Debugf("processor already initialized %v", cpw.name)
 		return nil
 	}
 	cpw.commandResultChan, err = cpw.processor.Start()
@@ -160,9 +160,9 @@ func (cpw *CommandWorkerProcessorWrapper) Stop() {
 func (cpw *CommandWorkerProcessorWrapper) listenReply(resChan chan contracts.DocumentResult, outputChan map[contracts.UpstreamServiceName]chan contracts.DocumentResult) {
 	log := cpw.context.Log()
 	cpw.listenReplyEnded = make(chan struct{}, 1)
-	log.Info("started listening command reply thread")
+	log.Debug("started listening command reply thread")
 	defer func() {
-		log.Info("ended command reply thread")
+		log.Debug("ended command reply thread")
 		if r := recover(); r != nil {
 			log.Errorf("listen reply thread panicked in CommandWorkerProcessorWrapper: \n%v", r)
 			log.Errorf("stacktrace:\n%s", debug.Stack())

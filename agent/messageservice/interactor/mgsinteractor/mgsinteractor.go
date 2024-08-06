@@ -203,7 +203,7 @@ func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error
 		log.Errorf("Error setting up control channel: %v", err)
 		return err
 	}
-	log.Info("Set up control channel successfully")
+	log.Debug("Set up control channel successfully")
 	if ableToOpenMGSConnection != nil {
 		atomic.StoreUint32(ableToOpenMGSConnection, 1)
 	}
@@ -276,9 +276,9 @@ func (mgs *MGSInteractor) Close() (err error) {
 func (mgs *MGSInteractor) listenReply() {
 	log := mgs.context.Log()
 	mgs.listenReplyThreadEnded = make(chan struct{}, 1)
-	log.Info("listen reply thread in MGS interactor started")
+	log.Debug("listen reply thread in MGS interactor started")
 	defer func() {
-		log.Info("listen reply thread in MGS interactor ended")
+		log.Debug("listen reply thread in MGS interactor ended")
 		if r := recover(); r != nil {
 			log.Errorf("listen reply in mgsinteractor panicked: \n%v", r)
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
@@ -292,7 +292,7 @@ externalLoop:
 		select {
 		case reply, isOpen := <-mgs.replyChan:
 			if !isOpen {
-				log.Info("reply channel closed")
+				log.Debug("reply channel closed")
 				break externalLoop
 			}
 			replyUUID := uuid.NewV4()
@@ -319,9 +319,9 @@ externalLoop:
 // listenIncomingAgentMessages listens to the incoming messages and submits to the message handler
 func (mgs *MGSInteractor) listenIncomingAgentMessages() {
 	log := mgs.context.Log()
-	log.Info("listen incoming messages thread in MGS interactor started")
+	log.Debug("listen incoming messages thread in MGS interactor started")
 	defer func() {
-		log.Info("listen incoming messages thread in MGS interactor ended")
+		log.Debug("listen incoming messages thread in MGS interactor ended")
 		if r := recover(); r != nil {
 			log.Errorf("listen incoming messages panic: \n%v", r)
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
@@ -404,7 +404,7 @@ func (mgs *MGSInteractor) processAgentJobMessage(agentMessage mgsContracts.Agent
 	appConfig := mgs.context.AppConfig()
 	log := mgs.context.Log()
 	if !mgs.isChannelOpenForAgentJobMsgs() {
-		log.Infof("dropping message because the channel is not open: %s", agentMessage.MessageId.String())
+		log.Warnf("dropping message because the channel is not open: %s", agentMessage.MessageId.String())
 		return
 	}
 
@@ -523,7 +523,7 @@ func (mgs *MGSInteractor) buildAgentJobAckMessageAndSend(ackMessageId uuid.UUID,
 		log.Errorf("Error sending agent job ack message, ID [%v], err: %v", ackMessageId.String(), err)
 		return err
 	}
-	log.Infof("Successfully sent ack message id %s back for JobID %s", replyUUID, jobId)
+	log.Debugf("Successfully sent ack message id %s back for JobID %s", replyUUID, jobId)
 	return nil
 }
 

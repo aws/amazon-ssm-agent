@@ -253,7 +253,7 @@ func isAssociationRunDirName(dirName string) (matched bool) {
 func cleanupAssociationDirectory(log log.T, deletedCount int, commandOrchestrationPath string, retentionDurationHours int) (canDeleteDirectory bool, deletedCountAfter int) {
 	subdirNames, err := fileutil.GetDirectoryNames(commandOrchestrationPath)
 	if err != nil {
-		log.Debugf("Error reading association orchestration directory %v: %v", commandOrchestrationPath, err)
+		log.Infof("Error reading association orchestration directory %v: %v", commandOrchestrationPath, err)
 		return false, deletedCount
 	}
 
@@ -355,7 +355,7 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 
 	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultDocumentRootDirName)
 	if err != nil {
-		log.Debugf("Failed to get orchestration directories under %v", err)
+		log.Errorf("Failed to get orchestration directories under %v", err)
 		return
 	}
 
@@ -364,7 +364,7 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 	deletedCount := 0
 	for _, dirName := range dirNames {
 		if deletedCount >= maxOrchestrationDirectoryDeletions {
-			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
+			log.Warnf("Reached max number of deletions for orchestration directories: %v", deletedCount)
 			break
 		}
 

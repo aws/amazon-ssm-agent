@@ -51,7 +51,7 @@ func NewNamedPipeChannel(log log.T, identity identity.IAgentIdentity) IChannel {
 func (channel *namedPipeChannel) Initialize(socketType utils.SocketType) error {
 	var err error
 	var socket mangos.Socket
-	channel.log.Info("using named pipe channel for IPC")
+	channel.log.Debug("using named pipe channel for IPC")
 	if socketType == utils.Surveyor {
 		if socket, err = getSurveyorSocket(); err != nil {
 			return err
