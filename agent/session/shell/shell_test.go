@@ -644,10 +644,8 @@ func (suite *ShellTestSuite) TestIfShouldWriteToIpcFileWhenDestinationIsNone() {
 }
 
 // Testing if ipc file should be written to when destination is not provided
-func (suite *ShellTestSuite) TestWhenWriteToIpcFileWhenDestinationNotProvided() {
-	agentConfig := appconfig.SsmagentConfig{
-		Ssm: appconfig.SsmCfg{},
-	}
+func (suite *ShellTestSuite) TestWhenWriteToIpcFileWithDefaultConfig() {
+	agentConfig := appconfig.DefaultConfig()
 	mockContext := context.NewMockDefaultWithConfig(agentConfig)
 	plugin := &ShellPlugin{
 		context: mockContext,
@@ -672,10 +670,11 @@ func (suite *ShellTestSuite) TestWhenWriteToIpcFileWhenDestinationNotProvided() 
 		OutputS3BucketName: "bucketname",
 	}
 
-	// write to ipc file in all cases
+	// by default do not write to ipc file when logging features not enabled
 	plugin.initializeLogger(suite.mockLog, noLoggingConfig)
-	suite.True(plugin.logger.writeToIpcFile)
+	suite.False(plugin.logger.writeToIpcFile)
 
+	// write to ipc file when cw or s3 logging enabled
 	plugin.initializeLogger(suite.mockLog, cwConfig)
 	suite.True(plugin.logger.writeToIpcFile)
 

@@ -117,7 +117,7 @@ func parser(config *SsmagentConfig) {
 	sessionLogsDestinationOptions := []string{SessionLogsDestinationDisk, SessionLogsDestinationNone}
 	config.Ssm.SessionLogsDestination = getStringEnum(config.Ssm.SessionLogsDestination,
 		sessionLogsDestinationOptions,
-		SessionLogsDestinationDisk)
+		SessionLogsDestinationNone)
 	pluginLocalOutputCleanupOptions := []string{PluginLocalOutputCleanupAfterExecution,
 		PluginLocalOutputCleanupAfterUpload,
 		DefaultPluginOutputRetention}

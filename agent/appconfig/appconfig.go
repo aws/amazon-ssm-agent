@@ -116,6 +116,7 @@ func DefaultConfig() SsmagentConfig {
 		AssociationLogsRetentionDurationHours: DefaultAssociationLogsRetentionDurationHours,
 		RunCommandLogsRetentionDurationHours:  DefaultRunCommandLogsRetentionDurationHours,
 		SessionLogsRetentionDurationHours:     DefaultSessionLogsRetentionDurationHours,
+		SessionLogsDestination:                SessionLogsDestinationNone,
 		PluginLocalOutputCleanup:              DefaultPluginOutputRetention,
 		OrchestrationDirectoryCleanup:         DefaultOrchestrationDirCleanup,
 	}
