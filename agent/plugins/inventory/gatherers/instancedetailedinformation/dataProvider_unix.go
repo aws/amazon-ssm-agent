@@ -98,6 +98,9 @@ func parseLscpuOutput(output string) model.InstanceDetailedInformation {
 	}
 
 	socketsStr := getFieldValue(output, socketsKey)
+	if socketsStr != "" {
+		socketsStr = parseString(socketsStr, "")
+	}
 
 	cpuCoresStr := ""
 	coresPerSocketStr := getFieldValue(output, coresPerSocketKey)
@@ -153,6 +156,14 @@ func parseFloat(value string, defaultValue float64) float64 {
 		return defaultValue
 	}
 	return res
+}
+
+func parseString(value string, defaultValue string) string {
+	_, err := strconv.Atoi(value)
+	if err != nil {
+		return defaultValue
+	}
+	return value
 }
 
 func boolToStr(b bool) string {
