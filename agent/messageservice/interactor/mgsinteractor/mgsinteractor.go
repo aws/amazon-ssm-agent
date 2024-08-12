@@ -203,7 +203,7 @@ func (mgs *MGSInteractor) Initialize(ableToOpenMGSConnection *uint32) (err error
 		log.Errorf("Error setting up control channel: %v", err)
 		return err
 	}
-	log.Debug("Set up control channel successfully")
+	log.Info("Set up control channel successfully")
 	if ableToOpenMGSConnection != nil {
 		atomic.StoreUint32(ableToOpenMGSConnection, 1)
 	}
