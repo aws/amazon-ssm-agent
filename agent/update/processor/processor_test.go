@@ -1635,6 +1635,8 @@ func TestVerifyInstallation_VersionCheck_Success(t *testing.T) {
 	assert.NoError(t, err)
 	assert.False(t, isRollbackCalled)
 	assert.Equal(t, updateDetail.State, Completed)
+	assert.Equal(t, updateDetail.Result, contracts.ResultStatusSuccess)
+	assert.Equal(t, updater.mgr.subStatus, "")
 }
 
 func TestVerifyInstallation_VersionCheck_Failed_WMIC(t *testing.T) {
@@ -1657,6 +1659,8 @@ func TestVerifyInstallation_VersionCheck_Failed_WMIC(t *testing.T) {
 	assert.NoError(t, err)
 	assert.False(t, isRollbackCalled)
 	assert.Equal(t, updateDetail.State, Completed)
+	assert.Equal(t, updateDetail.Result, contracts.ResultStatusSuccess)
+	assert.Equal(t, updater.mgr.subStatus, string(updateconstants.ErrorInstTargetVersionNotFoundViaWMIC))
 }
 
 func TestVerifyInstallation_VersionCheck_Failed_Reg(t *testing.T) {
@@ -1679,6 +1683,8 @@ func TestVerifyInstallation_VersionCheck_Failed_Reg(t *testing.T) {
 	assert.NoError(t, err)
 	assert.False(t, isRollbackCalled)
 	assert.Equal(t, updateDetail.State, Completed)
+	assert.Equal(t, updateDetail.Result, contracts.ResultStatusSuccess)
+	assert.Equal(t, updater.mgr.subStatus, string(updateconstants.ErrorInstTargetVersionNotFoundViaReg))
 }
 
 func TestVerifyInstallationCannotStartAgent(t *testing.T) {
