@@ -1,5 +1,8 @@
 name: amazon-ssm-agent
-base: core18
+base: core22
+architectures:
+  - build-on: [amd64]
+  - build-on: [arm64]
 version: {{version}}
 summary: Agent to enable remote management of your Amazon EC2 instance configuration
 description: |
@@ -27,6 +30,6 @@ parts:
     build-attributes: [no-patchelf]
     source: .
     override-build: |
-      snapcraftctl build
+      craftctl default
       echo "start packaging under:: $ARCH_DIR"
       mv prepacked/$ARCH_DIR/* $SNAPCRAFT_PART_INSTALL
