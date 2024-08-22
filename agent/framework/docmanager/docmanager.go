@@ -33,7 +33,7 @@ import (
 )
 
 const (
-	maxOrchestrationDirectoryDeletions int = 100
+	maxOrchestrationDirectoryDeletions int = 1000
 )
 
 type validString func(string) bool
@@ -259,6 +259,7 @@ func cleanupAssociationDirectory(log log.T, deletedCount int, commandOrchestrati
 
 	canDeleteDirectory = true
 
+	log.Debugf("Starting deletion of association directories")
 	for _, subdirName := range subdirNames {
 		if deletedCount >= maxOrchestrationDirectoryDeletions {
 			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
@@ -287,6 +288,7 @@ func cleanupAssociationDirectory(log log.T, deletedCount int, commandOrchestrati
 		deletedCount += 1
 	}
 
+	log.Debugf("Finished deleting %v association directories", deletedCount)
 	return canDeleteDirectory, deletedCount
 }
 
@@ -307,7 +309,7 @@ func isLegacyAssociationDirectory(log log.T, commandOrchestrationPath string) (b
 	return false, nil
 }
 
-// Global variables to throttle the impact of constantly rechecking the stale orchestation files
+// Global variables to throttle the impact of constantly rechecking the stale orchestration files
 var cleanupLock sync.Mutex
 var inCleanup = make(map[string]bool)
 var nextCleanup = make(map[string]time.Time) // okay that these will default to start of epoch
@@ -334,7 +336,7 @@ func releaseLock(name string) {
 func updateTime(name string) {
 	cleanupLock.Lock()
 	defer cleanupLock.Unlock()
-	nextCleanup[name] = time.Now().Add(time.Minute * 60)
+	nextCleanup[name] = time.Now().Add(time.Minute * 15)
 }
 
 // DeleteOldOrchestrationDirectories deletes expired orchestration directories based on retentionDurationHours and associationRetentionDurationHours.
@@ -394,7 +396,7 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 	}
 
 	updateTime(orchestrationRootDirName)
-	log.Debugf("Completed orchestration directory clean up")
+	log.Debugf("Completed orchestration directory clean up of %v items", deletedCount)
 
 }
 
@@ -447,7 +449,7 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 
 	}
 
-	log.Debugf("Completed orchestration directory clean up")
+	log.Debugf("Completed session orchestration directory clean up of %v items", deletedCount)
 }
 
 // isOlderThan checks whether the file is older than the retention duration
