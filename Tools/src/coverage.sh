@@ -2,8 +2,8 @@
 # Generate test coverage statistics for Go packages.
 #
 
-echo "Try update 'cover'"
-GOPATH=`pwd`/Tools go get -u golang.org/x/tools/cmd/cover
+
+GOPATH=`pwd`/Tools 
 
 set -e
 
