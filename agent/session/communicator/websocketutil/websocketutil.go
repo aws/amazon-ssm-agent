@@ -75,7 +75,7 @@ func (u *WebsocketUtil) OpenConnection(url string, requestHeader http.Header) (*
 		return nil, err
 	}
 
-	u.log.Infof("Successfully opened websocket connection to: %s", url)
+	u.log.Infof("Successfully opened websocket connection to: %s", conn.RemoteAddr())
 
 	return conn, err
 }

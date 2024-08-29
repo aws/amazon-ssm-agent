@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"runtime/debug"
 	"sync"
@@ -180,6 +181,12 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T, dialer *websocket.Dial
 		}()
 
 		retryCount := 0
+		webSocketChannel.Connection.SetReadDeadline(time.Now().Add(mgsconfig.WebSocketPongWaitTimeout + mgsconfig.WebSocketPingInterval))
+		webSocketChannel.Connection.SetPongHandler(func(string) error {
+			webSocketChannel.Connection.SetReadDeadline(time.Now().Add(mgsconfig.WebSocketPongWaitTimeout))
+			log.Debug("WebsocketChannel: received pong, extend timeout to be ", time.Now().Add(mgsconfig.WebSocketPongWaitTimeout))
+			return nil
+		})
 		for {
 
 			if webSocketChannel.IsOpen == false {
@@ -190,7 +197,11 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T, dialer *websocket.Dial
 			messageType, rawMessage, err := webSocketChannel.Connection.ReadMessage()
 			if err != nil {
 				retryCount++
-				if retryCount >= mgsconfig.RetryAttempt {
+				if errors.Is(err, os.ErrDeadlineExceeded) {
+					log.Warnf("I/O timeout. Error: %v", err.Error())
+					webSocketChannel.OnError(err)
+					break
+				} else if retryCount >= mgsconfig.RetryAttempt {
 					log.Warnf("Reach the retry limit %v for receive messages. Error: %v", mgsconfig.RetryAttempt, err.Error())
 					webSocketChannel.OnError(err)
 					break

@@ -21,6 +21,7 @@ import (
 	"net/url"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -78,6 +79,29 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 
 		//echo back the same sent string from the client while adding "echo" at the beginning
 		conn.WriteMessage(mt, []byte("echo "+string(p)))
+	}
+}
+
+// handlerToSendPongForPing send back pong for any ping message
+func handlerToSendPongForPing(w http.ResponseWriter, req *http.Request) {
+	conn, err := upgrader.Upgrade(w, req, nil)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("cannot upgrade: %v", err), http.StatusInternalServerError)
+	}
+
+	conn.SetPingHandler(func(string) error {
+		conn.WriteMessage(websocket.PongMessage, []byte(""))
+		conn.WriteMessage(websocket.TextMessage, []byte("Received Ping and send back Pong"))
+		return nil
+	})
+	for {
+		_, _, err := conn.ReadMessage()
+
+		if err != nil {
+			logger.DefaultLogger().Errorf("error: %v", err)
+			return
+		}
+
 	}
 }
 
@@ -201,6 +225,56 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	assert.Nil(t, err, "Error closing the websocket connection.")
 	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
 	t.Log("Ending test: TestReadWriteWebSocketChannel ")
+}
+
+func TestSendPingAndReceivePongInWebSocketChannel(t *testing.T) {
+	t.Log("Starting test: TestSendPingAndReceivePongInWebSocketChannel ")
+	srv := httptest.NewServer(http.HandlerFunc(handlerToSendPongForPing))
+	defer srv.Close()
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = logmocks.NewMockLog()
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	onMessage := func(input []byte) {
+		defer wg.Done()
+		t.Log(input)
+		// Verify read from websocket server
+		assert.Equal(t, string(input), "Received Ping and send back Pong")
+	}
+
+	websocketchannel := WebSocketChannel{
+		Url:       u.String(),
+		OnMessage: onMessage,
+		Context:   contextmocks.NewMockDefault(),
+	}
+
+	// Open the websocket connection
+	err := websocketchannel.Open(log, nil)
+	assert.Nil(t, err, "Error opening the websocket connection.")
+	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
+
+	// Verify if websocket connection sent ping and received pong
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		t.Log("Received reply from handler")
+	case <-time.After(2 * time.Minute):
+		t.Errorf("Timeout: ping pong not sent")
+	}
+
+	// Close the websocket connection
+	err = websocketchannel.Close(log)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
+	t.Log("Ending test: TestSendPingAndReceivePongInWebSocketChannel ")
 }
 
 func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {

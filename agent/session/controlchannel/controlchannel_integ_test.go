@@ -51,6 +51,128 @@ func TestMain(m *testing.M) {
 	os.Exit(code)
 }
 
+func TestControlChannel_PongWaitTimeoutReconnect(t *testing.T) {
+	httpErrorHandler := func(hw http.ResponseWriter, request *http.Request) {
+		httpConn, err := wsUpgrader.Upgrade(hw, request, nil)
+		if err != nil {
+			http.Error(hw, fmt.Sprintf("no upgrade: %v", err), http.StatusGatewayTimeout)
+			panic("Connection should be successful. Should not enter here.")
+		}
+		httpConn.SetPingHandler(func(string) error {
+			// received ping but do nothing
+			return nil
+		})
+		for {
+			_, _, err = httpConn.ReadMessage()
+			if err != nil {
+				return
+			}
+		}
+	}
+
+	// launch local HTTP Server
+	srv := httptest.NewServer(http.HandlerFunc(httpErrorHandler))
+	defer srv.Close()
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+
+	controlChannel := &ControlChannel{}
+	messageChan := make(chan mgsContracts.AgentMessage)
+	mockEventLog.On("SendAuditMessage")
+	var ableToOpenMGSConnection uint32
+	createControlChannelOutput := service.CreateControlChannelOutput{TokenValue: &token}
+	mockService = &serviceMock.Service{}
+	mockService.On("CreateControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(&createControlChannelOutput, nil)
+	mockService.On("GetRegion").Return(region)
+	mockService.On("GetV4Signer").Return(signer)
+	controlChannel.Initialize(mockContext, mockService, instanceId, messageChan)
+	var err error
+	err = controlChannel.SetWebSocket(mockContext, mockService, &ableToOpenMGSConnection)
+	assert.Nil(t, err, "should not throw error during websocket creation")
+
+	// Set local server URL
+	controlChannel.wsChannel.SetUrl(u.String())
+
+	// Get number of go-routines running
+	initialGRNumber := runtime.NumGoroutine()
+	stop := make(chan bool)
+	startConnectionChannelReader(stop, contracts.MGS)
+	// start the control channel Open
+	err = controlChannel.Open(mockContext, &ableToOpenMGSConnection)
+	defer controlChannel.Close(mockLog)
+
+	// sleep time for 3 ping pong timeout period and some extra time for reconnection
+	time.Sleep(4*mgsConfig.WebSocketPongWaitTimeout + 10)
+
+	controlChannel.AuditLogScheduler.ScheduleAuditEvents()
+	stop <- true
+	mockService.AssertNumberOfCalls(t, "CreateControlChannel", 3)
+
+	completedGRNumber := runtime.NumGoroutine()
+	assert.True(t, initialGRNumber+5 >= completedGRNumber) // tests run in parallel at times hence adding some buffer
+}
+
+func TestControlChannel_PingPongKeepConnection(t *testing.T) {
+	httpErrorHandler := func(hw http.ResponseWriter, request *http.Request) {
+		httpConn, err := wsUpgrader.Upgrade(hw, request, nil)
+		if err != nil {
+			http.Error(hw, fmt.Sprintf("no upgrade: %v", err), http.StatusGatewayTimeout)
+			panic("Connection should be successful. Should not enter here.")
+		}
+		httpConn.SetPingHandler(func(string) error {
+			httpConn.WriteMessage(websocket.PongMessage, []byte(""))
+			return nil
+		})
+		for {
+			_, _, err = httpConn.ReadMessage()
+			if err != nil {
+				return
+			}
+		}
+	}
+
+	// launch local HTTP Server
+	srv := httptest.NewServer(http.HandlerFunc(httpErrorHandler))
+	defer srv.Close()
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+
+	controlChannel := &ControlChannel{}
+	messageChan := make(chan mgsContracts.AgentMessage)
+	mockEventLog.On("SendAuditMessage")
+	var ableToOpenMGSConnection uint32
+	createControlChannelOutput := service.CreateControlChannelOutput{TokenValue: &token}
+	mockService = &serviceMock.Service{}
+	mockService.On("CreateControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(&createControlChannelOutput, nil)
+	mockService.On("GetRegion").Return(region)
+	mockService.On("GetV4Signer").Return(signer)
+	controlChannel.Initialize(mockContext, mockService, instanceId, messageChan)
+	var err error
+	err = controlChannel.SetWebSocket(mockContext, mockService, &ableToOpenMGSConnection)
+	assert.Nil(t, err, "should not throw error during websocket creation")
+
+	// Set local server URL
+	controlChannel.wsChannel.SetUrl(u.String())
+
+	// Get number of go-routines running
+	initialGRNumber := runtime.NumGoroutine()
+	stop := make(chan bool)
+	startConnectionChannelReader(stop, contracts.MGS)
+	// start the control channel Open
+	err = controlChannel.Open(mockContext, &ableToOpenMGSConnection)
+	defer controlChannel.Close(mockLog)
+
+	// sleep time for 3 ping pong timeout period
+	time.Sleep(mgsConfig.WebSocketPongWaitTimeout * 3)
+
+	controlChannel.AuditLogScheduler.ScheduleAuditEvents()
+	stop <- true
+	mockService.AssertNumberOfCalls(t, "CreateControlChannel", 1)
+
+	completedGRNumber := runtime.NumGoroutine()
+	assert.True(t, initialGRNumber+5 >= completedGRNumber) // tests run in parallel at times hence adding some buffer
+}
+
 func TestOpenControlChannel_MultiThread(t *testing.T) {
 	httpErrorHandler := func(hw http.ResponseWriter, request *http.Request) {
 		httpConn, err := wsUpgrader.Upgrade(hw, request, nil)
