@@ -1,5 +1,9 @@
 Latest
 ===============
+- Updated snapcraft.yml specification
+
+3.3.808.0
+===============
 - Add enhancements related to KMS sessions
 - Add support for RHEL 8.10 & 9.4
 - Allow in-place upgrade for hybrid distributor packages
