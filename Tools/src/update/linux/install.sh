@@ -35,7 +35,7 @@ function install_agent
   fi
   
   echo "Attempting to install amazon-ssm-agent using yum"
-  pmOutput=$(yum -y localinstall amazon-ssm-agent.rpm 2>&1)
+  pmOutput=$(yum -y --cacheonly localinstall amazon-ssm-agent.rpm 2>&1)
   pmExit=$?
   echo "Yum Output: $pmOutput"
   if [ ${pmExit} -ne 0 ]; then

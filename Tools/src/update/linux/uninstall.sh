@@ -23,7 +23,7 @@ function uninstall_agent()
   fi
   
   echo "Attempting to uninstall amazon-ssm-agent using yum"
-  pmOutput=$(yum -y remove amazon-ssm-agent 2>&1)
+  pmOutput=$(yum -y --cacheonly remove amazon-ssm-agent 2>&1)
   pmExit=$?
   echo "Yum Output: $pmOutput"
   if [ ${pmExit} -ne 0 ]; then
