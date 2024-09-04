@@ -39,7 +39,7 @@ func GetDefaultTLSConfig(log log.T, appConfig appconfig.SsmagentConfig) *tls.Con
 
 	if tlsConfig == nil {
 		// Initialize tls config
-		tlsConfig = &tls.Config{}
+		tlsConfig = &tls.Config{MinVersion: tls.VersionTLS12}
 	}
 	tlsConfigCopy := tlsConfig.Clone()
 
