@@ -15,20 +15,17 @@
 package filewatcherbasedipc
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"runtime/debug"
-	"strings"
-	"time"
-
-	"strconv"
-
-	"errors"
-
 	"regexp"
+	"runtime/debug"
+	"strconv"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -43,12 +40,8 @@ const (
 	//exclusive flag works on windows, while 660 blocks others access to the file
 	defaultFileWriteMode = os.ModeExclusive | 0660
 
-	consumeAttemptCount                = 3
-	consumeRetryIntervalInMilliseconds = 20
-)
-
-var (
-	osStatFn = os.Stat
+	consumeAttemptCount                = 5
+	consumeRetryIntervalInMilliseconds = 200
 )
 
 // TODO add unittest
@@ -358,11 +351,6 @@ func fileRead(logger log.T, filepath string) (buf []byte, err error) {
 
 // TODO - create a new function for read using blocking file locks
 func fileReadWithRetry(filepath string) (buf []byte, err error) {
-	fileSize, err := getFileSize(filepath)
-	if err != nil {
-		return
-	}
-
 	exponentialBackOff, err := backoffconfig.GetExponentialBackoff(consumeRetryIntervalInMilliseconds*time.Millisecond, consumeAttemptCount)
 	if err != nil {
 		return
@@ -373,34 +361,11 @@ func fileReadWithRetry(filepath string) (buf []byte, err error) {
 		if err != nil {
 			fileErr = errors.New(fmt.Sprintf("error while consuming message: %v", err))
 		}
-		fileBufSize := int64(len(buf))
-		if fileSize == 0 || fileBufSize == 0 || fileBufSize != fileSize {
-			fileErr = errors.New(fmt.Sprintf("problem reading file - fileBufSize: %v, fileSize: %v", fileBufSize, fileSize))
-		}
 		return fileErr
 	}
 
 	err = backoff.Retry(fileRead, exponentialBackOff)
 	return
-}
-
-func getFileSize(filepath string) (fileSize int64, err error) {
-	var fileInfo os.FileInfo
-	exponentialBackOff, err := backoffconfig.GetExponentialBackoff(consumeRetryIntervalInMilliseconds*time.Millisecond, consumeAttemptCount)
-	if err != nil {
-		return
-	}
-
-	fileStat := func() (err error) {
-		fileInfo, err = osStatFn(filepath)
-		return
-	}
-	err = backoff.Retry(fileStat, exponentialBackOff)
-	if err != nil {
-		return
-	}
-	fileSize = fileInfo.Size()
-	return fileSize, err
 }
 
 // we need to launch watcher receiver in another go routine, putting watcher.Close() and the receiver in same go routine can

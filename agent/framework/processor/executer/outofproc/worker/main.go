@@ -68,7 +68,7 @@ func main() {
 
 	logger.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
-	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(logger, agentIdentity, filewatcherbasedipc.ModeWorker, channelName, false)
+	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(logger, agentIdentity, filewatcherbasedipc.ModeWorker, channelName, true)
 	if err != nil {
 		logger.Errorf("failed to create channel: %v", err)
 		logger.Close()
