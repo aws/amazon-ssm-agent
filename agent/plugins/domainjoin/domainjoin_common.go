@@ -15,6 +15,11 @@
 // Package domainjoin implements the domain join plugin.
 package domainjoin
 
+import (
+	"fmt"
+	"github.com/google/shlex"
+)
+
 // Returns true if an injection command is detected in a shell command
 func isShellInjection(arg string) bool {
 	// The following characters are common shell injection characters
@@ -31,4 +36,13 @@ func isShellInjection(arg string) bool {
 	}
 
 	return false
+}
+
+func makeCommandParts(command string) (commandParts []string, err error) {
+
+	if commandParts, err = shlex.Split(command); err != nil {
+		return []string{}, fmt.Errorf("Command lexical analysis failed: %v", err)
+	}
+
+	return
 }

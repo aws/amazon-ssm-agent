@@ -160,8 +160,14 @@ func (p *Plugin) runCommands(pluginID string, pluginInput DomainJoinPluginInput,
 	}
 
 	log.Debugf("command line is : %v", command)
+
+	var commandParts []string
+	if commandParts, err = makeCommandParts(command); err != nil {
+		out.MarkAsFailed(fmt.Errorf("Failed to parse domain join command because : %v", err.Error()))
+		return
+	}
+
 	workingDir := fileutil.BuildPath(appconfig.DefaultPluginPath, DomainJoinFolderName)
-	commandParts := strings.Fields(command)
 	out.SetStatus(contracts.ResultStatusInProgress)
 	var output string
 	output, err = utilExe(log,
@@ -224,9 +230,13 @@ func makeArguments(context context.T, pluginInput DomainJoinPluginInput) (comman
 	if len(pluginInput.DirectoryOU) != 0 {
 		log.Debugf("Customized directory OU parameter provided: %v", pluginInput.DirectoryOU)
 		buffer.WriteString(DirectoryOUArg)
-		buffer.WriteString("'")
-		buffer.WriteString(pluginInput.DirectoryOU)
-		buffer.WriteString("'")
+		// Windows powershell splits an unquoted parameter with space(s) to separate parameters by space
+		// when using OU name with spaces, we should expect users passing in the OU parameter within quotation marks
+		// need to make sure the final parameter only has one pair of quotation marks
+		// adding outer single quotes to indicate the lexical parser this is a single token
+		buffer.WriteString("'\"")
+		buffer.WriteString(strings.Trim(pluginInput.DirectoryOU, "\""))
+		buffer.WriteString("\"'")
 	}
 
 	if len(pluginInput.HostName) != 0 {

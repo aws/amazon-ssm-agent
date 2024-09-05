@@ -192,7 +192,13 @@ func (p *Plugin) runCommands(pluginID string, pluginInput DomainJoinPluginInput,
 	}
 
 	log.Infof("command line is : %v", command)
-	commandParts := strings.Fields(command)
+
+	var commandParts []string
+	if commandParts, err = makeCommandParts(command); err != nil {
+		out.MarkAsFailed(fmt.Errorf("Failed to parse domain join command because : %v", err.Error()))
+		return
+	}
+
 	out.SetStatus(contracts.ResultStatusInProgress)
 	var output string
 	output, err = utilExe(log,
@@ -276,7 +282,12 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 	if len(pluginInput.DirectoryOU) != 0 {
 		log.Debugf("Customized directory OU parameter provided: %v", pluginInput.DirectoryOU)
 		buffer.WriteString(DirectoryOUArg)
-		buffer.WriteString(pluginInput.DirectoryOU)
+		// when using OU name with spaces, we should expect users passing in the OU parameter within quotation marks
+		// need to remove such quotation marks for UNIX shell script
+		// adding outer single quotes to indicate the lexical parser this is a single token
+		buffer.WriteString("'")
+		buffer.WriteString(strings.Trim(pluginInput.DirectoryOU, "\""))
+		buffer.WriteString("'")
 	}
 
 	if isShellInjection(pluginInput.DirectoryOU) {
