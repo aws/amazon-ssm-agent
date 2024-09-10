@@ -132,8 +132,7 @@ set_hostname() {
 get_list_of_computers() {
     check_for_write_protect ldapsearch
     LDAP_BASE_DN=$(echo $DIRECTORY_NAME | awk -F\. '{ for (i = 1; i <= NF; i++) { if (i != NF) printf "DC=%s,",$i ; else printf "DC=%s", $i} }')
-    DIRNAME_UPPER=$(echo "$DIRECTORY_NAME" | tr [:lower:] [:upper:])
-    ldapsearch -H ldap://$DIRECTORY_NAME -b $LDAP_BASE_DN 'objectClass=computer' -D "$DOMAIN_USERNAME@$DIRNAME_UPPER" -w "$DOMAIN_PASSWORD"  | grep "cn:" | sed 's/cn://g'
+    ldapsearch -H ldap://$DIRECTORY_NAME -b $LDAP_BASE_DN 'objectClass=computer' -D "$DOMAIN_USERNAME@$REALM" -w "$DOMAIN_PASSWORD"  | grep "cn:" | sed 's/cn://g'
 }
 
 cleanup_temp_files() {
@@ -343,7 +342,7 @@ check_awscli_install_dir() {
 ########## Install components ####################
 ##################################################
 install_components() {
-    LINUX_DISTRO=$(cat /etc/os-release | grep NAME | awk -F'=' '{print $2}')
+    LINUX_DISTRO=$(cat /etc/os-release | grep NAME | awk -F'=' '{print $2}' | head -1)
     LINUX_DISTRO_VERSION_ID=$(cat /etc/os-release | grep VERSION_ID | awk -F'=' '{print $2}' | tr -d '"')
     if [ -z $LINUX_DISTRO_VERSION_ID ]; then
        echo "**Failed : Unsupported OS version $LINUX_DISTRO : $LINUX_DISTRO_VERSION_ID"
@@ -361,7 +360,7 @@ install_components() {
         check_for_write_protect yum
         yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for CentOS" && return 1; fi
-    elif grep -e 'Red Hat' /etc/os-release 1>/dev/null 2>/dev/null; then
+    elif grep -E -e 'Red Hat|Rocky' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='RHEL'
         RHEL_MAJOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $1}')
         RHEL_MINOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $2}')
@@ -830,9 +829,15 @@ do_domainjoin() {
 
     if echo "$DOMAIN_USERNAME" | grep "@" 2>&1 > /dev/null; then
        # Use username@RemoteTrustedDir (Active Directory Trust) to join
-       echo "do_domainjoin(): Found directory in username as username@directory"
+       echo "do_domainjoin(): Found directory/realm in username as username@directory"
     else
-       DOMAIN_USERNAME=${DOMAIN_USERNAME}@${DIRECTORY_NAME}
+        if [ ${LINUX_DISTRO} == "RHEL" ]; then
+            # Redhat and derivatives require domain portion to be upper case, ie use Kerberos Realm
+            # https://access.redhat.com/solutions/5592351
+            DOMAIN_USERNAME=${DOMAIN_USERNAME}@${REALM}
+        else
+            DOMAIN_USERNAME=${DOMAIN_USERNAME}@${DIRECTORY_NAME}
+        fi
     fi
 
     IS_VERSION_ID_2022="FALSE"
@@ -840,12 +845,11 @@ do_domainjoin() {
         IS_VERSION_ID_2022="TRUE"
     fi
     if [ ${LINUX_DISTRO} == "AMAZON_LINUX" -a ${IS_VERSION_ID_2022} == "TRUE" ]; then
-       DIRNAME_UPPER=$(echo "$DIRECTORY_NAME" | tr [:lower:] [:upper:])
        # Add kinit as a workaround for this issue:
        #     WARNING: The option -k|--kerberos is deprecated!
        USERNAME=$(echo ${DOMAIN_USERNAME} | sed 's/@.*$//g')
        check_for_write_protect kinit
-       echo ${DOMAIN_PASSWORD} | kinit -V ${USERNAME}@${DIRNAME_UPPER}
+       echo ${DOMAIN_PASSWORD} | kinit -V ${USERNAME}@${REALM}
     fi
 
     check_for_write_protect realm
