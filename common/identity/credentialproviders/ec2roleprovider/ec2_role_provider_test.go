@@ -22,7 +22,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider/stubs"
@@ -82,7 +81,7 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, testCase.ssmRetrieveErr).Once()
 	}
 
-	newV4ServiceWithCreds = func(log log.T, appConfig *appconfig.SsmagentConfig, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
+	newV4ServiceWithCreds = func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
 
@@ -91,11 +90,6 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 		InstanceInfo: &ssmec2roleprovider.InstanceInfo{
 			InstanceId: "SomeInstanceId",
 			Region:     "SomeRegion",
-		},
-		Config: &appconfig.SsmagentConfig{
-			Agent: appconfig.AgentInfo{
-				Version: "3.1.0.0",
-			},
 		},
 		expirationUpdateLock: &sync.Mutex{},
 		RuntimeConfigClient:  &runtimeConfigMocks.IIdentityRuntimeConfigClient{},
@@ -115,7 +109,7 @@ func arrangeUpdateInstanceInformation(err error) (*mocks.ISSMClient, *EC2RolePro
 	ssmClient := &mocks.ISSMClient{}
 	updateInstanceInfoOutput := &ssm.UpdateInstanceInformationOutput{}
 	ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, err).Repeatability = 1
-	newV4ServiceWithCreds = func(log log.T, appConfig *appconfig.SsmagentConfig, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
+	newV4ServiceWithCreds = func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
 
@@ -124,11 +118,6 @@ func arrangeUpdateInstanceInformation(err error) (*mocks.ISSMClient, *EC2RolePro
 		InstanceInfo: &ssmec2roleprovider.InstanceInfo{
 			InstanceId: "SomeInstanceId",
 			Region:     "SomeRegion",
-		},
-		Config: &appconfig.SsmagentConfig{
-			Agent: appconfig.AgentInfo{
-				Version: "3.1.0.0",
-			},
 		},
 		expirationUpdateLock: &sync.Mutex{},
 		RuntimeConfigClient:  &runtimeConfigMocks.IIdentityRuntimeConfigClient{},
@@ -431,7 +420,7 @@ func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
 		runtimeConfigClient.On("GetConfigWithRetry").Return(j.runtimeConfig, j.ssmRetrieveErr)
 	}
 
-	newV4ServiceWithCreds = func(log log.T, appConfig *appconfig.SsmagentConfig, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
+	newV4ServiceWithCreds = func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
 
@@ -439,11 +428,6 @@ func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
 	instanceInfo := &ssmec2roleprovider.InstanceInfo{
 		InstanceId: "SomeInstanceId",
 		Region:     "SomeRegion",
-	}
-	config := &appconfig.SsmagentConfig{
-		Agent: appconfig.AgentInfo{
-			Version: "3.1.0.0",
-		},
 	}
 
 	iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName, RetrieveErr: j.iprRetrieveErr}
@@ -457,7 +441,7 @@ func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
 
 	ssmEndpoint := "ssm.amazonaws.com"
 
-	return NewEC2RoleProvider(log, config, innerProviders, instanceInfo, ssmEndpoint, runtimeConfigClient)
+	return NewEC2RoleProvider(log, innerProviders, instanceInfo, ssmEndpoint, runtimeConfigClient)
 }
 
 func TestEC2RoleProvider_GetInnerProvider_ReturnsIPRProvider_WhenCredentialSourceEmpty(t *testing.T) {

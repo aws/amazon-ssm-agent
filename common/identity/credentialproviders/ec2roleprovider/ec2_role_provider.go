@@ -39,7 +39,6 @@ type EC2RoleProvider struct {
 	credentials.Expiry
 	InnerProviders         *EC2InnerProviders
 	Log                    log.T
-	Config                 *appconfig.SsmagentConfig
 	InstanceInfo           *ssmec2roleprovider.InstanceInfo
 	expirationUpdateLock   *sync.Mutex
 	credentialSource       string
@@ -49,7 +48,7 @@ type EC2RoleProvider struct {
 }
 
 // NewEC2RoleProvider initializes a new EC2RoleProvider using runtime config values
-func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
+func NewEC2RoleProvider(log log.T, innerProviders *EC2InnerProviders, instanceInfo *ssmec2roleprovider.InstanceInfo, ssmEndpoint string, runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient) *EC2RoleProvider {
 	runtimeConfig, err := runtimeConfigClient.GetConfigWithRetry()
 	if err != nil {
 		log.Warnf("Failed to get credential source from runtime config. Err: %v", err)
@@ -67,7 +66,6 @@ func NewEC2RoleProvider(log log.T, config *appconfig.SsmagentConfig, innerProvid
 	return &EC2RoleProvider{
 		InnerProviders:         innerProviders,
 		Log:                    log.WithContext(ec2rolecreds.ProviderName),
-		Config:                 config,
 		InstanceInfo:           instanceInfo,
 		SsmEndpoint:            ssmEndpoint,
 		RuntimeConfigClient:    runtimeConfigClient,
@@ -181,9 +179,9 @@ func (p *EC2RoleProvider) iprCredentials(ctx context.Context, ssmEndpoint string
 
 // updateEmptyInstanceInformation calls UpdateInstanceInformation with minimal parameters
 func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ssmEndpoint string, roleCredentials *credentials.Credentials) error {
-	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), p.Config, roleCredentials, p.InstanceInfo.Region, ssmEndpoint)
+	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), roleCredentials, p.InstanceInfo.Region, ssmEndpoint)
 
-	p.Log.Debugf("Calling UpdateInstanceInformation with agent version %s", p.Config.Agent.Version)
+	p.Log.Debugf("Calling UpdateInstanceInformation")
 	// Call update instance information with instance profile role
 	input := &ssm.UpdateInstanceInformationInput{
 		AgentName:    aws.String(agentName),

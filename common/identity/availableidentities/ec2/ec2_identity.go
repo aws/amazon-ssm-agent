@@ -312,7 +312,7 @@ func (i *Identity) initEc2RoleProvider(endpointHelper endpoint.IEndpointHelper, 
 
 	runtimeConfigClient := runtimeconfig.NewIdentityRuntimeConfigClient()
 	ssmEndpoint := endpointHelper.GetServiceEndpoint("ssm", instanceInfo.Region)
-	ec2RoleProvider := ec2roleprovider.NewEC2RoleProvider(i.Log, i.Config, innerProviders, instanceInfo, ssmEndpoint, runtimeConfigClient)
+	ec2RoleProvider := ec2roleprovider.NewEC2RoleProvider(i.Log, innerProviders, instanceInfo, ssmEndpoint, runtimeConfigClient)
 
 	i.credentialsProvider = ec2RoleProvider
 }
