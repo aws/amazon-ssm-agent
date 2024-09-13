@@ -408,6 +408,14 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
+
+	// Add lock to prevent quadratic fs lookup for large volume session users.
+	sessionLockName := orchestrationRootDirName + appconfig.DefaultSessionRootDirName
+	if !getLock(sessionLockName) {
+		return
+	}
+	defer releaseLock(sessionLockName)
+
 	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultSessionRootDirName)
 	if err != nil {
 		log.Debugf("Failed to get orchestration directories under %v", err)
@@ -446,9 +454,9 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 			// Deletion of both document state and orchestration file was successful
 			deletedCount += 1
 		}
-
 	}
 
+	updateTime(sessionLockName)
 	log.Debugf("Completed session orchestration directory clean up of %v items", deletedCount)
 }
 
