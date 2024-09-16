@@ -1,5 +1,23 @@
 Latest
 ===============
+- Update default session logging destination to none
+- Specify a minimum of TLS v1.2 in http client calls
+- Add web-socket heartbeat to detect connection drops in the web-socket for control and data channels sooner
+- Use exponential retry for document worker, increase retry interval and attempt count when reading IPC files
+- Add wait for cloud-init in the agent updater
+- Fix timeouts for update without yum endpoint connectivity
+- Change in orchestration directory removal process to reduce disk space usage
+- Fix Inventory detailed information invalid value check
+- Fix parsing issue with DomainJoin Plugin
+- Modify DomainJoin Plugin to use Kerberos REALM in username for RHEL and variants
+- Change the SUSE linux zypper commands to quiet mode for the DomainJoin Plugin
+- Move high volume info logs to debug level
+- Remove deprecated go coverage library (golang.org/x/tools/cmd/cover)
+- Add lock on session orchestration cleanup to prevent quadratic file system lookup for large volume session users
+- Upgrade GoLang to version 1.22.7
+
+3.3.859.0
+===============
 - Updated snapcraft.yml specification
 
 3.3.808.0
