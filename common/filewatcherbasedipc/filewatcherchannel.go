@@ -298,13 +298,27 @@ func (ch *fileWatcherChannel) consumeAll() {
 	}
 }
 
-// TODO add unittest
+func (ch *fileWatcherChannel) isFullPathReadable(fullpath string) bool {
+	relpath, err := filepath.Rel(ch.path, fullpath)
+	if err != nil {
+		ch.logger.Error("Found watched file path that doesn't belong to process channel path (fullpath, process channel path): ", fullpath, ch.path)
+		return false
+	}
+	return ch.isReadable(relpath)
+}
+
 func (ch *fileWatcherChannel) isReadable(filename string) bool {
 	matched, err := regexp.MatchString("[a-zA-Z]+-[0-9]+-[0-9]+", filename)
 	if !matched || err != nil {
 		return false
 	}
-	return !strings.Contains(filename, string(ch.mode)) && !strings.Contains(filename, "tmp")
+	if strings.HasPrefix(filename, "tmp") {
+		return false
+	}
+	if strings.HasPrefix(filename, string(ch.mode)) {
+		return false
+	}
+	return true
 }
 
 // read and remove a given file
@@ -396,7 +410,7 @@ func (ch *fileWatcherChannel) watch() {
 				return
 			}
 			log.Debug("received event: ", event.String())
-			if event.Op&fsnotify.Create == fsnotify.Create && ch.isReadable(event.Name) {
+			if event.Op&fsnotify.Create == fsnotify.Create && ch.isFullPathReadable(event.Name) {
 				//if the receiving counter is as expected, consume that message
 				//otherwise, read the entire directory in sorted order, sender assures sending order
 				if parseSequenceCounter(event.Name) == ch.recvCounter {
