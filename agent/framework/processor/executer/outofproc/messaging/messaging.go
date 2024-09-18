@@ -94,8 +94,8 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 	for {
 		select {
 		case <-stopTimer:
-			log.Error("received timedout signal!")
-			err = errors.New("document worker timed out")
+			log.Error("ipc messaging received timedout signal!")
+			err = errors.New("ipc messaging received timeout signal")
 			//messaging already timed out, close ipc and wait for done
 			ipc.Close()
 
