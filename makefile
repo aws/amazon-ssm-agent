@@ -477,3 +477,13 @@ build-tests-windows: copy-src copy-tests-src pre-build
 lint:
 # if you want to configure what linters are run, edit .golangci.yml
 	$(GO_SPACE)/Tools/src/run_golangci-lint.sh
+
+# simple version of analyze target
+.PHONY: security-check
+security-check:
+	gosec -quiet -severity high -confidence high $(GO_SPACE)/agent/... $(GO_SPACE)/core/... $(GO_SPACE)/common/... $(GO_SPACE)/internal/...
+ 
+.PHONY: vuln-check
+vuln-check:
+	govulncheck $(GO_SPACE)/agent/... $(GO_SPACE)/core/... $(GO_SPACE)/common/... $(GO_SPACE)/internal/...
+ 
