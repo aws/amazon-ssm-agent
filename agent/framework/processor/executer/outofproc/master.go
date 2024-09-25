@@ -128,8 +128,12 @@ func (e *OutOfProcExecuter) Run(
 // Executer however does hold a timer to the worker to forcefully termniate both of them
 func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
 
+	// backup current time in case outofproc execution failed and cannot correctly return PluginResult
+	backupStartTime := time.Now()
+
 	//handoff reply functionalities to data backend.
 	backend := messaging.NewExecuterBackend(log, resChan, e.docState, cancelFlag)
+
 	//handoff the data backend to messaging worker
 	if err := messaging.Messaging(log, ipc, backend, stopTimer); err != nil {
 		//the messaging worker encountered error, either ipc run into error or data backend throws error
@@ -141,14 +145,16 @@ func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChan
 			e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
 			e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusFailed
 			log.Info("document failed half way, sending fail message...")
-			resChan <- e.generateUnexpectedFailResult(fmt.Sprintf("document process failed unexpectedly: %s , check [ssm-document-worker]/[ssm-session-worker] log for crash reason", err))
+			errMsg := fmt.Sprintf("document process failed unexpectedly: %s , check [ssm-document-worker]/[ssm-session-worker] log for crash reason", err)
+			resChan <- e.generateUnexpectedFailResult(errMsg, backupStartTime)
 		}
 		//destroy the channel
 		ipc.Destroy()
 	}
 }
 
-func (e *OutOfProcExecuter) generateUnexpectedFailResult(errMsg string) contracts.DocumentResult {
+func (e *OutOfProcExecuter) generateUnexpectedFailResult(errMsg string, startTime time.Time) contracts.DocumentResult {
+	endTime := time.Now()
 	var docResult contracts.DocumentResult
 	docResult.MessageID = e.docState.DocumentInformation.MessageID
 	docResult.AssociationID = e.docState.DocumentInformation.AssociationID
@@ -160,6 +166,8 @@ func (e *OutOfProcExecuter) generateUnexpectedFailResult(errMsg string) contract
 	res := e.docState.InstancePluginsInformation[0].Result
 	res.Output = errMsg
 	res.Status = contracts.ResultStatusFailed
+	res.StartDateTime = startTime
+	res.EndDateTime = endTime
 	docResult.PluginResults[e.docState.InstancePluginsInformation[0].Id] = &res
 	return docResult
 }

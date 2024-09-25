@@ -100,3 +100,11 @@ func (m *BackendMock) Close() {
 func (m *BackendMock) CloseStop() {
 	m.Called()
 }
+
+func (m *BackendMock) ForceQuit() {
+	m.Called()
+}
+
+func (m *BackendMock) GetBackendState() int32 {
+	return BackendStateProc
+}

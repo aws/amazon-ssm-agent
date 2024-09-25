@@ -3,6 +3,7 @@ package messaging
 import (
 	"errors"
 	"runtime/debug"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -12,9 +13,15 @@ import (
 type MessageType string
 
 const (
+	// Stop type terminate is used on agent-worker thread
 	stopTypeTerminate = 1
-	stopTypeShutdown  = 2
+	// Stop type shutdown is used on document/session worker process.
+	stopTypeShutdown = 2
 )
+
+// Stop idle worker process if initiation failed for any reason.
+// As fail safe mechanism to avoid resource leak.
+const idleInitWorkerStopTimeMinutes = 15
 
 // Message types
 const (
@@ -42,6 +49,10 @@ type MessagingBackend interface {
 	Close()
 	//Sets stop channel to nil.
 	CloseStop()
+	// Get backend state
+	GetBackendState() int32
+	// Force Quit backend and exits the messaging block.
+	ForceQuit()
 }
 
 // GetLatestVersion retrieves the current latest message version of the agent build
@@ -76,6 +87,17 @@ func ParseDatagram(datagram string) (MessageType, string) {
 	return message.Type, message.Content
 }
 
+// Remove idle worker if it was unable to start via IPC.
+// This will remove agent-thread as well and document would timeout.
+// instead of waiting forever in messaging block
+func stopIdleInitWorkerBackend(log log.T, backend MessagingBackend) {
+	<-time.After(time.Duration(idleInitWorkerStopTimeMinutes) * time.Minute)
+	if backend.GetBackendState() == BackendStateInit {
+		log.Error("Worker process did not start properly, force quitting")
+		backend.ForceQuit()
+	}
+}
+
 // Messaging implements the duplex transmission between master and worker, it send datagram it received to data backend,
 // TODO ipc should not be destroyed within this worker, destroying ipc object should be done in its caller: Executer
 func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingBackend, stopTimer chan bool) (err error) {
@@ -87,7 +109,8 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 		}
 	}()
 
-	log.Debugf("inter process communication started at %v", ipc.GetPath())
+	log.Infof("inter process communication started at %v", ipc.GetPath())
+	go stopIdleInitWorkerBackend(log, backend)
 	requestedStop := false
 	inboundClosed := false
 	//TODO add timer, if IPC is unresponsive to Close(), force return

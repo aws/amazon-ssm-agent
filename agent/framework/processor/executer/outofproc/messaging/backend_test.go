@@ -1,6 +1,7 @@
 package messaging
 
 import (
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -190,6 +191,33 @@ func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 	err = backend.Process(testUnknownTypeRawJSON2)
 	assert.Error(t, err)
 	logger.Info(err)
+}
+
+func TestWorkerBackend_TestBackendStateUpdate(t *testing.T) {
+	_ = CreateTestCase()
+	inputChan := make(chan string, 10)
+	cancelFlag := new(taskmocks.MockCancelFlag)
+	cancelFlag.On("Set", task.Canceled).Return(nil)
+	pluginRunner := func(
+		context context.T,
+		docState contracts.DocumentState,
+		resChan chan contracts.PluginResult,
+		cancelFlag task.CancelFlag,
+	) {
+		close(resChan)
+	}
+	stopChan := make(chan int, 1)
+	backend := WorkerBackend{
+		ctx:        contextMock,
+		input:      inputChan,
+		cancelFlag: cancelFlag,
+		runner:     pluginRunner,
+		stopChan:   stopChan,
+		state:      atomic.Int32{},
+	}
+	assert.Equal(t, backend.GetBackendState(), BackendStateInit)
+	backend.Process(testPluginsRawJSON)
+	assert.Equal(t, backend.GetBackendState(), BackendStateProc)
 }
 
 func TestWorkerBackend_ProcessCancelV1(t *testing.T) {

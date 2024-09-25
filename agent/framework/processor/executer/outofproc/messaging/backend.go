@@ -3,6 +3,7 @@ package messaging
 import (
 	"errors"
 	"runtime/debug"
+	"sync/atomic"
 
 	"sync"
 
@@ -16,6 +17,10 @@ import (
 const (
 	//make sure the channel operation in backend is not blocked
 	defaultBackendChannelSize = 10
+	// Backend states with potential future addition to further manage backend
+	// Currently with Init and Processing statuses to avoid idle process leak.
+	BackendStateInit int32 = 0
+	BackendStateProc int32 = 1
 )
 
 type PluginRunner func(
@@ -33,6 +38,7 @@ type WorkerBackend struct {
 	cancelFlag task.CancelFlag
 	runner     PluginRunner
 	stopChan   chan int
+	state      atomic.Int32
 }
 
 // Executer backend formulate the run request to the worker, and collect back the responses from worker
@@ -95,6 +101,17 @@ func (p *ExecuterBackend) CloseStop() {
 	return
 }
 
+func (p *ExecuterBackend) GetBackendState() int32 {
+	// For Executor Backend, default to processing as initiator of communications
+	return BackendStateProc
+}
+
+func (p *ExecuterBackend) ForceQuit() {
+	// Force Quit is currently targeted for WorkerBackend, purposefully do
+	// nothing for Executor Backend until we find a valid reason to do so.
+	return
+}
+
 // TODO handle error and logging, when err, ask messaging to stop
 // TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
@@ -134,12 +151,14 @@ func NewWorkerBackend(ctx context.T, runner PluginRunner) *WorkerBackend {
 		cancelFlag: task.NewChanneledCancelFlag(),
 		runner:     runner,
 		stopChan:   stopChan,
+		state:      atomic.Int32{},
 	}
 }
 
 func (p *WorkerBackend) Process(datagram string) error {
 	t, content := ParseDatagram(datagram)
 	log := p.ctx.Log()
+	p.state.Store(BackendStateProc)
 	switch t {
 	case MessageTypePluginConfig:
 		log.Info("received plugin config message")
@@ -227,4 +246,13 @@ func (p *WorkerBackend) Close() {
 
 func (p *WorkerBackend) CloseStop() {
 	p.stopChan = nil
+}
+
+func (p *WorkerBackend) GetBackendState() int32 {
+	return p.state.Load()
+}
+
+func (p *WorkerBackend) ForceQuit() {
+	p.stopChan <- stopTypeShutdown
+	close(p.stopChan)
 }
