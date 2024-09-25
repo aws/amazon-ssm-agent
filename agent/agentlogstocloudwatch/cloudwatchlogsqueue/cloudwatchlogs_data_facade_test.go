@@ -18,6 +18,7 @@ package cloudwatchlogsqueue
 import (
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -95,16 +96,16 @@ func TestParallelAccessOfQueue(t *testing.T) {
 
 	message := &cloudwatchlogs.InputLogEvent{}
 
-	counter := 0
+	var counter atomic.Int32
 
 	dequeued := make(chan bool, 6)
 	done := make(chan bool, 3)
-	enqueuesComplete := false
+	var enqueuesComplete atomic.Bool
 
 	go func() {
 		for i := 0; i < 500; i++ {
 			Enqueue(message)
-			counter++
+			counter.Add(1)
 			if i == 100 || i == 300 {
 				// Block on dequeued which unblocks only when something dequeues to ensure dequeuer is running while enqueueing
 				<-dequeued
@@ -117,7 +118,7 @@ func TestParallelAccessOfQueue(t *testing.T) {
 	go func() {
 		for i := 0; i < 1000; i++ {
 			Enqueue(message)
-			counter++
+			counter.Add(1)
 			if i == 100 || i == 500 {
 				// Block on dequeued which unblocks only when something dequeues to ensure dequeuer is running while enqueueing
 				<-dequeued
@@ -130,12 +131,12 @@ func TestParallelAccessOfQueue(t *testing.T) {
 	go func() {
 		for {
 			messages, _ := Dequeue(time.Millisecond)
-			counter -= len(messages)
+			counter.Add(int32(-len(messages)))
 			if len(messages) == 0 {
 				// Unblock Enqueuers to continue enqueueing
 				dequeued <- true
 			}
-			if enqueuesComplete {
+			if enqueuesComplete.Load() {
 				break
 			}
 			time.Sleep(time.Millisecond)
@@ -145,10 +146,10 @@ func TestParallelAccessOfQueue(t *testing.T) {
 
 	<-done
 	<-done
-	enqueuesComplete = true
+	enqueuesComplete.Store(true)
 	<-done
 
-	assert.Equal(t, 0, counter, "Message loss while enqueueing and dequeueing from go routines")
+	assert.Equal(t, 0, int(counter.Load()), "Message loss while enqueueing and dequeueing from go routines")
 
 }
 
