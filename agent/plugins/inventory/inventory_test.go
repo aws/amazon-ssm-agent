@@ -16,6 +16,7 @@ package inventory
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -169,6 +170,22 @@ func LargeInventoryItem(sizeInBytes int) model.Item {
 		Content:       LargeString(sizeInBytes),
 		SchemaVersion: "1.0",
 	}
+}
+func TestVerifyCanGathererRun(t *testing.T) {
+	//ARRANGE
+	iGatherers := []string{"Gatherer1", "Gatherer2", "Gatherer3"}
+	sGatherers := []string{"Gatherer1", "Gatherer2", "Gatherer4"}
+	p, _ := MockInventoryPlugin(sGatherers, iGatherers)
+	p.context = context.NewMockDefault()
+	//ACT
+	_, _, err := p.CanGathererRun(p.context, "Gatherer5")
+	supportedAndInstalled, _, _ := p.CanGathererRun(p.context, "Gatherer1")
+	notSupportedAndInstalled, _, _ := p.CanGathererRun(p.context, "Gatherer3")
+	//ASSERT
+	assert.Error(t, err, "Should throw and error ")
+	assert.False(t, notSupportedAndInstalled)
+	assert.True(t, supportedAndInstalled)
+
 }
 
 func TestRunGatherers(t *testing.T) {
@@ -340,6 +357,81 @@ func TestPlugin_IsMulitpleAssociationPresent(t *testing.T) {
 	status, other := p.IsMulitpleAssociationPresent("testAssociationID", config)
 	assert.True(t, status)
 	assert.Equal(t, "testAssociationID2", other)
+}
+
+func TestInventoryIsInventoryBeingInvokedAsAssociation(t *testing.T) {
+	//ARRANGE
+	type fields struct {
+		fileutilExists      func(path string) bool
+		fileutilReadAllText func(path string) (string, error)
+		expectedStatus      bool
+		expectedError       bool
+	}
+	tests := []struct {
+		name   string
+		fields fields
+	}{
+		{
+			name: "DocumentExistsIsOfTypeAssociationReturnTrue",
+			fields: fields{
+				fileutilExists: func(path string) bool { return true },
+				fileutilReadAllText: func(path string) (string, error) {
+					var docstate = contracts.DocumentState{DocumentType: "Association"}
+					bytearray, err := json.Marshal(docstate)
+					return string(bytearray), err
+				},
+				expectedStatus: true,
+				expectedError:  false,
+			},
+		},
+		{
+			name: "DocumentDoesNotExistsReturnFalse",
+			fields: fields{
+				fileutilExists: func(path string) bool { return false },
+				expectedStatus: false,
+				expectedError:  true,
+			},
+		},
+		{
+			name: "DocumentExistsCanNotBeReadReturnFalse",
+			fields: fields{
+				fileutilExists: func(path string) bool { return true },
+				fileutilReadAllText: func(path string) (string, error) {
+					return "fake", nil
+				},
+				expectedStatus: false,
+				expectedError:  true,
+			},
+		},
+		{name: "DocumentExistsNotIsOfTypeAssociationReturnFalse",
+			fields: fields{
+				fileutilExists: func(path string) bool { return true },
+				fileutilReadAllText: func(path string) (string, error) {
+					var docstate = contracts.DocumentState{DocumentType: "Inventory"}
+					bytearray, err := json.Marshal(docstate)
+					return string(bytearray), err
+				},
+				expectedStatus: false,
+				expectedError:  false,
+			},
+		},
+	}
+	gatherers := []string{"RandomGatherer"}
+	p, _ := MockInventoryPlugin(gatherers, gatherers)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fileutilExists = tt.fields.fileutilExists
+			fileutilReadAllText = tt.fields.fileutilReadAllText
+			//ACT
+			status, err := p.IsInventoryBeingInvokedAsAssociation("")
+			//ASSERT
+			assert.Equal(t, tt.fields.expectedStatus, status)
+			assert.Equal(t, tt.fields.expectedError, err != nil)
+
+		})
+	}
+
 }
 
 func TestShouldRetryWithNonOptimizedData(t *testing.T) {

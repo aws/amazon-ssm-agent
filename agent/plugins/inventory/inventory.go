@@ -49,6 +49,8 @@ import (
 )
 
 // TODO: add more unit tests.
+var fileutilExists = fileutil.Exists
+var fileutilReadAllText = fileutil.ReadAllText
 
 const (
 	errorMsgForMultipleAssociations           = "%v detected multiple inventory configurations associated with one instance. Each instance can be associated with just one inventory configuration. Conflicting inventory configuration IDs: %v and %v"
@@ -651,13 +653,12 @@ func (p *Plugin) IsInventoryBeingInvokedAsAssociation(fileName string) (status b
 		appconfig.DefaultLocationOfCurrent)
 
 	absPathOfDoc := filepath.Join(path, fileName)
-
 	//read file & then determine if document is of association type
-	if fileutil.Exists(absPathOfDoc) {
+	if fileutilExists(absPathOfDoc) {
 		log.Debugf("Found the document that's executing inventory plugin - %v", absPathOfDoc)
 
 		//read file
-		if content, err = fileutil.ReadAllText(absPathOfDoc); err == nil {
+		if content, err = fileutilReadAllText(absPathOfDoc); err == nil {
 			if err = json.Unmarshal([]byte(content), &docState); err == nil {
 				status = docState.IsAssociation()
 			}
