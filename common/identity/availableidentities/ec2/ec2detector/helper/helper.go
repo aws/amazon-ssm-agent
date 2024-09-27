@@ -44,7 +44,7 @@ type Detector interface {
 type DetectorHelper interface {
 	// MatchUuid ensured string matches an uuid format and starts with ec2
 	MatchUuid(string) bool
-	// GetSystemInfo retrieves the system information based on platform, linux reads files while on Windows queries wmic
+	// GetSystemInfo retrieves the system information based on platform, linux reads files while on Windows queries wmi
 	GetSystemInfo(string) string
 }
 

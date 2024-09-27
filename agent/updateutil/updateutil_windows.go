@@ -22,7 +22,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -52,7 +51,6 @@ var (
 	backOffRetry                    = backoff.Retry
 	deleteFile                      = fileutil.DeleteFile
 	fileWrite                       = fileutil.WriteIntoFileWithPermissions
-	wmicCommand                     = filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
 	getVersionThroughRegistryKeyRef = getVersionThroughRegistryKey
 	getVersionThroughWMIRef         = getVersionThroughWMI
 )
@@ -367,16 +365,17 @@ func getVersionThroughRegistryKey(log log.T) string {
 
 func getVersionThroughWMI(log log.T) string {
 	version := ""
-	contentBytes, err := execCommand(wmicCommand, "product", "where", "name like 'Amazon SSM Agent%'", "get", "version", "/Value").Output()
+	cmdArgs := []string{`Get-CimInstance -ClassName Win32_Product -Filter "Name like 'Amazon SSM Agent%'" | Format-List -Property @{name='Version';expr={$_.version}}`}
+	contentBytes, err := execCommand(appconfig.PowerShellPluginCommandName, cmdArgs...).Output()
 	if err != nil {
-		log.Warnf("Error getting version value from WMIC: %v %v", string(contentBytes), err)
+		log.Warnf("Error getting version value from WMI: %v %v", string(contentBytes), err)
 		return version
 	}
 	contents := string(contentBytes)
-	log.Debugf("Version info from WMIC: %v", contents)
-	data := strings.Split(contents, "=")
+	log.Debugf("Version info from WMI: %v", contents)
+	data := strings.Split(contents, ":")
 	if len(data) > 1 {
 		version = strings.TrimSpace(data[1])
 	}
-	return strings.TrimSpace(version)
+	return version
 }

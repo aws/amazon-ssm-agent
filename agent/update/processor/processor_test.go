@@ -1695,7 +1695,7 @@ func TestVerifyInstallation_VersionCheck_Success(t *testing.T) {
 	assert.Equal(t, updater.mgr.subStatus, "")
 }
 
-func TestVerifyInstallation_VersionCheck_Failed_WMIC(t *testing.T) {
+func TestVerifyInstallation_VersionCheck_Failed_WMI(t *testing.T) {
 	// setup
 	var logger = logmocks.NewMockLog()
 	control := &stubControl{serviceIsRunning: true, versionErrorCode: updateconstants.ErrorInstTargetVersionNotFoundViaWMIC}

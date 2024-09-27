@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -30,9 +29,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-const caption = "Caption"
-const version = "Version"
-const sku = "OperatingSystemSKU"
+const (
+	caption = "Caption"
+	version = "Version"
+	sku     = "OperatingSystemSKU"
+)
 
 // Win32_OperatingSystems https://msdn.microsoft.com/en-us/library/aa394239%28v=vs.85%29.aspx
 const (
@@ -109,8 +110,8 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 	log.Debugf(gettingPlatformDetailsMessage)
 	value = notAvailableMessage
 
-	cmdName := "wmic"
-	cmdArgs := []string{"OS", "get", property, "/format:list"}
+	cmdName := appconfig.PowerShellPluginCommandName
+	cmdArgs := []string{fmt.Sprintf("Get-CimInstance -ClassName Win32_OperatingSystem | Format-List -Property %s", property)}
 	var cmdOut []byte
 	if cmdOut, err = exec.Command(cmdName, cmdArgs...).Output(); err != nil {
 		log.Debugf("There was an error running %v %v, err:%v", cmdName, cmdArgs, err)
@@ -121,7 +122,7 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 	value = strings.TrimSpace(string(cmdOut))
 
 	// Match whitespaces between property and = sign and remove whitespaces
-	rp := regexp.MustCompile(fmt.Sprintf("%v(\\s*)%v", property, "="))
+	rp := regexp.MustCompile(fmt.Sprintf("%v(\\s*)%v", property, ":"))
 	value = rp.ReplaceAllString(value, "")
 
 	// Trim spaces again
@@ -131,14 +132,12 @@ func getPlatformDetails(property string, log log.T) (value string, err error) {
 	return
 }
 
-var wmicCommand = filepath.Join(appconfig.EnvWinDir, "System32", "wbem", "wmic.exe")
-
 // fullyQualifiedDomainName returns the Fully Qualified Domain Name of the instance, otherwise the hostname
 func fullyQualifiedDomainName(log log.T) string {
 	hostName, _ := os.Hostname()
 
-	dnsHostName := getWMICComputerSystemValue("DNSHostName")
-	domainName := getWMICComputerSystemValue("Domain")
+	dnsHostName := getWMIComputerSystemValue("DNSHostName")
+	domainName := getWMIComputerSystemValue("Domain")
 
 	if dnsHostName == "" || domainName == "" {
 		return hostName
@@ -147,11 +146,12 @@ func fullyQualifiedDomainName(log log.T) string {
 	return dnsHostName + "." + domainName
 }
 
-// getWMICComputerSystemValue return the value part of the wmic computersystem command for the specified attribute
-func getWMICComputerSystemValue(attribute string) string {
-	if contentBytes, err := exec.Command(wmicCommand, "computersystem", "get", attribute, "/value").Output(); err == nil {
+// getWMIComputerSystemValue return the specified attribute from WMI via powershell
+func getWMIComputerSystemValue(attribute string) string {
+	cmdArgs := []string{fmt.Sprintf("Get-CimInstance -Class Win32_ComputerSystem | Format-List -Property %s", attribute)}
+	if contentBytes, err := exec.Command(appconfig.PowerShellPluginCommandName, cmdArgs...).Output(); err == nil {
 		contents := string(contentBytes)
-		data := strings.Split(contents, "=")
+		data := strings.Split(contents, ":")
 		if len(data) > 1 {
 			return strings.TrimSpace(data[1])
 		}

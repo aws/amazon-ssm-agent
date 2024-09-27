@@ -135,7 +135,7 @@ func TestVerifyVersion_Success(t *testing.T) {
 	assert.Equal(t, updateconstants.ErrorCode(""), errCode)
 }
 
-func TestVerifyVersion_Failed_WMIC(t *testing.T) {
+func TestVerifyVersion_Failed_WMI(t *testing.T) {
 	expectedVersion := "3.2.0.0"
 	getVersionThroughRegistryKeyRef = func(log logPkg.T) string {
 		return expectedVersion
