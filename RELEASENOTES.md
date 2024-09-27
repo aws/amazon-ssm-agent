@@ -94,6 +94,7 @@ Latest
 - Adjusted random number generator logic used to get filename in downloadContent plugin
 - Fixed Agent to gather application inventory from both rpm and dpkg package managers if present in Unix instances
 - Bump golang.org/x/crypto/ssh from 0.14.0 to 0.17.0
+- Added EXCLUDE\_INTERFACES environment variable support to exclude certain interfaces
 
 3.2.2016.0
 ===============
