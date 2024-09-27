@@ -61,14 +61,16 @@ docker run -it --rm --name ssm-agent-build-container -v `pwd`:/amazon-ssm-agent 
 
 * [Cross Compile SSM Agent](https://www.ardanlabs.com/blog/2013/10/cross-compile-your-go-programs.html)
 
-* Run `make build` to build the SSM Agent for Linux, Debian, Windows environment.
+* Run `make build` to build the SSM Agent for MacOS, Linux, FreeBSD and Windows environment.
 
 * Run `make build-release` to build the agent and also packages it into a RPM, DEB and ZIP package.
 
 The following folders are generated when the build completes:
 ```
-bin/debian_386
-bin/debian_amd64
+bin/darwin_amd64
+bin/darwin_arm64
+bin/freebsd_386
+bin/freebsd_amd64
 bin/linux_386
 bin/linux_amd64
 bin/linux_arm
@@ -125,9 +127,11 @@ The following targets are available. Each may be run with `make <target>`.
 | `quick-test`             | `quick-test` runs all the tests including integration and unit tests using `go test` |
 | `coverage`               | `coverage` runs all tests and calculate code coverage |
 | `build-linux`            | `build-linux` builds the agent for execution in the Linux amd64 environment |
+| `build-freebsd`            | `build-freebsd` builds the agent for execution in the FreeBSD amd64 environment |
 | `build-windows`          | `build-windows` builds the agent for execution in the Windows amd64 environment |
 | `build-darwin`           | `build-darwin` builds the agent for execution in the Darwin amd64 environment |
 | `build-linux-386`        | `build-linux-386` builds the agent for execution in the Linux 386 environment |
+| `build-freebsd-386`        | `build-freebsd-386` builds the agent for execution in the FreeBSD 386 environment |
 | `build-windows-386`      | `build-windows-386` builds the agent for execution in the Windows 386 environment |
 | `build-darwin-386`       | `build-darwin-386` builds the agent for execution in the Darwin 386 environment |
 | `build-arm`              | `build-arm` builds the agent for execution in the arm environment |
