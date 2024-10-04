@@ -118,12 +118,12 @@ func NewService(context context.T, connectionTimeout time.Duration) Service {
 	msgSvc := ssmmds.New(sess)
 
 	//adding server based expected error messages
-	serverBasedErrorMessages = make([]string, 2)
+	serverBasedErrorMessages = make([]string, 0, 2)
 	serverBasedErrorMessages = append(serverBasedErrorMessages, "use of closed network connection")
 	serverBasedErrorMessages = append(serverBasedErrorMessages, "connection reset by peer")
 
 	//adding client based expected error messages
-	clientBasedErrorMessages = make([]string, 1)
+	clientBasedErrorMessages = make([]string, 0, 1)
 	clientBasedErrorMessages = append(clientBasedErrorMessages, "Client.Timeout exceeded while awaiting headers")
 
 	sendMdsSdkRequest := func(req *request.Request) error {
