@@ -578,11 +578,14 @@ func verifyInstallation(mgr *updateManager, log log.T, updateDetail *UpdateDetai
 	}
 
 	if !isRollback {
-		// reset the sub status as it is used in the succeeded function now
-		mgr.subStatus = ""
 		// initiate rollback when agent installation is not complete
 		if versionInstalledErrCode := mgr.util.VerifyInstalledVersion(log, version); versionInstalledErrCode != "" {
-			mgr.subStatus = string(versionInstalledErrCode)
+			message := updateutil.BuildMessage(nil,
+				"failed to identify installed target agent version: %v",
+				updateDetail.TargetVersion)
+			updateDetail.AppendError(log, message)
+			// we will receive only 1 error code - ErrorInstTargetVersionNotFoundViaReg
+			return mgr.failed(updateDetail, log, versionInstalledErrCode, message, false)
 		}
 		log.Infof("%v is running", updateDetail.PackageName)
 		return mgr.succeeded(updateDetail, log)

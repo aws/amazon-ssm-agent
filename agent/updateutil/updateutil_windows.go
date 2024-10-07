@@ -52,7 +52,6 @@ var (
 	deleteFile                      = fileutil.DeleteFile
 	fileWrite                       = fileutil.WriteIntoFileWithPermissions
 	getVersionThroughRegistryKeyRef = getVersionThroughRegistryKey
-	getVersionThroughWMIRef         = getVersionThroughWMI
 )
 
 type UpdatePluginRunState struct {
@@ -339,12 +338,7 @@ func verifyVersion(log log.T, targetVersion string) updateconstants.ErrorCode {
 	log.Infof("Verifying Agent version using Registry")
 	registryCurrentAgentVersion := getVersionThroughRegistryKeyRef(log)
 	if targetVersion == registryCurrentAgentVersion {
-		log.Infof("Verifying Agent version using WMI query")
-		wmiCurrentAgentVersion := getVersionThroughWMIRef(log)
-		if targetVersion == wmiCurrentAgentVersion {
-			return "" // return blank when success
-		}
-		return updateconstants.ErrorInstTargetVersionNotFoundViaWMIC
+		return "" // success code
 	}
 	return updateconstants.ErrorInstTargetVersionNotFoundViaReg
 }

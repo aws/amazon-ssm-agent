@@ -1684,30 +1684,11 @@ func TestVerifyInstallation_VersionCheck_Success(t *testing.T) {
 		return nil
 	}
 
-	// action
-	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
-
-	// assert
-	assert.NoError(t, err)
-	assert.False(t, isRollbackCalled)
-	assert.Equal(t, updateDetail.State, Completed)
-	assert.Equal(t, updateDetail.Result, contracts.ResultStatusSuccess)
-	assert.Equal(t, updater.mgr.subStatus, "")
-}
-
-func TestVerifyInstallation_VersionCheck_Failed_WMI(t *testing.T) {
-	// setup
-	var logger = logmocks.NewMockLog()
-	control := &stubControl{serviceIsRunning: true, versionErrorCode: updateconstants.ErrorInstTargetVersionNotFoundViaWMIC}
-	updater := createUpdaterStubs(control)
-	updateDetail := createUpdateDetail(Installed)
-	isRollbackCalled := false
-
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
-		isRollbackCalled = true
+	finalize_error_code := ""
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		finalize_error_code = errorCode
 		return nil
 	}
-
 	// action
 	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
 
@@ -1716,7 +1697,7 @@ func TestVerifyInstallation_VersionCheck_Failed_WMI(t *testing.T) {
 	assert.False(t, isRollbackCalled)
 	assert.Equal(t, updateDetail.State, Completed)
 	assert.Equal(t, updateDetail.Result, contracts.ResultStatusSuccess)
-	assert.Equal(t, updater.mgr.subStatus, string(updateconstants.ErrorInstTargetVersionNotFoundViaWMIC))
+	assert.Equal(t, string(""), finalize_error_code)
 }
 
 func TestVerifyInstallation_VersionCheck_Failed_Reg(t *testing.T) {
@@ -1731,7 +1712,11 @@ func TestVerifyInstallation_VersionCheck_Failed_Reg(t *testing.T) {
 		isRollbackCalled = true
 		return nil
 	}
-
+	finalize_error_code := ""
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		finalize_error_code = errorCode
+		return nil
+	}
 	// action
 	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
 
@@ -1739,8 +1724,8 @@ func TestVerifyInstallation_VersionCheck_Failed_Reg(t *testing.T) {
 	assert.NoError(t, err)
 	assert.False(t, isRollbackCalled)
 	assert.Equal(t, updateDetail.State, Completed)
-	assert.Equal(t, updateDetail.Result, contracts.ResultStatusSuccess)
-	assert.Equal(t, updater.mgr.subStatus, string(updateconstants.ErrorInstTargetVersionNotFoundViaReg))
+	assert.Equal(t, updateDetail.Result, contracts.ResultStatusFailed)
+	assert.Equal(t, string(updateconstants.ErrorInstTargetVersionNotFoundViaReg), finalize_error_code)
 }
 
 func TestVerifyInstallationCannotStartAgent(t *testing.T) {

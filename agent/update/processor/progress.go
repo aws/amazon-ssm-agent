@@ -96,8 +96,8 @@ func (u *updateManager) succeeded(updateDetail *UpdateDetail, log logPkg.T) (err
 	log.WriteEvent(
 		logger.AgentUpdateResultMessage,
 		updateDetail.SourceVersion,
-		PrepareHealthStatus(updateDetail, u.subStatus, updateDetail.TargetVersion))
-	return u.finalize(u, updateDetail, u.subStatus)
+		PrepareHealthStatus(updateDetail, "", updateDetail.TargetVersion))
+	return u.finalize(u, updateDetail, "")
 }
 
 // failed sets update to failed with error messages

@@ -13,7 +13,6 @@
 
 // Package processor contains the methods for update ssm agent.
 // It also provides methods for sendReply and updateInstanceInfo
-
 //go:build e2e
 // +build e2e
 
