@@ -137,6 +137,20 @@ func TestEC2RoleProvider_UpdateEmptyInstanceInformation_Success(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestEC2RoleProvider_UpdateEmptyInstanceInformation_ReturnsNestedError(t *testing.T) {
+	// Arrange
+	_, ec2RoleProvider := arrangeUpdateInstanceInformation(awserr.New(ErrCodeEC2RoleRequestError, "Instance profile role not found", genericAwsClientError))
+	defaultEndpoint := "ssm.amazon.com"
+
+	// Act
+	err := ec2RoleProvider.updateEmptyInstanceInformation(context.Background(), defaultEndpoint, &credentials.Credentials{})
+
+	// Assert
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), ErrCodeEC2RoleRequestError)
+	assert.NotContains(t, err.Error(), genericAwsClientError.Error())
+}
+
 func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With1HrSession(t *testing.T) {
 	// Arrange
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
@@ -335,6 +349,30 @@ func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials(t *testing.T) {
 			assert.Error(t, err)
 			assert.Equal(t, iprEmptyCredential, creds)
 			assert.Equal(t, CredentialSourceNone, ec2RoleProvider.credentialSource)
+		})
+	}
+}
+
+func TestEC2RoleProvider_Retrieve_ReturnsNestedErr(t *testing.T) {
+	testCases := []testCase{
+		{
+			testName:       "InstanceProfileRoleRetrieveErrorWithOrigError_ReturnsNoOrigError",
+			iprRetrieveErr: awserr.New(ErrCodeEC2RoleRequestError, "Instance profile role not found", genericAwsClientError),
+		},
+	}
+
+	for _, j := range testCases {
+		t.Run(j.testName, func(t *testing.T) {
+			// Arrange
+			ec2RoleProvider := arrangeRetrieveEmptyTest(j)
+
+			// Act
+			_, err := ec2RoleProvider.Retrieve()
+
+			//Assert
+			assert.Error(t, err)
+			assert.Contains(t, err.Error(), ErrCodeEC2RoleRequestError)
+			assert.NotContains(t, err.Error(), genericAwsClientError.Error())
 		})
 	}
 }

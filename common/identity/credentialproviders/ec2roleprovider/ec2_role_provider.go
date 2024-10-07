@@ -105,6 +105,9 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 
 	iprCredentials, err := p.InnerProviders.IPRProvider.RetrieveWithContext(ctx)
 	if err != nil {
+		if awsErr := sdkutil.GetAwsError(err); awsErr != nil {
+			err = awserr.New(awsErr.Code(), awsErr.Message(), nil)
+		}
 		err = fmt.Errorf("failed to retrieve instance profile role credentials. Err: %w", err)
 		p.Log.Error(err)
 		return iprEmptyCredential, err
@@ -200,6 +203,11 @@ func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ss
 	}
 
 	_, err := ssmClient.UpdateInstanceInformationWithContext(ctx, input)
+	if err != nil {
+		if awsErr := sdkutil.GetAwsError(err); awsErr != nil {
+			err = awserr.New(awsErr.Code(), awsErr.Message(), nil)
+		}
+	}
 	return err
 }
 
