@@ -16,6 +16,7 @@ package registermanager
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common"
 	"github.com/aws/amazon-ssm-agent/agent/setupcli/utility"
@@ -89,7 +90,7 @@ func getAgentBinaryPath() string {
 }
 
 func (m *registerManager) generateMIRegisterCommand(registerAgentInpModel *RegisterAgentInputModel) (string, error) {
-	return m.managerHelper.RunCommand(m.agentBinPath, "-register", "-y",
+	return m.managerHelper.RunCommandWithCustomTimeout(60*time.Second, m.agentBinPath, "-register", "-y", //run command with custom timeout of 60s
 		"-region", registerAgentInpModel.Region,
 		"-code", registerAgentInpModel.ActivationCode,
 		"-id", registerAgentInpModel.ActivationId)

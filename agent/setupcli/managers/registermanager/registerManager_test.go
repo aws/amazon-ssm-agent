@@ -17,6 +17,7 @@ package registermanager
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	mhMock "github.com/aws/amazon-ssm-agent/agent/setupcli/managers/common/mocks"
 	"github.com/stretchr/testify/assert"
@@ -42,7 +43,7 @@ func TestRegisterAgent_Success_Onprem(t *testing.T) {
 	helperMock := &mhMock.IManagerHelper{}
 
 	rm := registerManager{helperMock, "SomeBinPath"}
-	helperMock.On("RunCommand", "SomeBinPath", "-register", mock.Anything, mock.Anything, "Region", "-code", "test1", "-id", "test2").Return("", nil).Once()
+	helperMock.On("RunCommandWithCustomTimeout", 60*time.Second, "SomeBinPath", "-register", mock.Anything, mock.Anything, "Region", "-code", "test1", "-id", "test2").Return("", nil).Once()
 	input := &RegisterAgentInputModel{
 		Region:         "Region",
 		ActivationCode: "test1",
@@ -56,7 +57,7 @@ func TestRegisterAgent_Failure_Onprem(t *testing.T) {
 	helperMock := &mhMock.IManagerHelper{}
 
 	rm := registerManager{helperMock, ""}
-	helperMock.On("RunCommand", "", "-register", mock.Anything, mock.Anything, "Region", "-code", "test1", "-id", "test2").Return("", nil).Once()
+	helperMock.On("RunCommandWithCustomTimeout", 60*time.Second, "", "-register", mock.Anything, mock.Anything, "Region", "-code", "test1", "-id", "test2").Return("", nil).Once()
 	input := &RegisterAgentInputModel{
 		Region:         "Region",
 		ActivationCode: "test1",
@@ -108,7 +109,7 @@ func TestRegisterAgent_ValidActionIdActionCode_Success(t *testing.T) {
 	helperMock := &mhMock.IManagerHelper{}
 
 	rm := registerManager{helperMock, "SomeBinPath"}
-	helperMock.On("RunCommand", mock.Anything, mock.Anything, mock.Anything,
+	helperMock.On("RunCommandWithCustomTimeout", 60*time.Second, mock.Anything, mock.Anything, mock.Anything,
 		"-region", "SomeRegion",
 		"-code", "SomeActivationCode",
 		"-id", "SomeActivationId").Return("", nil).Once()
