@@ -1,5 +1,19 @@
 Latest
 ===============
+- Fail windows update when installed version does not match
+- Reduced length of IMDS errors to shorter format
+- Increase the RunCommand timeout during the registration process for the on-prem instances
+- Add nil check when calling GetRepository content in aws:downloadContent
+- Worker process to exit if they are not successfully started and became idle
+- Fix bug where unforeseen failures cause time to be incorrectly displayed in RunCommand
+- Update GreenGrass component minor version to 1.3.0
+- Ensure agent thread always exit after the corresponding worker process exits
+- Fix IPC file filtering bug where usernames or session names containing tmp causes agent worker to not correctly receive IPC
+- Load directly from appconfig file when calling UpdateInstanceInformation during credential refresher
+- Use a single syscall for route table for health check IP
+
+3.3.987.0
+===============
 - Update default session logging destination to none
 - Specify a minimum of TLS v1.2 in http client calls
 - Add web-socket heartbeat to detect connection drops in the web-socket for control and data channels sooner
