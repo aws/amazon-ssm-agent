@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"errors"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -15,7 +16,7 @@ const (
 	stopTypeShutdown  = 2
 )
 
-//Message types
+// Message types
 const (
 	MessageTypePluginConfig = "pluginconfig"
 	MessageTypeComplete     = "complete"
@@ -31,7 +32,7 @@ type Message struct {
 	Content string      `json:"content"`
 }
 
-//MessagingBackend defines an asycn message in/out processing pipeline
+// MessagingBackend defines an asycn message in/out processing pipeline
 type MessagingBackend interface {
 	Accept() <-chan string
 	Stop() <-chan int
@@ -39,16 +40,18 @@ type MessagingBackend interface {
 	Process(string) error
 	//Sets input channel to nil.
 	Close()
+	//Sets stop channel to nil.
+	CloseStop()
 }
 
-//GetLatestVersion retrieves the current latest message version of the agent build
+// GetLatestVersion retrieves the current latest message version of the agent build
 func GetLatestVersion() string {
 	return versions[len(versions)-1]
 }
 
-//CreateDatagram marshals a given arbitrary object to raw json string
-//Message schema is determined by the current version, content struct is indicated by type field
-//TODO add version handling
+// CreateDatagram marshals a given arbitrary object to raw json string
+// Message schema is determined by the current version, content struct is indicated by type field
+// TODO add version handling
 func CreateDatagram(t MessageType, content interface{}) (string, error) {
 	contentStr, err := jsonutil.Marshal(content)
 	if err != nil {
@@ -66,7 +69,7 @@ func CreateDatagram(t MessageType, content interface{}) (string, error) {
 	return datagram, nil
 }
 
-//TODO add version and error handling
+// TODO add version and error handling
 func ParseDatagram(datagram string) (MessageType, string) {
 	message := Message{}
 	jsonutil.Unmarshal(datagram, &message)
@@ -80,9 +83,11 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 	defer func() {
 		if msg := recover(); msg != nil {
 			log.Errorf("messaging worker panic: %v", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
-	log.Info("inter process communication started")
+
+	log.Debugf("inter process communication started at %v", ipc.GetPath())
 	requestedStop := false
 	inboundClosed := false
 	//TODO add timer, if IPC is unresponsive to Close(), force return
@@ -98,6 +103,7 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 			//stopChannel is closed, stop transmission
 			if !more {
 				ipc.Close()
+				backend.CloseStop()
 				break
 			}
 			//soft stop, safely close IPC
@@ -127,7 +133,8 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 				//if inbound channel from backend breaks, still continue messaging to send outbound messages
 				break
 			}
-			log.Debugf("sending datagram: %v", datagram)
+
+			log.Debugf("sending datagram to %v: %v", ipc.GetPath(), datagram)
 			if err = ipc.Send(datagram); err != nil {
 				//this is fatal error, force return
 				log.Errorf("failed to send message to ipc channel: %v", err)
@@ -136,10 +143,11 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 		case datagram, more := <-ipc.GetMessage():
 			if !more {
 				//safe close
-				log.Info("ipc channel closed, stop messaging worker")
+				log.Debug("ipc channel closed, stop messaging worker")
 				return
 			}
-			log.Debugf("received datagram: %v", datagram)
+
+			log.Debugf("received datagram from %v: %v", ipc.GetPath(), datagram)
 			if err = backend.Process(datagram); err != nil {
 				//encountered error in databackend, it's up to the backend to decide whether close or not
 				log.Errorf("messaging pipeline process datagram encountered error: %v", err)

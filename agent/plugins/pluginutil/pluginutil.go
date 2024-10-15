@@ -15,14 +15,16 @@
 package pluginutil
 
 import (
+	"errors"
 	"io"
 	"io/ioutil"
+	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
-	"errors"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -90,16 +92,17 @@ func CreateScriptFile(log log.T, scriptPath string, runCommand []string, byteOrd
 }
 
 // DownloadFileFromSource downloads file from source
-func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
+func DownloadFileFromSource(context context.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
 	// download source and verify its integrity
 	downloadInput := artifact.DownloadInput{
-		SourceURL: source,
+		SourceURL:            source,
+		DestinationDirectory: appconfig.DownloadRoot,
 		SourceChecksums: map[string]string{
 			sourceHashType: sourceHash,
 		},
 	}
-	log.Debug("Downloading file")
-	return artifact.Download(log, downloadInput)
+	context.Log().Debug("Downloading file")
+	return artifact.Download(context, downloadInput)
 }
 
 // LoadParametersAsList returns properties as a list and appropriate PluginResult if error is encountered
@@ -257,4 +260,41 @@ func CleanupJSONField(field string) string {
 	res = strings.Replace(res, `"`, `\"`, -1)
 	res = strings.Replace(res, "\t", `\t`, -1)
 	return res
+}
+
+// Deletes file if it exists
+func CleanupFile(log log.T, file string) {
+	if _, err := os.Stat(file); err == nil || os.IsExist(err) {
+		if err = os.RemoveAll(file); err != nil {
+			log.Debugf("failed to delete file %v, %v", file, err.Error())
+		} else {
+			log.Debugf("deleted file %v", file)
+		}
+	} else {
+		log.Debugf("failed to get file info: %v", file)
+	}
+}
+
+// AddSingleQuotesToStringArray put single quote around each string in array
+// - add escape if value has single quote in it
+func AddSingleQuotesToStringArray(stringValues []string) []string {
+	for index := range stringValues {
+		stringValues[index] = addSingleQuotesToStringValue(stringValues[index])
+	}
+	return stringValues
+}
+
+func addSingleQuotesToStringValue(stringValue string) string {
+	stringValue = strings.Replace(stringValue, "'", "''", -1)
+	stringValue = "'" + stringValue + "'"
+	return stringValue
+}
+
+// ValidatePluginId checks that id values are not allowing file injections
+func ValidatePluginId(id string) bool {
+	validIdValue := regexp.MustCompile(`^(\.{2}\/|~\/).*$`)
+	if validIdValue.MatchString(id) {
+		return false
+	}
+	return true
 }

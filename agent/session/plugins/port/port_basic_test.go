@@ -20,6 +20,7 @@ import (
 	"errors"
 	"io"
 	"net"
+	"strconv"
 	"sync"
 	"testing"
 	"time"
@@ -27,20 +28,19 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextMock "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	portSessionMock "github.com/aws/amazon-ssm-agent/agent/session/plugins/port/mocks"
-	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
 type BasicPortTestSuite struct {
 	suite.Suite
-	mockContext     *context.Mock
-	mockLog         log.T
+	mockContext     *contextMock.Mock
 	mockCancelFlag  *task.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
@@ -49,9 +49,10 @@ type BasicPortTestSuite struct {
 }
 
 func (suite *BasicPortTestSuite) SetupTest() {
-	suite.mockLog = mockLog
+	suite.mockContext = contextMock.NewMockDefault()
 	suite.mockDataChannel = &dataChannelMock.IDataChannel{}
 	suite.session = &BasicPortSession{
+		context:            suite.mockContext,
 		reconnectToPortErr: make(chan error),
 		cancelled:          make(chan struct{}),
 	}
@@ -71,7 +72,7 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessage() {
 		assert.Equal(suite.T(), payload, output[:n])
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload))
 }
 
 func (suite *BasicPortTestSuite) TestHandleStreamMessageWriteFailed() {
@@ -80,7 +81,7 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWriteFailed() {
 	defer out.Close()
 	// Close the write pipe
 	in.Close()
-	assert.Error(suite.T(), suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload)))
+	assert.Error(suite.T(), suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload)))
 }
 
 func (suite *BasicPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlagIsReceived() {
@@ -99,7 +100,7 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlag
 		assert.Equal(suite.T(), struct{}{}, cancelled)
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
 	wg.Wait()
 }
 
@@ -112,8 +113,8 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWithReconnectToPortSetTo
 	out, in := net.Pipe()
 	defer in.Close()
 	defer out.Close()
-	DialCall = func(network string, address string) (net.Conn, error) {
-		return out, nil
+	DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+		return "", out, nil
 	}
 
 	suite.session.reconnectToPort = false
@@ -127,18 +128,18 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWithReconnectToPortSetTo
 		assert.Equal(suite.T(), payload, output[:n])
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload))
 	assert.Equal(suite.T(), false, suite.session.reconnectToPort)
 }
 
 // Testing handleTCPReadError
 func (suite *BasicPortTestSuite) TestHandleTCPReadNonEOFError() {
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, errors.New("some error!!!"))
+	returnCode := suite.session.handleTCPReadError(errors.New("some error!!!"))
 	assert.Equal(suite.T(), appconfig.ErrorExitCode, returnCode)
 }
 
 func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenEOFError() {
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, io.EOF)
+	returnCode := suite.session.handleTCPReadError(io.EOF)
 	assert.Equal(suite.T(), appconfig.SuccessExitCode, returnCode)
 }
 
@@ -156,7 +157,7 @@ func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortIsS
 		suite.session.reconnectToPortErr <- nil
 	}()
 
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, errors.New("some error!!"))
+	returnCode := suite.session.handleTCPReadError(errors.New("some error!!"))
 	assert.Equal(suite.T(), true, suite.session.reconnectToPort)
 	assert.Equal(suite.T(), mgsConfig.ResumeReadExitCode, returnCode)
 }
@@ -175,14 +176,15 @@ func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortFai
 		suite.session.reconnectToPortErr <- errors.New("failed to start tcp connection!!")
 	}()
 
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, errors.New("some error!!"))
+	returnCode := suite.session.handleTCPReadError(errors.New("some error!!"))
 	assert.Equal(suite.T(), true, suite.session.reconnectToPort)
 	assert.Equal(suite.T(), appconfig.ErrorExitCode, returnCode)
 }
 
 // Testing writepump
 func (suite *BasicPortTestSuite) TestWritePump() {
-	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, payload).Return(nil)
+	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()
 	defer out.Close()
@@ -193,10 +195,72 @@ func (suite *BasicPortTestSuite) TestWritePump() {
 	}()
 
 	suite.session.conn = out
-	suite.session.WritePump(suite.mockLog, suite.mockDataChannel)
+	suite.session.WritePump(suite.mockDataChannel)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+func (suite *BasicPortTestSuite) TestWritePumpWhenDatachannelIsNotActive() {
+	suite.mockDataChannel.On("IsActive").Return(false)
+
+	out, in := net.Pipe()
+	defer out.Close()
+
+	go func() {
+		in.Write(payload)
+		in.Close()
+	}()
+
+	suite.session.conn = out
+	go func() {
+		suite.session.WritePump(suite.mockDataChannel)
+	}()
+
+	time.Sleep(10 * time.Millisecond)
+
+	// Assert if SendStreamDataMessage function was not called
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertNotCalled(suite.T(), "SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload)
+}
+
+func (suite *BasicPortTestSuite) TestInitializeWithReachableEndpoint() {
+	addr, _ := suite.SpawnMockServer()
+	suite.session.destinationAddress = net.JoinHostPort(addr.IP.String(), strconv.Itoa(addr.Port))
+
+	DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+		conn, err := net.Dial(network, suite.session.destinationAddress)
+		return suite.session.destinationAddress, conn, err
+	}
+
+	assert.Nil(suite.T(), suite.session.InitializeSession())
+}
+
+func (suite *BasicPortTestSuite) TestInitializeWithUnreachableEndpoint() {
+	addr, listener := suite.SpawnMockServer()
+	listener.Close()
+
+	suite.session.destinationAddress = net.JoinHostPort(addr.IP.String(), strconv.Itoa(addr.Port))
+
+	DialCall = func(context context.T, network string, host string, portNumber string, addressList []string) (string, net.Conn, error) {
+		conn, err := net.Dial(network, suite.session.destinationAddress)
+		return suite.session.destinationAddress, conn, err
+	}
+
+	assert.Error(suite.T(), suite.session.InitializeSession())
+}
+
+func (suite *BasicPortTestSuite) SpawnMockServer() (addr *net.TCPAddr, listener net.Listener) {
+	listener, _ = net.Listen("tcp", "127.0.0.1:0")
+	addr = listener.Addr().(*net.TCPAddr)
+	go func() {
+		if conn, _ := listener.Accept(); conn != nil {
+			conn.Write(payload)
+			conn.Close()
+		}
+	}()
+	time.Sleep(200 * time.Millisecond)
+	return
 }
 
 // Execute the test suite

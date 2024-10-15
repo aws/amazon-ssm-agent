@@ -1,0 +1,136 @@
+{
+  "SchemaVersion": "1.0",
+  "Packages": [
+    {
+      "Files": [
+        {
+          "Name": "amazon-ssm-agent-linux-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "d2b67b804e0c3d3d83d09992a6a62b9e6a79fa3214b00685b07998b4e548870e",
+              "Version": "1.0.178.0"
+            },
+            {
+              "CheckSum": "84fc818a7e21068c47412ddd18d3748a04a16b8f8836a259191920f854c4edc7",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "bc477b4ea68756e3a83b93445cc1bbdd5f9465b3334f7ecf58c69771956d5673",
+              "Version": "1.1.43.0"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-ubuntu-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "3b71baf69c058cfac077c3fd546982eac84b68ff34f09006f292f5a735d77cec",
+              "Version": "1.0.178.0"
+            },
+            {
+              "CheckSum": "6647374ed4eaec0a98eb245349bc75a48e41b6548d28a5eb2089512dd27201c6",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "2085451b4a426dfb0775938235d535763320ba8ea969cb6d21ff0923ce6ee444",
+              "Version": "1.1.43.0"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-linux-386.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "e07ae297306eb0044c6b1d99a8869adb11aa51015ff88bd2bab78a31f0cb232a",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "3e4bbd5433265d12cebfd6e2e3129e51ce2413f643264504d7ab5fcbd143a936",
+              "Version": "1.1.43.0"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-ubuntu-386.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "2746e3590fdee47efa4c9f18a5019daa08261c5ae85bd939f5dd791339a962c6",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "c243f73e25546162979ac8d319627efa3c504bbf5df66bbcd5c0ec2a7bb2d341",
+              "Version": "1.1.43.0"
+            }
+          ]
+        }
+      ],
+      "Name": "amazon-ssm-agent"
+    },
+    {
+      "Files": [
+        {
+          "Name": "amazon-ssm-agent-updater-linux-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "2d56d3d55f268a6322772132daf5bb42382fd10450f8751fc53b0ed0a33aa45a",
+              "Version": "1.0.178.0"
+            },
+            {
+              "CheckSum": "7ffd1eff027e928a0e4bc0a3a51cbeaec95c057dba725d2fa0eb3d95743d2c98",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "975561627b5cb06a486567e73ae917eabadb5dd8b4c1f9998a07cfdb5529a8d2",
+              "Version": "1.1.43.0"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-updater-ubuntu-amd64.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "7ccb2aa2d1481019490d162dacabb46e67f20f1a1744fbe6a5792497137560e4",
+              "Version": "1.0.178.0"
+            },
+            {
+              "CheckSum": "a97615c237fa0e860ffe080c99e6f2f0bfc9be8f58c11e029a8ecba4594e968d",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "0120b0201c24c8207725402a92426a876612766947d52e1c1683c90c7426e78f",
+              "Version": "1.1.43.0"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-updater-linux-386.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "c83644487573e66b3292fae165498ae1758203e3d2fe88eab968da71eff93bfe",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "20f6c3e2dc10089a5f6e385f9a08c9373d4a3ab197e1eb213f8f6a42c3a34a54",
+              "Version": "1.1.43.0"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-updater-ubuntu-386.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "cb12212b7abac5d3e8ebb49c7c0eae33ddb2d16eca0e397834092aaf83a8d18c",
+              "Version": "1.1.0.0"
+            },
+            {
+              "CheckSum": "776c31e44872af25cdcab50201c4d7a0f6a9b33319964eb073d0b03ec497a83e",
+              "Version": "1.1.43.0"
+            }
+          ]
+        }
+      ],
+      "Name": "amazon-ssm-agent-updater"
+    }
+  ],
+  "UriFormat": "https://s3.amazonaws.com/some-agent-bucket/{PackageName}/{PackageVersion}/{FileName}"
+}

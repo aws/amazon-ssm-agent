@@ -2,6 +2,7 @@ package processormock
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -19,17 +20,17 @@ func (m *MockedProcessor) InitialProcessing(skipDocumentIfExpired bool) (err err
 	return args.Error(0)
 }
 
-func (m *MockedProcessor) Stop(stopType contracts.StopType) {
-	m.Called(stopType)
+func (m *MockedProcessor) Stop() {
+	m.Called()
 	return
 }
 
-func (m *MockedProcessor) Submit(docState contracts.DocumentState) {
-	m.Called(docState)
-	return
+func (m *MockedProcessor) Submit(docState contracts.DocumentState) processor.ErrorCode {
+	args := m.Called(docState)
+	return args.Get(0).(processor.ErrorCode)
 }
 
-func (m *MockedProcessor) Cancel(docState contracts.DocumentState) {
-	m.Called(docState)
-	return
+func (m *MockedProcessor) Cancel(docState contracts.DocumentState) processor.ErrorCode {
+	args := m.Called(docState)
+	return args.Get(0).(processor.ErrorCode)
 }

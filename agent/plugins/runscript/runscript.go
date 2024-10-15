@@ -17,7 +17,6 @@ package runscript
 import (
 	"fmt"
 	"path/filepath"
-
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -26,27 +25,31 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 const (
 	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 )
 
+var getRemoteProvider = identity.GetRemoteProvider
+
 // Plugin is the type for the runscript plugin.
 type Plugin struct {
+	Context context.T
 	// ExecuteCommand is an object that can execute commands.
 	CommandExecuter executers.T
 	// Name is the plugin name (PowerShellScript or ShellScript)
-	Name           string
-	ScriptName     string
-	ShellCommand   string
-	ShellArguments []string
-	ByteOrderMark  fileutil.ByteOrderMark
+	Name                  string
+	ScriptName            string
+	ShellCommand          string
+	ShellArguments        []string
+	ByteOrderMark         fileutil.ByteOrderMark
+	IdentityRuntimeClient runtimeconfig.IIdentityRuntimeConfigClient
 }
 
 // RunScriptPluginInput represents one set of commands executed by the RunScript plugin.
@@ -61,8 +64,8 @@ type RunScriptPluginInput struct {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunScriptPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.Context.Log()
 	log.Infof("%v started with configuration %v", p.Name, config)
 	log.Debugf("DefaultWorkingDirectory %v", config.DefaultWorkingDirectory)
 
@@ -78,13 +81,50 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		p.runCommandsRawInput(log, config.PluginID, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output, runCommandID)
+		p.runCommandsRawInput(config.PluginID, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output, runCommandID)
+	}
+}
+
+func (p *Plugin) setShareCredsEnvironment(pluginInput RunScriptPluginInput) {
+	credentialProvider, ok := getRemoteProvider(p.Context.Identity())
+	if !ok {
+		return
+	}
+
+	// Don't set environment variables if credentials are not being shared
+	if !credentialProvider.SharesCredentials() {
+		return
+	}
+
+	// Get identity runtime config
+	identityConfig, err := p.IdentityRuntimeClient.GetConfig()
+	if err != nil {
+		p.Context.Log().Infof("Failed to get identity runtime config, unable to set profile and creds file: %v", err)
+		return
+	}
+
+	if identityConfig.ShareProfile != "" {
+		pluginInput.Environment["AWS_PROFILE"] = identityConfig.ShareProfile
+	}
+
+	if identityConfig.ShareFile != "" {
+		pluginInput.Environment["AWS_SHARED_CREDENTIALS_FILE"] = identityConfig.ShareFile
+	}
+}
+
+func (p *Plugin) setCommandIdEnvironment(pluginInput RunScriptPluginInput, runCommandID string) {
+	if runCommandID != "" {
+		// Check if "SSM_COMMAND_ID" exists already in the env. If so, log that it will be overwritten
+		if _, ok := pluginInput.Environment["SSM_COMMAND_ID"]; ok {
+			p.Context.Log().Warnf("The environment variable 'SSM_COMMAND_ID' has been detected as pre-existing and will be overwritten with the CommandId of this execution.")
+		}
+		pluginInput.Environment["SSM_COMMAND_ID"] = runCommandID
 	}
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, runCommandID string) {
+func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput interface{}, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, runCommandID string) {
 	var pluginInput RunScriptPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
 	if err != nil {
@@ -93,23 +133,25 @@ func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput 
 		return
 	}
 
-	if runCommandID != "" {
-		if pluginInput.Environment == nil {
-			pluginInput.Environment = make(map[string]string)
-		}
-		// Check if "SSM_COMMAND_ID" exists already in the env. If so, log that it will be overwritten
-		if _, ok := pluginInput.Environment["SSM_COMMAND_ID"]; ok {
-			log.Warnf("The environment variable 'SSM_COMMAND_ID' has been detected as pre-existing and will be overwritten with the CommandId of this execution.")
-		}
-		pluginInput.Environment["SSM_COMMAND_ID"] = runCommandID
+	if pluginInput.Environment == nil {
+		pluginInput.Environment = make(map[string]string)
 	}
-	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, defaultWorkingDirectory, cancelFlag, output)
+
+	p.setCommandIdEnvironment(pluginInput, runCommandID)
+	p.setShareCredsEnvironment(pluginInput)
+
+	p.runCommands(pluginID, pluginInput, orchestrationDirectory, defaultWorkingDirectory, cancelFlag, output)
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPluginInput, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+func (p *Plugin) runCommands(pluginID string, pluginInput RunScriptPluginInput, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.Context.Log()
 	var err error
 	var workingDir string
+
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
 
 	if filepath.IsAbs(pluginInput.WorkingDirectory) {
 		workingDir = pluginInput.WorkingDirectory
@@ -150,7 +192,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput RunScriptPl
 	commandArguments := append(p.ShellArguments, scriptPath)
 
 	// Execute Command
-	exitCode, err := p.CommandExecuter.NewExecute(log, workingDir, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments, pluginInput.Environment)
+	exitCode, err := p.CommandExecuter.NewExecute(p.Context, workingDir, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments, pluginInput.Environment)
 
 	// Set output status
 	output.SetExitCode(exitCode)

@@ -11,19 +11,19 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build e2e
 // +build e2e
 
 package artifact
 
 import (
+	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
-
-	"fmt"
-
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/stretchr/testify/assert"
 )
 
 type DownloadTest struct {
@@ -35,7 +35,8 @@ var (
 	localPathExist, _    = filepath.Abs(filepath.Join(".", "testdata", "CheckMyHash.txt"))
 	localPathNotExist, _ = filepath.Abs(filepath.Join(".", "testdata", "IDontExist.txt"))
 	downloadFolder, _    = filepath.Abs(filepath.Join(".", "testdata"))
-	mockLog              = log.NewMockLog()
+	mockContext          = context.NewMockDefault()
+	mockLog              = mockContext.Log()
 
 	downloadTests = []DownloadTest{
 		// {DownloadInput{SourceUrl, DestinationDirectory, SourceHashValue, SourceHashType},
@@ -219,7 +220,7 @@ var (
 
 func runDownloadTests(t *testing.T, tests []DownloadTest) {
 	for _, test := range tests {
-		output, err := Download(mockLog, test.input)
+		output, err := Download(mockContext, test.input)
 		t.Log(err)
 		assert.Equal(t, test.expectedOutput, output)
 	}
@@ -232,15 +233,15 @@ func TestDownloads(t *testing.T) {
 }
 
 func TestHttpHttpsDownloadArtifact(t *testing.T) {
-	testFilePath := "https://www.ietf.org/rfc/rfc1350.txt"
+	testFilePath := "https://amazon-ssm-us-east-1.s3.amazonaws.com/3.3.40.0/VERSION"
 	downloadInput := DownloadInput{
 		DestinationDirectory: ".",
 		SourceURL:            testFilePath,
 		SourceChecksums: map[string]string{
-			"sha256": "39c9534e5fa6fecd3ac083ffd6256c2cc9a58f9f1058cb2e472d1782040231f9",
+			"sha256": "0c0f36c238e6c4c00f39d94dc6381930df2851db0ea2e2543d931474ddce1f8f",
 		},
 	}
-	var expectedLocalPath = "dd5335f3e07903892245d100f4d7df03067e6402"
+	var expectedLocalPath = "b9f961391ec1ae061db3afcbed5571b2463139c8"
 	os.Remove(expectedLocalPath)
 	os.Remove(expectedLocalPath + ".etag")
 	expectedOutput := DownloadOutput{
@@ -248,9 +249,14 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 		true,
 		true}
 
-	output, err := Download(mockLog, downloadInput)
+	output, err := Download(mockContext, downloadInput)
 	assert.NoError(t, err, "Failed to download %v", downloadInput)
 	mockLog.Infof("Download Result is %v and err:%v", output, err)
+
+	defer func() {
+		os.Remove(expectedLocalPath)
+		os.Remove(expectedLocalPath + ".etag")
+	}()
 	assert.Equal(t, expectedOutput, output)
 
 	// now since we have downloaded the file, try to download again should result in cache hit!
@@ -258,13 +264,10 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 		expectedLocalPath,
 		false,
 		true}
-	output, err = Download(mockLog, downloadInput)
+	output, err = Download(mockContext, downloadInput)
 	assert.NoError(t, err, "Failed to download %v", downloadInput)
 	mockLog.Infof("Download Result is %v and err:%v", output, err)
 	assert.Equal(t, expectedOutput, output)
-
-	os.Remove(expectedLocalPath)
-	os.Remove(expectedLocalPath + ".etag")
 }
 
 func ExampleMd5HashValue() {

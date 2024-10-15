@@ -19,6 +19,7 @@ import (
 
 	"os/exec"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -27,6 +28,8 @@ import (
 )
 
 var (
+	PowershellCmd = appconfig.PowerShellPluginCommandName
+
 	startMarker       = "<start" + randomString(8) + ">"
 	endMarker         = "<end" + randomString(8) + ">"
 	serviceInfoScript = `
@@ -50,10 +53,6 @@ $result = $jsonObj -join ","
 $result = "[" + $result + "]"
 [Console]::WriteLine($result)
 `
-)
-
-const (
-	PowershellCmd = "powershell"
 )
 
 func randomString(length int) string {

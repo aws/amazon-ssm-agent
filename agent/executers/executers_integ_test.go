@@ -11,6 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build (freebsd || linux || netbsd || openbsd) && integration
+// +build freebsd linux netbsd openbsd
 // +build integration
 
 // Package executers contains general purpose (shell) command executing objects.
@@ -28,9 +30,12 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/twinj/uuid"
 )
@@ -171,12 +176,20 @@ var envVars = map[string]string{
 
 var logger = log.NewMockLog()
 
+func getTestContext() context.T {
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("Region").Return(testRegionName, nil)
+	identityMock.On("InstanceID").Return(testInstanceID, nil)
+
+	contextMock := &contextmocks.Mock{}
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(logger)
+
+	return contextMock
+}
+
 // TestRunCommand tests that RunCommand (in memory call, no local script or output files) works correctly.
 func TestRunCommand(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
-
 	for _, testCase := range RunCommandTestCases {
 		runCommandInvoker, _ := prepareTestRunCommand(t, make(map[string]string))
 		testCommandInvoker(t, runCommandInvoker, testCase)
@@ -190,10 +203,6 @@ func TestRunCommand(t *testing.T) {
 
 // TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
 func TestRunCommand_cancel(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
-
 	for _, testCase := range RunCommandCancelTestCases {
 		runCommandInvoker, cancelFlag := prepareTestRunCommand(t, make(map[string]string))
 		testCommandInvokerCancel(t, runCommandInvoker, cancelFlag, testCase)
@@ -207,10 +216,6 @@ func TestRunCommand_cancel(t *testing.T) {
 
 // TestRunCommand_cancel tests that RunCommand (in memory call, no local script or output files) is canceled correctly.
 func TestRunCommand_async(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
-
 	for _, testCase := range RunCommandAsyncTestCases {
 		startCommandInvoker, cancelFlag := prepareTestStartCommand(t)
 		testCommandInvoker(t, startCommandInvoker, testCase)
@@ -220,9 +225,6 @@ func TestRunCommand_async(t *testing.T) {
 
 // TestShellCommandExecuter tests that ShellCommandExecuter (creates local script, redirects outputs to files) works
 func TestShellCommandExecuter(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, _ := prepareTestShellCommandExecuter(t, make(map[string]string))
 		defer fileutil.DeleteDirectory(orchestrationDir)
@@ -248,10 +250,6 @@ func TestShellCommandExecuter(t *testing.T) {
 
 // TestShellCommandExecuter_cancel tests that ShellCommandExecuter (creates local script, redirects outputs to files) is canceled correctly
 func TestShellCommandExecuter_cancel(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
-
 	runTest := func(testCase TestCase) {
 		orchestrationDir, shCommandExecuterInvoker, cancelFlag := prepareTestShellCommandExecuter(t, make(map[string]string))
 		defer fileutil.DeleteDirectory(orchestrationDir)
@@ -274,7 +272,7 @@ func testCommandInvoker(t *testing.T, invoke CommandInvoker, testCase TestCase) 
 	assert.Equal(t, exitCode, testCase.ExpectedExitCode)
 }
 
-//using long-running testcases for this test
+// using long-running testcases for this test
 func testCommandInvokerShutdown(t *testing.T, invoke CommandInvoker, cancelFlag task.CancelFlag, testCase TestCase) {
 	go func() {
 		time.Sleep(100 * time.Millisecond)
@@ -348,7 +346,7 @@ func prepareTestShellCommandExecuter(t *testing.T, envVars map[string]string) (o
 
 		// Used to mimic the process
 		CreateScriptFile(scriptPath, commands)
-		return sh.Execute(logger, workDir, stdoutFilePath, stderrFilePath, cancelFlag, defaultExecutionTimeout, commands[0], commands[1:], envVars)
+		return sh.Execute(getTestContext(), workDir, stdoutFilePath, stderrFilePath, cancelFlag, defaultExecutionTimeout, commands[0], commands[1:], envVars)
 	}
 
 	return
@@ -364,7 +362,7 @@ func prepareTestRunCommand(t *testing.T, envVars map[string]string) (commandInvo
 		var stdoutBuf bytes.Buffer
 		var stderrBuf bytes.Buffer
 		workDir := "."
-		tempExitCode, err := ExecuteCommand(logger, cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:], envVars)
+		tempExitCode, err := ExecuteCommand(getTestContext(), cancelFlag, workDir, &stdoutBuf, &stderrBuf, defaultExecutionTimeout, commands[0], commands[1:], envVars)
 		exitCode = tempExitCode
 
 		// record error if any
@@ -409,7 +407,7 @@ func prepareTestStartCommand(t *testing.T) (commandInvoker CommandInvoker, cance
 		defer os.Remove(stdoutFilePath)
 
 		workDir := "."
-		process, tempExitCode, err := StartCommand(logger, cancelFlag, workDir, stdoutWriter, stderrWriter, commands[0], commands[1:])
+		process, tempExitCode, err := StartCommand(getTestContext(), cancelFlag, workDir, stdoutWriter, stderrWriter, commands[0], commands[1:])
 		stdoutWriter.Close()
 		stderrWriter.Close()
 		exitCode = tempExitCode

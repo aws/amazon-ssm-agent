@@ -15,51 +15,33 @@
 package util
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-func AwsConfig(log log.T) *aws.Config {
-	// create default config
-	awsConfig := &aws.Config{
+func AwsConfig(logger log.T, appConfig appconfig.SsmagentConfig, service, region string) *aws.Config {
+	endpointHelper := endpoint.NewEndpointHelper(logger, appConfig)
+
+	return &aws.Config{
 		Retryer:    newRetryer(),
 		SleepDelay: sleepDelay,
+		HTTPClient: &http.Client{
+			Transport:     network.GetDefaultTransport(logger, appConfig),
+			CheckRedirect: disableHTTPDowngrade,
+			Timeout:       60 * time.Second,
+		},
+		Region:   aws.String(region),
+		Endpoint: aws.String(endpointHelper.GetServiceEndpoint(service, region)),
+		Logger:   logger,
 	}
-
-	// parse appConfig overrides
-	appConfig, err := appconfig.Config(false)
-	if err != nil {
-		return awsConfig
-	}
-	if appConfig.Ssm.Endpoint != "" {
-		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-	} else {
-		if region, err := platform.Region(); err == nil {
-			if defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
-				awsConfig.Endpoint = &defaultEndpoint
-			}
-		}
-	}
-	if appConfig.Agent.Region != "" {
-		awsConfig.Region = &appConfig.Agent.Region
-	}
-
-	// TODO: test hook, can be removed before release
-	// this is to skip ssl verification for the beta self signed certs
-	awsConfig.HTTPClient = &http.Client{Transport: network.GetDefaultTransport(log)}
-	if appConfig.Ssm.InsecureSkipVerify {
-		tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
-		tlsConfig.InsecureSkipVerify = true
-	}
-
-	return awsConfig
 
 }
 
@@ -71,4 +53,18 @@ var newRetryer = func() aws.RequestRetryer {
 
 var sleepDelay = func(d time.Duration) {
 	time.Sleep(d)
+}
+
+func disableHTTPDowngrade(req *http.Request, via []*http.Request) error {
+	//Go's http.DefaultClient allows 10 redirects before returning an error.
+	if len(via) >= 10 {
+		return fmt.Errorf("stopped after 10 redirects")
+	}
+
+	//Send an error on HTTP redirect attempt
+	if len(via) > 0 && via[0].URL.Scheme == "https" && req.URL.Scheme != "https" {
+		lastHop := via[len(via)-1].URL
+		return fmt.Errorf("redirected from secure URL %s to insecure URL %s", lastHop, req.URL)
+	}
+	return nil
 }

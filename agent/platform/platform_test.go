@@ -20,6 +20,7 @@ import (
 	"testing"
 
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +28,7 @@ func TestInvalidPlatform(t *testing.T) {
 	getPlatformNameFn = func(log logger.T) (value string, err error) {
 		return "Microsoft \xa9 sample R2 Server", nil
 	}
-	logObj := logger.NewMockLog()
+	logObj := log.NewMockLog()
 	name, err := PlatformName(logObj)
 	assert.Equal(t, "Microsoft  sample R2 Server", name)
 	assert.Nil(t, err)
@@ -37,7 +38,7 @@ func TestValidPlatform(t *testing.T) {
 	getPlatformNameFn = func(log logger.T) (value string, err error) {
 		return "Microsoft sample R2 \u00a9 Server", nil
 	}
-	logObj := logger.NewMockLog()
+	logObj := log.NewMockLog()
 	name, err := PlatformName(logObj)
 	assert.Equal(t, "Microsoft sample R2 © Server", name)
 	assert.Nil(t, err)
@@ -47,7 +48,7 @@ func TestSimpleValidUnixPlatform(t *testing.T) {
 	getPlatformNameFn = func(log logger.T) (value string, err error) {
 		return "Amazon Linux", nil
 	}
-	logObj := logger.NewMockLog()
+	logObj := log.NewMockLog()
 	name, err := PlatformName(logObj)
 	assert.Equal(t, "Amazon Linux", name)
 	assert.Nil(t, err)
@@ -57,7 +58,7 @@ func TestPlatformWithErr(t *testing.T) {
 	getPlatformNameFn = func(log logger.T) (value string, err error) {
 		return "Microsoft \xa9 sample R2 Server", fmt.Errorf("test")
 	}
-	logObj := logger.NewMockLog()
+	logObj := log.NewMockLog()
 	name, err := PlatformName(logObj)
 	assert.Equal(t, "Microsoft \xa9 sample R2 Server", name)
 	assert.NotNil(t, err)

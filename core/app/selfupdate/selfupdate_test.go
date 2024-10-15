@@ -23,6 +23,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	context "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
 	lock "github.com/nightlyone/lockfile"
 	"github.com/stretchr/testify/assert"
@@ -32,7 +35,8 @@ import (
 type SelfUpdateTestSuite struct {
 	suite.Suite
 	contextMock     *context.ICoreAgentContext
-	logMock         *log.Mock
+	identityMock    *identityMocks.IAgentIdentity
+	logMock         *logmocks.Mock
 	appconfigMock   *appconfig.SsmagentConfig
 	selfUpdater     *SelfUpdate
 	platformNameMap map[string]string
@@ -40,11 +44,13 @@ type SelfUpdateTestSuite struct {
 
 // SetupTest will initialized the object for each test case before test function execution
 func (suite *SelfUpdateTestSuite) SetupTest() {
-	suite.logMock = log.NewMockLog()
+	suite.logMock = logmocks.NewMockLog()
 	suite.appconfigMock = &appconfig.SsmagentConfig{}
 	suite.contextMock = &context.ICoreAgentContext{}
+	suite.identityMock = &identityMocks.IAgentIdentity{}
 	suite.contextMock.On("With", "[SelfUpdate]").Return(suite.contextMock)
 	suite.contextMock.On("Log").Return(suite.logMock)
+	suite.contextMock.On("Identity").Return(suite.identityMock)
 	suite.contextMock.On("AppConfig").Return(suite.appconfigMock)
 	suite.selfUpdater = NewSelfUpdater(suite.contextMock)
 	suite.platformNameMap = map[string]string{
@@ -62,12 +68,6 @@ func (suite *SelfUpdateTestSuite) SetupTest() {
 	}
 	updateExecuteSelfUpdate = func(log log.T, region string) (pid int, err error) {
 		return os.Getppid(), nil
-	}
-	regionGetter = func() (string, error) {
-		return "", nil
-	}
-	instanceidGetter = func() (string, error) {
-		return "", nil
 	}
 }
 
@@ -129,12 +129,14 @@ func (suite *SelfUpdateTestSuite) TestGetDownloadManifestURL() {
 	var manifestUrl, chinaRegion, commonRegion string
 	chinaRegion = "cn-north-1"
 	chinaManifestUrl := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/ssm-agent-manifest.json"
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.cn-north-1.amazonaws.com.cn").Once()
 
 	manifestUrl = suite.selfUpdater.generateDownloadManifestURL(suite.logMock, chinaRegion)
 	assert.Equal(suite.T(), manifestUrl, chinaManifestUrl)
 
 	commonRegion = "us-east-1"
 	commonManifestUrl := "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/ssm-agent-manifest.json"
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.us-east-1.amazonaws.com").Once()
 
 	manifestUrl = suite.selfUpdater.generateDownloadManifestURL(suite.logMock, commonRegion)
 	assert.Equal(suite.T(), manifestUrl, commonManifestUrl)
@@ -146,12 +148,14 @@ func (suite *SelfUpdateTestSuite) TestGetDownloadUpdaterChina() {
 
 	chinaRegion = "cn-north-1"
 	chinaUpdaterUrl := "https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-cn-north-1/amazon-ssm-agent-updater/latest/amazon-ssm-agent-updater-linux-amd64.tar.gz"
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.cn-north-1.amazonaws.com.cn").Once()
 
 	updaterUrl = suite.selfUpdater.generateDownloadUpdaterURL(suite.logMock, chinaRegion, fileName)
 	assert.Equal(suite.T(), chinaUpdaterUrl, updaterUrl)
 
 	commonRegion = "eu-west-1"
 	commonUpdaterUrl := "https://s3.eu-west-1.amazonaws.com/amazon-ssm-eu-west-1/amazon-ssm-agent-updater/latest/amazon-ssm-agent-updater-linux-amd64.tar.gz"
+	suite.identityMock.On("GetServiceEndpoint", "s3").Return("s3.eu-west-1.amazonaws.com").Once()
 
 	updaterUrl = suite.selfUpdater.generateDownloadUpdaterURL(suite.logMock, commonRegion, fileName)
 	assert.Equal(suite.T(), commonUpdaterUrl, updaterUrl)
@@ -162,9 +166,9 @@ func (suite *SelfUpdateTestSuite) TestFileName() {
 		return PlatformRedHat, nil
 	}
 
-	fileName, err := suite.selfUpdater.getUpdaterFileName(suite.logMock, "amd64", CompressFormat)
+	fileName, err := suite.selfUpdater.getUpdaterFileName(suite.logMock, "amd64", updateconstants.CompressFormat)
 	assert.Nil(suite.T(), err)
-	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64.tar.gz", fileName)
+	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64."+updateconstants.CompressFormat, fileName)
 }
 
 func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
@@ -176,6 +180,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
 		os.RemoveAll(lockfilePath)
 	}()
 
+	suite.identityMock.On("Region").Return("us-west-2", nil)
+	suite.identityMock.On("InstanceID").Return("i-abc123", nil)
 	mockSelfUpdateObj := SelfUpdate{context: suite.contextMock}
 
 	err = mockSelfUpdateObj.updateFromS3()
@@ -183,6 +189,8 @@ func (suite *SelfUpdateTestSuite) TestLockFileBasic() {
 }
 
 func (suite *SelfUpdateTestSuite) TestLockFileWithError() {
+	suite.identityMock.On("InstanceID").Return("i-123", nil).Twice()
+	suite.identityMock.On("Region").Return("us-west-2", nil).Twice()
 	workingDir, _ := os.Getwd()
 	lockfilePath := filepath.Join(workingDir, "lockDir")
 	lockFileName = filepath.Join(lockfilePath, "test.lock")
@@ -205,9 +213,14 @@ func (suite *SelfUpdateTestSuite) TestLockFileWithError() {
 	}
 	err = mockSelfUpdateObj.updateFromS3()
 	assert.Nil(suite.T(), err)
+
+	suite.identityMock.AssertExpectations(suite.T())
 }
 
 func (suite *SelfUpdateTestSuite) TestLockWithMultipleUpdates() {
+	suite.identityMock.On("InstanceID").Return("i-123", nil).Once()
+	suite.identityMock.On("Region").Return("us-west-2", nil).Once()
+
 	workingDir, _ := os.Getwd()
 	lockfilePath := filepath.Join(workingDir, "lockDir")
 	lockFileName = filepath.Join(lockfilePath, "test.lock")
@@ -228,7 +241,7 @@ func (suite *SelfUpdateTestSuite) TestLockWithMultipleUpdates() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestSelfUpdateTestSuite(t *testing.T) {
 	suite.Run(t, new(SelfUpdateTestSuite))
 }

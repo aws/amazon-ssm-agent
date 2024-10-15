@@ -31,10 +31,10 @@ if [[ "$(cat /proc/1/comm)" == "init" ]]; then
     echo "-> Agent is not installed in this instance"
   fi
 elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
-  if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
+  if [[ "$(systemctl is-active amazon-ssm-agent.service)" == "active" ]]; then
 		# echo "-> Agent is running in the instance"
 		echo "Stopping the agent"
-		systemctl stop amazon-ssm-agent
+		systemctl stop amazon-ssm-agent.service
 		systemctl daemon-reload
   else
 		echo "-> Agent is not running in the instance"

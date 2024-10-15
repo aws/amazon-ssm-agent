@@ -16,6 +16,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -27,9 +28,10 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/core/tools"
 )
 
 // parseFlags displays flags and handles them
@@ -37,16 +39,15 @@ func parseFlags() {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	flag.Usage = flagUsage
 
-	// instance id and region for overriding in dev test scenarios
-	instanceIDPtr = flag.String("i", "", "instance id")
-	regionPtr = flag.String("r", "", "instance region")
-
 	// managed instance registration
 	flag.BoolVar(&register, registerFlag, false, "")
+	flag.BoolVar(&disableSimilarityCheck, disableSimilarityCheckFlag, false, "")
 	flag.StringVar(&activationCode, activationCodeFlag, "", "")
 	flag.StringVar(&activationID, activationIDFlag, "", "")
 	flag.StringVar(&region, regionFlag, "", "")
 	flag.BoolVar(&agentVersionFlag, versionFlag, false, "")
+	flag.StringVar(&role, roleFlag, "", "")
+	flag.StringVar(&tagsJson, tagsFlag, "", "")
 
 	// clear registration
 	flag.BoolVar(&clear, "clear", false, "")
@@ -58,6 +59,14 @@ func parseFlags() {
 	// force flag
 	flag.BoolVar(&force, "y", false, "")
 
+	// tool flag
+	toolDescription := "Tools flag should not be used by anybody manually, commands might be removed without notice and we don't guarantee backwards compatibility"
+	flag.BoolVar(&tool, toolFlag, false, toolDescription)
+
+	// windows on first install checks flag
+	flag.BoolVar(&winOnFirstInstallChecks, winOnFirstInstallChecksFlag, false, "Must be used in combination with tools flag")
+	// allow link deletions during windows on first install checks
+	flag.StringVar(&allowLinkDeletions, allowLinkDeletionsFlag, "", "Must be used in combination with tools and winOnFirstInstallChecks flag")
 	flag.Parse()
 }
 
@@ -89,34 +98,68 @@ func handleAgentVersionFlag() {
 	}
 }
 
+// handles tools flag
+func handleToolsFlag() {
+	if tool {
+		if flag.NFlag() == 2 {
+			if winOnFirstInstallChecks {
+				// no link deletion
+				if err := tools.DataDirChecksOnInitialInstall(false); err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
+				os.Exit(0)
+			}
+		} else if flag.NFlag() == 3 {
+			if winOnFirstInstallChecks {
+				if strings.EqualFold(allowLinkDeletions, "yes") {
+					if err := tools.DataDirChecksOnInitialInstall(true); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+					os.Exit(0)
+				} else if strings.EqualFold(allowLinkDeletions, "no") {
+					if err := tools.DataDirChecksOnInitialInstall(false); err != nil {
+						fmt.Println(err)
+						os.Exit(1)
+					}
+					os.Exit(0)
+				}
+			}
+		}
+	}
+}
+
 // flagUsage displays a command-line friendly usage message
 func flagUsage() {
 	fmt.Fprintln(os.Stderr, "\n\nCommand-line Usage:")
 	fmt.Fprintln(os.Stderr, "\t-register\tregister managed instance")
-	fmt.Fprintln(os.Stderr, "\t\t-id\tSSM activation ID    \t(REQUIRED)")
-	fmt.Fprintln(os.Stderr, "\t\t-code\tSSM activation code\t(REQUIRED)")
-	fmt.Fprintln(os.Stderr, "\t\t-region\tSSM region       \t(REQUIRED)")
+	fmt.Fprintln(os.Stderr, "\t\t-id                    \tSSM activation ID                                                                          \t(REQUIRED with activation registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-code                  \tSSM activation code                                                                        \t(REQUIRED with activation registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-role                  \tIAM role name the agent should assume                                                      \t(REQUIRED with greengrass registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-tags                  \tSSM tags for greengrass registration                                                       \t(OPTIONAL with greengrass registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-region                \tSSM region                                                                                 \t(REQUIRED with registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-disableSimilarityCheck\tDisable the agent hardware/fingerprint similarity check (similarity threshold is set to -1)\t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\n\t\t-clear\tClears the previously saved SSM registration")
 	fmt.Fprintln(os.Stderr, "\t-fingerprint\tWhether to update the machine fingerprint similarity threshold\t(OPTIONAL)")
-	fmt.Fprintln(os.Stderr, "\t\t-similarityThreshold\tThe new required percentage of matching hardware values\t(OPTIONAL)")
+	fmt.Fprintln(os.Stderr, "\t\t-similarityThreshold\tThe new required percentage of matching hardware values (-1 disables hardware check)\t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\n\t-y\tAnswer yes for all questions")
 }
 
 // processRegistration handles flags related to the registration category
 func processRegistration(log logger.T) (exitCode int) {
-	if activationCode == "" || activationID == "" || region == "" {
+	if ((activationCode == "" || activationID == "") && role == "") || region == "" {
 		// clear registration
 		if clear {
+			fingerprint.ClearStoredHardwareInfo(log)
 			return clearRegistration(log)
 		}
 		flagUsage()
 		return 1
 	}
 
-	platform.SetRegion(region)
-
 	// check if previously registered
-	if !force && registration.InstanceID() != "" {
+	if !force && registration.InstanceID(log, "", registration.RegVaultKey) != "" {
 		confirmation, err := askForConfirmation()
 		if err != nil {
 			log.Errorf("Registration failed due to %v", err)
@@ -134,14 +177,13 @@ func processRegistration(log logger.T) (exitCode int) {
 		log.Errorf("Registration failed due to %v", err)
 		return 1
 	}
-
 	log.Infof("Successfully registered the instance with AWS SSM using Managed instance-id: %s", managedInstanceID)
 	return 0
 }
 
 // processFingerprint handles flags related to the fingerprint category
 func processFingerprint(log logger.T) (exitCode int) {
-	if err := fingerprint.SetSimilarityThreshold(similarityThreshold); err != nil {
+	if err := fingerprint.SetSimilarityThreshold(log, similarityThreshold); err != nil {
 		log.Errorf("Error setting the SimilarityThreshold. %v", err)
 		return 1
 	}
@@ -154,36 +196,58 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	// try to activate the instance with the activation credentials
 	publicKey, privateKey, keyType, err := registration.GenerateKeyPair()
 	if err != nil {
-		return managedInstanceID, fmt.Errorf("error generating signing keys. %v", err)
+		return "", fmt.Errorf("error generating signing keys. %v", err)
 	}
 
 	// checking write access before registering
-	err = registration.UpdateServerInfo("", "", privateKey, keyType)
+	err = registration.UpdateServerInfo("", "", "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
-		return managedInstanceID,
+		return "",
 			fmt.Errorf("Unable to save registration information. %v\nTry running as sudo/administrator.", err)
 	}
 
 	// generate fingerprint
-	fingerprint, err := registration.Fingerprint()
+	fingerprintUUID, err := registration.Fingerprint(log)
 	if err != nil {
-		return managedInstanceID, fmt.Errorf("error generating instance fingerprint. %v", err)
+		return "", fmt.Errorf("error generating instance fingerprint. %v", err)
 	}
 
-	service := anonauth.NewAnonymousService(log, region)
-	managedInstanceID, err = service.RegisterManagedInstance(
-		activationCode,
-		activationID,
-		publicKey,
-		keyType,
-		fingerprint,
-	)
+	// set similarity threshold
+	if disableSimilarityCheck {
+		log.Debugf("disableSimilarityCheck is set to true, setting similarity threshold to -1")
+		if err = fingerprint.SetSimilarityThreshold(log, -1); err != nil {
+			fingerprint.ClearStoredHardwareInfo(log)
+			clearRegistration(log)
+			return "", fmt.Errorf("failed to set SimilarityThreshold: %v", err)
+		}
+	}
+
+	if role != "" {
+		authRegisterService := authregister.NewClient(log, region, nil)
+		managedInstanceID, err = authRegisterService.RegisterManagedInstanceWithContext(
+			context.Background(),
+			publicKey,
+			keyType,
+			fingerprintUUID,
+			role,
+			tagsJson,
+		)
+	} else {
+		service := anonauth.NewClient(log, region)
+		managedInstanceID, err = service.RegisterManagedInstance(
+			activationCode,
+			activationID,
+			publicKey,
+			keyType,
+			fingerprintUUID,
+		)
+	}
 
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error registering the instance with AWS SSM. %v", err)
 	}
 
-	err = registration.UpdateServerInfo(managedInstanceID, region, privateKey, keyType)
+	err = registration.UpdateServerInfo(managedInstanceID, region, "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error persisting the instance registration information. %v", err)
 	}
@@ -208,7 +272,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 
 // clearRegistration clears any existing registration data
 func clearRegistration(log logger.T) (exitCode int) {
-	err := registration.UpdateServerInfo("", "", "", "")
+	err := registration.UpdateServerInfo("", "", "", "", "", "", registration.RegVaultKey)
 	if err == nil {
 		log.Info("Registration information has been removed from the instance.")
 		return 0

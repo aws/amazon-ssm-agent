@@ -17,22 +17,26 @@ package cloudwatchlogspublisher
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
 	"time"
 
 	cloudwatchlogspublisher_mock "github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 var (
-	logMock          = log.NewMockLog()
+	contextMock      = context.NewMockDefault()
+	logMock          = contextMock.Log()
 	cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
 	logGroupName     = "logGroupName"
 	logStreamName    = "logStreamName"
@@ -78,6 +82,7 @@ var (
 
 func TestCloudWatchLogsService_DescribeLogGroups(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -86,7 +91,7 @@ func TestCloudWatchLogsService_DescribeLogGroups(t *testing.T) {
 
 	cwLogsClientMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(&output, nil)
 
-	_, err := service.DescribeLogGroups(logMock, "LogGroup", "")
+	_, err := service.DescribeLogGroups("LogGroup", "")
 
 	assert.NoError(t, err, "DescribeLogGroups should be called successfully")
 
@@ -94,6 +99,7 @@ func TestCloudWatchLogsService_DescribeLogGroups(t *testing.T) {
 
 func TestCloudWatchLogsService_CreateLogGroup(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -102,14 +108,60 @@ func TestCloudWatchLogsService_CreateLogGroup(t *testing.T) {
 
 	cwLogsClientMock.On("CreateLogGroup", mock.AnythingOfType("*cloudwatchlogs.CreateLogGroupInput")).Return(&output, nil)
 
-	err := service.CreateLogGroup(logMock, "LogGroup")
+	err := service.CreateLogGroup("LogGroup")
 
 	assert.NoError(t, err, "CreateLogGroup should be called successfully")
 
 }
 
+func TestCloudWatchLogsService_CreateLogGroup_AccessDenied_LogGroupExists(t *testing.T) {
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	var logGroups []*cloudwatchlogs.LogGroup
+	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
+	logGroups = append(logGroups, logGroup)
+	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
+		LogGroups: logGroups,
+	}
+	createLogGrpOutput := cloudwatchlogs.CreateLogGroupOutput{}
+	accessDeniedError := fmt.Errorf("access denied")
+
+	cloudWatchMock.On("CreateLogGroup", mock.AnythingOfType("*cloudwatchlogs.CreateLogGroupInput")).Return(&createLogGrpOutput, accessDeniedError)
+	cloudWatchMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(logGroupOutput, nil)
+
+	err := service.CreateLogGroup(logGroupName)
+
+	assert.NoError(t, err, "expected create log group to be successful")
+}
+
+func TestCloudWatchLogsService_CreateLogGroup_AccessDenied_LogGroupNotExists(t *testing.T) {
+
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	createLogGrpOutput := cloudwatchlogs.CreateLogGroupOutput{}
+	accessDeniedError := fmt.Errorf("access denied")
+	noLogGroupError := fmt.Errorf("no log group error")
+	describeLogGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{}
+
+	cloudWatchMock.On("CreateLogGroup", mock.AnythingOfType("*cloudwatchlogs.CreateLogGroupInput")).Return(&createLogGrpOutput, accessDeniedError)
+	cloudWatchMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(describeLogGroupOutput, noLogGroupError)
+
+	err := service.CreateLogGroup(logGroupName)
+
+	assert.Error(t, err, "error expected while creating log group")
+}
+
 func TestCloudWatchLogsService_DescribeLogStreams(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -117,7 +169,7 @@ func TestCloudWatchLogsService_DescribeLogStreams(t *testing.T) {
 	output := cloudwatchlogs.DescribeLogStreamsOutput{}
 
 	cwLogsClientMock.On("DescribeLogStreams", mock.AnythingOfType("*cloudwatchlogs.DescribeLogStreamsInput")).Return(&output, nil)
-	_, err := service.DescribeLogStreams(logMock, "LogGroup", "LogStream", "")
+	_, err := service.DescribeLogStreams("LogGroup", "LogStream", "")
 
 	assert.NoError(t, err, "DescribeLogStreams should be called successfully")
 
@@ -125,6 +177,7 @@ func TestCloudWatchLogsService_DescribeLogStreams(t *testing.T) {
 
 func TestCloudWatchLogsService_CreateLogStream(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -132,14 +185,60 @@ func TestCloudWatchLogsService_CreateLogStream(t *testing.T) {
 	output := cloudwatchlogs.CreateLogStreamOutput{}
 
 	cwLogsClientMock.On("CreateLogStream", mock.AnythingOfType("*cloudwatchlogs.CreateLogStreamInput")).Return(&output, nil)
-	err := service.CreateLogStream(logMock, "LogGroup", "LogStream")
+	err := service.CreateLogStream("LogGroup", "LogStream")
 
 	assert.NoError(t, err, "CreateLogStream should be called successfully")
 
 }
 
+func TestCloudWatchLogsService_CreateLogStream_AccessDenied_Exists(t *testing.T) {
+
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	var logStreams []*cloudwatchlogs.LogStream
+	logStream := &cloudwatchlogs.LogStream{LogStreamName: &logStreamName}
+	logStreams = append(logStreams, logStream)
+	describeLogStreamOutput := &cloudwatchlogs.DescribeLogStreamsOutput{
+		LogStreams: logStreams,
+	}
+	createLogStreamOutput := cloudwatchlogs.CreateLogStreamOutput{}
+
+	cloudWatchMock.On("CreateLogStream", mock.AnythingOfType("*cloudwatchlogs.CreateLogStreamInput")).Return(&createLogStreamOutput, nil)
+	cloudWatchMock.On("DescribeLogStreams", mock.Anything).Return(describeLogStreamOutput, nil)
+
+	err := service.CreateLogStream("LogGroup", "LogStream")
+
+	assert.NoError(t, err, "CreateLogStream should be called successfully")
+}
+
+func TestCloudWatchLogsService_CreateLogStream_AccessDenied_NotExists(t *testing.T) {
+
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	accessDeniedError := fmt.Errorf("access denied")
+	noLogStreamError := fmt.Errorf("no log stream error")
+	createLogStreamOutput := cloudwatchlogs.CreateLogStreamOutput{}
+	describeLogStreamOutput := &cloudwatchlogs.DescribeLogStreamsOutput{}
+
+	cloudWatchMock.On("CreateLogStream", mock.AnythingOfType("*cloudwatchlogs.CreateLogStreamInput")).Return(&createLogStreamOutput, accessDeniedError)
+	cloudWatchMock.On("DescribeLogStreams", mock.Anything).Return(describeLogStreamOutput, noLogStreamError)
+
+	err := service.CreateLogStream("LogGroup", logStreamName)
+
+	assert.Error(t, err, "error expected during CreateLogStream")
+}
+
 func TestCloudWatchLogsService_PutLogEvents(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -151,7 +250,7 @@ func TestCloudWatchLogsService_PutLogEvents(t *testing.T) {
 	sequenceToken := "1234"
 
 	cwLogsClientMock.On("PutLogEvents", mock.AnythingOfType("*cloudwatchlogs.PutLogEventsInput")).Return(&output, nil)
-	_, err := service.PutLogEvents(logMock, messages, "LogGroup", "LogStream", &sequenceToken)
+	_, err := service.PutLogEvents(messages, "LogGroup", "LogStream", &sequenceToken)
 
 	assert.NoError(t, err, "PutLogEvents should be called successfully")
 
@@ -159,6 +258,7 @@ func TestCloudWatchLogsService_PutLogEvents(t *testing.T) {
 
 func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              context.NewMockDefault(),
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 5),
 	}
@@ -167,7 +267,7 @@ func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 
 	assert.False(t, service.stopPolicy.IsHealthy(), "Service should be unhealthy")
 
-	service.CreateNewServiceIfUnHealthy(logMock)
+	service.CreateNewServiceIfUnHealthy()
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 
@@ -177,7 +277,7 @@ func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 
-	service.CreateNewServiceIfUnHealthy(logMock)
+	service.CreateNewServiceIfUnHealthy()
 
 	assert.True(t, service.stopPolicy.IsHealthy(), "Service should be healthy")
 
@@ -185,9 +285,10 @@ func TestCloudWatchLogsService_CreateNewServiceIfUnHealthy(t *testing.T) {
 
 func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -231,7 +332,7 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 	// Get actual result
 	var actualLastKnownLineUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
-	message, eof := service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
+	message, eof := service.getNextMessage(fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
 
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
@@ -249,7 +350,7 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 
 	// Get actual result
 	actualLastKnownLineUploadedToCWL = actualCurrentLineNumber
-	message, eof = service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
+	message, eof = service.getNextMessage(fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
 
 	// Compare results
 	assert.Equal(t, expectedLastKnownLineUploadedToCWL, actualLastKnownLineUploadedToCWL)
@@ -261,20 +362,18 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 
 func TestCloudWatchLogsService_getNextMessage_largeline(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
 	file, err := os.Create(fileName)
 	assert.Nil(t, err, "Failed to create test file")
 	// writing more than 200K bytes
-	var largeLine string
-	for i := 0; i < 50; i++ {
-		largeLine += strings.Join(input, " ")
-	}
-	file.Write([]byte(largeLine))
+	message := make([]byte, MessageLengthThresholdInBytes+10000, MessageLengthThresholdInBytes+10000)
+	file.Write(message)
 	file.Close()
 
 	// Deleting file
@@ -286,21 +385,50 @@ func TestCloudWatchLogsService_getNextMessage_largeline(t *testing.T) {
 	// Get actual result
 	var actualLastKnownLineUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
-	events, eof := service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
-
+	events, eof := service.getNextMessage(fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
 	// Compare results
 	// Since length of line exceeds max limit of 200K, messages will be sent in 2 separate events
 	assert.Equal(t, 2, len(events))
 	assert.False(t, eof)
-	assert.Equal(t, largeLine[:200000], *events[0].Message)
-	assert.Equal(t, largeLine[200000:], *events[1].Message)
+	assert.Equal(t, string(message[:200000]), *events[0].Message)
+	assert.Equal(t, string(message[200000:]), *events[1].Message)
+}
+
+func TestCloudWatchLogsService_buildEventInfo_stream_threshold_should_match(t *testing.T) {
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+		isFileComplete:       true,
+	}
+
+	message := make([]byte, StreamMessageLengthThresholdInBytes, StreamMessageLengthThresholdInBytes)
+	event := service.buildEventInfo(message, true)
+	// Result event size should be less than cloudwatch event quota
+	eventBytes, err := json.Marshal(event)
+	assert.Nil(t, err)
+	assert.Less(t, len(eventBytes)+64, 262144)
+}
+
+func TestCloudWatchLogsService_buildEventInfo_threshold_should_match(t *testing.T) {
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+		isFileComplete:       true,
+	}
+
+	message := make([]byte, MessageLengthThresholdInBytes, MessageLengthThresholdInBytes)
+	event := service.buildEventInfo(message, false)
+	assert.Less(t, len([]byte(*event.Message))+64, 262144)
 }
 
 func TestCloudWatchLogsService_getNextMessage_ending_with_newlinecharacter(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -319,7 +447,7 @@ func TestCloudWatchLogsService_getNextMessage_ending_with_newlinecharacter(t *te
 	// Get actual result
 	var actualLastKnownLineUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
-	events, eof := service.getNextMessage(logMock, fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
+	events, eof := service.getNextMessage(fileName, &actualLastKnownLineUploadedToCWL, &actualCurrentLineNumber, false, false)
 
 	// Compare results where output does not contain \n at the end of the line
 	assert.Equal(t, 1, len(events))
@@ -329,9 +457,10 @@ func TestCloudWatchLogsService_getNextMessage_ending_with_newlinecharacter(t *te
 
 func TestCloudWatchLogsService_getNextMessage_structuredLogs(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -359,7 +488,6 @@ func TestCloudWatchLogsService_getNextMessage_structuredLogs(t *testing.T) {
 	var actualLastKnownLineUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
 	events, eof := service.getNextMessage(
-		logMock,
 		fileName,
 		&actualLastKnownLineUploadedToCWL,
 		&actualCurrentLineNumber,
@@ -386,9 +514,10 @@ func TestCloudWatchLogsService_getNextMessage_structuredLogs(t *testing.T) {
 
 func TestCloudWatchLogsService_getNextMessage_cleanupControlCharacters(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -417,7 +546,6 @@ func TestCloudWatchLogsService_getNextMessage_cleanupControlCharacters(t *testin
 	var actualLastKnownLineUploadedToCWL int64 = 0
 	var actualCurrentLineNumber int64 = 0
 	events, eof := service.getNextMessage(
-		logMock,
 		fileName,
 		&actualLastKnownLineUploadedToCWL,
 		&actualCurrentLineNumber,
@@ -445,6 +573,7 @@ func TestCloudWatchLogsService_getNextMessage_cleanupControlCharacters(t *testin
 func TestCloudWatchLogsService_StreamData(t *testing.T) {
 	cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -494,19 +623,14 @@ func TestCloudWatchLogsService_StreamData(t *testing.T) {
 	var logGroups []*cloudwatchlogs.LogGroup
 	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
 	logGroups = append(logGroups, logGroup)
-	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
-		LogGroups: logGroups,
-	}
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
-	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
 	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
 	// PutLogEvents called once indicates logs was uploaded all at once
 	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(&cloudwatchlogs.PutLogEventsOutput{}, nil).Once()
 
 	// isFileComplete set to true to disable streaming of logs
 	success := service.StreamData(
-		logMock,
 		logGroupName,
 		logStreamName,
 		fileName,
@@ -523,6 +647,7 @@ func TestCloudWatchLogsService_StreamData(t *testing.T) {
 func TestCloudWatchLogsService_StreamData_StreamingEnabled(t *testing.T) {
 	cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -572,12 +697,8 @@ func TestCloudWatchLogsService_StreamData_StreamingEnabled(t *testing.T) {
 	var logGroups []*cloudwatchlogs.LogGroup
 	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
 	logGroups = append(logGroups, logGroup)
-	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
-		LogGroups: logGroups,
-	}
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
-	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
 	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
 	// PutLogEvents calls twice indicates streaming of logs was done
 	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(&cloudwatchlogs.PutLogEventsOutput{}, nil).Twice()
@@ -585,12 +706,11 @@ func TestCloudWatchLogsService_StreamData_StreamingEnabled(t *testing.T) {
 	go func() {
 		time.Sleep(1800 * time.Millisecond)
 		file.Write([]byte("Test Line 2"))
-		service.IsFileComplete = true
+		service.isFileComplete = true
 	}()
 
 	// isFileComplete set to false is to enable streaming of logs
 	success := service.StreamData(
-		logMock,
 		logGroupName,
 		logStreamName,
 		fileName,
@@ -604,8 +724,162 @@ func TestCloudWatchLogsService_StreamData_StreamingEnabled(t *testing.T) {
 	cwLogsClientMock.AssertExpectations(t)
 }
 
+func TestCloudWatchLogsService_StreamData_MissingStreamPermissions(t *testing.T) {
+	cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+
+	fileName := "cwl_util_test_file"
+	file, err := os.Create(fileName)
+	assert.Nil(t, err, "Failed to create test file")
+	// string representation of below byte array containing control characters is "[?1034hsh-4.2$"
+	file.Write([]byte("Test Line 1\n"))
+
+	// Deleting file
+	defer func() {
+		file.Close()
+		err = os.Remove(fileName)
+		assert.Nil(t, err)
+	}()
+
+	service.SetCloudWatchMessage(
+		eventVersion,
+		awsRegion,
+		targetId,
+		runAsUser,
+		sessionId,
+		sessionOwner,
+	)
+	fileCompleteSignal := make(chan bool)
+	service.SetCloudWatchMessage(
+		eventVersion,
+		awsRegion,
+		targetId,
+		runAsUser,
+		sessionId,
+		sessionOwner,
+	)
+	cloudWatchMessage := service.CloudWatchMessage
+	cloudWatchMessage.SessionData = aws.StringSlice([]string{"Test Line 1"})
+	formattedMessageBytes, _ := json.Marshal(service.CloudWatchMessage)
+	formattedMessage := string(formattedMessageBytes)
+
+	var events []*cloudwatchlogs.InputLogEvent
+	event := &cloudwatchlogs.InputLogEvent{
+		Message:   aws.String(formattedMessage),
+		Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+	}
+	events = append(events, event)
+
+	var logGroups []*cloudwatchlogs.LogGroup
+	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
+	logGroups = append(logGroups, logGroup)
+
+	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, errors.New("error"))
+	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
+
+	go func() {
+		time.Sleep(1800 * time.Millisecond)
+		file.Write([]byte("Test Line 2"))
+		service.isFileComplete = true
+	}()
+
+	// isFileComplete set to false is to enable streaming of logs
+	success := service.StreamData(
+		logGroupName,
+		logStreamName,
+		fileName,
+		false,
+		false,
+		fileCompleteSignal,
+		true,
+		true)
+
+	assert.False(t, success)
+	cwLogsClientMock.AssertExpectations(t)
+}
+
+func TestCloudWatchLogsService_StreamData_InvalidLogStream(t *testing.T) {
+	cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+
+	fileName := "cwl_util_test_file"
+	file, err := os.Create(fileName)
+	assert.Nil(t, err, "Failed to create test file")
+	file.Write([]byte("Test Line 1\n"))
+
+	// Deleting file
+	defer func() {
+		file.Close()
+		err = os.Remove(fileName)
+		assert.Nil(t, err)
+	}()
+	fileCompleteSignal := make(chan bool)
+	service.SetCloudWatchMessage(
+		eventVersion,
+		awsRegion,
+		targetId,
+		runAsUser,
+		sessionId,
+		sessionOwner,
+	)
+	cloudWatchMessage := service.CloudWatchMessage
+	cloudWatchMessage.SessionData = aws.StringSlice([]string{"Test Line 1"})
+	formattedMessageBytes, _ := json.Marshal(service.CloudWatchMessage)
+	formattedMessage := string(formattedMessageBytes)
+
+	var events []*cloudwatchlogs.InputLogEvent
+	event := &cloudwatchlogs.InputLogEvent{
+		Message:   aws.String(formattedMessage),
+		Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+	}
+	events = append(events, event)
+
+	var logGroups []*cloudwatchlogs.LogGroup
+	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
+	logGroups = append(logGroups, logGroup)
+
+	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
+	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
+	// Returns a ResourceNotFoundException error when PutLogEvents is called
+	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(
+		&cloudwatchlogs.PutLogEventsOutput{},
+		awserr.New("ResourceNotFoundException",
+			"Mocked ResourceNotFound Response from AWS API",
+			nil),
+	)
+
+	go func() {
+		time.Sleep(1800 * time.Millisecond)
+		file.Write([]byte("Test Line 2"))
+		service.isFileComplete = true
+	}()
+
+	// isFileComplete set to false is to enable streaming of logs
+	success := service.StreamData(
+		logGroupName,
+		logStreamName,
+		fileName,
+		false,
+		false,
+		fileCompleteSignal,
+		true,
+		true)
+
+	assert.False(t, success)
+	cwLogsClientMock.AssertExpectations(t)
+}
+
 func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMSWithEncryptionDisabled(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -615,12 +889,13 @@ func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMSWithEncryptionDisabled(
 		LogGroupName: &logGroupName,
 	}
 
-	encrypted, _ := service.IsLogGroupEncryptedWithKMS(logMock, &testCwlLogGroup)
+	encrypted, _ := service.IsLogGroupEncryptedWithKMS(&testCwlLogGroup)
 	assert.False(t, encrypted)
 }
 
 func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMSWithEncryptionEnabled(t *testing.T) {
 	service := CloudWatchLogsService{
+		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
 	}
@@ -632,6 +907,6 @@ func TestCloudWatchLogsService_IsLogGroupEncryptedWithKMSWithEncryptionEnabled(t
 		KmsKeyId:     &kmsKeyId,
 	}
 
-	encrypted, _ := service.IsLogGroupEncryptedWithKMS(logMock, &testCwlLogGroup)
+	encrypted, _ := service.IsLogGroupEncryptedWithKMS(&testCwlLogGroup)
 	assert.True(t, encrypted)
 }

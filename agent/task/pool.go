@@ -14,12 +14,33 @@
 package task
 
 import (
-	"fmt"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+)
+
+type PoolErrorCode string
+
+var (
+	// DuplicateCommand represents duplicate command in the buffer
+	DuplicateCommand PoolErrorCode = "DuplicateCommand"
+
+	// InvalidJobId represents invalid job Id
+	InvalidJobId PoolErrorCode = "InvalidJobId"
+
+	// UninitializedBuffer represents that the buffer has not been initialized in the pool
+	UninitializedBuffer PoolErrorCode = "UninitializedBuffer"
+
+	// JobQueueFull represents that the job queue buffer is full
+	JobQueueFull PoolErrorCode = "JobQueueFull"
+)
+
+const (
+	// unusedTokenValidityInMinutes denotes the unused token validity in minutes
+	unusedTokenValidityInMinutes = 10
 )
 
 // Pool is a pool of jobs.
@@ -45,19 +66,31 @@ type Pool interface {
 
 	// HasJob returns if jobStore has specified job
 	HasJob(jobID string) bool
+
+	// BufferTokensIssued returns the current buffer token size
+	BufferTokensIssued() int
+
+	// AcquireBufferToken acquires the buffer token based on job id
+	AcquireBufferToken(jobId string) PoolErrorCode
+
+	// ReleaseBufferToken releases the acquired token
+	ReleaseBufferToken(jobId string) PoolErrorCode
 }
 
 // pool implements a task pool where all jobs are managed by a root task
 type pool struct {
-	log            log.T
-	jobQueue       chan JobToken
-	nWorkers       int
-	doneWorker     chan struct{}
-	isShutdown     bool
-	clock          times.Clock
-	mut            sync.Mutex
-	jobStore       *JobStore
-	cancelDuration time.Duration
+	log                log.T
+	jobQueue           chan JobToken
+	maxWorkers         int
+	doneWorker         chan struct{}
+	jobHandlerDone     chan struct{}
+	isShutdown         bool
+	bufferLimit        int
+	tokenHoldingJobIds map[string]*time.Time
+	clock              times.Clock
+	mut                sync.RWMutex
+	jobStore           *JobStore
+	cancelDuration     time.Duration
 }
 
 // JobToken embeds a job and its associated info
@@ -71,14 +104,17 @@ type JobToken struct {
 // NewPool creates a new task pool and launches maxParallel workers.
 // The cancelWaitDuration parameter defines how long to wait for a job
 // to complete a cancellation request.
-func NewPool(log log.T, maxParallel int, cancelWaitDuration time.Duration, clock times.Clock) Pool {
+func NewPool(log log.T, maxParallel int, bufferLimit int, cancelWaitDuration time.Duration, clock times.Clock) Pool {
 	p := &pool{
-		log:            log,
-		jobQueue:       make(chan JobToken),
-		nWorkers:       maxParallel,
-		doneWorker:     make(chan struct{}),
-		clock:          clock,
-		cancelDuration: cancelWaitDuration,
+		log:                log,
+		jobQueue:           make(chan JobToken, bufferLimit),
+		maxWorkers:         maxParallel,
+		doneWorker:         make(chan struct{}),
+		jobHandlerDone:     make(chan struct{}),
+		clock:              clock,
+		bufferLimit:        bufferLimit,
+		cancelDuration:     cancelWaitDuration,
+		tokenHoldingJobIds: make(map[string]*time.Time),
 	}
 
 	p.jobStore = NewJobStore()
@@ -89,8 +125,8 @@ func NewPool(log log.T, maxParallel int, cancelWaitDuration time.Duration, clock
 		process(j.log, j.job, j.cancelFlag, cancelWaitDuration, p.clock)
 	}
 
-	// start the workers
-	p.start(processor)
+	// start job handler
+	go p.startJobHandler(processor)
 
 	return p
 }
@@ -119,38 +155,133 @@ func (p *pool) ShutdownAndWait(timeout time.Duration) (finished bool) {
 
 	timeoutTimer := p.clock.After(timeout)
 	exitTimer := p.clock.After(timeout + p.cancelDuration)
-	workersRunning := p.nWorkers
-	for workersRunning > 0 {
-		select {
-		case <-p.doneWorker:
-			workersRunning--
-			if workersRunning == 0 {
-				p.log.Debug("Pool shutdown normally.")
-				return true
-			}
-			p.log.Debugf("Pool worker done; %d still running", workersRunning)
 
-		case <-timeoutTimer:
-			p.log.Debugf("Pool shutdown timed out with %d workers still running, start cancelling jobs...", workersRunning)
+	for {
+		select {
+		case <-p.jobHandlerDone:
+			p.log.Debug("Pool shutdown normally.")
+			return true
+		case <-timeoutTimer: // timeoutTimer will always trigger before exitTimer
+			p.log.Debug("Pool shutdown timed, start cancelling jobs...")
 			// wait for the worker pool to react to the cancel flag and fail the ongoing jobs
 			p.CancelAll()
 		case <-exitTimer:
-			p.log.Debugf("Pool eventual timeout with %d workers still running ", workersRunning)
+			p.log.Debug("Pool eventual timeout with workers still running")
 			return false
 		}
 	}
-	return true
 }
 
-// start starts the workers of this pool
-func (p *pool) start(jobProcessor func(JobToken)) {
-	for i := 0; i < p.nWorkers; i++ {
-		workerName := fmt.Sprintf("worker-%d", i)
-		go func() {
-			defer p.workerDone()
-			worker(workerName, p.jobQueue, jobProcessor)
-		}()
+// startJobHandler starts the job handler
+func (p *pool) startJobHandler(jobProcessor func(JobToken)) {
+	workerCount := 0
+
+exitLoopLabel:
+	for {
+		// If there are too many workers currently running, wait for worker before trying to start a new job
+		if workerCount >= p.maxWorkers {
+			p.log.Debug("Max workers are running, waiting for a worker to complete")
+			<-p.doneWorker
+			p.log.Debug("Worker completed, can start next job")
+			workerCount--
+		}
+
+		// now there are workers available, wait for a job or a worker to finish
+		select {
+		case job, ok := <-p.jobQueue:
+			if !ok {
+				p.log.Debug("JobQueue has been closed")
+				break exitLoopLabel
+			}
+			p.ReleaseBufferToken(job.id)
+			p.log.Debugf("Got job %s, starting worker", job.id)
+			workerCount++
+			go func() {
+				defer p.workerDone()
+				if !job.cancelFlag.Canceled() && !job.cancelFlag.ShutDown() {
+					jobProcessor(job)
+				}
+			}()
+		case <-p.doneWorker:
+			p.log.Debug("Worker completed")
+			workerCount--
+		}
 	}
+
+	// Wait for all workers
+	for workerCount != 0 {
+		<-p.doneWorker
+		p.log.Debug("Worker completed after shutdown")
+		workerCount--
+	}
+
+	p.log.Debug("All workers have finished and pool has been put into shutdown")
+	close(p.jobHandlerDone)
+}
+
+// BufferTokensIssued returns the current buffer token size
+func (p *pool) BufferTokensIssued() int {
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	return len(p.tokenHoldingJobIds)
+}
+
+// AcquireBufferToken acquires the buffer token based on job id
+func (p *pool) AcquireBufferToken(jobId string) PoolErrorCode {
+	p.mut.Lock()
+	defer p.mut.Unlock()
+	// no buffer case
+	if p.bufferLimit == 0 {
+		return UninitializedBuffer
+	}
+	// job already in the job store
+	if p.HasJob(jobId) {
+		return DuplicateCommand
+	}
+	// token already acquired for the job
+	if _, ok := p.tokenHoldingJobIds[jobId]; ok {
+		return DuplicateCommand
+	}
+	// empty job id
+	if strings.TrimSpace(jobId) == "" {
+		return InvalidJobId
+	}
+	currentTime := time.Now()
+	// buffer length validation
+	if len(p.tokenHoldingJobIds) >= p.bufferLimit {
+		// removing expired tokens only when the job queue is full
+		expirationTime := currentTime.Add(time.Duration(-unusedTokenValidityInMinutes) * time.Minute)
+		for tokenId, tokenTime := range p.tokenHoldingJobIds {
+			// hasJob condition added to handle long-running commands
+			if tokenTime.Before(expirationTime) && !p.HasJob(tokenId) {
+				p.log.Warnf("removing expired token %v from the TokenBuffer", tokenId)
+				delete(p.tokenHoldingJobIds, tokenId)
+			}
+		}
+		// do the validation again. if fails, return JobQueueFull error
+		if len(p.tokenHoldingJobIds) >= p.bufferLimit {
+			return JobQueueFull
+		}
+	}
+	p.tokenHoldingJobIds[jobId] = &currentTime
+	return ""
+}
+
+// ReleaseBufferToken releases the acquired token
+func (p *pool) ReleaseBufferToken(jobId string) PoolErrorCode {
+	p.mut.Lock()
+	defer p.mut.Unlock()
+	// no buffer case
+	if p.bufferLimit == 0 {
+		return UninitializedBuffer
+	}
+	// empty job id
+	if strings.TrimSpace(jobId) == "" {
+		return InvalidJobId
+	}
+	delete(p.tokenHoldingJobIds, jobId)
+	p.log.Debugf("buffer limit end values for command %v: tokenSize - %v", jobId, len(p.tokenHoldingJobIds))
+	return ""
 }
 
 // workerDone signals that a worker has terminated.
@@ -158,17 +289,16 @@ func (p *pool) workerDone() {
 	p.doneWorker <- struct{}{}
 }
 
-// worker processes jobs from a channel.
-func worker(workerName string, queue chan JobToken, processor func(JobToken)) {
-	for token := range queue {
-		if !token.cancelFlag.Canceled() {
-			processor(token)
-		}
-	}
-}
-
 // Submit adds a job to the execution queue of this pool.
+// NOTE: When adding new errors in this function, make sure that the token buffer deletion is fine in that case
+// When this function throw error, we release token in submit/cancel in processor.go.
+// This may lead to mismatch between issued buffer token and jobs in the buffer when done improperly
 func (p *pool) Submit(log log.T, jobID string, job Job) (err error) {
+	if p.checkIsShutDown() {
+		p.log.Errorf("Attempting to add job %s to a closed queue", jobID)
+		return nil // restart will pick this pending document
+	}
+
 	token := JobToken{
 		id:         jobID,
 		job:        job,
@@ -203,6 +333,13 @@ func (p *pool) Cancel(jobID string) (canceled bool) {
 	return true
 }
 
+// checkIsShutDown safely reads if the pool has been set into shutdown
+func (p *pool) checkIsShutDown() bool {
+	p.mut.Lock()
+	defer p.mut.Unlock()
+	return p.isShutdown
+}
+
 // CancelAll cancels all the running jobs.
 func (p *pool) CancelAll() {
 	// remove jobs from task and save them to a local variable
@@ -214,7 +351,7 @@ func (p *pool) CancelAll() {
 	}
 }
 
-// ShutdownAll cancels all the running jobs.
+// ShutDownAll cancels all the running jobs.
 func (p *pool) ShutDownAll() {
 	// remove jobs from task and save them to a local variable
 	jobs := p.jobStore.DeleteAllJobs()

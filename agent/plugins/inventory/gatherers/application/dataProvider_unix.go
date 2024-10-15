@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 // Package application contains application gatherer.
@@ -19,6 +20,8 @@ package application
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -30,6 +33,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/twinj/uuid"
 )
+
+type InventoryApplicationFile struct {
+	Content []model.ApplicationData
+}
 
 var (
 	startMarker = "<start" + randomString(8) + ">"
@@ -56,6 +63,9 @@ var (
 	snapCmd                        = "snap"
 	snapArgsToGetAllInstalledSnaps = "list"
 	snapQueryFormat                = "{\"Name\":\"%s\",\"Publisher\":\"%s\",\"Version\":\"%s\",\"ApplicationType\":\"%s\",\"Architecture\":\"%s\",\"Url\":\"%s\",\"Summary\":\"%s\",\"PackageId\":\"%s\"}"
+
+	// platforms that can pass application inventory files, as the agent cannot gather the data from the local package manager
+	inventoryApplicationFileSupportedPlatforms = []string{"Bottlerocket"}
 )
 
 func randomString(length int) string {
@@ -66,11 +76,24 @@ func mark(s string) string {
 	return startMarker + s + endMarker
 }
 
-// decoupling exec.Command for easy testability
+// decoupling for easy testability
 var cmdExecutor = executeCommand
+var checkCommandExists = commandExists
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
+}
+
+// returns true if the command is available on the instance
+func commandExists(cmd string) bool {
+	_, err := exec.LookPath(cmd)
+	return err == nil
+}
+
+// returns true if an inventory file is available on the instance
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 func platformInfoProvider(log log.T) (name string, err error) {
@@ -81,31 +104,81 @@ func platformInfoProvider(log log.T) (name string, err error) {
 func collectPlatformDependentApplicationData(context context.T) (appData []model.ApplicationData) {
 
 	var err error
+	var cmd string
+	var args []string
+
 	log := context.Log()
 
-	args := []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
-	cmd := dpkgCmd
-	// try dpkg first, if any error occurs, use rpm
-	if appData, err = getApplicationData(context, cmd, args); err != nil {
-		log.Info("Getting applications information using dpkg failed, trying rpm now")
-		cmd = rpmCmd
-		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
-		if appData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
+	platformName, _ := platformInfoProvider(log)
+	for _, fileSupportedPlatform := range inventoryApplicationFileSupportedPlatforms {
+		lowerPlatformName := strings.ToLower(platformName)
+		formattedPlatformName := strings.ReplaceAll(lowerPlatformName, " ", "-")
+		inventoryApplicationFileLocation := "/var/lib/" + formattedPlatformName + "/inventory/application.json"
+		if platformName == fileSupportedPlatform && fileExists(inventoryApplicationFileLocation) {
+			var inventoryApplicationFileBytes []byte
+			if inventoryApplicationFileBytes, err = ioutil.ReadFile(inventoryApplicationFileLocation); err != nil {
+				log.Errorf("Unable to read inventory file - hence no inventory data for %v: %v", GathererName, err)
+				return
+			}
+			if appData, err = getInventoryApplicationFileData(inventoryApplicationFileBytes); err != nil {
+				log.Errorf("Failed to gather inventory data from inventory file %v: %v", GathererName, err)
+				return
+			}
+			log.Infof("Used file to gather application")
+			return
+
 		}
 	}
 
-	// Due to ubuntu 18 use snap, so add getApplicationData here
+	var noPackageManagerFound bool = true
+
+	if checkCommandExists(dpkgCmd) {
+		noPackageManagerFound = false
+		cmd = dpkgCmd
+		args = []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
+		var dpkgAppData []model.ApplicationData
+		log.Infof("Using '%s' to gather application information", cmd)
+		if dpkgAppData, err = getApplicationData(context, cmd, args); err != nil {
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Found %v dpkg packages", len(dpkgAppData))
+			appData = append(appData, dpkgAppData...)
+		}
+	}
+
+	if checkCommandExists(rpmCmd) {
+		noPackageManagerFound = false
+		cmd = rpmCmd
+		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
+		var rpmAppData []model.ApplicationData
+		log.Infof("Using '%s' to gather application information", cmd)
+		if rpmAppData, err = getApplicationData(context, cmd, args); err != nil {
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Found %v rpm packages", len(rpmAppData))
+			appData = append(appData, rpmAppData...)
+		}
+	}
+
+	// Ubuntu 18 also uses snap, so add getApplicationData for it here
 	if snapIsInstalled(appData) {
 		cmd = snapCmd
 		args = []string{snapArgsToGetAllInstalledSnaps}
 		var snapAppData []model.ApplicationData
 		if snapAppData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("Getting applications information using snap failed. Skipping.")
-			return
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Appending application information found using snap to application data.")
+			log.Infof("Found %v snap packages", len(snapAppData))
+			appData = append(appData, snapAppData...)
 		}
-		log.Infof("Appending application information found using snap to application data.")
-		appData = append(appData, snapAppData...)
+	}
+
+	log.Infof("Found %v packages in total", len(appData))
+
+	if noPackageManagerFound {
+		log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
+		return
 	}
 	return
 }
@@ -133,19 +206,34 @@ func parseSnapOutput(context context.T, cmdOutput string) (snapOutput string) {
 			log.Errorf("Unable get the snap list result.")
 			return
 		}
+
+		const nameIndex = 0
+		const versionIndex = 1
+		const publisherIndex = 4
+
 		var str = fmt.Sprintf(snapQueryFormat,
-			mark(arr[0]),  // Name
-			mark(arr[4]),  // Publisher
-			mark(arr[1]),  // Version
-			mark("admin"), // ApplicationType
-			mark(""),      // Architecture
-			mark(""),      // Url
-			mark(""),      // Summary
-			mark(""))      // PackageId
+			mark(arr[nameIndex]),      // Name
+			mark(arr[publisherIndex]), // Publisher
+			mark(arr[versionIndex]),   // Version
+			mark("admin"),             // ApplicationType
+			mark(""),                  // Architecture
+			mark(""),                  // Url
+			mark(""),                  // Summary
+			mark(fmt.Sprintf("pkg:snap/%s/%s@%s", arr[publisherIndex], arr[nameIndex], arr[versionIndex]))) // PackageId
 		snapOutput = snapOutput + str
 		snapOutput = snapOutput + ","
 	}
 	snapOutput = strings.TrimSuffix(snapOutput, ",")
+	return
+}
+
+// getInventoryApplicationFileData reads an inventory file's bytes and gets information about all packages/applications
+func getInventoryApplicationFileData(inventoryApplicationFileBytes []byte) (data []model.ApplicationData, err error) {
+	var inventory InventoryApplicationFile
+	//unmarshal json bytes accordingly.
+	if err = json.Unmarshal(inventoryApplicationFileBytes, &inventory); err == nil {
+		data = inventory.Content
+	}
 	return
 }
 

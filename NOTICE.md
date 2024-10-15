@@ -100,6 +100,8 @@ Copyright (c) 2009 The Go Authors
 Copyright (c) 2016 Péter Surányi
 * pborman/ansi; version 1.0 -- https://github.com/pborman/ansi
 Copyright (c) 2013 Google Inc. All rights reserved.
+* golang/protobuf - https://github.com/golang/protobuf
+Copyright 2010 The Go Authors.  All rights reserved.
 
 BSD License
 
@@ -158,11 +160,14 @@ Copyright 2014 Unknwon
 Copyright 2011-2016 Canonical Ltd.
 * jmespath/go-jmespath - https://github.com/jmespath/go-jmespath
 Copyright 2015 James Saryerwinnie
+* digitalocean/go-smbios - https://github.com/digitalocean/go-smbios
+Copyright 2018 DigitalOcean, Inc
 * Workiva/go-datastructures - https://github.com/Workiva/go-datastructures
 * gorhill/cronexpr - https://github.com/gorhill/cronexpr
 * go-git/go-git - https://github.com/go-git/go-git
 * go-git/go-billy - https://github.com/go-git/go-billy
 * xanzy/ssh-agent - https://github.com/xanzy/ssh-agent
+* golang/appengine - https://github.com/golang/appengine
 
 Apache License
 Version 2.0, January 2004

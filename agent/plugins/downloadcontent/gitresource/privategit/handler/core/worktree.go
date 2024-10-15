@@ -17,7 +17,7 @@
 package core
 
 import (
-	"github.com/go-git/go-git"
+	"github.com/go-git/go-git/v5"
 )
 
 // IGitWorktree defines a subset of git.Worktree methods required to clone/checkout a git repository

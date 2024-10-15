@@ -16,9 +16,15 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
 	"runtime"
 	"runtime/debug"
 	"testing"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -30,6 +36,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -42,9 +49,10 @@ import (
 
 // RunCommandOutputTestSuite defines test suite for sending runcommand output, error and exit code to MDS service
 type RunCommandOutputTestSuite struct {
+	context context.T
 	suite.Suite
 	ssmAgent     agent.ISSMAgent
-	mdsSdkMock   *mdssdkmock.SSMMDSAPI
+	mdsSdkMock   *mdssdkmock.SsmmdsAPI
 	healthModule *healthmock.IHealthCheck
 	hibernate    *hibernatemock.IHibernate
 	log          log.T
@@ -59,36 +67,49 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 
 	config, err := appconfig.Config(true)
 	if err != nil {
-		log.Debugf("appconfig could not be loaded - %v", err)
+		panic(fmt.Sprintf("appconfig could not be loaded - %v", err))
 		return
 	}
-	context := context.Default(log, config)
+	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		panic(fmt.Sprintf("unable to assume identity - %v", err))
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
 
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
-	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(context, mdsService)
-	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, messageServiceModule))
 
 	// Create core manager that accepts runcommand core module
 	var cpm *coremanager.CoreManager
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	// Create core ssm agent
-	suite.ssmAgent = agent.NewSSMAgent(context, suite.healthModule, suite.hibernate)
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent = agent.NewSSMAgent(suite.context, suite.healthModule, suite.hibernate)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
 
 func (suite *RunCommandOutputTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
 	// Close the log only after the all tests are done.
 	suite.log.Close()
 }
@@ -111,18 +132,18 @@ func verifyRunCommandOutput(suite *RunCommandOutputTestSuite,
 	code int,
 	expectedResultStatus contracts.ResultStatus,
 	wrongResultStatus contracts.ResultStatus) {
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(docContent)
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		messageOutput, _ := testutils.GenerateMessages(suite.context, docContent)
 		return messageOutput
 	}, nil).Once()
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		// unmarshal the reply sent back to MDS, verify plugin output
 		payload := input.Payload
 		var sendReplyPayload messageContracts.SendReplyPayload
@@ -133,14 +154,25 @@ func verifyRunCommandOutput(suite *RunCommandOutputTestSuite,
 			c <- 1
 		} else if sendReplyPayload.DocumentStatus == expectedResultStatus {
 			foundPlugin := false
-			for _, pluginStatus := range sendReplyPayload.RuntimeStatus {
-				if pluginStatus.Status == expectedResultStatus {
-					foundPlugin = true
-					assert.Contains(suite.T(), pluginStatus.StandardOutput, stdout, "plugin stdout is not as expected")
-					assert.Contains(suite.T(), pluginStatus.StandardError, stderr, "plugin stderr is not as expected")
-					assert.Equal(suite.T(), pluginStatus.Code, code, "Exit code is %v expected %v", pluginStatus.Code, code)
-				}
+			runTimeStatusCount := 0
+			for _, counts := range sendReplyPayload.AdditionalInfo.RuntimeStatusCounts {
+				runTimeStatusCount += counts
 			}
+
+			if runTimeStatusCount <= 1 {
+				for _, pluginStatus := range sendReplyPayload.RuntimeStatus {
+					if pluginStatus.Status == expectedResultStatus {
+						foundPlugin = true
+						assert.Contains(suite.T(), pluginStatus.StandardOutput, stdout, "plugin stdout is not as expected")
+						assert.Contains(suite.T(), pluginStatus.StandardError, stderr, "plugin stderr is not as expected")
+						assert.Equal(suite.T(), pluginStatus.Code, code, "Exit code is %v expected %v", pluginStatus.Code, code)
+					}
+				}
+			} else {
+				suite.T().Log("For multiple plugin docs, last sendreply contains empty plugin runtime status map.")
+				foundPlugin = true
+			}
+
 			if !foundPlugin {
 				suite.T().Errorf("Couldn't find plugin with result status %v", expectedResultStatus)
 			}

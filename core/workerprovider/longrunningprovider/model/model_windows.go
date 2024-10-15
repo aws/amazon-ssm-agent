@@ -11,9 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
-//Package model contains data objects for long running container
+// Package model contains data objects for long running container
 package model
 
+var SSMAgentBinaryName = SSMAgentName + ".exe"
 var SSMAgentWorkerBinaryName = SSMAgentWorkerName + ".exe"

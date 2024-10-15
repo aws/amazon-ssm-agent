@@ -18,7 +18,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -28,18 +27,18 @@ type MockIOHandler struct {
 }
 
 // Init is a mocked method that acknowledges that the function has been called.
-func (m *MockIOHandler) Init(log log.T, filePath ...string) {
-	m.Called(log, filePath)
+func (m *MockIOHandler) Init(filePath ...string) {
+	m.Called(filePath)
 }
 
 // RegisterOutputSource is a mocked method that acknowledges that the function has been called.
-func (m *MockIOHandler) RegisterOutputSource(log log.T, multiWriter multiwriter.DocumentIOMultiWriter, IOModules ...iomodule.IOModule) {
-	m.Called(log, multiWriter, IOModules)
+func (m *MockIOHandler) RegisterOutputSource(multiWriter multiwriter.DocumentIOMultiWriter, IOModules ...iomodule.IOModule) {
+	m.Called(multiWriter, IOModules)
 }
 
 // Close is a mocked method that acknowledges that the function has been called.
-func (m *MockIOHandler) Close(log log.T) {
-	m.Called(log)
+func (m *MockIOHandler) Close() {
+	m.Called()
 }
 
 // String is a mocked method that just returns what mock tells it to.

@@ -23,17 +23,20 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	logger2 "github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
 var log logger.T
 
 func init() {
-	log = logger.DefaultLogger()
+	log = logger2.DefaultLogger()
 	defer log.Flush()
 }
 
@@ -57,11 +60,6 @@ func main() {
 	var timeout int64 = 10000
 	timeoutPtr := &timeout
 	var err error
-	err = platform.SetRegion(*regionPtr)
-	if err != nil {
-		log.Error("please specify the region to use.")
-		return
-	}
 
 	if *commandPtr == "" && *scriptFilePtr == "" {
 		fmt.Println("No commands specified (use either -c or -f).")
@@ -109,7 +107,20 @@ func main() {
 		}
 	}
 
-	ssmSvc := ssm.NewService(log)
+	config, err := appconfig.Config(false)
+	if err != nil {
+		log.Warnf("appconfig could not be loaded, using default config - %v", err)
+	}
+	selector := identity.NewInstanceIDRegionAgentIdentitySelector(log, *instanceIDPtr, *regionPtr)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, selector)
+	if err != nil {
+		log.Errorf("Failed to find agent identity: %v", err)
+		return
+	}
+
+	context := context.Default(log, config, agentIdentity).With("[agentconsole]")
+
+	ssmSvc := ssm.NewService(context)
 	if ssmSvc == nil {
 		log.Error("couldn't create ssm service.")
 		return
@@ -289,7 +300,7 @@ func prettyPrint(input interface{}, indentLevel int) (res string) {
 	}
 }
 
-//Colors In Terminal
+// Colors In Terminal
 const (
 	//Clr0 Colors In Terminal
 	Clr0 = "\x1b[30;1m"

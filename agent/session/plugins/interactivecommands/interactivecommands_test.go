@@ -15,19 +15,18 @@
 package interactivecommands
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
-	"github.com/aws/amazon-ssm-agent/agent/session/shell"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	sessionPluginMock "github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -41,7 +40,6 @@ type InteractiveCommandsTestSuite struct {
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
 	plugin          *InteractiveCommandsPlugin
-	shellProps      interface{}
 }
 
 func (suite *InteractiveCommandsTestSuite) SetupTest() {
@@ -49,18 +47,7 @@ func (suite *InteractiveCommandsTestSuite) SetupTest() {
 	mockCancelFlag := &task.MockCancelFlag{}
 	mockDataChannel := &dataChannelMock.IDataChannel{}
 	mockIohandler := new(iohandlermocks.MockIOHandler)
-	mockLog := log.NewMockLog()
-
-	shellProps := mgsContracts.ShellProperties{
-		Linux: mgsContracts.ShellConfig{
-			Commands:      "ls",
-			RunAsElevated: true,
-		},
-		Windows: mgsContracts.ShellConfig{
-			Commands:      "date",
-			RunAsElevated: true,
-		},
-	}
+	mockLog := logmocks.NewMockLog()
 
 	suite.mockContext = mockContext
 	suite.mockLog = mockLog
@@ -68,10 +55,9 @@ func (suite *InteractiveCommandsTestSuite) SetupTest() {
 	suite.mockDataChannel = mockDataChannel
 	suite.mockIohandler = mockIohandler
 	suite.plugin = &InteractiveCommandsPlugin{}
-	suite.shellProps = shellProps
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestInteractiveCommandsTestSuite(t *testing.T) {
 	suite.Run(t, new(InteractiveCommandsTestSuite))
 }
@@ -84,85 +70,41 @@ func (suite *InteractiveCommandsTestSuite) TestName() {
 
 // Testing GetPluginParameters
 func (suite *InteractiveCommandsTestSuite) TestGetPluginParameters() {
+	mockSessionPlugin := new(sessionPluginMock.ISessionPlugin)
+	mockSessionPlugin.On("GetPluginParameters", mock.Anything).Return(nil)
+	suite.plugin.sessionPlugin = mockSessionPlugin
+
 	assert.Equal(suite.T(), suite.plugin.GetPluginParameters(map[string]interface{}{"key": "value"}), nil)
 }
 
-// Testing Execute when cancel flag is shut down.
-func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
-	suite.mockCancelFlag.On("ShutDown").Return(true)
-	suite.mockIohandler.On("MarkAsShutdown").Return(nil)
-	suite.plugin.shell, _ = shell.NewPlugin(suite.plugin.name())
+// Testing RequireHandshake
+func (suite *InteractiveCommandsTestSuite) TestRequireHandshake() {
+	mockSessionPlugin := new(sessionPluginMock.ISessionPlugin)
+	mockSessionPlugin.On("RequireHandshake").Return(false)
+	suite.plugin.sessionPlugin = mockSessionPlugin
 
-	suite.plugin.Execute(suite.mockContext,
-		contracts.Configuration{Properties: suite.shellProps},
-		suite.mockCancelFlag,
-		suite.mockIohandler,
-		suite.mockDataChannel)
-
-	suite.mockCancelFlag.AssertExpectations(suite.T())
-	suite.mockIohandler.AssertExpectations(suite.T())
+	assert.Equal(suite.T(), suite.plugin.RequireHandshake(), false)
 }
 
-// Testing Execute when cancel flag is cancelled.
-func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
-	suite.mockCancelFlag.On("Canceled").Return(true)
-	suite.mockCancelFlag.On("ShutDown").Return(false)
-	suite.mockIohandler.On("MarkAsCancelled").Return(nil)
-	suite.plugin.shell, _ = shell.NewPlugin(suite.plugin.name())
-
-	suite.plugin.Execute(suite.mockContext,
-		contracts.Configuration{Properties: suite.shellProps},
-		suite.mockCancelFlag,
-		suite.mockIohandler,
-		suite.mockDataChannel)
-
-	suite.mockCancelFlag.AssertExpectations(suite.T())
-	suite.mockIohandler.AssertExpectations(suite.T())
-}
-
-// Testing Execute happy case when the exit code is 0.
+// Testing Execute
 func (suite *InteractiveCommandsTestSuite) TestExecute() {
-	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockLog, contracts.IOConfiguration{})
-	mockShellPlugin := new(shell.IShellPluginMock)
-	mockShellPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel, suite.shellProps).Return()
-	suite.plugin.shell = mockShellPlugin
+	mockSessionPlugin := new(sessionPluginMock.ISessionPlugin)
+	mockSessionPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+	suite.plugin.sessionPlugin = mockSessionPlugin
 
-	suite.plugin.Execute(suite.mockContext,
-		contracts.Configuration{Properties: suite.shellProps},
-		suite.mockCancelFlag,
-		newIOHandler,
-		suite.mockDataChannel)
+	suite.plugin.Execute(contracts.Configuration{}, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel)
 
-	mockShellPlugin.AssertExpectations(suite.T())
-	assert.Equal(suite.T(), 0, newIOHandler.GetExitCode())
-}
-
-// Testing Execute without properties section in the input.
-func (suite *InteractiveCommandsTestSuite) TestExecuteWithoutCommands() {
-	suite.mockIohandler.On("SetExitCode", 1).Return(nil)
-	suite.mockIohandler.On("SetStatus", contracts.ResultStatusFailed).Return()
-
-	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
-	sessionPluginResultOutput.Output = fmt.Sprintf("Commands cannot be empty for session type %s", suite.plugin.name())
-	suite.mockIohandler.On("SetOutput", sessionPluginResultOutput).Return()
-
-	suite.plugin.Execute(suite.mockContext,
-		contracts.Configuration{},
-		suite.mockCancelFlag,
-		suite.mockIohandler,
-		suite.mockDataChannel)
-
-	suite.mockIohandler.AssertExpectations(suite.T())
+	mockSessionPlugin.AssertExpectations(suite.T())
 }
 
 // Testing InputStreamMessageHandler base case.
 func (suite *InteractiveCommandsTestSuite) TestInputStreamMessageHandler() {
-	mockShellPlugin := new(shell.IShellPluginMock)
-	mockShellPlugin.On("InputStreamMessageHandler", suite.mockLog, mock.Anything).Return(nil)
-	suite.plugin.shell = mockShellPlugin
+	mockSessionPlugin := new(sessionPluginMock.ISessionPlugin)
+	mockSessionPlugin.On("InputStreamMessageHandler", suite.mockLog, mock.Anything).Return(nil)
+	suite.plugin.sessionPlugin = mockSessionPlugin
 
 	err := suite.plugin.InputStreamMessageHandler(suite.mockLog, mgsContracts.AgentMessage{})
 
-	mockShellPlugin.AssertExpectations(suite.T())
+	mockSessionPlugin.AssertExpectations(suite.T())
 	assert.Nil(suite.T(), err)
 }

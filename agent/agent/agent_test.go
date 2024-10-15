@@ -17,11 +17,12 @@ package agent
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	coremanager "github.com/aws/amazon-ssm-agent/agent/framework/coremanager/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	healthmock "github.com/aws/amazon-ssm-agent/agent/health/mocks"
 	hibernation "github.com/aws/amazon-ssm-agent/agent/hibernation/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -43,7 +44,7 @@ func (suite *AgentTestSuite) SetupTest() {
 	mockCoreManager.On("Start").Return()
 
 	mockHiberation := new(hibernation.IHibernate)
-	mockHiberation.On("ExecuteHibernation").Return(health.Active)
+	mockHiberation.On("ExecuteHibernation", mock.Anything).Return(health.Active)
 
 	mockHealthModule := new(healthmock.IHealthCheck)
 
@@ -63,14 +64,14 @@ func (suite *AgentTestSuite) SetupTest() {
 func (suite *AgentTestSuite) TestAgentActiveHibernation() {
 	suite.mockHealthModule.On("GetAgentState").Return(health.Passive, nil)
 	suite.mockSSMAgent.Hibernate()
-	suite.mockHiberation.AssertCalled(suite.T(), "ExecuteHibernation")
+	suite.mockHiberation.AssertCalled(suite.T(), "ExecuteHibernation", mock.Anything)
 }
 
 // TestAgentPassiveHibernation tests that agent doesnot executes hibernation if the agent state was active
 func (suite *AgentTestSuite) TestAgentPassiveHibernation() {
 	suite.mockHealthModule.On("GetAgentState").Return(health.Active, nil)
 	suite.mockSSMAgent.Hibernate()
-	suite.mockHiberation.AssertNotCalled(suite.T(), "ExecuteHibernation")
+	suite.mockHiberation.AssertNotCalled(suite.T(), "ExecuteHibernation", mock.Anything)
 }
 
 // TestAgentStart tests that agent starts the core manager when it starts

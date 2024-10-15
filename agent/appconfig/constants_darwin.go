@@ -11,12 +11,13 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin
 // +build darwin
 
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
-const (
+var (
 	// DefaultProgramFolder is the default folder for SSM
 	DefaultProgramFolder = "/opt/aws/ssm/"
 
@@ -82,20 +83,27 @@ const (
 	// Default Session files Folder
 	SessionFilesPath = DefaultDataStorePath + "session"
 
-	DefaultSSMAgentWorker = DefaultProgramFolder + "bin/ssm-agent-worker"
-	DefaultDocumentWorker = DefaultProgramFolder + "bin/ssm-document-worker"
-	DefaultSessionWorker  = DefaultProgramFolder + "bin/ssm-session-worker"
-	DefaultSessionLogger  = DefaultProgramFolder + "bin/ssm-session-logger"
+	DefaultSSMAgentBinaryPath = DefaultProgramFolder + "bin/amazon-ssm-agent"
+	DefaultSSMAgentWorker     = DefaultProgramFolder + "bin/ssm-agent-worker"
+	DefaultDocumentWorker     = DefaultProgramFolder + "bin/ssm-document-worker"
+	DefaultSessionWorker      = DefaultProgramFolder + "bin/ssm-session-worker"
+	DefaultSessionLogger      = DefaultProgramFolder + "bin/ssm-session-logger"
 
 	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandName = "/usr/local/bin/pwsh"
 
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = "-f"
+	// SSM Agent Update download legacy path
+	LegacyUpdateDownloadFolder = DownloadRoot
 
 	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
 	CommandStoppedPreemptivelyExitCode = 137 // Fatal error (128) + signal for SIGKILL (9) = 137
 
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
+
+	RuntimeConfigFolderPath = DefaultProgramFolder + "runtimeconfig"
+
+	DefaultEC2SharedCredentialsFilePath = DefaultDataStorePath + "credentials"
 )

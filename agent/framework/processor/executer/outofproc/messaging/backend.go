@@ -2,12 +2,14 @@ package messaging
 
 import (
 	"errors"
+	"runtime/debug"
 
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -23,7 +25,7 @@ type PluginRunner func(
 	cancelFlag task.CancelFlag,
 )
 
-//worker backend receives request messages from master, controls a pluginRunner based off the request and send reponses to Executer
+// worker backend receives request messages from master, controls a pluginRunner based off the request and send reponses to Executer
 type WorkerBackend struct {
 	ctx        context.T
 	input      chan string
@@ -33,7 +35,7 @@ type WorkerBackend struct {
 	stopChan   chan int
 }
 
-//Executer backend formulate the run request to the worker, and collect back the responses from worker
+// Executer backend formulate the run request to the worker, and collect back the responses from worker
 type ExecuterBackend struct {
 	//the shared state object that Executer hand off to data backend
 	docState   *contracts.DocumentState
@@ -43,7 +45,7 @@ type ExecuterBackend struct {
 	stopChan   chan int
 }
 
-func NewExecuterBackend(output chan contracts.DocumentResult, docState *contracts.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
+func NewExecuterBackend(log log.T, output chan contracts.DocumentResult, docState *contracts.DocumentState, cancelFlag task.CancelFlag) *ExecuterBackend {
 	stopChan := make(chan int, defaultBackendChannelSize)
 	inputChan := make(chan string, defaultBackendChannelSize)
 	p := ExecuterBackend{
@@ -53,11 +55,17 @@ func NewExecuterBackend(output chan contracts.DocumentResult, docState *contract
 		cancelFlag: cancelFlag,
 		stopChan:   stopChan,
 	}
-	go p.start(*docState)
+	go p.start(log, *docState)
 	return &p
 }
 
-func (p *ExecuterBackend) start(docState contracts.DocumentState) {
+func (p *ExecuterBackend) start(log log.T, docState contracts.DocumentState) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Executer backend start panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	startDatagram, _ := CreateDatagram(MessageTypePluginConfig, docState)
 	p.input <- startDatagram
 	p.cancelFlag.Wait()
@@ -83,8 +91,12 @@ func (p *ExecuterBackend) Close() {
 	p.input = nil
 }
 
-//TODO handle error and logging, when err, ask messaging to stop
-//TODO version handling?
+func (p *ExecuterBackend) CloseStop() {
+	return
+}
+
+// TODO handle error and logging, when err, ask messaging to stop
+// TODO version handling?
 func (p *ExecuterBackend) Process(datagram string) error {
 	t, content := ParseDatagram(datagram)
 	switch t {
@@ -163,6 +175,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		//if this routine panics, return failed results
 		if msg := recover(); msg != nil {
 			log.Errorf("plugin listener panic: %v", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 			finalStatus = contracts.ResultStatusFailed
 		}
 
@@ -185,7 +198,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		var result = res
 		results[res.PluginID] = &result
 		//TODO move the aggregator under executer package and protect it, there's global lock in this package
-		status, _, _ := contracts.DocumentResultAggregator(log, res.PluginID, results)
+		status, _, _, _ := contracts.DocumentResultAggregator(log, res.PluginID, results)
 		docResult := contracts.DocumentResult{
 			Status:        status,
 			PluginResults: results,
@@ -196,7 +209,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		p.input <- replyMessage
 	}
 	log.Info("document execution complete")
-	finalStatus, _, _ = contracts.DocumentResultAggregator(log, "", results)
+	finalStatus, _, _, _ = contracts.DocumentResultAggregator(log, "", results)
 
 }
 
@@ -210,4 +223,8 @@ func (p *WorkerBackend) Stop() <-chan int {
 
 func (p *WorkerBackend) Close() {
 	p.input = nil
+}
+
+func (p *WorkerBackend) CloseStop() {
+	p.stopChan = nil
 }

@@ -24,20 +24,34 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"go.nanomsg.org/mangos/v3"
 )
 
-// GetRespondentInstance returns the surveyor instance
-func GetSurveyInstance(log log.T) *survey {
+type ISurvey interface {
+	Initialize()
+	GetCommProtocolInfo() utils.SocketType
+	Send(message *message.Message) error
+	Close() error
+	Recv() ([]byte, error)
+	SetOption(name string, value interface{}) (err error)
+	Listen(address string) error
+	Dial(path string) error
+}
+
+// GetSurveyInstance returns the surveyor instance
+func GetSurveyInstance(log log.T, identity identity.IAgentIdentity) ISurvey {
 	return &survey{
-		log: log,
+		log:      log,
+		identity: identity,
 	}
 }
 
 // survey implements surveyor actions from surveyor-respondent pattern
 type survey struct {
 	log                        log.T
+	identity                   identity.IAgentIdentity
 	fileChannel                filewatcherbasedipc.IPCChannel
 	optionSurveyTimeoutSeconds time.Duration
 	socketType                 utils.SocketType
@@ -98,7 +112,7 @@ func (sur *survey) Recv() ([]byte, error) {
 		}
 		return []byte(message), nil
 	}
-	return nil, nil
+
 }
 
 // SetOption is used to specify additional options
@@ -119,7 +133,15 @@ func (sur *survey) SetOption(name string, value interface{}) (err error) {
 // Listen creates a new channel in the main worker side
 func (sur *survey) Listen(address string) error {
 	sur.address = address
-	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(sur.log, filewatcherbasedipc.ModeSurveyor, filepath.Base(address), false)
+	var channel filewatcherbasedipc.IPCChannel
+	var err error
+	channel, err, _ = filewatcherbasedipc.CreateFileWatcherChannel(sur.log, sur.identity, filewatcherbasedipc.ModeSurveyor, filepath.Base(address), false)
+	// return error to initiate retry
+	if err != nil {
+		return fmt.Errorf("error while creating file channel: %v", err)
+	}
+	// clean up surveyor files in case agent was not able to clean last time it stopped
+	channel.CleanupOwnModeFiles()
 	sur.fileChannel = channel
 	return err
 }

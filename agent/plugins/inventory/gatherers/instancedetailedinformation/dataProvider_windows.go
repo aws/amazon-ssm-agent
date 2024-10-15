@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 package instancedetailedinformation
@@ -22,12 +23,12 @@ import (
 
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
 const (
-	PowershellCmd = "powershell"
 	CPUInfoScript = `
 $wmi_proc = Get-WmiObject -Class Win32_Processor
 if (@($wmi_proc)[0].NumberOfCores) #Modern OS
@@ -57,7 +58,14 @@ Write-Host -nonewline @"
 SELECT-OBJECT ServicePackMajorVersion,BuildNumber | % { Write-Output @"
 {"OSServicePack":"$($_.ServicePackMajorVersion)"}
 "@}`
+	KernelVersionScript = `
+$KernelVersion = (Join-Path $env:windir 'System32\ntoskrnl.exe' | Get-Item).VersionInfo.FileVersion
+Write-Host -nonewline @"
+{"KernelVersion":"$KernelVersion"}
+"@`
 )
+
+var PowershellCmd = appconfig.PowerShellPluginCommandName
 
 // decoupling exec.Command for easy testability
 var cmdExecutor = executeCommand
@@ -77,6 +85,12 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 		// if both commands fail, return no data
 		return
 	}
+
+	err3 := collectDataFromPowershell(context, KernelVersionScript, &instanceDetailedInfo)
+	if err3 != nil {
+		log.Warnf("Failed to gather kernel version using script: %v", KernelVersionScript)
+	}
+
 	appData = append(appData, instanceDetailedInfo)
 	str, _ := json.Marshal(appData)
 	log.Debugf("%v gathered: %v", GathererName, string(str))

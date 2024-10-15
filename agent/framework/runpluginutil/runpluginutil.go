@@ -16,6 +16,7 @@ package runpluginutil
 
 import (
 	"fmt"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
@@ -41,7 +42,7 @@ const (
 
 // TODO: rename to RCPlugin, this represents RCPlugin interface.
 type T interface {
-	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler)
+	Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler)
 }
 
 type PluginFactory interface {
@@ -51,7 +52,11 @@ type PluginFactory interface {
 // PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
 type PluginRegistry map[string]PluginFactory
 
-var SSMPluginRegistry PluginRegistry
+var (
+	SSMPluginRegistry PluginRegistry
+
+	deleteDirectoryRef = fileutil.DeleteDirectory
+)
 
 // allPlugins is the list of all known plugins.
 // This allows us to differentiate between the case where a document asks for a plugin that exists but isn't supported on this platform
@@ -77,9 +82,10 @@ var allPlugins = map[string]struct{}{
 
 // allSessionPlugins is the list of all known session plugins.
 var allSessionPlugins = map[string]struct{}{
-	appconfig.PluginNameStandardStream:      {},
-	appconfig.PluginNameInteractiveCommands: {},
-	appconfig.PluginNamePort:                {},
+	appconfig.PluginNameStandardStream:         {},
+	appconfig.PluginNameInteractiveCommands:    {},
+	appconfig.PluginNamePort:                   {},
+	appconfig.PluginNameNonInteractiveCommands: {},
 }
 
 // Assign method to global variables to allow unittest to override
@@ -93,6 +99,7 @@ func RunPlugins(
 	context context.T,
 	plugins []contracts.PluginState,
 	ioConfig contracts.IOConfiguration,
+	upstreamServiceName contracts.UpstreamServiceName,
 	registry PluginRegistry,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag,
@@ -103,6 +110,13 @@ func RunPlugins(
 	//Contains the logStreamPrefix without the pluginID
 	logStreamPrefix := ioConfig.CloudWatchConfig.LogStreamPrefix
 	log := context.Log()
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Run plugins panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 
 	for pluginIndex, pluginState := range plugins {
 		pluginID := pluginState.Id     // the identifier of the plugin
@@ -143,8 +157,9 @@ func RunPlugins(
 
 		log.Debugf("Executing plugin - %v", pluginName)
 
-		// populate plugin start time and status
+		// populate plugin start time, status, and upstream service name
 		configuration := pluginState.Configuration
+		configuration.UpstreamServiceName = upstreamServiceName
 
 		if ioConfig.OutputS3BucketName != "" {
 			pluginOutputs[pluginID].OutputS3BucketName = ioConfig.OutputS3BucketName
@@ -260,8 +275,34 @@ func RunPlugins(
 			break
 		}
 	}
-
+	// this will clean the orchestration folder for the successful and failed document executions only when the agent is configured
+	orchestrationDirCleanup(context, len(plugins), pluginOutputs, ioConfig.OrchestrationDirectory)
 	return
+}
+
+// orchestrationDirCleanup will clean orchestration folder for the successful and failed document executions. Cleaned only when the agent is configured to do so
+func orchestrationDirCleanup(context context.T, pluginsCount int, pluginOutputs map[string]*contracts.PluginResult, orchestrationDir string) {
+	log := context.Log()
+	if orchestrationDir == "" {
+		log.Info("orchestration directory is empty")
+		return
+	}
+
+	if pluginsCount == len(pluginOutputs) {
+		// this will clean the orchestration folder for the successful and failed document executions only when the agent is configured
+		orchestrationDirectoryCleanupConfig := context.AppConfig().Ssm.OrchestrationDirectoryCleanup
+		documentResult, _, _, _ := contracts.DocumentResultAggregator(log, "", pluginOutputs)
+		statusWithCleanupConfig := map[contracts.ResultStatus]map[string]interface{}{
+			contracts.ResultStatusSuccess: {appconfig.OrchestrationDirCleanupForSuccessCommand: nil, appconfig.OrchestrationDirCleanupForSuccessFailedCommand: nil},
+			contracts.ResultStatusFailed:  {appconfig.OrchestrationDirCleanupForSuccessFailedCommand: nil},
+		}
+		if _, ok := statusWithCleanupConfig[documentResult][orchestrationDirectoryCleanupConfig]; ok {
+			log.Infof("orchestration cleanup started for the command with status %v - deleting orchestration directory: %v", documentResult, orchestrationDir)
+			if err := deleteDirectoryRef(orchestrationDir); err != nil {
+				log.Warnf("error deleting the directory %v", orchestrationDir)
+			}
+		}
+	}
 }
 
 var runPlugin = func(
@@ -285,6 +326,7 @@ var runPlugin = func(
 			res.Code = 1
 			res.Error = fmt.Errorf("Plugin crashed with message %v!", err).Error()
 			log.Error(res.Error)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 
@@ -302,7 +344,7 @@ var runPlugin = func(
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 
-	output := iohandler.NewDefaultIOHandler(log, ioConfig)
+	output := iohandler.NewDefaultIOHandler(context, ioConfig)
 	//check if properties is a list. If true, then unroll
 	switch config.Properties.(type) {
 	case []interface{}:
@@ -313,16 +355,16 @@ var runPlugin = func(
 		}
 		for _, prop := range properties {
 			config.Properties = prop
-			propOutput := iohandler.NewDefaultIOHandler(log, ioConfig)
+			propOutput := iohandler.NewDefaultIOHandler(context, ioConfig)
 			stepName, err = getStepName(pluginName, config)
 			if err != nil {
 				errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
 				output.MarkAsFailed(errorString)
 			} else {
-				executePlugin(context, plugin, pluginName, stepName, config, cancelFlag, propOutput)
+				executePlugin(plugin, pluginName, stepName, config, cancelFlag, propOutput)
 			}
 
-			output.Merge(log, propOutput)
+			output.Merge(propOutput)
 		}
 
 	default:
@@ -331,7 +373,7 @@ var runPlugin = func(
 			errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
 			output.MarkAsFailed(errorString)
 		} else {
-			executePlugin(context, plugin, pluginName, stepName, config, cancelFlag, output)
+			executePlugin(plugin, pluginName, stepName, config, cancelFlag, output)
 		}
 	}
 
@@ -353,19 +395,18 @@ var runPlugin = func(
 }
 
 // executePlugin executes the plugin that's passed in and initializes the necessary writers
-func executePlugin(context context.T,
+func executePlugin(
 	plugin T,
 	pluginName string,
 	stepName string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler) {
-	log := context.Log()
 
 	// Create the output object and execute the plugin
-	defer output.Close(log)
-	output.Init(log, pluginName, stepName)
-	plugin.Execute(context, config, cancelFlag, output)
+	defer output.Close()
+	output.Init(pluginName, stepName)
+	plugin.Execute(config, cancelFlag, output)
 }
 
 // GetPropertyName returns the ID field of property in a v1.2 SSM Document

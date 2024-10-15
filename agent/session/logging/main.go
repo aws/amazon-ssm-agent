@@ -50,7 +50,11 @@ func main() {
 		log.Errorf("Failed to open log file %s", args[1])
 		return
 	}
-	defer file.Close()
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing file, %v", closeErr)
+		}
+	}()
 
 	enableVirtualTerminalProcessingForWindows, err := strconv.ParseBool(args[2])
 	if err != nil {
@@ -80,5 +84,6 @@ func initializeLogger() context.T {
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
 
-	return context.Default(logger, config).With(defaultSessionLoggerContextName)
+	// agentIdentity is nil because session-logger does not use instanceId/Region/Credentials
+	return context.Default(logger, config, nil).With(defaultSessionLoggerContextName)
 }

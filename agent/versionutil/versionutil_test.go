@@ -1,9 +1,9 @@
 package versionutil
 
 import (
-	"testing"
-
+	"fmt"
 	"sort"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -23,6 +23,7 @@ func TestCompareSemVer(t *testing.T) {
 	// SemVer and non-SemVer compliant versions
 	assert.True(t, Compare("3.0.0+foo", "3.0", false) > 0)
 	assert.True(t, Compare("3.0.0+foo", "3.0.0.1", false) > 0)
+	assert.True(t, Compare("3.2.0.0+foo", "3.1.9999.99999+foo", false) > 0)
 }
 
 func TestCompareVersion(t *testing.T) {
@@ -68,4 +69,78 @@ func TestSort(t *testing.T) {
 	expected := []string{"2.0.1+asdf.qwerty", "3.7", "3.8", "4.0", "4.0", "4.0.1"}
 	sort.Sort(ByVersion(actual))
 	assert.Equal(t, actual, expected)
+}
+
+// TestVersionStringCompare tests version string comparison
+func TestVersionStringCompare(t *testing.T) {
+	testCases := []struct {
+		a      string
+		b      string
+		result int
+	}{
+		{"0", "1.0.152.0", -1},
+		{"0.0.1.0", "1.0.152.0", -1},
+		{"1.05.00.0156", "1.0.221.9289", 1},
+		{"2.05.1", "1.3234.221.9289", 1},
+		{"1", "1.0.1", -1},
+		{"1.0.1", "1.0.2", -1},
+		{"1.0.2", "1.0.3", -1},
+		{"1.0.3", "1.1", -1},
+		{"1.1", "1.1.1", -1},
+		{"1.1.0", "1.0.152.0", 1},
+		{"1.1.45", "1.0.152.0", 1},
+		{"1.1.1", "1.1.2", -1},
+		{"1.1.2", "1.2", -1},
+		{"1.1.2", "1.1.2", 0},
+		{"2.1.2", "2.1.2", 0},
+		{"7.1", "7", 1},
+	}
+
+	for _, test := range testCases {
+		compareResult, err := VersionCompare(test.a, test.b)
+		assert.NoError(t, err)
+		assert.Equal(t, compareResult, test.result)
+	}
+}
+
+// TestVersionStringCompare tests version string comparison
+func TestVersionStringCompareWithError(t *testing.T) {
+	testCases := []struct {
+		a string
+		b string
+	}{
+		{"Invalid version", "1.0.152.0"},
+		{"0.0.1.0", "Invalid version"},
+	}
+
+	for _, test := range testCases {
+		_, err := VersionCompare(test.a, test.b)
+		assert.Error(t, err)
+	}
+}
+
+// TestVersionStringCompare tests version string comparison
+func TestIsValidVersion(t *testing.T) {
+	testCases := []struct {
+		version string
+		success bool
+	}{
+		{"somestring", false},
+		{"../../string1", false},
+		{"1.", false},
+		{"1..", false},
+		{"23.0", true},
+		{"1.3.3.7", true},
+		{"1.0", true},
+		{"1", true},
+	}
+
+	for _, test := range testCases {
+		result := IsValidVersion(test.version)
+		if test.success {
+			assert.True(t, result, fmt.Sprintf("Version %s should have been valid", test.version))
+		} else {
+			assert.False(t, result, fmt.Sprintf("Version %s should not have been valid", test.version))
+		}
+	}
 }

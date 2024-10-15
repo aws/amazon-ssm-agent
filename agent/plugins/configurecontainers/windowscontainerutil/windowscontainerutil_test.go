@@ -18,12 +18,12 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var loggerMock = log.NewMockLog()
+var contextMock = context.NewMockDefault()
 
 func successMock() *DepMock {
 	depmock := DepMock{}
@@ -32,7 +32,7 @@ func successMock() *DepMock {
 	depmock.On("SetDaemonConfig", mock.Anything, mock.Anything).Return(nil)
 	depmock.On("MakeDirs", mock.Anything).Return(nil)
 	depmock.On("TempDir", mock.Anything, mock.Anything).Return("test", nil)
-	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
+	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 	depmock.On("ArtifactDownload", mock.Anything, mock.Anything).Return(artifact.DownloadOutput{}, nil)
 	depmock.On("LocalRegistryKeySetDWordValue", mock.Anything, mock.Anything, mock.Anything).Return(nil)
@@ -48,7 +48,7 @@ func TestInstall(t *testing.T) {
 	defer func() { dep = depOrig }()
 
 	output := iohandler.DefaultIOHandler{}
-	RunInstallCommands(loggerMock, "", &output)
+	RunInstallCommands(contextMock, "", &output)
 
 	assert.Equal(t, output.GetExitCode(), 0)
 	assert.Contains(t, output.GetStdout(), "Installation complete")

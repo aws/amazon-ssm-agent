@@ -17,6 +17,7 @@ package frequentcollector
 import (
 	"encoding/json"
 	"math"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -27,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
@@ -72,7 +72,7 @@ func GetFrequentCollector() *FrequentCollector {
 	return frequentCollector
 }
 
-//ClearTicker stops the ticker for frequent collector, and sets it to nil
+// ClearTicker stops the ticker for frequent collector, and sets it to nil
 func (collector *FrequentCollector) ClearTicker() {
 	collector.mutex.RLock()
 	defer collector.mutex.RUnlock()
@@ -83,7 +83,7 @@ func (collector *FrequentCollector) ClearTicker() {
 	}
 }
 
-//resetTicker stop the old ticker for frequent collector and creates a new one
+// resetTicker stop the old ticker for frequent collector and creates a new one
 func (collector *FrequentCollector) resetTicker(d time.Duration) *time.Ticker {
 	collector.ClearTicker()
 
@@ -94,13 +94,13 @@ func (collector *FrequentCollector) resetTicker(d time.Duration) *time.Ticker {
 	return collector.tickerForFrequentCollector
 }
 
-//StartFrequentCollector starts the frequent collector per association configuration.
+// StartFrequentCollector starts the frequent collector per association configuration.
 func (collector *FrequentCollector) StartFrequentCollector(context context.T, docState *contracts.DocumentState, scheduledAssociation *AssociationModel.InstanceAssociation) {
 	collector.mutex.RLock()
 	defer collector.mutex.RUnlock()
 
 	log := context.Log()
-	changeDetectionFrequency, _ := collector.getFrequentCollectInformation(log, docState)
+	changeDetectionFrequency, _ := collector.getFrequentCollectInformation(context, docState)
 	_, intervalInSeconds := collector.GetIntervalInSeconds(changeDetectionFrequency, scheduledAssociation.ParsedExpression)
 
 	defer func() {
@@ -114,6 +114,12 @@ func (collector *FrequentCollector) StartFrequentCollector(context context.T, do
 	ticker := collector.resetTicker(time.Duration(intervalInSeconds) * time.Second)
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Frequent collector panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for t := range ticker.C {
 			log.Infof("Frequent collector, tick at %s, ticker address : %p", t.Format(time.UnixDate), collector.tickerForFrequentCollector)
 			collector.collect(context, docState)
@@ -121,7 +127,7 @@ func (collector *FrequentCollector) StartFrequentCollector(context context.T, do
 	}()
 }
 
-//IsFrequentCollectorEnabled return a boolean indicating if the frequent collector is enabled per association configuration.
+// IsFrequentCollectorEnabled return a boolean indicating if the frequent collector is enabled per association configuration.
 func (collector *FrequentCollector) IsFrequentCollectorEnabled(context context.T, docState *contracts.DocumentState, scheduledAssociation *AssociationModel.InstanceAssociation) bool {
 	log := context.Log()
 
@@ -136,7 +142,7 @@ func (collector *FrequentCollector) IsFrequentCollectorEnabled(context context.T
 		return false
 	}
 
-	changeDetectionFrequency, namesOfGatherers := collector.getFrequentCollectInformation(log, docState)
+	changeDetectionFrequency, namesOfGatherers := collector.getFrequentCollectInformation(context, docState)
 	if changeDetectionFrequency <= 0 || len(namesOfGatherers) <= 0 {
 		log.Infof(" frequent collector is not enabled. changeDetectionFrequency: %d, len of gatherers: %d", changeDetectionFrequency, len(namesOfGatherers))
 		return false
@@ -146,7 +152,7 @@ func (collector *FrequentCollector) IsFrequentCollectorEnabled(context context.T
 	return frequencyPresent && intervalInSeconds > 0
 }
 
-//GetIntervalInSeconds return the interval in seconds for frequent collector while the change detection frequency is specified
+// GetIntervalInSeconds return the interval in seconds for frequent collector while the change detection frequency is specified
 func (collector *FrequentCollector) GetIntervalInSeconds(changeDetectionFrequency int, parsedExpression scheduleexpression.ScheduleExpression) (bool, int) {
 	if changeDetectionFrequency > 1 {
 		//get the rate in seconds
@@ -162,11 +168,12 @@ func (collector *FrequentCollector) GetIntervalInSeconds(changeDetectionFrequenc
 	}
 }
 
-//getFrequentCollectInformation return frequent collector's frequency and watched inventory types.
-func (collector *FrequentCollector) getFrequentCollectInformation(log log.T, docState *contracts.DocumentState) (changeDetectionFrequency int, listOfGathererNames []string) {
+// getFrequentCollectInformation return frequent collector's frequency and watched inventory types.
+func (collector *FrequentCollector) getFrequentCollectInformation(context context.T, docState *contracts.DocumentState) (changeDetectionFrequency int, listOfGathererNames []string) {
 	var pluginState *contracts.PluginState = collector.getInventoryPluginState(docState)
+	log := context.Log()
 	if pluginState != nil {
-		output := iohandler.NewDefaultIOHandler(log, docState.IOConfig)
+		output := iohandler.NewDefaultIOHandler(context, docState.IOConfig)
 		parameterMap := pluginutil.LoadParametersAsMap(log, pluginState.Configuration.Properties, output)
 		gathererParameterMap := collector.getGathererParameterMap()
 
@@ -214,7 +221,7 @@ func (collector *FrequentCollector) getFrequentCollectInformation(log log.T, doc
 	return 0, listOfGathererNames
 }
 
-//getInventoryPluginState return the pointer to the inventory plugin state
+// getInventoryPluginState return the pointer to the inventory plugin state
 func (collector *FrequentCollector) getInventoryPluginState(docState *contracts.DocumentState) *contracts.PluginState {
 	for _, plugin := range docState.InstancePluginsInformation {
 		if plugin.Name == appconfig.PluginNameAwsSoftwareInventory {
@@ -224,24 +231,24 @@ func (collector *FrequentCollector) getInventoryPluginState(docState *contracts.
 	return nil
 }
 
-//IsSoftwareInventoryAssociation return true if it's a software inventory association.
+// IsSoftwareInventoryAssociation return true if it's a software inventory association.
 func (collector *FrequentCollector) IsSoftwareInventoryAssociation(docState *contracts.DocumentState) bool {
 	return collector.getInventoryPluginState(docState) != nil
 }
 
-//collect collects the dirty inventory types and report to SSM if there's any
+// collect collects the dirty inventory types and report to SSM if there's any
 func (collector *FrequentCollector) collect(context context.T, docState *contracts.DocumentState) {
 	log := context.Log()
 
 	if inventoryPlugin, err := inventory.NewPlugin(context); err == nil {
-		output := iohandler.NewDefaultIOHandler(log, docState.IOConfig)
-		_, inventoryTypes := collector.getFrequentCollectInformation(log, docState)
+		output := iohandler.NewDefaultIOHandler(context, docState.IOConfig)
+		_, inventoryTypes := collector.getFrequentCollectInformation(context, docState)
 		gathererMap := collector.getGatherersForFrequentCollectTypes(context, docState, inventoryPlugin, inventoryTypes)
 		log.Debugf("show the value of gatherer map for frequent collector : %#v ", *gathererMap)
 
 		if len(*gathererMap) > 0 {
 			log.Debug("calling Inventory.Plugin.ApplyInventoryFrequentCollector")
-			inventoryPlugin.ApplyInventoryFrequentCollector(context, *gathererMap, output)
+			inventoryPlugin.ApplyInventoryFrequentCollector(*gathererMap, output)
 		} else {
 			log.Infof("no enabled gatherer found for frequent collector")
 		}
@@ -250,7 +257,7 @@ func (collector *FrequentCollector) collect(context context.T, docState *contrac
 	}
 }
 
-//getGatherersForFrequentCollectTypes return the map of gatherers and InventoryModel.Config
+// getGatherersForFrequentCollectTypes return the map of gatherers and InventoryModel.Config
 func (collector *FrequentCollector) getGatherersForFrequentCollectTypes(context context.T, docState *contracts.DocumentState, plugin *inventory.Plugin, namesOfItems []string) *map[gatherers.T]InventoryModel.Config {
 	log := context.Log()
 	var gatherersMap = make(map[gatherers.T]InventoryModel.Config)
@@ -281,7 +288,7 @@ func (collector *FrequentCollector) getGatherersForFrequentCollectTypes(context 
 	return &gatherersMap
 }
 
-//getValidInventoryGathererConfigMap return the map of valid gatherers and their InventoryModel.config
+// getValidInventoryGathererConfigMap return the map of valid gatherers and their InventoryModel.config
 func (collector *FrequentCollector) getValidInventoryGathererConfigMap(context context.T, docState *contracts.DocumentState, plugin *inventory.Plugin) (validGatherers map[gatherers.T]InventoryModel.Config) {
 	log := context.Log()
 	var dataB []byte
@@ -307,7 +314,7 @@ func (collector *FrequentCollector) getValidInventoryGathererConfigMap(context c
 	return
 }
 
-//getSupportedGathererNames returns a map of gatherer names, using the all lower case as key, the normal gatherer name as value. This is to allow customer to input gatherer name ignoring case.
+// getSupportedGathererNames returns a map of gatherer names, using the all lower case as key, the normal gatherer name as value. This is to allow customer to input gatherer name ignoring case.
 func (collector *FrequentCollector) getSupportedGathererNames() map[string]string {
 	var gathererNameMap = make(map[string]string)
 	//only "AWS:Applications" is supported for now
@@ -315,7 +322,7 @@ func (collector *FrequentCollector) getSupportedGathererNames() map[string]strin
 	return gathererNameMap
 }
 
-//getGathererParameterMap returns a map taking gatherer name as key and document parameter as value, used to check if the gatherer is enabled in plugin state.
+// getGathererParameterMap returns a map taking gatherer name as key and document parameter as value, used to check if the gatherer is enabled in plugin state.
 func (collector *FrequentCollector) getGathererParameterMap() map[string]string {
 	var paramGathererMap = make(map[string]string)
 	paramGathererMap[strings.ToLower(application.GathererName)] = "applications"

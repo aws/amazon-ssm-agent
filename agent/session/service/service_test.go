@@ -19,7 +19,11 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -61,17 +65,17 @@ func TestCreateControlChannel(t *testing.T) {
 		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
 		RequestId:            aws.String(uuid.NewV4().String()),
 	}
-	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateControlChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
 		}
 		return xml.Marshal(output)
 	}
-	output, err := service.CreateControlChannel(log.NewMockLog(), createControlChannelInput, instanceId)
+	output, err := service.CreateControlChannel(logmocks.NewMockLog(), createControlChannelInput, instanceId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, *output.TokenValue)
@@ -84,36 +88,36 @@ func TestCreateDataChannel(t *testing.T) {
 		RequestId:            aws.String(uuid.NewV4().String()),
 		ClientId:             aws.String(uuid.NewV4().String()),
 	}
-	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateDataChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
 		}
 		return xml.Marshal(output)
 	}
-	output, err := service.CreateDataChannel(log.NewMockLog(), createDataChannelInput, sessionId)
+	output, err := service.CreateDataChannel(logmocks.NewMockLog(), createDataChannelInput, sessionId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, token, *output.TokenValue)
 }
 
 func TestGetBaseUrl(t *testing.T) {
-	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
 
 	// data channel url test
-	dataChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.DataChannel, sessionId, region)
+	dataChannelUrlResult, err := getMGSBaseUrl(contextmocks.NewMockDefault(), mgsConfig.DataChannel, sessionId, region)
 
 	expectedDataChannelUrl := "https://" + mgsHost + "/v1/data-channel/" + sessionId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedDataChannelUrl, dataChannelUrlResult)
 
 	// control channel url test
-	controlChannelUrlResult, err := getMGSBaseUrl(log.NewMockLog(), mgsConfig.ControlChannel, instanceId, region)
+	controlChannelUrlResult, err := getMGSBaseUrl(contextmocks.NewMockDefault(), mgsConfig.ControlChannel, instanceId, region)
 
 	expectedControlChannelUrl := "https://" + mgsHost + "/v1/control-channel/" + instanceId
 	assert.Nil(t, err)
@@ -122,7 +126,8 @@ func TestGetBaseUrl(t *testing.T) {
 
 func getService() Service {
 	return &MessageGatewayService{
-		region: "us-east-1",
-		signer: signer,
+		region:  "us-east-1",
+		signer:  signer,
+		context: contextmocks.NewMockDefault(),
 	}
 }

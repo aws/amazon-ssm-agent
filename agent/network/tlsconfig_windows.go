@@ -11,12 +11,15 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 package network
 
 import (
 	"crypto/x509"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 func getSystemCertPool() (*x509.CertPool, error) {
@@ -25,7 +28,7 @@ func getSystemCertPool() (*x509.CertPool, error) {
 	return nil, nil
 }
 
-func getCustomCertificate() ([]byte, error) {
+func getCustomCertificate(appConfig appconfig.SsmagentConfig) ([]byte, error) {
 	// Custom Certificates not supported on windows
 	return nil, nil
 }

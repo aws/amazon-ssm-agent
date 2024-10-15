@@ -21,12 +21,13 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	gitmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient/mock"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 	"github.com/stretchr/testify/assert"
 )
 
-var logMock = log.NewMockLog()
+var logMock = logmocks.NewMockLog()
 
 func TestTokenInfoImpl_GetOAuthClient_Success(t *testing.T) {
 
@@ -41,7 +42,7 @@ func TestTokenInfoImpl_GetOAuthClient_Success(t *testing.T) {
 	oauthclientmock.On("GetGithubOauthClient", tokenValue).Return(clientVal)
 	tokenInfo := TokenInfoImpl{
 		SsmParameter:   getMockedSecureParam,
-		gitoauthclient: oauthclientmock,
+		gitoauthclient: &oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, `{{ ssm-secure:dummysecureparam }}`)
@@ -71,7 +72,7 @@ func TestTokenInfoImpl_ValidateTokenParameter_Failure(t *testing.T) {
 	tokenInfoInput := `{ "dummysecureparam" }`
 	oauthclientmock := gitmock.OAuthClientMock{}
 	tokenInfo := TokenInfoImpl{
-		gitoauthclient: oauthclientmock,
+		gitoauthclient: &oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)
@@ -94,7 +95,7 @@ func TestTokenInfoImpl_ValidateSecureParameter(t *testing.T) {
 	// token info must be a parameter of SecureString type
 	tokenInfo := TokenInfoImpl{
 		SsmParameter:   getMockedParam,
-		gitoauthclient: oauthclientmock,
+		gitoauthclient: &oauthclientmock,
 	}
 
 	httpout, err := tokenInfo.GetOAuthClient(logMock, tokenInfoInput)

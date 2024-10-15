@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 package executor
@@ -81,8 +82,8 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 	}
 }
 
-//Unix man: http://www.skrenta.com/rt/man/ps.1.html , return the process table of the current user, in agent it'll be root
-//verified on RHEL, Amazon Linux, Ubuntu, Centos, and FreeBSD
+// Unix man: http://www.skrenta.com/rt/man/ps.1.html , return the process table of the current user, in agent it'll be root
+// verified on RHEL, Amazon Linux, Ubuntu, Centos, and FreeBSD
 var listProcessPs = func() ([]byte, error) {
 	return exec.Command("ps", "-e", "-o", "pid,ppid,state,command").CombinedOutput()
 }

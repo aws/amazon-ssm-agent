@@ -25,7 +25,8 @@ import (
 )
 
 const (
-	ReadWriteAccess = 0600
+	ReadWriteAccess        = 0600
+	ReadWriteExecuteAccess = 0700
 )
 
 type IStore interface {
@@ -92,9 +93,9 @@ func (localFileStore *LocalFileStore) exists(name string) (bool, error) {
 	return false, err
 }
 
-// createPath makes directory with ReadWriteAccess
+// createPath makes directory with ReadWriteExecuteAccess
 func (localFileStore *LocalFileStore) createPath(path string) error {
-	err := localFileStore.fileSystem.MkdirAll(path, ReadWriteAccess)
+	err := localFileStore.fileSystem.MkdirAll(path, ReadWriteExecuteAccess)
 	if err != nil {
 		err = fmt.Errorf("failed to create directory %v. %v", path, err)
 	}

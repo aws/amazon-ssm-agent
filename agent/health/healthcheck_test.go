@@ -16,16 +16,21 @@ package health
 import (
 	"errors"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -37,7 +42,7 @@ import (
 // Suite is the testify framework struct
 type HealthCheckTestSuite struct {
 	suite.Suite
-	logMock     *log.Mock
+	logMock     *logmocks.Mock
 	contextMock *context.Mock
 	serviceMock *ssmMock.Service
 	healthJob   *scheduler.Job
@@ -47,7 +52,7 @@ type HealthCheckTestSuite struct {
 
 // Setting up the HealthCheckTestSuite variable, initialize logMock and conntextMock struct
 func (suite *HealthCheckTestSuite) SetupTest() {
-	logMock := log.NewMockLog()
+	logMock := logmocks.NewMockLog()
 	contextMock := context.NewMockDefault()
 
 	serviceMock := new(ssmMock.Service)
@@ -83,18 +88,267 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
 		},
 	}
+
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockEC2Identity
+	}
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
+	mockOnPremIdentity := &identityMock.IAgentIdentityInner{}
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return mockOnPremIdentity
+	}
+	mockOnPremIdentity.On("IsIdentityEnvironment").Return(false)
+
+	ssmConnectionChannel := "ssmmessages"
+	var ableToOpenMGSConnection uint32
+
+	// reset
+	suite.resetConnectionChannel()
+
+	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+	}()
+
+	mdsSwitchFlag := <-ssmconnectionchannel.GetMDSSwitchChannel()
+	suite.False(mdsSwitchFlag, "MDS flag is invalid")
+
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
-	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName).Return(nil, nil)
-	suite.healthCheck.ModuleExecute(suite.contextMock)
-	// Because ModuleExecute will launch two new go routine, wait five second to make sure the updateHealth() has launched
+	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel).Return(nil, nil)
+	suite.healthCheck.ModuleExecute()
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
-	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName)
+	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel)
+
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "setConnection Go Routine not killed")
+	}
 }
 
-//Testing the ModuleRequestStop method with healthjob define
-func (suite *HealthCheckTestSuite) TestModuleRequestStopWithHealthJob() {
+// Testing the ModuleExecute method
+func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
+	// Initialize the appconfigMock with HealthFrequencyMinutes as every five minute
+	appconfigMock := &appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
+		},
+	}
+
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockEC2Identity
+	}
+
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	mockOnPremIdentity := &identityMock.IAgentIdentityInner{}
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return mockOnPremIdentity
+	}
+	mockOnPremIdentity.On("IsIdentityEnvironment").Return(true)
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
+	// reset
+	suite.resetConnectionChannel()
+
+	ssmConnectionChannel := "ssmmessages"
+	var ableToOpenMGSConnection uint32
+	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+	}()
+
+	mdsSwitchFlag := <-ssmconnectionchannel.GetMDSSwitchChannel()
+	suite.False(mdsSwitchFlag, "MDS flag is invalid")
+
+	// Turn on the mock method
+	suite.contextMock.On("AppConfig").Return(*appconfigMock)
+	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "", ssmConnectionChannel).Return(nil, nil)
+	suite.healthCheck.ModuleExecute()
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	time.Sleep(100 * time.Millisecond)
+	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
+	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "", ssmConnectionChannel)
+	suite.serviceMock.AssertNotCalled(suite.T(), "IsIdentityEnvironment", true)
+
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+}
+
+// Testing the ModuleExecute method
+func (suite *HealthCheckTestSuite) TestModuleExecuteWithNilOnPremIdentity() {
+	// Initialize the appconfigMock with HealthFrequencyMinutes as every five minute
+	appconfigMock := &appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
+		},
+	}
+
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockEC2Identity
+	}
+
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return nil
+	}
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
+	// reset
+	suite.resetConnectionChannel()
+
+	ssmConnectionChannel := "ssmmessages"
+	var ableToOpenMGSConnection uint32
+	atomic.StoreUint32(&ableToOpenMGSConnection, 1)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSSuccess)
+		setConnectionGoRoutine <- false
+
+	}()
+
+	mdsSwitchFlag := <-ssmconnectionchannel.GetMDSSwitchChannel()
+	suite.False(mdsSwitchFlag, "MDS flag is invalid")
+
+	// Turn on the mock method
+	suite.contextMock.On("AppConfig").Return(*appconfigMock)
+	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel).Return(nil, nil)
+	suite.healthCheck.ModuleExecute()
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	time.Sleep(100 * time.Millisecond)
+	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
+	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+}
+
+// Testing the ModuleExecute method with MDS connection
+func (suite *HealthCheckTestSuite) TestModuleExecuteWithMDSConnection() {
+	// Initialize the appconfigMock with HealthFrequencyMinutes as every five minute
+	appconfigMock := &appconfig.SsmagentConfig{
+		Ssm: appconfig.SsmCfg{
+			HealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutes,
+		},
+	}
+
+	mockEC2Identity := &identityMock.IAgentIdentityInner{}
+	newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+		return mockEC2Identity
+	}
+	availabilityZone := "us-east-1a"
+	availabilityZoneId := "use1-az2"
+	mockEC2Identity.On("IsIdentityEnvironment").Return(true)
+	mockEC2Identity.On("AvailabilityZone").Return(availabilityZone, nil)
+	mockEC2Identity.On("AvailabilityZoneId").Return(availabilityZoneId, nil)
+
+	mockECSIdentity := &identityMock.IAgentIdentityInner{}
+	newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+		return mockECSIdentity
+	}
+	mockECSIdentity.On("IsIdentityEnvironment").Return(false)
+
+	mockOnPremIdentity := &identityMock.IAgentIdentityInner{}
+	newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+		return mockOnPremIdentity
+	}
+	mockOnPremIdentity.On("IsIdentityEnvironment").Return(false)
+
+	// reset
+	suite.resetConnectionChannel()
+
+	ssmConnectionChannel := "ec2messages"
+	var ableToOpenMGSConnection uint32
+	atomic.StoreUint32(&ableToOpenMGSConnection, 0)
+	setConnectionGoRoutine := make(chan bool, 1)
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+		setConnectionGoRoutine <- false
+
+	}()
+	time.Sleep(1 * time.Second)
+
+	// Turn on the mock method
+	suite.contextMock.On("AppConfig").Return(*appconfigMock)
+	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel).Return(nil, nil)
+	suite.healthCheck.ModuleExecute()
+	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	time.Sleep(100 * time.Millisecond)
+	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
+	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel)
+	select {
+	case <-setConnectionGoRoutine:
+		break
+	case <-time.After(2 * time.Second):
+		assert.Fail(suite.T(), "set connection go routine not killed")
+	}
+}
+
+func (suite *HealthCheckTestSuite) resetConnectionChannel() {
+	go func() {
+		ssmconnectionchannel.SetConnectionChannel(suite.contextMock, ssmconnectionchannel.MGSFailedDueToAccessDenied)
+	}()
+	go func() {
+		select {
+		case <-time.After(500 * time.Millisecond):
+			break
+		case <-ssmconnectionchannel.GetMDSSwitchChannel():
+			break
+		}
+	}()
+	time.Sleep(500 * time.Millisecond)
+}
+
+// Testing the ModuleStop method with healthjob define
+func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
 	suite.healthCheck = &HealthCheck{
 		context:               suite.contextMock,
 		healthJob:             suite.healthJob,
@@ -106,24 +360,24 @@ func (suite *HealthCheckTestSuite) TestModuleRequestStopWithHealthJob() {
 	go func(wgc *sync.WaitGroup) {
 		wgc.Add(1)
 		defer wgc.Done()
-		suite.healthCheck.ModuleRequestStop(contracts.StopTypeSoftStop)
+		suite.healthCheck.ModuleStop()
 	}(wg)
 	// Check the value is sent to healthJobMock channel. And the value is true.
 	val := <-suite.healthJob.Quit
 	close(suite.healthJob.Quit)
 	wg.Wait()
-	assert.Equal(suite.T(), val, true, "ModuleRequestStop should return true")
+	assert.Equal(suite.T(), val, true, "ModuleStop should return true")
 }
 
-// Testing the ModuleRequestStop method which doesn't have healthjob defination
-func (suite *HealthCheckTestSuite) TestModuleRequestStopWithoutHealthJob() {
+// Testing the ModuleStop method which doesn't have healthjob defination
+func (suite *HealthCheckTestSuite) TestModuleStopWithoutHealthJob() {
 	// Start a new wg to avoid go panic
 	wg := new(sync.WaitGroup)
 	go func(wgc *sync.WaitGroup) {
 		wgc.Add(1)
 		defer wgc.Done()
-		rst := suite.healthCheck.ModuleRequestStop(contracts.StopTypeSoftStop)
-		assert.Nil(suite.T(), rst, "result from ModuleRequestStop should be nil")
+		rst := suite.healthCheck.ModuleStop()
+		assert.Nil(suite.T(), rst, "result from ModuleStop should be nil")
 	}(wg)
 }
 
@@ -147,7 +401,7 @@ func (suite *HealthCheckTestSuite) TestGetAgentStatePassive() {
 	assert.NotNil(suite.T(), err, "GetAgentStatePassive should return error message UpdatesWithError")
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestHealthCheckTestSuite(t *testing.T) {
 	suite.Run(t, new(HealthCheckTestSuite))
 }

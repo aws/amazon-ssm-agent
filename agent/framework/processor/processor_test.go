@@ -15,71 +15,79 @@
 package processor
 
 import (
-	"testing"
-
 	"fmt"
+	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-//TODO implement processor_integ_test once we encapsulate docmanager
+// TestEngineProcessor_Submit tests the basic flow of start command thread operation
+// this function submits to the job pool
 func TestEngineProcessor_Submit(t *testing.T) {
-	sendCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	executerMock := executermocks.NewMockExecuter()
 	creator := func(ctx context.T) executer.Executer {
 		return executerMock
 	}
 	sendCommandPoolMock.On("Submit", ctx.Log(), "messageID", mock.Anything).Return(nil)
+	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
+
 	docMock := new(DocumentMgrMock)
 	processor := EngineProcessor{
 		executerCreator: creator,
 		sendCommandPool: sendCommandPoolMock,
 		context:         ctx,
 		documentMgr:     docMock,
+		startWorker:     NewWorkerProcessorSpec(ctx, 1, contracts.StartSession, 0),
 	}
 	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
-	docMock.On("PersistDocumentState", mock.Anything, mock.Anything, mock.Anything, appconfig.DefaultLocationOfPending, docState)
-	processor.Submit(docState)
+	docState.DocumentType = contracts.StartSession
+	docMock.On("PersistDocumentState", mock.Anything, appconfig.DefaultLocationOfPending, docState)
+	errorCode := processor.Submit(docState)
+	assert.Equal(t, errorCode, ErrorCode(""))
 	sendCommandPoolMock.AssertExpectations(t)
 }
 
 func TestEngineProcessor_Cancel(t *testing.T) {
-	cancelCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
-	executerMock := executermocks.NewMockExecuter()
-	creator := func(ctx context.T) executer.Executer {
-		return executerMock
-	}
-	cancelCommandPoolMock.On("Submit", ctx.Log(), "cancelMessageID", mock.Anything).Return(nil)
+	cancelCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	docMock := new(DocumentMgrMock)
-
 	processor := EngineProcessor{
-		executerCreator:   creator,
-		cancelCommandPool: cancelCommandPoolMock,
 		context:           ctx,
 		documentMgr:       docMock,
+		cancelCommandPool: cancelCommandPoolMock,
+		cancelWorker:      NewWorkerProcessorSpec(ctx, 1, contracts.TerminateSession, 0),
+		startWorker:       NewWorkerProcessorSpec(ctx, 1, contracts.StartSession, 0),
 	}
+	cancelCommandPoolMock.On("Submit", ctx.Log(), "cancelMessageID", mock.Anything).Return(nil)
+	cancelCommandPoolMock.On("BufferTokensIssued").Return(0)
+
 	docState := contracts.DocumentState{}
-	docState.DocumentInformation.MessageID = "cancelMessageID"
-	docMock.On("PersistDocumentState", mock.Anything, mock.Anything, mock.Anything, appconfig.DefaultLocationOfPending, docState)
-	processor.Cancel(docState)
-	cancelCommandPoolMock.AssertExpectations(t)
+	expectedVal := "cancelMessageID"
+	docState.DocumentInformation.MessageID = expectedVal
+	docState.DocumentType = contracts.TerminateSession
+
+	docMock.On("PersistDocumentState", mock.Anything, appconfig.DefaultLocationOfPending, docState)
+	errorCode := processor.Cancel(docState)
+	assert.Equal(t, errorCode, ErrorCode(""))
+	docMock.AssertExpectations(t)
 }
 
 func TestEngineProcessor_Stop(t *testing.T) {
-	sendCommandPoolMock := new(task.MockedPool)
-	cancelCommandPoolMock := new(task.MockedPool)
-	ctx := context.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	cancelCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
 	resChan := make(chan contracts.DocumentResult)
 	processor := EngineProcessor{
 		sendCommandPool:   sendCommandPoolMock,
@@ -89,14 +97,20 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	}
 	sendCommandPoolMock.On("ShutdownAndWait", mock.AnythingOfType("time.Duration")).Return(true)
 	cancelCommandPoolMock.On("ShutdownAndWait", mock.AnythingOfType("time.Duration")).Return(true)
-	processor.Stop(contracts.StopTypeSoftStop)
+	processor.Stop()
 	sendCommandPoolMock.AssertExpectations(t)
 	cancelCommandPoolMock.AssertExpectations(t)
+	// multiple stop
+	sendCommandPoolMock = new(taskmocks.MockedPool)
+	cancelCommandPoolMock = new(taskmocks.MockedPool)
+	processor.Stop()
+	sendCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
+	cancelCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 }
 
-//TODO add shutdown and reboot test once we encapsulate docmanager
+// TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand(t *testing.T) {
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docState.DocumentInformation.InstanceID = "instanceID"
@@ -130,20 +144,156 @@ func TestProcessCommand(t *testing.T) {
 		close(statusChan)
 	}()
 	docMock := new(DocumentMgrMock)
-	docMock.On("MoveDocumentState", mock.Anything, "documentID", "instanceID", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
-	docMock.On("RemoveDocumentState", mock.Anything, "documentID", "instanceID", appconfig.DefaultLocationOfCurrent)
+	docMock.On("MoveDocumentState", "documentID", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
+	docMock.On("RemoveDocumentState", "documentID", appconfig.DefaultLocationOfCurrent)
 	processCommand(ctx, creator, cancelFlag, resChan, &docState, docMock)
 	executerMock.AssertExpectations(t)
 	docMock.AssertExpectations(t)
 	close(resChan)
 	//assert channel is not closed, each instance of Processor keeps a distinct copy of channel
 	assert.NotNil(t, resChan)
-
 }
 
-//TODO add shutdown and reboot test once we encapsulate docmanager
+func TestCheckDocSubmissionAllowed(t *testing.T) {
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
+	resChan := make(chan contracts.DocumentResult)
+	processor := EngineProcessor{
+		sendCommandPool:             sendCommandPoolMock,
+		context:                     ctx,
+		resChan:                     resChan,
+		startWorker:                 NewWorkerProcessorSpec(ctx, 1, contracts.StartSession, 1),
+		poolToProcessorErrorCodeMap: make(map[task.PoolErrorCode]ErrorCode),
+	}
+	sendCommandPoolMock.On("AcquireBufferToken", "messageID").Return(task.JobQueueFull)
+	sendCommandPoolMock.On("ReleaseBufferToken", "messageID").Return(task.PoolErrorCode(""))
+	sendCommandPoolMock.On("BufferTokensIssued").Return(1)
+
+	bufferLimit := 1
+	docState := contracts.DocumentState{}
+	docState.DocumentInformation.MessageID = "messageID"
+	docState.DocumentInformation.InstanceID = "instanceID"
+	docState.DocumentInformation.DocumentID = "documentID"
+	docState.DocumentType = contracts.StartSession
+
+	errorCode := processor.checkDocSubmissionAllowed(&docState, sendCommandPoolMock, bufferLimit)
+	assert.Equal(t, ConversionFailed, errorCode, "conversion failed")
+
+	processor.loadProcessorPoolErrorCodes()
+	sendCommandPoolMock = new(taskmocks.MockedPool)
+	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
+	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.JobQueueFull)
+	processor.sendCommandPool = sendCommandPoolMock
+	errorCode = processor.checkDocSubmissionAllowed(&docState, sendCommandPoolMock, bufferLimit)
+	assert.Equal(t, CommandBufferFull, errorCode, "command buffer full")
+}
+
+func TestDocSubmission_Panic(t *testing.T) {
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
+	executerMock := executermocks.NewMockExecuter()
+	creator := func(ctx context.T) executer.Executer {
+		return executerMock
+	}
+	sendCommandPoolMock.On("Submit", ctx.Log(), "messageID", mock.Anything).Return(nil)
+	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
+	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.PoolErrorCode(""))
+	sendCommandPoolMock.On("ReleaseBufferToken", mock.Anything).Return(task.PoolErrorCode(""))
+
+	processor := EngineProcessor{
+		executerCreator: creator,
+		sendCommandPool: sendCommandPoolMock,
+		context:         ctx,
+		documentMgr:     nil, // assigning nil panics Submit()
+		startWorker:     NewWorkerProcessorSpec(ctx, 1, contracts.StartSession, 1),
+	}
+	docState := contracts.DocumentState{}
+	docState.DocumentInformation.MessageID = "messageID"
+	docState.DocumentType = contracts.StartSession
+
+	errorCode := processor.Submit(docState)
+	assert.Equal(t, errorCode, SubmissionPanic)
+}
+
+func TestDocSubmission_CheckDocSubmissionAllowedError(t *testing.T) {
+	ctx := contextmocks.NewMockDefault()
+	executerMock := executermocks.NewMockExecuter()
+	creator := func(ctx context.T) executer.Executer {
+		return executerMock
+	}
+
+	sendCommandPoolMock := new(taskmocks.MockedPool)
+	processor := EngineProcessor{
+		executerCreator:             creator,
+		sendCommandPool:             sendCommandPoolMock,
+		context:                     ctx,
+		documentMgr:                 nil, // assigning nil panics Submit()
+		startWorker:                 NewWorkerProcessorSpec(ctx, 1, contracts.StartSession, 1),
+		poolToProcessorErrorCodeMap: make(map[task.PoolErrorCode]ErrorCode),
+	}
+	processor.loadProcessorPoolErrorCodes()
+	docState := contracts.DocumentState{}
+	docState.DocumentInformation.MessageID = "messageID"
+	docState.DocumentInformation.InstanceID = "instanceID"
+	docState.DocumentInformation.DocumentID = "documentID"
+	docState.DocumentType = contracts.StartSession
+
+	docMock := new(DocumentMgrMock)
+	docMock.On("PersistDocumentState", mock.Anything, appconfig.DefaultLocationOfPending, docState)
+
+	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.DuplicateCommand)
+	sendCommandPoolMock.On("Submit", ctx.Log(), "messageID", mock.Anything).Return(nil)
+	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
+	sendCommandPoolMock.On("ReleaseBufferToken", mock.Anything).Return(task.PoolErrorCode(""))
+	errorCode := processor.Submit(docState)
+	assert.Equal(t, errorCode, DuplicateCommand)
+
+	sendCommandPoolMock = new(taskmocks.MockedPool)
+	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
+	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.InvalidJobId)
+	processor.sendCommandPool = sendCommandPoolMock
+	errorCode = processor.Submit(docState)
+	assert.Equal(t, errorCode, InvalidDocumentId)
+
+	sendCommandPoolMock = new(taskmocks.MockedPool)
+	sendCommandPoolMock.On("BufferTokensIssued").Return(0)
+	sendCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.JobQueueFull)
+	processor.sendCommandPool = sendCommandPoolMock
+	errorCode = processor.Submit(docState)
+	assert.Equal(t, errorCode, CommandBufferFull)
+}
+
+func TestDocCancellation_Panic(t *testing.T) {
+	cancelCommandPoolMock := new(taskmocks.MockedPool)
+	ctx := contextmocks.NewMockDefault()
+	executerMock := executermocks.NewMockExecuter()
+	creator := func(ctx context.T) executer.Executer {
+		return executerMock
+	}
+	cancelCommandPoolMock.On("Submit", ctx.Log(), "messageID", mock.Anything).Return(nil)
+	cancelCommandPoolMock.On("BufferTokensIssued").Return(0)
+	cancelCommandPoolMock.On("AcquireBufferToken", mock.Anything).Return(task.PoolErrorCode(""))
+	cancelCommandPoolMock.On("ReleaseBufferToken", mock.Anything).Return(task.PoolErrorCode(""))
+
+	processor := EngineProcessor{
+		executerCreator:   creator,
+		cancelCommandPool: cancelCommandPoolMock,
+		context:           ctx,
+		documentMgr:       nil, // assigning nil panics Submit()
+		startWorker:       NewWorkerProcessorSpec(ctx, 1, contracts.StartSession, 1),
+		cancelWorker:      NewWorkerProcessorSpec(ctx, 1, contracts.TerminateSession, 1),
+	}
+	docState := contracts.DocumentState{}
+	docState.DocumentInformation.MessageID = "messageID"
+	docState.DocumentType = contracts.TerminateSession
+
+	errorCode := processor.Cancel(docState)
+	assert.Equal(t, errorCode, SubmissionPanic)
+}
+
+// TODO add shutdown and reboot test once we encapsulate docmanager
 func TestProcessCommand_Shutdown(t *testing.T) {
-	ctx := context.NewMockDefault()
+	ctx := contextmocks.NewMockDefault()
 	docState := contracts.DocumentState{}
 	docState.DocumentInformation.MessageID = "messageID"
 	docState.DocumentInformation.InstanceID = "instanceID"
@@ -164,7 +314,7 @@ func TestProcessCommand_Shutdown(t *testing.T) {
 		close(statusChan)
 	}()
 	docMock := new(DocumentMgrMock)
-	docMock.On("MoveDocumentState", mock.Anything, "documentID", "instanceID", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
+	docMock.On("MoveDocumentState", "documentID", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
 	processCommand(ctx, creator, cancelFlag, resChan, &docState, docMock)
 	executerMock.AssertExpectations(t)
 	docMock.AssertExpectations(t)
@@ -176,14 +326,14 @@ func TestProcessCommand_Shutdown(t *testing.T) {
 }
 
 func TestProcessCancelCommand_Success(t *testing.T) {
-	ctx := context.NewMockDefault()
-	sendCommandPoolMock := new(task.MockedPool)
+	ctx := contextmocks.NewMockDefault()
+	sendCommandPoolMock := new(taskmocks.MockedPool)
 	docState := contracts.DocumentState{}
 	docState.CancelInformation.CancelMessageID = "messageID"
 	sendCommandPoolMock.On("Cancel", "messageID").Return(true)
 	docMock := new(DocumentMgrMock)
-	docMock.On("MoveDocumentState", mock.Anything, "", "", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
-	docMock.On("RemoveDocumentState", mock.Anything, "", "", appconfig.DefaultLocationOfCurrent, mock.Anything)
+	docMock.On("MoveDocumentState", "", appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCurrent)
+	docMock.On("RemoveDocumentState", "", appconfig.DefaultLocationOfCurrent, mock.Anything)
 	processCancelCommand(ctx, sendCommandPoolMock, &docState, docMock)
 	sendCommandPoolMock.AssertExpectations(t)
 	docMock.AssertExpectations(t)
@@ -195,22 +345,22 @@ type DocumentMgrMock struct {
 	mock.Mock
 }
 
-func (m *DocumentMgrMock) MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
-	m.Called(log, fileName, instanceID, srcLocationFolder, dstLocationFolder)
+func (m *DocumentMgrMock) MoveDocumentState(fileName, srcLocationFolder, dstLocationFolder string) {
+	m.Called(fileName, srcLocationFolder, dstLocationFolder)
 	return
 }
 
-func (m *DocumentMgrMock) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState) {
-	m.Called(log, fileName, instanceID, locationFolder, state)
+func (m *DocumentMgrMock) PersistDocumentState(fileName, locationFolder string, state contracts.DocumentState) {
+	m.Called(fileName, locationFolder, state)
 	return
 }
 
-func (m *DocumentMgrMock) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
-	args := m.Called(log, fileName, instanceID, locationFolder)
+func (m *DocumentMgrMock) GetDocumentState(fileName, locationFolder string) contracts.DocumentState {
+	args := m.Called(fileName, locationFolder)
 	return args.Get(0).(contracts.DocumentState)
 }
 
-func (m *DocumentMgrMock) RemoveDocumentState(log log.T, documentID, instanceID, location string) {
-	m.Called(log, documentID, instanceID, location)
+func (m *DocumentMgrMock) RemoveDocumentState(documentID, location string) {
+	m.Called(documentID, location)
 	return
 }

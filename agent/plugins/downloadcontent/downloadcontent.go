@@ -67,15 +67,17 @@ var sourceTypes = map[string]bool{
 var SetPermission = SetFilePermissions
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	plugin.remoteResourceCreator = newRemoteResource
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context:               context,
+		remoteResourceCreator: newRemoteResource,
+	}, nil
 }
 
 // Plugin is the type for the aws:downloadContent plugin.
 type Plugin struct {
-	remoteResourceCreator func(log log.T, sourceType string, SourceInfo string) (remoteresource.RemoteResource, error)
+	context               context.T
+	remoteResourceCreator func(context context.T, sourceType string, SourceInfo string) (remoteresource.RemoteResource, error)
 	filesys               filemanager.FileSystem
 }
 
@@ -90,23 +92,23 @@ type DownloadContentPlugin struct {
 }
 
 // newRemoteResource switches between the source type and returns a struct of the source type that implements remoteresource
-func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resource remoteresource.RemoteResource, err error) {
+func newRemoteResource(context context.T, SourceType string, SourceInfo string) (resource remoteresource.RemoteResource, err error) {
 	switch SourceType {
 	case GitHub:
 		// TODO: meloniam@ 08/24/2017 Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
-		token := privategithub.NewTokenInfoImpl(log)
-		return github.NewGitHubResource(log, SourceInfo, token)
+		token := privategithub.NewTokenInfoImpl(context)
+		return github.NewGitHubResource(context, SourceInfo, token)
 	case S3:
-		return s3resource.NewS3Resource(log, SourceInfo)
+		return s3resource.NewS3Resource(context, SourceInfo)
 	case SSMDocument:
-		return ssmdocresource.NewSSMDocResource(log, SourceInfo)
+		return ssmdocresource.NewSSMDocResource(context, SourceInfo)
 	case HTTP:
-		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService(log))
-		return httpresource.NewHTTPResource(log, SourceInfo, ssmParameterResolverBridge)
+		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService(context))
+		return httpresource.NewHTTPResource(context, SourceInfo, ssmParameterResolverBridge)
 	case Git:
-		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService(log))
-		return privategit.NewGitResource(log, SourceInfo, ssmParameterResolverBridge)
+		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService(context))
+		return privategit.NewGitResource(context, SourceInfo, ssmParameterResolverBridge)
 	default:
 		return nil, fmt.Errorf("Invalid SourceType - %v", SourceType)
 	}
@@ -114,13 +116,13 @@ func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resourc
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	p.filesys = filemanager.FileSystemImpl{}
-	p.execute(context, config, cancelFlag, output)
+	p.execute(config, cancelFlag, output)
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Info("Plugin aws:downloadContent started with configuration", config)
 
 	if cancelFlag.ShutDown() {
@@ -142,7 +144,7 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 
 	// remoteResourceCreator makes a call to a function that creates a new remote resource based on the source type
 	log.Debug("Creating resource of type - ", input.SourceType)
-	remoteResource, err := p.remoteResourceCreator(log, input.SourceType, input.SourceInfo)
+	remoteResource, err := p.remoteResourceCreator(p.context, input.SourceType, input.SourceInfo)
 	if err != nil {
 		output.MarkAsFailed(err)
 		return
@@ -169,7 +171,7 @@ func (p *Plugin) runCopyContent(log log.T, input *DownloadContentPlugin, config 
 
 	var result *remoteresource.DownloadResult
 	log.Debug("Downloading resource")
-	if err, result = remoteResource.DownloadRemoteResource(log, p.filesys, destinationPath); err != nil {
+	if err, result = remoteResource.DownloadRemoteResource(p.filesys, destinationPath); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
@@ -213,11 +215,14 @@ func parseAndValidateInput(rawPluginInput interface{}) (*DownloadContentPlugin, 
 	if err = jsonutil.Remarshal(rawPluginInput, &pluginInputMap); err != nil {
 		return nil, fmt.Errorf("problem while remarshalling %v; \nerror %v", rawPluginInput, err)
 	}
-	sourceInfo := "SourceInfo"
-	if info, ok := pluginInputMap[sourceInfo]; ok {
-		if reflect.ValueOf(info).Kind() == reflect.Map {
-			if sourceInfoBytes, err := json.Marshal(info); err == nil {
-				pluginInputMap[sourceInfo] = string(sourceInfoBytes)
+
+	// the below conversion is done for handling the change in parameter structure when sent from CLI and Console
+	for paramName, paramValue := range pluginInputMap {
+		if strings.ToLower(paramName) == "sourceinfo" {
+			if reflect.ValueOf(paramValue).Kind() == reflect.Map {
+				if sourceInfoBytes, err := json.Marshal(paramValue); err == nil {
+					pluginInputMap[paramName] = string(sourceInfoBytes)
+				}
 			}
 		}
 	}

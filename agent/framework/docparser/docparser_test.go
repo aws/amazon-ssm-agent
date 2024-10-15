@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path"
 	"path/filepath"
 	"testing"
 
@@ -25,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -66,7 +67,7 @@ var sampleMessageWithPreconditionFiles = []string{
 }
 
 func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
@@ -77,13 +78,13 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 		DefaultWorkingDir: testWorkingDir,
 	}
 
-	validdocumentruntimeconfig := loadFile(t, "../../runcommand/mds/testdata/validcommand12.json")
+	validdocumentruntimeconfig := loadFile(t, filepath.Join("..", "..", "runcommand", "mds", "testdata", "validcommand12.json"))
 	var testDocContent DocContent
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
 	}
-	pluginsInfo, err := testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, nil)
+	pluginsInfo, err := testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(pluginsInfo))
@@ -92,14 +93,14 @@ func TestParseDocument_ValidRuntimeConfig(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
 }
 
 func TestParseDocument_ValidMainSteps(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
@@ -111,12 +112,12 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	}
 
 	var testDocContent DocContent
-	validdocumentmainsteps := loadFile(t, "../../runcommand/mds/testdata/validcommand20.json")
+	validdocumentmainsteps := loadFile(t, filepath.Join("..", "..", "runcommand", "mds", "testdata", "validcommand20.json"))
 	err := json.Unmarshal(validdocumentmainsteps, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
 	}
-	pluginsInfo, err := testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, nil)
+	pluginsInfo, err := testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(pluginsInfo))
@@ -125,14 +126,14 @@ func TestParseDocument_ValidMainSteps(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "test"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
 }
 
 func TestInitializeDocState_Valid(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	cloudWatchConfig := contracts.CloudWatchConfiguration{
 		LogGroupName:    testLogGroupName,
@@ -150,13 +151,13 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	}
 
 	var testDocContent DocContent
-	validdocumentruntimeconfig := loadFile(t, "../../runcommand/mds/testdata/validcommand12.json")
+	validdocumentruntimeconfig := loadFile(t, filepath.Join("..", "..", "runcommand", "mds", "testdata", "validcommand12.json"))
 	err := json.Unmarshal(validdocumentruntimeconfig, &testDocContent)
 	if err != nil {
 		assert.Error(t, err, "Error occurred when trying to unmarshal valid document")
 	}
 
-	docState, err := InitializeDocState(mockLog, contracts.SendCommand, &testDocContent, contracts.DocumentInfo{}, testParserInfo, nil)
+	docState, err := InitializeDocState(context, contracts.SendCommand, &testDocContent, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.Nil(t, err)
 
@@ -166,7 +167,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 	assert.Equal(t, 1, len(pluginInfo))
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunShellScript"), pluginInfo[0].Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfo[0].Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunShellScript"), pluginInfo[0].Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunShellScript"), pluginInfo[0].Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfo[0].Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfo[0].Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfo[0].Configuration.DefaultWorkingDirectory)
@@ -175,7 +176,7 @@ func TestInitializeDocState_Valid(t *testing.T) {
 }
 
 func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		MessageId:        testMessageID,
@@ -203,7 +204,7 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 		SessionType:   appconfig.PluginNameStandardStream,
 	}
 
-	docState, err := InitializeDocState(mockLog,
+	docState, err := InitializeDocState(context,
 		contracts.StartSession,
 		sessionDocContent,
 		contracts.DocumentInfo{DocumentID: testSessionId, ClientId: testClientId},
@@ -233,7 +234,7 @@ func TestInitializeDocStateForStartSessionDocument_Valid(t *testing.T) {
 }
 
 func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		MessageId:        testMessageID,
@@ -254,7 +255,7 @@ func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t
 		SessionType:   appconfig.PluginNameStandardStream,
 	}
 
-	docState, err := InitializeDocState(mockLog,
+	docState, err := InitializeDocState(context,
 		contracts.StartSession,
 		sessionDocContent,
 		contracts.DocumentInfo{DocumentID: testSessionId, ClientId: testClientId},
@@ -282,7 +283,7 @@ func TestInitializeDocStateForStartSessionDocumentWithoutSessionCommands_Valid(t
 }
 
 func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		MessageId:        testMessageID,
@@ -314,7 +315,7 @@ func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testin
 		Properties:    testProperties,
 	}
 
-	docState, err := InitializeDocState(mockLog,
+	docState, err := InitializeDocState(context,
 		contracts.StartSession,
 		sessionDocContent,
 		contracts.DocumentInfo{DocumentID: testSessionId, ClientId: testClientId},
@@ -343,7 +344,7 @@ func TestInitializeDocStateForStartSessionDocumentWithParameters_Valid(t *testin
 }
 
 func TestInitializeDocStateForStartSessionDocumentWithBooleanParameters_Valid(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		MessageId:        testMessageID,
@@ -382,7 +383,7 @@ func TestInitializeDocStateForStartSessionDocumentWithBooleanParameters_Valid(t 
 		Properties:    testProperties,
 	}
 
-	docState, err := InitializeDocState(mockLog,
+	docState, err := InitializeDocState(context,
 		contracts.StartSession,
 		sessionDocContent,
 		contracts.DocumentInfo{DocumentID: testSessionId, ClientId: testClientId},
@@ -411,7 +412,7 @@ func TestInitializeDocStateForStartSessionDocumentWithBooleanParameters_Valid(t 
 }
 
 func TestParseDocument_EmptyDocContent(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
 		S3Bucket:          testS3Bucket,
@@ -423,7 +424,7 @@ func TestParseDocument_EmptyDocContent(t *testing.T) {
 
 	var testDocContent DocContent
 	testDocContent.SchemaVersion = "1.2"
-	_, err := testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, nil)
+	_, err := testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.NotNil(t, err)
 	assert.Error(t, err)
@@ -431,7 +432,7 @@ func TestParseDocument_EmptyDocContent(t *testing.T) {
 }
 
 func TestParseDocument_Invalid(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
 		S3Bucket:          testS3Bucket,
@@ -445,7 +446,7 @@ func TestParseDocument_Invalid(t *testing.T) {
 	err := json.Unmarshal([]byte(invaliddocument), &testDocContent)
 	assert.Nil(t, err)
 	assert.NoError(t, err, "Error occurred when trying to unmarshal invalid document")
-	_, err = testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, nil)
+	_, err = testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.NotNil(t, err)
 	assert.Error(t, err)
@@ -453,7 +454,7 @@ func TestParseDocument_Invalid(t *testing.T) {
 }
 
 func TestParseDocument_InvalidSchema(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
 		S3Bucket:          testS3Bucket,
@@ -463,20 +464,20 @@ func TestParseDocument_InvalidSchema(t *testing.T) {
 		DefaultWorkingDir: testWorkingDir,
 	}
 	var testDocContent DocContent
-	invalidschema := loadFile(t, "testdata/schemaVersion9999.json")
+	invalidschema := loadFile(t, filepath.Join("testdata", "schemaVersion9999.json"))
 
 	err := json.Unmarshal([]byte(invalidschema), &testDocContent)
 	assert.Nil(t, err)
 	assert.NoError(t, err, "Error occurred when trying to unmarshal invalid schema")
 
-	_, err = testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, nil)
+	_, err = testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, nil)
 
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "Document with schema version 9999.0 is not supported by this version of ssm agent")
 }
 
 func TestParseDocument_ValidParameters(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
@@ -498,7 +499,7 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 	assert.NoError(t, err, "Error occurred when trying to unmarshal test parameters")
 	originalMessage, _ := jsonutil.Marshal(testDocContent)
 
-	pluginsInfo, err := testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, testParams)
+	pluginsInfo, err := testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, testParams)
 	parsedMessage, _ := jsonutil.Marshal(testDocContent)
 
 	assert.Nil(t, err)
@@ -508,7 +509,7 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
@@ -516,7 +517,7 @@ func TestParseDocument_ValidParameters(t *testing.T) {
 }
 
 func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
@@ -528,14 +529,14 @@ func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
 	}
 
 	var testDocContent DocContent
-	defaultParamatersDoc := loadFile(t, "testdata/sampleReplaceDefaultParams.json")
+	defaultParamatersDoc := loadFile(t, filepath.Join("testdata", "sampleReplaceDefaultParams.json"))
 
 	err := json.Unmarshal([]byte(defaultParamatersDoc), &testDocContent)
 	assert.Nil(t, err)
 	assert.NoError(t, err, "Error occurred when trying to unmarshal test parameters")
 	originalMessage, _ := jsonutil.Marshal(testDocContent)
 
-	pluginsInfo, err := testDocContent.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, nil)
+	pluginsInfo, err := testDocContent.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, nil)
 	parsedMessage, _ := jsonutil.Marshal(testDocContent)
 
 	assert.Nil(t, err)
@@ -545,7 +546,7 @@ func TestParseDocument_ReplaceDefaultParameters(t *testing.T) {
 	assert.Equal(t, "", pluginInfoTest.Result.Error)
 	assert.Equal(t, filepath.Join(testOrchDir, "example"), pluginInfoTest.Configuration.OrchestrationDirectory)
 	assert.Equal(t, testS3Bucket, pluginInfoTest.Configuration.OutputS3BucketName)
-	assert.Equal(t, filepath.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
+	assert.Equal(t, path.Join(testS3Prefix, "awsrunPowerShellScript"), pluginInfoTest.Configuration.OutputS3KeyPrefix)
 	assert.Equal(t, testMessageID, pluginInfoTest.Configuration.MessageId)
 	assert.Equal(t, testDocumentID, pluginInfoTest.Configuration.BookKeepingFileName)
 	assert.Equal(t, testWorkingDir, pluginInfoTest.Configuration.DefaultWorkingDirectory)
@@ -574,7 +575,7 @@ func TestParseMessageWithParams(t *testing.T) {
 		OutputDoc   DocContent
 		OutputParam map[string]interface{}
 	}
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
@@ -601,7 +602,7 @@ func TestParseMessageWithParams(t *testing.T) {
 	for _, tst := range testCases {
 		// call method
 		origMessage, _ := jsonutil.Marshal(tst.OutputDoc)
-		pluginsInfo, err := tst.OutputDoc.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, tst.OutputParam)
+		pluginsInfo, err := tst.OutputDoc.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, tst.OutputParam)
 		parsedMessage, _ := jsonutil.Marshal(tst.OutputDoc)
 
 		// check results
@@ -650,7 +651,7 @@ func TestParseMessageWithPreconditions(t *testing.T) {
 		OutputParam           map[string]interface{}
 		ResolvedPreconditions map[string][]contracts.PreconditionArgument
 	}
-	mockLog := log.NewMockLog()
+	context := context.NewMockDefault()
 
 	testParserInfo := DocumentParserInfo{
 		OrchestrationDir:  testOrchDir,
@@ -679,7 +680,7 @@ func TestParseMessageWithPreconditions(t *testing.T) {
 	// run tests
 	for _, tst := range testCases {
 		// call method
-		pluginsInfo, err := tst.OutputDoc.ParseDocument(mockLog, contracts.DocumentInfo{}, testParserInfo, tst.OutputParam)
+		pluginsInfo, err := tst.OutputDoc.ParseDocument(context, contracts.DocumentInfo{}, testParserInfo, tst.OutputParam)
 
 		// check results
 		assert.Nil(t, err)
@@ -705,7 +706,7 @@ func loadMessageFromFile(t *testing.T, fileName string) (testDocContent DocConte
 	if err != nil {
 		t.Fatal(err)
 	}
-	p := loadFile(t, "testdata/sampleMessageParameters.json")
+	p := loadFile(t, filepath.Join("testdata", "sampleMessageParameters.json"))
 	err = json.Unmarshal(p, &params)
 	if err != nil {
 		t.Fatal(err)
@@ -714,7 +715,7 @@ func loadMessageFromFile(t *testing.T, fileName string) (testDocContent DocConte
 }
 
 func loadPreconditionsFromFile(t *testing.T) (preconditions map[string]map[string][]contracts.PreconditionArgument) {
-	b := loadFile(t, "testdata/sampleResolvedMessagePreconditions.json")
+	b := loadFile(t, filepath.Join("testdata", "sampleResolvedMessagePreconditions.json"))
 
 	err := json.Unmarshal(b, &preconditions)
 	if err != nil {

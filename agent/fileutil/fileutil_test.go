@@ -76,35 +76,6 @@ func ExampleReadAllText() {
 	// Will you please check my hash?
 }
 
-func ExampleBuildPath() {
-	orchestrationDirectory := "/Users/"
-	// Path with invalid char
-	name1 := "Fix:ThisPath"
-	content1 := BuildPath(orchestrationDirectory, name1)
-	fmt.Println(content1)
-
-	// path with no invalid char
-	name2 := "DoNotFixThisPath"
-	content2 := BuildPath(orchestrationDirectory, name2)
-	fmt.Println(content2)
-
-	// empty path should not return error
-	name3 := ""
-	content3 := BuildPath("", name3)
-	fmt.Println(content3)
-
-	// Path with several invalid chars
-	name4 := "Fix:ThisPath1"
-	name5 := "Fix:ThisPath2"
-	content4 := BuildPath(orchestrationDirectory, name4, name5)
-	fmt.Println(content4)
-	// Output:
-	// /Users/FixThisPath
-	// /Users/DoNotFixThisPath
-	//
-	// /Users/FixThisPath1/FixThisPath2
-}
-
 func ExampleIsDirectory() {
 	path := filepath.Join("artifact", "testdata", "CheckMyHash.txt")
 	content := IsDirectory(path)
@@ -325,9 +296,15 @@ func TestIOHelperMock_MoveFiles(t *testing.T) {
 	assert.NoError(t, err)
 	testSubDir, err := ioutil.TempDir(tempCloneDir, "testsubdir")
 	assert.NoError(t, err)
-	_, err = ioutil.TempFile(tempCloneDir, "test")
+	f, err := ioutil.TempFile(tempCloneDir, "test")
+	if err == nil {
+		f.Close()
+	}
 	assert.NoError(t, err)
-	_, err = ioutil.TempFile(testSubDir, "test")
+	f, err = ioutil.TempFile(testSubDir, "test")
+	if err == nil {
+		f.Close()
+	}
 	assert.NoError(t, err)
 	defer os.RemoveAll(destDir)
 
@@ -345,13 +322,13 @@ func TestIOHelperMock_MoveFiles(t *testing.T) {
 func TestIOHelperMock_MoveFilesMoveError(t *testing.T) {
 	err := MoveFiles("", "")
 	assert.Error(t, err)
-	assert.Equal(t, "open : no such file or directory", err.Error())
+	assert.Equal(t, fileNotFoundErrorMessage, err.Error())
 }
 
 func TestIOHelperMock_MoveFilesMoveErrorReadDirError(t *testing.T) {
 	err := MoveFiles("", "")
 	assert.Error(t, err)
-	assert.Equal(t, "open : no such file or directory", err.Error())
+	assert.Equal(t, fileNotFoundErrorMessage, err.Error())
 }
 
 func TestIOHelperMock_CollectFilesAndRebase(t *testing.T) {

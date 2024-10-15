@@ -15,6 +15,8 @@
 // necessary for communication and sharing within the agent.
 package contracts
 
+import "encoding/json"
+
 // ResultStatus provides the granular status of a plugin.
 // These are internal states maintained by agent during the execution of a command/config
 type ResultStatus string
@@ -40,6 +42,8 @@ const (
 	ResultStatusSkipped ResultStatus = "Skipped"
 	// ResultStatusTestFailure represents test failure
 	ResultStatusTestFailure ResultStatus = "TestFailure"
+	// ResultStatusTestPass represents test passing
+	ResultStatusTestPass ResultStatus = "TestPass"
 )
 
 const (
@@ -167,12 +171,16 @@ const (
 	ParamTypeStringMap = "StringMap"
 )
 
-type StopType string
+type SSMConnectionChannel string
 
 const (
-	StopTypeSoftStop StopType = "SoftStop"
-	StopTypeHardStop StopType = "HardStop"
+	MGS SSMConnectionChannel = "ssmmessages"
+	MDS SSMConnectionChannel = "ec2messages"
 )
+
+type ConnectionChannel struct {
+	SSMConnectionChannel SSMConnectionChannel
+}
 
 // A Parameter in the DocumentContent of an MDS message.
 type Parameter struct {
@@ -181,6 +189,10 @@ type Parameter struct {
 	ParamType      string      `json:"type" yaml:"type"`
 	AllowedVal     []string    `json:"allowedValues" yaml:"allowedValues"`
 	AllowedPattern string      `json:"allowedPattern" yaml:"allowedPattern"`
+	MinChars       json.Number `json:"minChars,omitempty" yaml:"minChars,omitempty"`
+	MaxChars       json.Number `json:"maxChars,omitempty" yaml:"maxChars,omitempty"`
+	MinItems       json.Number `json:"minItems,omitempty" yaml:"minItems,omitempty"`
+	MaxItems       json.Number `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
 }
 
 // PluginConfig stores plugin configuration
@@ -209,6 +221,10 @@ type DocumentContent struct {
 	RuntimeConfig map[string]*PluginConfig `json:"runtimeConfig" yaml:"runtimeConfig"`
 	MainSteps     []*InstancePluginConfig  `json:"mainSteps" yaml:"mainSteps"`
 	Parameters    map[string]*Parameter    `json:"parameters" yaml:"parameters"`
+
+	// InvokedPlugin field is set when document is invoked from any other plugin.
+	// Currently, InvokedPlugin is set only in runDocument Plugin
+	InvokedPlugin string
 }
 
 // SessionInputs stores session configuration
@@ -243,10 +259,11 @@ type SessionDocumentContent struct {
 
 // AdditionalInfo section in agent response
 type AdditionalInfo struct {
-	Agent               AgentInfo      `json:"agent"`
-	DateTime            string         `json:"dateTime"`
-	RunID               string         `json:"runId"`
-	RuntimeStatusCounts map[string]int `json:"runtimeStatusCounts"`
+	Agent                   AgentInfo      `json:"agent"`
+	DateTime                string         `json:"dateTime"`
+	RunID                   string         `json:"runId"`
+	RuntimeStatusCounts     map[string]int `json:"runtimeStatusCounts"`
+	AbleToOpenMGSConnection *bool          `json:"ableToOpenMGSConnection,omitempty"`
 }
 
 // AgentInfo represents the agent response
@@ -277,17 +294,36 @@ type PluginRuntimeStatus struct {
 type AgentConfiguration struct {
 	AgentInfo  AgentInfo
 	InstanceID string
-	TargetID   string
 }
 
 // DocumentResult is a struct that stores information about the result of the document
 type DocumentResult struct {
-	DocumentName    string
-	DocumentVersion string
-	MessageID       string
-	AssociationID   string
-	PluginResults   map[string]*PluginResult
-	Status          ResultStatus
-	LastPlugin      string
-	NPlugins        int
+	DocumentName        string
+	DocumentVersion     string
+	MessageID           string
+	AssociationID       string
+	PluginResults       map[string]*PluginResult
+	Status              ResultStatus
+	LastPlugin          string
+	NPlugins            int
+	UpstreamServiceName UpstreamServiceName
+	ResultType          ResultType
+	RelatedDocumentType DocumentType
+}
+
+// ResultType represents document Result types
+type ResultType string
+
+const (
+	// RunCommandResult represents result sent by document worker which ran runCommand documents
+	RunCommandResult ResultType = "RunCommandResult"
+	// SessionResult represents result sent by session worker to service
+	SessionResult ResultType = "SessionResult"
+)
+
+// StatusComm is a struct that holds channels to pass status
+// between ssmAgentCore go routine and agent's main go routine
+type StatusComm struct {
+	TerminationChan chan struct{}
+	DoneChan        chan struct{}
 }

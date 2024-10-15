@@ -15,6 +15,7 @@
 package signal
 
 import (
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -50,6 +51,12 @@ func InitializeAssociationSignalService(log log.T, task func(log log.T)) {
 	defer lock.Unlock()
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Association signal service panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for {
 			_, more := <-instance.executeSignal
 			if more {
@@ -99,15 +106,9 @@ func ResetWaitTimerForNextScheduledAssociation(log log.T, targetDate time.Time) 
 		waitTimerForNextScheduledAssociation.Stop()
 	}
 
-	waitTimerForNextScheduledAssociation = time.NewTimer(duration)
-	nextScheduledDate = targetDate
-
 	log.Infof(scheduleForNextAssociationMessage, targetDate, duration)
-	go func() {
-		<-waitTimerForNextScheduledAssociation.C
-		ExecuteAssociation(log)
-	}()
-
+	waitTimerForNextScheduledAssociation = time.AfterFunc(duration, func() { ExecuteAssociation(log) })
+	nextScheduledDate = targetDate
 }
 
 // StopWaitTimerForNextScheduledAssociation stops the timer so it will not get triggered and send signal for the next scheduled association

@@ -17,22 +17,19 @@ package rundocument
 
 import (
 	"encoding/json"
-
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/go-yaml/yaml"
+	"gopkg.in/yaml.v2"
 )
 
 type ExecDocument interface {
-	ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
+	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string,
 		s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 		params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
 	ExecuteDocument(config contracts.Configuration, context context.T, pluginInput []contracts.PluginState, documentID string,
@@ -45,10 +42,13 @@ type ExecDocumentImpl struct {
 
 // ParseDocument parses the remote document obtained to a format that the executor can use.
 // This function is also responsible for all the validation of document and replacement of parameters
-func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
+func (exec ExecDocumentImpl) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string,
 	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
-	docContent := docparser.DocContent{}
+	log := context.Log()
+	docContent := docparser.DocContent{
+		InvokedPlugin: appconfig.PluginRunDocument,
+	}
 	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
 			log.Error("Unmarshaling remote resource document failed. Please make sure the document is in the correct JSON or YAML formal")
@@ -64,7 +64,7 @@ func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orches
 		DefaultWorkingDir: defaultWorkingDirectory,
 	}
 
-	pluginsInfo, err = docContent.ParseDocument(log, contracts.DocumentInfo{}, parserInfo, params)
+	pluginsInfo, err = docContent.ParseDocument(context, contracts.DocumentInfo{}, parserInfo, params)
 	log.Debug("Parsed document - ", docContent)
 	log.Debug("Plugins Info - ", pluginsInfo)
 	return
@@ -91,17 +91,56 @@ func (exec ExecDocumentImpl) ExecuteDocument(config contracts.Configuration, con
 			OutputS3KeyPrefix:      "",
 		},
 		InstancePluginsInformation: pluginInput,
+		UpstreamServiceName:        config.UpstreamServiceName,
 	}
-	//specify the sub-document's bookkeeping location
-	instanceID, err := instance.InstanceID()
-	if err != nil {
-		log.Error("failed to load instance id")
-		return resultChannels, err
-	}
-	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent,
-		&docState, docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
+
+	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, &docState,
+		NewNoOpDocumentMgr(context), true)
 	cancelFlag := task.NewChanneledCancelFlag()
 	resultChannels = exec.DocExecutor.Run(cancelFlag, &docStore)
 
 	return resultChannels, nil
+}
+
+// Workaround to keep this plugin from overwriting the DocumentState of the top-level document.
+//
+// Up until version 3.0.732.0, this plugin always failed to write the DocumentState to file due to a
+// path calculation bug.  In 3.0.732.0, the path calculation bug was fixed, and the plugin
+// started overwriting the top-level document's DocumentState, which sometimes interfered with
+// plugins in the top-level document that executed after this one.  NoOpDocumentMgr is meant
+// to keep this plugin from overwriting the state of the top-level document.  However, it does
+// not persist the DocumentState over a reboot, and it does not track the status (e.g. "pending",
+// "current", "corrupt") of the document.  Longer-term, we may want to implement proper DocumentState
+// bookkeeping for the documents executed by this plugin.
+type NoOpDocumentMgr struct {
+	context context.T
+	state   contracts.DocumentState
+}
+
+func NewNoOpDocumentMgr(ctx context.T) *NoOpDocumentMgr {
+	return &NoOpDocumentMgr{
+		ctx,
+		contracts.DocumentState{},
+	}
+}
+
+func (m *NoOpDocumentMgr) MoveDocumentState(fileName, srcLocationFolder, dstLocationFolder string) {
+	// No-op
+	m.context.Log().Debugf("NoOpDocumentMgr.MoveDocumentState(%s, %s, %s)", fileName, srcLocationFolder, dstLocationFolder)
+}
+
+func (m *NoOpDocumentMgr) PersistDocumentState(fileName, locationFolder string, state contracts.DocumentState) {
+	m.context.Log().Debugf("NoOpDocumentMgr.PersistDocumentState(%s, %s, %+v)", fileName, locationFolder, state)
+	m.state = state
+}
+
+func (m *NoOpDocumentMgr) GetDocumentState(fileName, locationFolder string) contracts.DocumentState {
+	m.context.Log().Debugf("NoOpDocumentMgr.GetDocumentState(%s, %s)", fileName, locationFolder)
+	m.context.Log().Warn("NoOpDocumentMgr.GetDocumentState() called, consider using a persistent DocumentMgr")
+	return m.state
+}
+
+func (m *NoOpDocumentMgr) RemoveDocumentState(fileName, locationFolder string) {
+	// No-op
+	m.context.Log().Debugf("NoOpDocumentMgr.RemoveDocumentState(%s, %s)", fileName, locationFolder)
 }

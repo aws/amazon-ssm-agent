@@ -19,10 +19,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
+	gatherers2 "github.com/aws/amazon-ssm-agent/agent/plugins/inventory/mocks/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -41,12 +42,12 @@ func MockInventoryPlugin(supportedGatherers, installedGatherers []string) (*Plug
 
 	//Creating supported gatherers
 	for _, name := range supportedGatherers {
-		p.supportedGatherers[name] = gatherers.NewMockDefault()
+		p.supportedGatherers[name] = gatherers2.NewMockDefault()
 	}
 
 	//Creating installed gatherers
 	for _, name := range installedGatherers {
-		p.installedGatherers[name] = gatherers.NewMockDefault()
+		p.installedGatherers[name] = gatherers2.NewMockDefault()
 	}
 
 	return &p, nil
@@ -188,8 +189,8 @@ func TestRunGatherers(t *testing.T) {
 	p, _ := MockInventoryPlugin(sGatherers, iGatherers)
 
 	//mock errorFree gatherer
-	errorFreeGatherer := gatherers.NewMockDefault()
-	errorProneGatherer := gatherers.NewMockDefault()
+	errorFreeGatherer := gatherers2.NewMockDefault()
+	errorProneGatherer := gatherers2.NewMockDefault()
 
 	//mock Config for gatherers
 	config := model.Config{
@@ -270,7 +271,7 @@ func TestVerifyPutInventoryCall(t *testing.T) {
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 
 	itemIndex := -1
-	itemIndex, _ = p.getLargeItemIndex(MockInventoryOptimizedItem(), context.NewMockDefault(), "AWS:File")
+	itemIndex, _ = p.getLargeItemIndex(MockInventoryOptimizedItem(), "AWS:File")
 
 	assert.NotEqual(t, -1, itemIndex)
 }
@@ -286,7 +287,7 @@ func TestVerifyNoPutInventoryCall(t *testing.T) {
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 
 	itemIndex := -1
-	itemIndex, _ = p.getLargeItemIndex(MockInventorySmallOptimizedItem(), context.NewMockDefault(), "AWS:File")
+	itemIndex, _ = p.getLargeItemIndex(MockInventorySmallOptimizedItem(), "AWS:File")
 
 	assert.Equal(t, -1, itemIndex)
 }
@@ -302,7 +303,7 @@ func TestVerifyOneItemNoPutInventoryCall(t *testing.T) {
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 
 	itemIndex := -1
-	itemIndex, _ = p.getLargeItemIndex(MockInventoryLargeFileItem(), context.NewMockDefault(), "AWS:File")
+	itemIndex, _ = p.getLargeItemIndex(MockInventoryLargeFileItem(), "AWS:File")
 
 	assert.Equal(t, -1, itemIndex)
 }

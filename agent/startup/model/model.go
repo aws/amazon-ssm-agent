@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package model provides model definition for startup processor
@@ -66,6 +67,12 @@ type PvPackageInfo struct {
 	Version string `json:"Version"`
 }
 
+// NitroEnclavesEntity contains Version from HKLM:\SOFTWARE\Amazon\AwsNitroEnclaves.
+type NitroEnclavesPackageInfo struct {
+	Name    string `json:"PSChildName"`
+	Version string `json:"Version"`
+}
+
 // PnpEntity contains DeviceId, Service, Name from Win32_PnpEntity.
 type PnpEntity struct {
 	DeviceID string `json:"DeviceID"`
@@ -104,7 +111,6 @@ type EventLogProperties struct {
 
 // SPCR table defined.
 // See https://msdn.microsoft.com/en-us/library/windows/hardware/dn639132(v=vs.85).aspx
-//
 func get_struct_SPCR_TABLE() *interop.StructDef {
 	sd := interop.NewStructDef()
 	sd.AddField("Signature", 4)

@@ -42,8 +42,10 @@ tar -zcvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/ama
 # ubuntu is prepacked since snaps will be added later
 tar -cvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-ubuntu-amd64.tar  -C ${GO_SPACE}/bin/debian_amd64/ amazon-ssm-agent.deb install.sh uninstall.sh snap-install.sh snap-uninstall.sh
 tar -cvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-snap-amd64.tar  -C ${GO_SPACE}/bin/debian_amd64/ snap-install.sh snap-uninstall.sh
+tar -cvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-snap-amd64-debug.tar  -C ${GO_SPACE}/bin/debian_amd64-debug/ snap-install.sh snap-uninstall.sh
 tar -cvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-ubuntu-arm64.tar  -C ${GO_SPACE}/bin/debian_arm64/ amazon-ssm-agent.deb install.sh uninstall.sh snap-install.sh snap-uninstall.sh
 tar -cvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-snap-arm64.tar  -C ${GO_SPACE}/bin/debian_arm64/ snap-install.sh snap-uninstall.sh
+tar -cvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-snap-arm64-debug.tar  -C ${GO_SPACE}/bin/debian_arm64-debug/ snap-install.sh snap-uninstall.sh
 tar -zcvf ${GO_SPACE}/bin/updates/amazon-ssm-agent/`cat ${GO_SPACE}/VERSION`/amazon-ssm-agent-ubuntu-386.tar.gz  -C ${GO_SPACE}/bin/debian_386/ amazon-ssm-agent.deb install.sh uninstall.sh
 
 

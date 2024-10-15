@@ -44,8 +44,8 @@ type ProcessExecutor struct {
 	log log.T
 }
 
-// NewWorkerDiscover returns worker discover
-func NewProcessExecutor(log log.T) *ProcessExecutor {
+// NewProcessExecutor returns process executor
+func NewProcessExecutor(log log.T) IExecutor {
 	return &ProcessExecutor{
 		log: log,
 	}

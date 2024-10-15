@@ -2,16 +2,14 @@ package file
 
 import (
 	"errors"
-	"testing"
-
 	"fmt"
-
-	"time"
-
 	"path/filepath"
+	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -88,7 +86,7 @@ func MockGetFilesErr(log log.T, path string, pattern []string, recursive bool, f
 	return MockFileData, errors.New("error")
 }
 
-func MockGetMetaData(log log.T, paths []string) (fileInfo []model.FileData, err error) {
+func MockGetMetaData(context context.T, paths []string) (fileInfo []model.FileData, err error) {
 	MockFileData := []model.FileData{
 		{
 			Name:             "abc.json",
@@ -123,41 +121,38 @@ func createMockFullPath(paths []string, errors []error) func(string, func(string
 }
 
 func TestGetAllMeta(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": false}, {"Path": "$HOME","Pattern":["*.txt"],"Recursive": false, "DirScanLimit": 4000}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	getFilesFunc = MockGetFiles
 	getFullPath = createMockFullPath([]string{"a1", ""}, []error{nil, errors.New("error")})
 	getMetaDataFunc = MockGetMetaData
-	data, err := getAllMeta(mockLog, mockConfig)
+	data, err := getAllMeta(mockContext, mockConfig)
 	assert.Nil(t, err, "err not nil")
 	fmt.Println(data)
 	assert.NotNil(t, data, "data is Nil")
 }
 
 func TestGetAllMetaOtherError(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": false}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	getFilesFunc = MockGetFilesErr
 	getFullPath = MockGetFullPath
 	getMetaDataFunc = MockGetMetaData
-	data, err := getAllMeta(mockLog, mockConfig)
+	data, err := getAllMeta(mockContext, mockConfig)
 	assert.Nil(t, err, "err not nil")
 	assert.NotNil(t, data, "data is Nil")
 }
 
 func TestGetAllMetaFilterErr(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `Invalid`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	getFilesFunc = MockGetFilesErr
 	getFullPath = MockGetFullPath
 	getMetaDataFunc = MockGetMetaData
-	data, err := getAllMeta(mockLog, mockConfig)
+	data, err := getAllMeta(mockContext, mockConfig)
 	assert.NotNil(t, err, "err not nil")
 	assert.Nil(t, data, "data is Nil")
 }
@@ -199,7 +194,7 @@ func TestRemoveDuplicates(t *testing.T) {
 }
 
 func TestGetFiles(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -215,8 +210,7 @@ func TestGetFiles(t *testing.T) {
 }
 
 func TestGetFilesLimitError(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": true}, {"Path": "$HOME","Pattern":["*.txt"],"Recursive": false, "DirScanLimit": 4000}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	existsPath = MockExistsPath
@@ -225,13 +219,13 @@ func TestGetFilesLimitError(t *testing.T) {
 	getFullPath = createMockFullPath([]string{"a1", ""}, []error{nil, errors.New("error occured")})
 	getMetaDataFunc = MockGetMetaData
 	getFilesFunc = getFiles
-	data, err := getAllMeta(mockLog, mockConfig)
+	data, err := getAllMeta(mockContext, mockConfig)
 	assert.NotNil(t, err)
 	assert.Nil(t, data)
 }
 
 func TestGetFilesLimitErrorWalkFn(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -242,7 +236,7 @@ func TestGetFilesLimitErrorWalkFn(t *testing.T) {
 }
 
 func TestGetFilesLimitErrorNonRecursive(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -253,8 +247,7 @@ func TestGetFilesLimitErrorNonRecursive(t *testing.T) {
 }
 
 func TestGetFilesDirLimitError(t *testing.T) {
-	mockContext := context.NewMockDefault()
-	mockLog := mockContext.Log()
+	mockContext := contextmocks.NewMockDefault()
 	mockFilters := `[{"Path": "$HOME","Pattern":["*.txt"],"Recursive": true}, {"Path": "$HOME","Pattern":["*.txt"],"Recursive": false, "DirScanLimit": 4000}]`
 	mockConfig := model.Config{Collection: "Enabled", Filters: mockFilters, Location: ""}
 	existsPath = MockExistsPath
@@ -263,13 +256,13 @@ func TestGetFilesDirLimitError(t *testing.T) {
 	getFullPath = createMockFullPath([]string{"a1", ""}, []error{nil, errors.New("error")})
 	getMetaDataFunc = MockGetMetaData
 	getFilesFunc = getFiles
-	data, err := getAllMeta(mockLog, mockConfig)
+	data, err := getAllMeta(mockContext, mockConfig)
 	assert.NotNil(t, err)
 	assert.Nil(t, data)
 }
 
 func TestGetFilesDirLimitErrorWalkFn(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, true}, []error{nil, nil})
 	filepathWalk = MockFilePathWalk
@@ -280,7 +273,7 @@ func TestGetFilesDirLimitErrorWalkFn(t *testing.T) {
 }
 
 func TestGetFilesPathExists(t *testing.T) {
-	mockContext := context.NewMockDefault()
+	mockContext := contextmocks.NewMockDefault()
 	mockLog := mockContext.Log()
 	existsPath = createMockExists([]bool{true, false, false}, []error{nil, nil, errors.New("error")})
 	filepathWalk = MockFilePathWalk

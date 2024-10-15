@@ -16,10 +16,10 @@ package ssmlog
 
 import (
 	"fmt"
-
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logpkg "github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/cihub/seelog"
 )
 
@@ -28,10 +28,16 @@ var loadedLogger *log.T
 var lock sync.RWMutex
 
 // pkgMutex is the lock used to serialize calls to the logger.
-var pkgMutex = new(sync.Mutex)
+var pkgMutex = new(sync.RWMutex)
 
 // loggerInstance is the delegate logger in the wrapper
-var loggerInstance = &log.DelegateLogger{}
+var loggerInstance = &logpkg.DelegateLogger{}
+
+func init() {
+	// below lines will close the Default loggers created in seelog init()
+	seelog.Default.Close()
+	seelog.Disabled.Close()
+}
 
 func SSMLogger(useWatcher bool) log.T {
 	if !isLoaded() {
@@ -44,7 +50,7 @@ func SSMLogger(useWatcher bool) log.T {
 // initLogger initializes a new logger based on current configurations and starts file watcher on the configurations file
 func initLogger(useWatcher bool) (logger log.T) {
 	// Read the current configurations or get the default configurations
-	logConfigBytes := log.GetLogConfigBytes()
+	logConfigBytes := logpkg.GetLogConfigBytes()
 	// Initialize the base seelog logger
 	baseLogger, _ := initBaseLoggerFromBytes(logConfigBytes)
 	// Create the wrapper logger
@@ -59,11 +65,11 @@ func initLogger(useWatcher bool) (logger log.T) {
 // withContext creates a wrapper logger on the base logger passed with context is passed
 func withContext(logger seelog.LoggerInterface, context ...string) (contextLogger log.T) {
 	loggerInstance.BaseLoggerInstance = logger
-	formatFilter := &log.ContextFormatFilter{Context: context}
-	contextLogger = &log.Wrapper{Format: formatFilter,
+	formatFilter := &logpkg.ContextFormatFilter{Context: context}
+	contextLogger = &logpkg.Wrapper{Format: formatFilter,
 		M:           pkgMutex,
 		Delegate:    loggerInstance,
-		EventLogger: log.GetEventLog(log.DefaultLogDir, log.EventLogFile),
+		EventLogger: logpkg.GetEventLog(logpkg.DefaultLogDir, logpkg.EventLogFile),
 	}
 	setStackDepth(logger)
 	return contextLogger
@@ -92,7 +98,7 @@ func loadUpdaterLogger(logRoot string, logFile string) (logger log.T) {
 }
 
 func defaultUpdaterConfig(logRoot string, logFile string) []byte {
-	return log.LoadLog(logRoot, logFile, seelog.DebugStr)
+	return logpkg.LoadLog(logRoot, logFile, seelog.DebugStr)
 }
 
 // check if a logger has be loaded
@@ -125,7 +131,7 @@ func startWatcher(logger log.T) {
 		}
 	}()
 	fileWatcher := &FileWatcher{}
-	fileWatcher.Init(logger, log.DefaultSeelogConfigFilePath, replaceLogger)
+	fileWatcher.Init(logger, logpkg.DefaultSeelogConfigFilePath, replaceLogger)
 	// Start the file watcher
 	fileWatcher.Start()
 }
@@ -138,12 +144,13 @@ func replaceLogger() {
 	logger := getCached()
 
 	//Create new logger
-	logConfigBytes := log.GetLogConfigBytes()
+	logConfigBytes := logpkg.GetLogConfigBytes()
 	baseLogger, err := initBaseLoggerFromBytes(logConfigBytes)
 
 	// If err in creating logger, do not replace logger
 	if err != nil {
 		logger.Error("New logger creation failed")
+		logger.Error(err)
 		return
 	}
 
@@ -151,7 +158,7 @@ func replaceLogger() {
 	baseLogger.Debug("New Logger Successfully Created")
 
 	// Safe conversion to *Wrapper
-	wrapper, ok := logger.(*log.Wrapper)
+	wrapper, ok := logger.(*logpkg.Wrapper)
 	if !ok {
 		logger.Errorf("Logger replace failed. The logger is not a wrapper")
 		return
@@ -176,9 +183,8 @@ func initBaseLoggerFromBytes(seelogConfig []byte) (seelogger seelog.LoggerInterf
 	if err != nil {
 		fmt.Println("Error parsing logger config. Creating logger from default config:", err)
 		// Create logger with default config
-		seelogger, _ = seelog.LoggerFromConfigAsBytes(log.DefaultConfig())
+		seelogger, _ = seelog.LoggerFromConfigAsBytes(logpkg.DefaultConfig())
 	}
-
 	fmt.Println("New Seelog Logger Creation Complete")
 	return
 }

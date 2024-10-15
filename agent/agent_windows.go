@@ -1,30 +1,28 @@
+//go:build windows
 // +build windows
 
 package main
 
 import (
-	"os"
+	"runtime"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
-	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 )
 
 const serviceName = "AmazonSSMAgent"
 const imageStateComplete = "IMAGE_STATE_COMPLETE"
 
 func main() {
+	config, _ := appconfig.Config(false)
+	// will use default when the value is less than one
+	runtime.GOMAXPROCS(config.Agent.GoMaxProcForAgentWorker)
+
 	// initialize logger
 	log := ssmlog.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
-
-	proxyconfig.SetProxySettings(log)
-
-	log.Infof("Proxy environment variables:")
-	for _, name := range []string{"http_proxy", "https_proxy", "no_proxy"} {
-		log.Infof(name + ": " + os.Getenv(name))
-	}
 
 	// parse input parameters
 	parseFlags(log)

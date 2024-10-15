@@ -1,24 +1,22 @@
 package iomodule
 
 import (
+	"io"
+	"strconv"
+	"sync"
 	"testing"
 
-	"io"
-
-	"sync"
-
-	"strconv"
-
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 )
-
-var logger = log.NewMockLog()
 
 // TestCommandOuput tests the CommandOutput module
 func TestCommandOuput(t *testing.T) {
 
 	// TestInputCases is a list of strings which we test multi-writer on.
+	context := contextmocks.NewMockDefault()
 	var TestInputCases = [...]string{
 		"Test input text.",
 		"A sample \ninput text.",
@@ -36,13 +34,13 @@ func TestCommandOuput(t *testing.T) {
 
 	i := 0
 	for _, testCase := range TestInputCases {
-		stdout := testFileCommandOutput(testCase, i)
+		stdout := testFileCommandOutput(context, testCase, i)
 		assert.Equal(t, testCase, stdout)
 		i++
 	}
 }
 
-func testFileCommandOutput(pipeTestCase string, i int) string {
+func testFileCommandOutput(context context.T, pipeTestCase string, i int) string {
 	r, w := io.Pipe()
 	wg := new(sync.WaitGroup)
 	var stdout string
@@ -56,7 +54,7 @@ func testFileCommandOutput(pipeTestCase string, i int) string {
 
 	go func() {
 		defer wg.Done()
-		stdoutConsole.Read(logger, r)
+		stdoutConsole.Read(context, r, appconfig.SuccessExitCode)
 	}()
 
 	w.Write([]byte(pipeTestCase))

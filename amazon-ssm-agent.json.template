@@ -1,7 +1,9 @@
 {
     "Profile":{
         "ShareCreds" : true,
-        "ShareProfile" : ""
+        "ShareProfile" : "",
+        "ForceUpdateCreds" : false,
+        "KeyAutoRotateDays": 0
     },
     "Mds": {
         "CommandWorkersLimit" : 5,
@@ -15,13 +17,27 @@
         "CustomInventoryDefaultLocation" : "",
         "AssociationLogsRetentionDurationHours" : 24,
         "RunCommandLogsRetentionDurationHours" : 336,
-        "SessionLogsRetentionDurationHours" : 336
+        "SessionLogsRetentionDurationHours" : 336,
+        "SessionLogsDestination": "none",
+        "PluginLocalOutputCleanup": "",
+        "OrchestrationDirectoryCleanup": ""
     },
     "Mgs": {
         "Region": "",
         "Endpoint": "",
         "StopTimeoutMillis" : 20000,
-        "SessionWorkersLimit" : 1000
+        "SessionWorkersLimit" : 1000,
+        "DeniedPortForwardingRemoteIPs" : [
+            "169.254.169.254",
+            "fd00:ec2::254",
+            "169.254.169.253",
+            "fd00:ec2::253",
+            "169.254.169.123",
+            "fd00:ec2::123",
+            "169.254.169.250",
+            "169.254.169.251",
+            "fd00:ec2::240"
+        ]
     },
     "Agent": {
         "Region": "",
@@ -44,6 +60,7 @@
         "LogKey":""
     },
     "Kms": {
-        "Endpoint": ""
+        "Endpoint": "",
+        "RequireKMSChallengeResponse": false
     }
 }

@@ -16,20 +16,21 @@ package runcommand
 
 import (
 	"crypto/sha256"
+	"encoding/json"
+	"path"
 	"strings"
 	"testing"
 	"time"
-
-	"encoding/json"
-	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -39,7 +40,7 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-//TODO unittest the parser functions
+// TODO unittest the parser functions
 var testMessageId = "03f44d19-90fe-44d4-bd4c-298b966a1e1a"
 var testDestination = "i-1679test"
 var testTopicSend = "aws.ssm.sendCommand.test"
@@ -51,7 +52,7 @@ var loggers = log.NewMockLog()
 
 // TestCaseProcessMessage contains fields to prepare processMessage tests
 type TestCaseProcessMessage struct {
-	ContextMock *context.Mock
+	ContextMock *contextmocks.Mock
 
 	Message ssmmds.Message
 
@@ -67,7 +68,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	// SendCommand topic prefix
 	var topic = testTopicSend
 	var fakeDocState = contracts.DocumentState{
-		DocumentType: contracts.SendCommand,
+		DocumentType: contracts.SendCommandOffline,
 	}
 	// prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)
@@ -80,7 +81,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 		return &fakeDocState, nil
 	}
 
-	tc.ProcessMock.On("Submit", fakeDocState).Return(nil)
+	tc.ProcessMock.On("Submit", fakeDocState).Return(processor.ErrorCode(""))
 	// execute processMessage
 	svc.processMessage(&tc.Message)
 
@@ -97,14 +98,14 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// CancelCommand topic prefix
 	var topic = testTopicCancel
 	var fakeCancelDocState = contracts.DocumentState{
-		DocumentType: contracts.CancelCommand,
+		DocumentType: contracts.CancelCommandOffline,
 	}
 	//prepare processor and test case fields
 	svc, tc := prepareTestProcessMessage(topic)
 
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
-	tc.ProcessMock.On("Cancel", fakeCancelDocState).Return(nil)
+	tc.ProcessMock.On("Cancel", fakeCancelDocState).Return(processor.ErrorCode(""))
 	loadDocStateFromCancelCommand = func(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 		return &fakeCancelDocState, nil
 	}
@@ -166,7 +167,7 @@ func TestProcessMessageWithInvalidMessage(t *testing.T) {
 func prepareTestProcessMessage(testTopic string) (svc RunCommandService, testCase TestCaseProcessMessage) {
 
 	// create mock context and log
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 
 	// create dummy message that would be passed processMessage
 	message := ssmmds.Message{
@@ -222,7 +223,7 @@ func prepareTestProcessMessage(testTopic string) (svc RunCommandService, testCas
 	return
 }
 
-//TODO keep the following functions temporarily before we have processor's integ_test
+// TODO keep the following functions temporarily before we have processor's integ_test
 var sampleMessageFiles = []string{
 	"../service/runcommand/testdata/sampleMsg.json",
 	"../service/runcommand/testdata/sampleMsgVersion2_0.json",
@@ -260,6 +261,9 @@ type TestCaseCancelCommand struct {
 }
 
 func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceID string) (testCase TestCaseSendCommand) {
+	// create mock context and log
+	contextMock := contextmocks.NewMockDefault()
+
 	// load message payload and create MDS message from it
 	var payload messageContracts.SendCommandPayload
 	err := json.Unmarshal((loadFile(t, messagePayloadFile)), &payload)
@@ -340,7 +344,7 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 		Parameters:    payload.DocumentContent.Parameters,
 	}
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	testCase.DocState, err = docparser.InitializeDocState(loggers, documentType, docContent, documentInfo, parserInfo, payload.Parameters)
+	testCase.DocState, err = docparser.InitializeDocState(contextMock, documentType, docContent, documentInfo, parserInfo, payload.Parameters)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -419,7 +423,7 @@ func createMDSMessage(commandID string, payload string, topic string, instanceID
 	}
 }
 func GenerateCancelDocState(t *testing.T, testCase TestCaseCancelCommand) (docState *contracts.DocumentState) {
-	context := context.NewMockDefault()
+	context := contextmocks.NewMockDefault()
 	cancelMessagePayload := messageContracts.CancelPayload{
 		CancelMessageID: "aws.ssm" + testCase.MsgToCancelID + "." + testCase.InstanceID,
 	}

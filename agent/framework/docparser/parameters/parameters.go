@@ -19,7 +19,9 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -48,18 +50,7 @@ func ReplaceParameters(input interface{}, parameters map[string]interface{}, log
 				return parameterValue
 			}
 		}
-
-		// look for multiple parameter strings
-		for parameterName, parameterValue := range parameters {
-			var parameterValueString string
-			var err error
-			if parameterValueString, err = convertToString(parameterValue); err != nil {
-				logger.Error(err)
-			}
-
-			input = ReplaceParameter(input, parameterName, parameterValueString)
-		}
-		return input
+		return ReplaceParameter(input, parameters, logger)
 
 	case []interface{}:
 		// for slices, recursively replace parameters on each element of the slice
@@ -115,10 +106,58 @@ func isSingleParameterString(input string, paramName string) bool {
 }
 
 // ReplaceParameter replaces all occurrences of "{{ paramName }}" in the input by paramValue.
-func ReplaceParameter(input string, paramName string, paramValue string) string {
-	// this method should be called only on parameter names that have been validated first
-	r := regexp.MustCompile(fmt.Sprintf(`{{\s*%v\s*}}`, paramName))
-	return r.ReplaceAllString(input, paramValue)
+// This method should be called only on parameter names that have been validated first.
+// this method replace all parameters all in once. i.e. if a parameter has value which is another parameter,
+// we won't recusively replace that value again
+func ReplaceParameter(input string, parameters map[string]interface{}, logger log.T) string {
+	type tokenMetaData struct {
+		endIndex int
+		key      string
+	}
+	pvs := make(map[string]string, len(parameters))
+	tokenIndex := []int{}
+	tokenIndexMap := make(map[int]tokenMetaData)
+
+	// in this loop, we preprocess the value in case we need marshal them, then we scan input
+	// and record the meta data about where this parameters used in the input
+	for k, v := range parameters {
+		tempStr, err := convertToString(v)
+		if err != nil {
+			logger.Error(err)
+		}
+		// The agent used to have a bug where '$' characters in paramValue would be
+		// interpreted as regexp back references by regexp.ReplaceAllString().  That bug
+		// has been fixed.  Now the problem is that some users may already be working around
+		// the bug by using '$$' in place of '$'.  The following line is meant to protect those
+		// users (if any).
+		pvs[k] = strings.ReplaceAll(tempStr, "$$", "$")
+
+		//find all occurrences of {{ paramName }} in the input string
+		r := regexp.MustCompile(fmt.Sprintf(`{{\s*%v\s*}}`, k))
+		findings := r.FindAllStringIndex(input, -1)
+		for _, finding := range findings {
+			tokenIndex = append(tokenIndex, finding[0])
+			tokenIndexMap[finding[0]] = tokenMetaData{endIndex: finding[1], key: k}
+		}
+	}
+
+	if len(tokenIndex) == 0 {
+		return input
+	}
+
+	//sort the tokenIndex so that we can replace the tokens in order
+	sort.Ints(tokenIndex)
+	var sb strings.Builder
+	startIndex := 0
+	//replace the tokens in order
+	for _, index := range tokenIndex {
+		sb.WriteString(input[startIndex:index])
+		sb.WriteString(pvs[tokenIndexMap[index].key])
+		startIndex = tokenIndexMap[index].endIndex
+	}
+	sb.WriteString(input[startIndex:])
+	//return the replaced string
+	return sb.String()
 }
 
 // ValidParameters checks if parameter names are valid. Returns valid parameters only.

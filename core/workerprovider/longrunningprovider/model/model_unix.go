@@ -11,11 +11,13 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
-//Package model contains data objects for long running container
+// Package model contains data objects for long running container
 package model
 
 import "github.com/aws/amazon-ssm-agent/agent/appconfig"
 
+var SSMAgentBinaryName = appconfig.DefaultSSMAgentBinaryPath
 var SSMAgentWorkerBinaryName = appconfig.DefaultSSMAgentWorker

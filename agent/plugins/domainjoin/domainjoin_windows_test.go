@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package domainjoin implements the domain join plugin.
@@ -18,14 +19,17 @@ package domainjoin
 
 import (
 	"errors"
+	"io"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -38,26 +42,26 @@ type TestCase struct {
 }
 
 const (
-	orchestrationDirectory = "OrchesDir"
-	s3BucketName           = "bucket"
-	s3KeyPrefix            = "key"
-	testInstanceID         = "i-12345678"
-	bucketRegionErrorMsg   = "AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []"
-	testDirectoryName      = "corp.test.com"
-	testDirectoryId        = "d-0123456789"
+	orchestrationDirectory         = "OrchesDir"
+	testDirectoryName              = "corp.test.com"
+	testDirectoryId                = "d-0123456789"
+	testDirectoryOU                = "OU=test,OU=corp,DC=test,DC=com"
+	testDirectoryOUWithSpace       = "OU=test with space,OU=corp,DC=test,DC=com"
+	testDirectoryOUWithSpaceQuoted = "\"OU=test with space,OU=corp,DC=test,DC=com\""
+	testSetHostName                = "my_hostname"
 )
 
 var TestCases = []TestCase{
-	generateTestCaseOk(testDirectoryId, testDirectoryName, []string{"10.0.0.0", "10.0.1.0"}),
-	generateTestCaseFail(testDirectoryId, testDirectoryName, []string{"10.0.0.2", "10.0.1.2"}),
+	generateTestCaseOk(testDirectoryId, testDirectoryName, "", []string{"10.0.0.0", "10.0.1.0"}),
+	generateTestCaseFail(testDirectoryId, testDirectoryName, "", []string{"10.0.0.2", "10.0.1.2"}),
 }
 
-var logger = log.NewMockLog()
+var logger = logmocks.NewMockLog()
 
-func generateTestCaseOk(id string, name string, ipAddress []string) TestCase {
+func generateTestCaseOk(id string, name string, ou string, ipAddress []string) TestCase {
 
 	testCase := TestCase{
-		Input:  generateDomainJoinPluginInput(id, name, ipAddress),
+		Input:  generateDomainJoinPluginInput(id, name, ou, ipAddress),
 		Output: iohandler.DefaultIOHandler{},
 		mark:   true,
 	}
@@ -70,9 +74,9 @@ func generateTestCaseOk(id string, name string, ipAddress []string) TestCase {
 	return testCase
 }
 
-func generateTestCaseFail(id string, name string, ipAddress []string) TestCase {
+func generateTestCaseFail(id string, name string, ou string, ipAddress []string) TestCase {
 	testCase := TestCase{
-		Input:  generateDomainJoinPluginInput(id, name, ipAddress),
+		Input:  generateDomainJoinPluginInput(id, name, ou, ipAddress),
 		Output: iohandler.DefaultIOHandler{},
 		mark:   false,
 	}
@@ -85,11 +89,22 @@ func generateTestCaseFail(id string, name string, ipAddress []string) TestCase {
 	return testCase
 }
 
-func generateDomainJoinPluginInput(id string, name string, ipAddress []string) DomainJoinPluginInput {
+func generateDomainJoinPluginInput(id string, name string, ou string, ipAddress []string) DomainJoinPluginInput {
 	return DomainJoinPluginInput{
 		DirectoryId:    id,
 		DirectoryName:  name,
+		DirectoryOU:    ou,
 		DnsIpAddresses: ipAddress,
+	}
+}
+
+func generateDomainJoinPluginInputOptionalParamSetHostName(id string, name string, ou string, ipAddress []string, setHostName string) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:    id,
+		DirectoryName:  name,
+		DirectoryOU:    ou,
+		DnsIpAddresses: ipAddress,
+		HostName:       setHostName,
 	}
 }
 
@@ -107,50 +122,113 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	logger.Infof("test run commands %v", testCase)
 
 	if testCase.mark {
-		utilExe = func(log log.T, cmd string, workingDir string, outputRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
-			return nil
+		utilExe = func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+			return "", nil
 		}
 	} else {
-		errCase := errors.New("err here")
-		utilExe = func(log log.T, cmd string, workingDir string, outputRoot string, stdOut string, stdErr string, isAsync bool) (err error) {
-			return errCase
+		utilExe = func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+			return "", errors.New("err here")
 		}
 	}
 
 	makeDir = func(destinationDir string) (err error) {
 		return nil
 	}
-	makeArgs = func(log log.T, pluginInput DomainJoinPluginInput) (commandArguments string) {
-		return "cmd"
+	makeArgs = func(context.T, DomainJoinPluginInput) (string, error) {
+		return "cmd", nil
 	}
-
-	var res contracts.PluginOutput
+	iohandler.DefaultOutputConfig()
 	mockCancelFlag := new(task.MockCancelFlag)
-	mockIOHandler := new(iohandlermocks.MockIOHandler)
-	p := new(Plugin)
-
+	p := &Plugin{
+		context: contextmocks.NewMockDefault(),
+	}
 	if rawInput {
 		// prepare plugin input
 		var rawPluginInput map[string]interface{}
 		err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 		assert.Nil(t, err)
 
-		p.runCommandsRawInput(logger, rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
+		p.runCommandsRawInput("-", rawPluginInput, orchestrationDirectory, mockCancelFlag, iohandler.NewDefaultIOHandler(p.context, contracts.IOConfiguration{}), utilExe)
 	} else {
-		p.runCommands(logger, testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
+		p.runCommands("-", testCase.Input, orchestrationDirectory, mockCancelFlag, iohandler.NewDefaultIOHandler(p.context, contracts.IOConfiguration{}), utilExe)
 	}
 }
 
-// TestMakeArguments tests the makeArguments methods, which build up the command for domainJoin.exe
-func TestMakeArguments(t *testing.T) {
-	logger.On("Error", mock.Anything).Return(nil)
-	getRegion = func() (string, error) {
-		return "us-east-1", nil
+// TestMakeArgumentsAndCommandParts tests the makeArguments and makeCommandParts methods, which build up the command for domainJoin.exe
+func TestMakeArgumentsAndCommandParts(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+
+	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, testDirectoryOU, []string{"172.31.4.141", "172.31.21.240"})
+	commandLine, _ := makeArguments(context, domainJoinInput)
+	expectedCommandLine := "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --directory-ou '\"OU=test,OU=corp,DC=test,DC=com\"' --dns-addresses 172.31.4.141 172.31.21.240"
+	assert.Equal(t, expectedCommandLine, commandLine)
+	commandParts, _ := makeCommandParts(commandLine)
+	expectedCommandParts := []string{
+		"./" + DomainJoinPluginExecutableName,
+		"--directory-id",
+		"d-0123456789",
+		"--directory-name",
+		"corp.test.com",
+		"--instance-region",
+		"us-east-1",
+		"--directory-ou",
+		"\"OU=test,OU=corp,DC=test,DC=com\"",
+		"--dns-addresses",
+		"172.31.4.141",
+		"172.31.21.240",
+	}
+	assert.Equal(t, expectedCommandParts, commandParts)
+
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, testDirectoryOUWithSpace, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
+	commandLine, _ = makeArguments(context, domainJoinInput)
+	expectedCommandLine = "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --directory-ou '\"OU=test with space,OU=corp,DC=test,DC=com\"' --set-hostname my_hostname --dns-addresses 172.31.4.141 172.31.21.240"
+	assert.Equal(t, expectedCommandLine, commandLine)
+	commandParts, _ = makeCommandParts(commandLine)
+	expectedCommandParts = []string{
+		"./" + DomainJoinPluginExecutableName,
+		"--directory-id",
+		"d-0123456789",
+		"--directory-name",
+		"corp.test.com",
+		"--instance-region",
+		"us-east-1",
+		"--directory-ou",
+		"\"OU=test with space,OU=corp,DC=test,DC=com\"",
+		"--set-hostname",
+		"my_hostname",
+		"--dns-addresses",
+		"172.31.4.141",
+		"172.31.21.240",
 	}
 
-	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
-	commandRes, _ := makeArguments(logger, domainJoinInput)
-	expected := "./Ec2Config.DomainJoin.exe --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141 172.31.21.240"
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, testDirectoryOUWithSpaceQuoted, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
+	commandLine, _ = makeArguments(context, domainJoinInput)
+	expectedCommandLine = "./" + DomainJoinPluginExecutableName + " --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --directory-ou '\"OU=test with space,OU=corp,DC=test,DC=com\"' --set-hostname my_hostname --dns-addresses 172.31.4.141 172.31.21.240"
+	assert.Equal(t, expectedCommandLine, commandLine)
+	commandParts, _ = makeCommandParts(commandLine)
+	expectedCommandParts = []string{
+		"./" + DomainJoinPluginExecutableName,
+		"--directory-id",
+		"d-0123456789",
+		"--directory-name",
+		"corp.test.com",
+		"--instance-region",
+		"us-east-1",
+		"--directory-ou",
+		"\"OU=test with space,OU=corp,DC=test,DC=com\"",
+		"--set-hostname",
+		"my_hostname",
+		"--dns-addresses",
+		"172.31.4.141",
+		"172.31.21.240",
+	}
 
-	assert.Equal(t, expected, commandRes)
+	shellInjectionCheck := isShellInjection("`del /Q *`")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for `del /Q *`")
+	shellInjectionCheck = isShellInjection("echo abc && del /Q *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc && del /Q *")
+	shellInjectionCheck = isShellInjection("echo abc || del /Q *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc || del /Q *")
+	shellInjectionCheck = isShellInjection("echo abc ; del /Q *")
+	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc ; del /Q *")
 }

@@ -11,14 +11,19 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin
 // +build darwin
 
-//Package message contains information for the IPC messages
+// Package message contains information for the IPC messages
 package message
 
-const (
+import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+)
+
+var (
 	DefaultIPCPrefix         = "ipc://"
-	DefaultCoreAgentChannel  = "/opt/aws/ssm/data/ipc/"
+	DefaultCoreAgentChannel  = appconfig.DefaultProgramFolder + "data/ipc/"
 	GetWorkerHealthChannel   = DefaultIPCPrefix + DefaultCoreAgentChannel + "health"
 	TerminationWorkerChannel = DefaultIPCPrefix + DefaultCoreAgentChannel + "termination"
 )

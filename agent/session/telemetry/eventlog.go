@@ -20,6 +20,7 @@ import (
 	"hash/fnv"
 	"math/rand"
 	"regexp"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -27,8 +28,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/telemetry/metrics"
@@ -50,10 +50,11 @@ var mu = &sync.Mutex{}
 
 // AgentTelemetry is the agent health message format being used as payload for MGS message
 type AgentTelemetry struct {
-	SchemaVersion           int    `json:"SchemaVersion"`
-	NumberOfAgentReboot     int    `json:"NumberOfAgentReboot"`
-	NumberOfSSMWorkerReboot int    `json:"NumberOfSSMWorkerReboot"`
-	AgentVersion            string `json:"AgentVersion"`
+	SchemaVersion               int    `json:"SchemaVersion"`
+	NumberOfAgentReboot         int    `json:"NumberOfAgentReboot"`
+	NumberOfSSMWorkerReboot     int    `json:"NumberOfSSMWorkerReboot"`
+	NumberOfInProcExecuterStart int    `json:"NumberOfInProcExecuterStart"`
+	AgentVersion                string `json:"AgentVersion"`
 }
 
 // AgentUpdateCodes is the agent health message format being used as payload for MGS message
@@ -94,7 +95,7 @@ func GetAuditLogTelemetryInstance(ctx context.T, channel communicator.IWebSocket
 	}
 
 	// to bring extra randomness
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := ctx.Identity().InstanceID()
 	hash := fnv.New32a()
 	hash.Write([]byte(instanceId))
 	rand.Seed(time.Now().UTC().UnixNano() + int64(hash.Sum32()))
@@ -179,6 +180,7 @@ func (a *AuditLogTelemetry) sendAgentHealthMessage() {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("Agent Telemetry panicked with: %v", err)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 	mu.Lock()
@@ -275,16 +277,17 @@ func (a *AuditLogTelemetry) sendAgentUpdateResultMessage(eventCount *logger.Even
 func (a *AuditLogTelemetry) sendBasicAgentTelemetryMessage(eventCount *logger.EventCounter) (err error) {
 	log := a.ctx.Log()
 	schemaVal, _ := strconv.Atoi(eventCount.SchemaVersion)
-	startEventCount, workerStartEventCount := eventCount.CountMap[logger.AmazonAgentStartEvent], eventCount.CountMap[logger.AmazonAgentWorkerStartEvent]
-	if startEventCount+workerStartEventCount == 0 {
+	startEventCount, workerStartEventCount, inProcExecuterStartEventCount := eventCount.CountMap[logger.AmazonAgentStartEvent], eventCount.CountMap[logger.AmazonAgentWorkerStartEvent], eventCount.CountMap[logger.AmazonAgentInProcExecuterStartEvent]
+	if startEventCount+workerStartEventCount+inProcExecuterStartEventCount == 0 {
 		log.Warnf("wrong event type mapped to the event log")
 		return
 	}
 	agentHealthJson := AgentTelemetry{
-		NumberOfAgentReboot:     startEventCount,
-		NumberOfSSMWorkerReboot: workerStartEventCount,
-		SchemaVersion:           schemaVal,
-		AgentVersion:            eventCount.AgentVersion,
+		NumberOfAgentReboot:         startEventCount,
+		NumberOfSSMWorkerReboot:     workerStartEventCount,
+		NumberOfInProcExecuterStart: inProcExecuterStartEventCount,
+		SchemaVersion:               schemaVal,
+		AgentVersion:                eventCount.AgentVersion,
 	}
 	if a.isMGSTelemetryTransportEnable {
 		auditBytes, err := json.Marshal(agentHealthJson)

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 // Package appconfig manages the configuration of the agent.
@@ -25,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/network/certreader"
 )
 
-const (
+var (
 
 	// AgentExtensions specified the root folder for various kinds of downloaded content
 	AgentData = "/var/lib/amazon/ssm/"
@@ -98,14 +99,17 @@ const (
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
 
-	NecessaryAgentBinaryPermissionMask  = 0511 // Require read/execute for root, execute for all
-	DisallowedAgentBinaryPermissionMask = 0022 // Disallow write for group and user
+	NecessaryAgentBinaryPermissionMask  os.FileMode = 0511 // Require read/execute for root, execute for all
+	DisallowedAgentBinaryPermissionMask os.FileMode = 0022 // Disallow write for group and user
 
 	// customCertificateFileName is the name of the custom certificate
 	customCertificateFileName = "amazon-ssm-agent.crt"
 
-	// seelogFileName is the name of the log configuration file
-	seelogFileName = "seelog.xml"
+	// SSM Agent Update download legacy path
+	LegacyUpdateDownloadFolder = "/var/log/amazon/ssm/download"
+
+	// DefaultEC2SharedCredentialsFilePath represents the filepath for storing credentials for ec2 identity
+	DefaultEC2SharedCredentialsFilePath = DefaultDataStorePath + "credentials"
 )
 
 // PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
@@ -115,6 +119,7 @@ var PowerShellPluginCommandName string
 var DefaultProgramFolder = "/etc/amazon/ssm/"
 
 var defaultWorkerPath = "/usr/bin/"
+var DefaultSSMAgentBinaryPath = defaultWorkerPath + "amazon-ssm-agent"
 var DefaultSSMAgentWorker = defaultWorkerPath + "ssm-agent-worker"
 var DefaultDocumentWorker = defaultWorkerPath + "ssm-document-worker"
 var DefaultSessionWorker = defaultWorkerPath + "ssm-session-worker"
@@ -127,11 +132,13 @@ var AppConfigPath = DefaultProgramFolder + AppConfigFileName
 var CustomCertificatePath = ""
 
 // SeelogFilePath specifies the path to the seelog
-var SeelogFilePath = DefaultProgramFolder + seelogFileName
+var SeelogFilePath = DefaultProgramFolder + SeelogConfigFileName
+
+var RuntimeConfigFolderPath = AgentData + "runtimeconfig"
 
 func init() {
 	/*
-	   Powershell command used to be poweshell in alpha versions, now it's pwsh in prod versions
+	   Powershell command used to be powershell in alpha versions, now it's pwsh in prod versions
 	*/
 	PowerShellPluginCommandName = "/usr/bin/powershell"
 	if _, err := os.Stat(PowerShellPluginCommandName); err != nil {
@@ -168,8 +175,8 @@ func init() {
 			}
 
 			// Check if seelog.xml is available in relative path
-			if validateRelativeConfigFile(filepath.Join(curdir, relativeConfigFolder, seelogFileName)) {
-				SeelogFilePath = filepath.Join(curdir, relativeConfigFolder, seelogFileName)
+			if validateRelativeConfigFile(filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)) {
+				SeelogFilePath = filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)
 			}
 
 			// Check if certificate is available in relative path

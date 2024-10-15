@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package updateec2config implements the UpdateEC2Config plugin.
@@ -22,6 +23,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -34,14 +36,23 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
+)
+
+var (
+	ec2ConfigVersionPattern = regexp.MustCompile("[.0-9]+")
+	sourcePattern           = regexp.MustCompile(`^https?:[\/][\/][\w.-]+:?[\/\w.-]+$`)
 )
 
 // Plugin is the type for the RunCommand plugin.
 type Plugin struct {
+	context context.T
 	// Manifest location
 	ManifestLocation string
 }
@@ -61,15 +72,17 @@ type UpdatePluginConfig struct {
 	ManifestLocation string
 }
 
-type updateManager struct{}
+type updateManager struct {
+	context context.T
+}
 
-//TODO move the interface and structs into a separate file to reduce the size of this main file
+// TODO move the interface and structs into a separate file to reduce the size of this main file
 // pluginHelper is a interface that has helper functions for update manager
 type pluginHelper interface {
 	generateSetupUpdateCmd(log log.T,
 		manifest *Manifest,
 		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceContext,
+		region string,
 		updaterPath string,
 		messageID string,
 		agentVersion string) (cmd string, err error)
@@ -77,22 +90,22 @@ type pluginHelper interface {
 	generateUpdateCmd(log log.T,
 		updaterPath string) (cmd string, err error)
 
-	downloadManifest(log log.T,
+	downloadManifest(context context.T,
 		util updateutil.T,
 		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceContext,
+		info updateinfo.T,
 		out iohandler.IOHandler) (manifest *Manifest, err error)
 
-	downloadUpdater(log log.T,
-		util updateutil.T,
+	downloadUpdater(context context.T,
+		region string,
 		updaterPackageName string,
 		manifest *Manifest,
 		out iohandler.IOHandler,
-		context *updateutil.InstanceContext) (version string, err error)
+		info updateinfo.T) (version string, err error)
 
 	validateUpdate(log log.T,
 		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceContext,
+		info updateinfo.T,
 		manifest *Manifest,
 		out iohandler.IOHandler, version string) (noNeedToUpdate bool, err error)
 
@@ -107,10 +120,11 @@ var updateAgent = runUpdateAgent
 var mkDirAll = os.MkdirAll
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
-	var plugin Plugin
-	plugin.ManifestLocation = updatePluginConfig.ManifestLocation
-	return &plugin, nil
+func NewPlugin(context context.T, updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
+	return &Plugin{
+		context,
+		updatePluginConfig.ManifestLocation,
+	}, nil
 }
 
 // getEC2ConfigCurrentVersion gets the current version of EC2 config installed on the platform
@@ -126,9 +140,10 @@ func getEC2ConfigCurrentVersion(log log.T) (res string, err error) {
 	}
 
 	data := string(cmdOut)
-	if len(data) > 1 {
-		version := strings.TrimSpace(data)
-		log.Debug("GetEC2ConfigCurrentVersion: version after trimming space is ", version)
+	matches := ec2ConfigVersionPattern.FindStringSubmatch(data)
+	if matches != nil {
+		version := matches[0]
+		log.Debugf("GetEC2ConfigCurrentVersion: version after trimming space is %s", version)
 		return version, err
 	}
 
@@ -140,7 +155,7 @@ func getEC2ConfigCurrentVersion(log log.T) (res string, err error) {
 func runUpdateAgent(
 	p *Plugin,
 	config contracts.Configuration,
-	log log.T,
+	context context.T,
 	manager pluginHelper,
 	util updateutil.T,
 	rawPluginInput interface{},
@@ -148,8 +163,10 @@ func runUpdateAgent(
 	startTime time.Time) {
 	var pluginInput UpdatePluginInput
 	var updatecontext *UpdateContextFile = new(UpdateContextFile)
+	var log log.T = context.Log()
 	var err error
-	var context *updateutil.InstanceContext
+	var info updateinfo.T
+	var region string
 
 	pluginConfig := iohandler.DefaultOutputConfig()
 
@@ -158,8 +175,14 @@ func runUpdateAgent(
 		return
 	}
 
-	log.Debugf("[runUpdateAgent]: Will now create the instance context")
-	if context, err = util.CreateInstanceContext(log); err != nil {
+	log.Debugf("[runUpdateAgent]: Will now create the instance info")
+	if info, err = updateinfo.New(context); err != nil {
+		output.MarkAsFailed(err)
+		return
+	}
+
+	log.Debugf("[runUpdateAgent]: Will now get region information")
+	if region, err = context.Identity().Region(); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
@@ -169,9 +192,17 @@ func runUpdateAgent(
 		pluginInput.Source = p.ManifestLocation
 	}
 	//Calculate manifest location base on current instance's region
-	pluginInput.Source = strings.Replace(pluginInput.Source, updateutil.RegionHolder, context.Region, -1)
+	pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, region, -1)
+
+	//Check the format of the source input and revert to default if not
+	if err = validateSource(pluginInput); err != nil {
+		log.Warnf("Invalid url provided at %v (url must be https/http link) falling back to default manifest location", pluginInput.Source)
+		pluginInput.Source = p.ManifestLocation
+		pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, region, -1)
+	}
+
 	//Calculate updater package name base on agent name
-	pluginInput.UpdaterName = pluginInput.AgentName + updateutil.UpdaterPackageNamePrefix
+	pluginInput.UpdaterName = pluginInput.AgentName + updateconstants.UpdaterPackageNamePrefix
 	//Generate update output
 	targetVersion := pluginInput.TargetVersion
 	if len(targetVersion) == 0 {
@@ -208,7 +239,7 @@ func runUpdateAgent(
 	} else { //if update process is not running
 
 		//Download manifest file
-		manifest, downloadErr := manager.downloadManifest(log, util, &pluginInput, context, output)
+		manifest, downloadErr := manager.downloadManifest(context, util, &pluginInput, info, output)
 		if downloadErr != nil {
 			output.MarkAsFailed(downloadErr)
 			return
@@ -216,7 +247,7 @@ func runUpdateAgent(
 
 		//Validate update details
 		noNeedToUpdate := false
-		if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, context, manifest, output, agentVersion); noNeedToUpdate {
+		if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, info, manifest, output, agentVersion); noNeedToUpdate {
 			if err != nil {
 				output.MarkAsFailed(err)
 			}
@@ -226,7 +257,7 @@ func runUpdateAgent(
 		//Download updater and retrieve the version number
 		updaterVersion := ""
 		if updaterVersion, err = manager.downloadUpdater(
-			log, util, pluginInput.UpdaterName, manifest, output, context); err != nil {
+			context, region, pluginInput.UpdaterName, manifest, output, info); err != nil {
 			output.MarkAsFailed(err)
 			return
 		}
@@ -236,7 +267,7 @@ func runUpdateAgent(
 		if cmd, err = manager.generateSetupUpdateCmd(log,
 			manifest,
 			&pluginInput,
-			context,
+			region,
 			UpdaterFilePath(appconfig.EC2UpdateArtifactsRoot, pluginInput.UpdaterName, updaterVersion),
 			config.MessageId,
 			agentVersion); err != nil {
@@ -259,7 +290,16 @@ func runUpdateAgent(
 			appconfig.EC2UpdateArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 
 		//Command to setup the installation
-		if _, _, err = util.ExeCommand(log, cmd, workDir, appconfig.EC2UpdateArtifactsRoot, pluginConfig.StdoutFileName, pluginConfig.StderrFileName, false); err != nil {
+		commandInput := &updateutil.CommandExecutionSettings{
+			Log:         log,
+			Cmd:         strings.Fields(cmd),
+			WorkingDir:  workDir,
+			UpdaterRoot: appconfig.EC2UpdateArtifactsRoot,
+			StdOut:      pluginConfig.StdoutFileName,
+			StdErr:      pluginConfig.StderrFileName,
+			IsAsync:     false,
+		}
+		if _, _, err = util.ExeCommand(commandInput); err != nil {
 			output.MarkAsFailed(err)
 			return
 		}
@@ -274,7 +314,16 @@ func runUpdateAgent(
 			return
 		}
 		log.Debugf("Setup update command %v", cmd)
-		if _, _, err = util.ExeCommand(log, cmd, workDir, appconfig.EC2UpdateArtifactsRoot, pluginConfig.StdoutFileName, pluginConfig.StderrFileName, true); err != nil {
+		asyncCommandInput := &updateutil.CommandExecutionSettings{
+			Log:         log,
+			Cmd:         strings.Fields(cmd),
+			WorkingDir:  workDir,
+			UpdaterRoot: appconfig.EC2UpdateArtifactsRoot,
+			StdOut:      pluginConfig.StdoutFileName,
+			StdErr:      pluginConfig.StderrFileName,
+			IsAsync:     true,
+		}
+		if _, _, err = util.ExeCommand(asyncCommandInput); err != nil {
 			output.MarkAsFailed(err)
 			return
 		}
@@ -288,7 +337,7 @@ func runUpdateAgent(
 func (m *updateManager) generateSetupUpdateCmd(log log.T,
 	manifest *Manifest,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	region string,
 	updaterPath string,
 	messageID string,
 	agentVersion string) (cmd string, err error) {
@@ -298,7 +347,7 @@ func (m *updateManager) generateSetupUpdateCmd(log log.T,
 
 	//Get download url and hash value from for the current version of ssm agent
 	if source, hash, err = manifest.DownloadURLAndHash(
-		context, EC2ConfigAgentName, agentVersion, EC2SetupFileName, S3Format, HTTPFormat); err != nil {
+		EC2ConfigAgentName, agentVersion, EC2SetupFileName, S3Format, HTTPFormat, region); err != nil {
 		return
 	}
 	cmd = updateutil.BuildUpdateCommand(cmd, SourceVersionCmd, agentVersion)
@@ -307,14 +356,14 @@ func (m *updateManager) generateSetupUpdateCmd(log log.T,
 
 	//Get download url and hash value from for the target version of ssm agent
 	if source, hash, err = manifest.DownloadURLAndHash(
-		context, EC2ConfigAgentName, pluginInput.TargetVersion, EC2SetupFileName, S3Format, HTTPFormat); err != nil {
+		EC2ConfigAgentName, pluginInput.TargetVersion, EC2SetupFileName, S3Format, HTTPFormat, region); err != nil {
 		return
 	}
 	cmd = updateutil.BuildUpdateCommand(cmd, TargetVersionCmd, pluginInput.TargetVersion)
 	cmd = updateutil.BuildUpdateCommand(cmd, TargetLocationCmd, source)
 	cmd = updateutil.BuildUpdateCommand(cmd, TargetHashCmd, hash)
 
-	cmd = updateutil.BuildUpdateCommand(cmd, "-"+updateutil.PackageNameCmd, EC2ConfigAgentName)
+	cmd = updateutil.BuildUpdateCommand(cmd, "-"+updateconstants.PackageNameCmd, EC2ConfigAgentName)
 
 	//messageID obtained from ssm is in the format = aws.ssm.{message-id}.{instance-id}. Parsing for use here
 	messageinfo := strings.Split(messageID, ".")
@@ -324,18 +373,13 @@ func (m *updateManager) generateSetupUpdateCmd(log log.T,
 
 	cmd = updateutil.BuildUpdateCommand(cmd, HistoryCmd, numHistories)
 
-	var appConfig appconfig.SsmagentConfig
-	appConfig, err = appconfig.Config(false)
-	if err != nil {
-		log.Error("something went wrong while generating the setup installation command")
-		return "", err
-	}
+	appConfig := m.context.AppConfig()
 
 	cmd = updateutil.BuildUpdateCommand(cmd, MdsEndpointCmd, appConfig.Mds.Endpoint)
 
 	cmd = updateutil.BuildUpdateCommand(cmd, InstanceID, messageinfo[3])
 
-	cmd = updateutil.BuildUpdateCommand(cmd, RegionIDCmd, context.Region)
+	cmd = updateutil.BuildUpdateCommand(cmd, RegionIDCmd, region)
 
 	user_agent := "EC2Config" + "/" + agentVersion
 	cmd = updateutil.BuildUpdateCommand(cmd, UserAgentCmd, user_agent)
@@ -353,12 +397,7 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 
 	cmd = updateutil.BuildUpdateCommand(cmd, HistoryCmd, numHistories)
 
-	var appConfig appconfig.SsmagentConfig
-	appConfig, err = appconfig.Config(false)
-	if err != nil {
-		log.Error("something went wrong while generating update command")
-		return "", err
-	}
+	appConfig := m.context.AppConfig()
 
 	cmd = updateutil.BuildUpdateCommand(cmd, MdsEndpointCmd, appConfig.Mds.Endpoint)
 
@@ -377,10 +416,10 @@ func createUpdateDownloadFolder() (folder string, err error) {
 }
 
 // downloadManifest downloads manifest file from s3 bucket
-func (m *updateManager) downloadManifest(log log.T,
+func (m *updateManager) downloadManifest(context context.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	info updateinfo.T,
 	out iohandler.IOHandler) (manifest *Manifest, err error) {
 	//Download source
 	var updateDownload = ""
@@ -394,30 +433,32 @@ func (m *updateManager) downloadManifest(log log.T,
 		DestinationDirectory: updateDownload,
 	}
 
-	downloadOutput, downloadErr := fileDownload(log, downloadInput)
+	downloadOutput, downloadErr := fileDownload(context, downloadInput)
 	if downloadErr != nil ||
 		downloadOutput.IsHashMatched == false ||
 		downloadOutput.LocalFilePath == "" {
 		return nil, downloadErr
 	}
 	out.AppendInfof("Successfully downloaded %v", downloadInput.SourceURL)
-	return ParseManifest(log, downloadOutput.LocalFilePath)
+	return ParseManifest(context.Log(), downloadOutput.LocalFilePath)
 }
 
 // downloadUpdater downloads updater from the s3 bucket
-func (m *updateManager) downloadUpdater(log log.T,
-	util updateutil.T,
+func (m *updateManager) downloadUpdater(
+	context context.T,
+	region string,
 	updaterPackageName string,
 	manifest *Manifest,
 	out iohandler.IOHandler,
-	context *updateutil.InstanceContext) (version string, err error) {
+	info updateinfo.T) (version string, err error) {
 	var hash = ""
 	var source = ""
+	var log = context.Log()
 
-	if version, err = manifest.LatestVersion(log, context); err != nil {
+	if version, err = manifest.LatestVersion(log, info); err != nil {
 		return
 	}
-	if source, hash, err = manifest.DownloadURLAndHash(context, EC2UpdaterPackageName, version, EC2UpdaterFileName, HTTPFormat, S3Format); err != nil {
+	if source, hash, err = manifest.DownloadURLAndHash(EC2UpdaterPackageName, version, EC2UpdaterFileName, HTTPFormat, S3Format, region); err != nil {
 		return
 	}
 	var updateDownloadFolder = ""
@@ -428,11 +469,11 @@ func (m *updateManager) downloadUpdater(log log.T,
 	downloadInput := artifact.DownloadInput{
 		SourceURL: source,
 		SourceChecksums: map[string]string{
-			updateutil.HashType: hash,
+			updateconstants.HashType: hash,
 		},
 		DestinationDirectory: updateDownloadFolder,
 	}
-	downloadOutput, downloadErr := fileDownload(log, downloadInput)
+	downloadOutput, downloadErr := fileDownload(context, downloadInput)
 	if downloadErr != nil ||
 		downloadOutput.IsHashMatched == false ||
 		downloadOutput.LocalFilePath == "" {
@@ -441,6 +482,8 @@ func (m *updateManager) downloadUpdater(log log.T,
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
+		// delete downloaded file, if it exists
+		pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 		return version, errors.New(errMessage)
 	}
 
@@ -449,10 +492,14 @@ func (m *updateManager) downloadUpdater(log log.T,
 		log,
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(appconfig.EC2UpdateArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
+		// delete downloaded file, if it exists
+		pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 		return version, fmt.Errorf("failed to uncompress updater package, %v, %v",
 			downloadOutput.LocalFilePath,
 			uncompressErr.Error())
 	}
+	// delete downloaded file, if it exists
+	pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 
 	return version, nil
 }
@@ -460,13 +507,13 @@ func (m *updateManager) downloadUpdater(log log.T,
 // validateUpdate validates manifest against update request
 func (m *updateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	info updateinfo.T,
 	manifest *Manifest,
 	out iohandler.IOHandler, currentVersion string) (noNeedToUpdate bool, err error) {
 	var allowDowngrade = false
 
 	if len(pluginInput.TargetVersion) == 0 {
-		if pluginInput.TargetVersion, err = manifest.LatestVersion(log, context); err != nil {
+		if pluginInput.TargetVersion, err = manifest.LatestVersion(log, info); err != nil {
 			return true, err
 		}
 	}
@@ -475,28 +522,33 @@ func (m *updateManager) validateUpdate(log log.T,
 		return true, err
 	}
 
-	if pluginInput.TargetVersion == currentVersion {
+	var versionCmpVal int
+	if versionCmpVal, err = versionutil.VersionCompare(pluginInput.TargetVersion, currentVersion); err != nil {
+		return true, err
+	}
+
+	if versionCmpVal == 0 {
 		out.AppendInfof("%v %v has already been installed, update skipped",
 			pluginInput.AgentName,
 			currentVersion)
 		out.MarkAsSucceeded()
 		return true, nil
 	}
-	if pluginInput.TargetVersion < currentVersion && !allowDowngrade {
+	if versionCmpVal < 0 && !allowDowngrade {
 		return true,
 			fmt.Errorf(
 				"updating %v to an older version, please enable allow downgrade to proceed",
 				pluginInput.AgentName)
 
 	}
-	if !manifest.HasVersion(context, pluginInput.TargetVersion) {
+	if !manifest.HasVersion(info, pluginInput.TargetVersion) {
 		return true,
 			fmt.Errorf(
 				"%v version %v is unsupported",
 				pluginInput.AgentName,
 				pluginInput.TargetVersion)
 	}
-	if !manifest.HasVersion(context, currentVersion) {
+	if !manifest.HasVersion(info, currentVersion) {
 		return true,
 			fmt.Errorf(
 				"%v current version %v is unsupported on current platform",
@@ -509,11 +561,14 @@ func (m *updateManager) validateUpdate(log log.T,
 
 // TODO Make common methods go into utility/helper/common package. Check if Execute can be added to that package
 // Execute runs multiple sets of commands and returns their outputs.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Info("RunCommand started with update configuration for EC2 config update ", config)
 	util := new(updateutil.Utility)
-	manager := new(updateManager)
+	util.Context = p.context
+	manager := &updateManager{
+		p.context,
+	}
 
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
@@ -522,7 +577,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else {
 		updateAgent(p,
 			config,
-			log,
+			p.context,
 			manager,
 			util,
 			config.Properties,
@@ -539,15 +594,12 @@ func Name() string {
 
 // GetUpdatePluginConfig returns the default values for the update plugin
 func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
-	log := context.Log()
-	region, err := platform.Region()
-	if err != nil {
-		log.Errorf("Error retrieving agent region in update plugin config. error: %v", err)
-	}
-
 	var manifestURL string
-	manifestURL = retrieveDynamicS3ManifestUrl(region, "s3")
-	if manifestURL == "" {
+	dynamicS3Endpoint := context.Identity().GetServiceEndpoint("s3")
+	if dynamicS3Endpoint != "" {
+		manifestURL = "https://" + dynamicS3Endpoint + ManifestPath
+	} else {
+		region, _ := context.Identity().Region()
 		if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
 			manifestURL = ChinaManifestURL
 		} else {
@@ -560,9 +612,11 @@ func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
 	}
 }
 
-func retrieveDynamicS3ManifestUrl(region string, service string) string {
-	if dynamicS3Endpoint := platform.GetDefaultEndPoint(region, service); dynamicS3Endpoint != "" {
-		return "https://" + dynamicS3Endpoint + ManifestPath
+func validateSource(pluginInput UpdatePluginInput) (err error) {
+	//This pattern allows for http/https links to local hosts and s3 buckets
+	validSourceValue := sourcePattern
+	if !validSourceValue.MatchString(pluginInput.Source) {
+		return errors.New("Invalid source")
 	}
-	return ""
+	return err
 }

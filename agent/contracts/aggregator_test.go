@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/stretchr/testify/assert"
 )
@@ -58,7 +58,7 @@ func TestPrepareRuntimeStatus(t *testing.T) {
 	return
 }
 
-//TODO add test for DocumentStatusAggregator
+// TODO add test for DocumentStatusAggregator
 func TestDocumentStatus(t *testing.T) {
 	type testCase struct {
 		Input  map[string]*PluginResult
@@ -122,8 +122,8 @@ func TestDocumentStatus(t *testing.T) {
 		},
 	}
 	for _, tstCase := range testCases {
-		status1, _, _ := DocumentResultAggregator(logger, "aws:runScript", tstCase.Input)
-		status2, _, _ := DocumentResultAggregator(logger, "", tstCase.Input)
+		status1, _, _, _ := DocumentResultAggregator(logger, "aws:runScript", tstCase.Input)
+		status2, _, _, _ := DocumentResultAggregator(logger, "", tstCase.Input)
 		assert.Equal(t, status1, ResultStatusInProgress)
 		assert.Equal(t, status2, tstCase.Output)
 	}
@@ -157,6 +157,6 @@ func TestDocumentStatusCount(t *testing.T) {
 		"Success": 1,
 		"Failed":  1,
 	}
-	_, statusCount, _ := DocumentResultAggregator(logger, "", input)
+	_, statusCount, _, _ := DocumentResultAggregator(logger, "", input)
 	assert.Equal(t, statusCount, output)
 }

@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package messagebus logic to send message and get reply over IPC
+// Package messagebus logic to send message and get reply over IPC
 package messagebus
 
 import (
@@ -20,6 +20,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/channel"
 	channelmocks "github.com/aws/amazon-ssm-agent/common/channel/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
@@ -45,7 +46,7 @@ type MessageBusTestSuite struct {
 }
 
 func (suite *MessageBusTestSuite) SetupTest() {
-	mockLog := log.NewMockLog()
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.mockContext = &contextmocks.ICoreAgentContext{}
 
@@ -64,7 +65,7 @@ func (suite *MessageBusTestSuite) SetupTest() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestMessageBusTestSuite(t *testing.T) {
 	suite.Run(t, new(MessageBusTestSuite))
 }
@@ -111,7 +112,7 @@ func (suite *MessageBusTestSuite) TestSendSurveyMessage_Successful() {
 
 	resultString, _ := json.Marshal(healthResult)
 
-	suite.mockHealthChannel.On("IsConnect").Return(true)
+	suite.mockHealthChannel.On("IsChannelInitialized").Return(true)
 	suite.mockHealthChannel.On("Send", mock.Anything).Return(nil)
 	suite.mockHealthChannel.On("Recv").Return(resultString, nil).Once()
 	suite.mockHealthChannel.On("Recv").Return(nil, errors.New("stop")).Once()
@@ -139,7 +140,7 @@ func (suite *MessageBusTestSuite) TestSendSurveyMessage_Successful() {
 func (suite *MessageBusTestSuite) TestSendSurveyMessage_Fail() {
 	resultString := "can not deserialize"
 
-	suite.mockHealthChannel.On("IsConnect").Return(true)
+	suite.mockHealthChannel.On("IsChannelInitialized").Return(true)
 	suite.mockHealthChannel.On("Send", mock.Anything).Return(nil)
 	suite.mockHealthChannel.On("Recv").Return([]byte(resultString), nil).Once()
 	suite.mockHealthChannel.On("Recv").Return(nil, errors.New("stop")).Once()

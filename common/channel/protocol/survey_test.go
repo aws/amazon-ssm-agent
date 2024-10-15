@@ -20,19 +20,22 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
-
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/stretchr/testify/assert"
-
 	"github.com/stretchr/testify/suite"
 )
 
 // ISurveySuite tests surveyor
 type ISurveySuite struct {
 	suite.Suite
+	log            log.T
+	identity       identity.IAgentIdentity
 	surveyInstance *survey
 }
 
@@ -41,9 +44,19 @@ func TestSurveySuite(t *testing.T) {
 	suite.Run(t, new(ISurveySuite))
 }
 
+// getSurveyInstance returns the surveyor instance
+func getSurveyInstance(log log.T, identity identity.IAgentIdentity) *survey {
+	return &survey{
+		log:      log,
+		identity: identity,
+	}
+}
+
 // SetupTest initializes Setup
 func (suite *ISurveySuite) SetupTest() {
-	suite.surveyInstance = GetSurveyInstance(log.NewMockLog())
+	suite.log = logmocks.NewMockLog()
+	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
+	suite.surveyInstance = getSurveyInstance(suite.log, suite.identity)
 }
 
 // TestBasicTest tests basic functionality
@@ -52,7 +65,7 @@ func (suite *ISurveySuite) TestBasic() {
 
 	assert.Equal(suite.T(), suite.surveyInstance.GetCommProtocolInfo(), utils.Surveyor)
 
-	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
+	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(logmocks.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
 	dummyMsg := message.Message{
 		SchemaVersion: 1,
 		Topic:         "TestBasic",
@@ -60,7 +73,7 @@ func (suite *ISurveySuite) TestBasic() {
 	}
 	dummyMsgOutput := dummyMsg
 	suite.surveyInstance.Send(&dummyMsg)
-	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
+	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(logmocks.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
 	output, err := suite.surveyInstance.Recv()
 	_ = json.Unmarshal(output, &dummyMsg)
 	assert.Equal(suite.T(), dummyMsg.Topic, dummyMsgOutput.Topic)

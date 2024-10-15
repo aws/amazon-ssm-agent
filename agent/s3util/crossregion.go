@@ -25,11 +25,15 @@ import (
 	"sync"
 
 	"github.com/Workiva/go-datastructures/cache"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 )
 
 const (
@@ -62,36 +66,36 @@ const (
 //
 // In most cases, the best-effort attempt will initialize the session with the correct
 // region, and the custom Transport and Handler chain will not need to make any changes.
-func GetS3CrossRegionCapableSession(log log.T, bucketName string) (*session.Session, error) {
-	initialRegion, err := getRegion()
+func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*session.Session, error) {
+	log := context.Log()
+
+	initialRegion, err := context.Identity().Region()
 	if err != nil {
 		log.Errorf("failed to get instance region: %v", err)
 		return nil, err
 	}
 
-	guessedBucketRegion := getBucketRegion(log, initialRegion, bucketName, getHttpProvider(log))
+	guessedBucketRegion := getBucketRegion(context, initialRegion, bucketName, getHttpProvider(log, context.AppConfig()))
 	if guessedBucketRegion != "" {
 		initialRegion = guessedBucketRegion
 	} else {
 		log.Infof("using instance region %v for bucket %v", initialRegion, bucketName)
 	}
 
-	config := makeAwsConfig(log, initialRegion)
+	config := makeAwsConfig(context, "s3", initialRegion)
+
+	appConfig := context.AppConfig()
 
 	var agentName, agentVersion string
-	if appConfig, cfgErr := getAppConfig(); cfgErr == nil {
-		agentName = appConfig.Agent.Name
-		agentVersion = appConfig.Agent.Version
+	agentName = appConfig.Agent.Name
+	agentVersion = appConfig.Agent.Version
 
-		if appConfig.S3.Endpoint != "" {
-			config.Endpoint = &appConfig.S3.Endpoint
-		}
-	} else {
-		log.Errorf("failed to read appconfig: %v", cfgErr)
+	if appConfig.S3.Endpoint != "" {
+		config.Endpoint = &appConfig.S3.Endpoint
 	}
 
 	config.HTTPClient = &http.Client{
-		Transport: newS3BucketRegionHeaderCapturingTransport(log),
+		Transport: newS3BucketRegionHeaderCapturingTransport(log, context.AppConfig()),
 	}
 
 	sess := session.New(config)
@@ -113,8 +117,57 @@ func GetS3CrossRegionCapableSession(log log.T, bucketName string) (*session.Sess
 // this header in the response, so this method works well for those regions.
 // S3 endpoints in the "aws-cn" partition may return a 401 or 403 response without
 // the header.
-func getBucketRegion(log log.T, instanceRegion, bucketName string, httpProvider HttpProvider) (region string) {
-	regionalEndpoint := getS3Endpoint(instanceRegion)
+
+func getBucketRegionFromSignedHeadBucketRequest(context context.T, instanceRegion, regionalEndpoint, bucketName string) (region string) {
+	var bucketRegion = ""
+	log := context.Log()
+
+	credentials := context.Identity().Credentials()
+	ctx := aws.BackgroundContext()
+
+	config := &aws.Config{
+		Credentials: credentials,
+		Endpoint:    aws.String(regionalEndpoint),
+		Region:      aws.String(instanceRegion),
+	}
+
+	sess, _ := session.NewSession(config)
+	svc := s3.New(sess)
+
+	req, _ := svc.HeadBucketRequest(&s3.HeadBucketInput{
+		Bucket: aws.String(bucketName),
+	})
+
+	req.Config.Credentials = credentials
+	req.SetContext(ctx)
+	req.DisableFollowRedirects = true
+
+	req.Handlers.Send.PushBack(func(r *request.Request) {
+		bucketRegion = r.HTTPResponse.Header.Get(bucketRegionHeader)
+		if len(bucketRegion) == 0 {
+			return
+		}
+		r.HTTPResponse.StatusCode = 200
+		r.HTTPResponse.Status = "OK"
+		r.Error = nil
+	})
+
+	if err := req.Send(); err != nil {
+		log.Warnf("Signed HeadBucket request failed, continuing to fallback logic")
+	}
+
+	return bucketRegion
+}
+
+func getBucketRegion(context context.T, instanceRegion, bucketName string, httpProvider HttpProvider) (region string) {
+	log := context.Log()
+	regionalEndpoint, _ := getS3Endpoint(context, instanceRegion)
+
+	// if we can get the region from a Signed HeadBucket request, then we will return that region
+	region = getBucketRegionFromSignedHeadBucketRequestFunc(context, instanceRegion, regionalEndpoint, bucketName)
+	if region != "" {
+		return region
+	}
 
 	// When using virtual hosted–style buckets with SSL, the SSL wild-card certificate
 	// only matches buckets that do not contain dots (".").  To work around this, try
@@ -127,9 +180,12 @@ func getBucketRegion(log log.T, instanceRegion, bucketName string, httpProvider 
 	// always try both the regional endpoint for the instance region as well as one other
 	// endpoint.  This should enable the HEAD request to successfully discover the bucket
 	// region in CN regions, and may be helpful in other partitions as well.
-	endpoints := []string{regionalEndpoint}
-	fallbackEndpoint := getFallbackS3EndpointFunc(instanceRegion)
-	if fallbackEndpoint != regionalEndpoint {
+	endpoints := []string{}
+	if regionalEndpoint != "" {
+		endpoints = append(endpoints, regionalEndpoint)
+	}
+	fallbackEndpoint := getFallbackS3EndpointFunc(context, instanceRegion)
+	if fallbackEndpoint != regionalEndpoint && fallbackEndpoint != "" {
 		endpoints = append(endpoints, fallbackEndpoint)
 	}
 
@@ -146,7 +202,6 @@ func getBucketRegion(log log.T, instanceRegion, bucketName string, httpProvider 
 						return region
 					}
 				}
-
 				// Got a response, no need to try other protocols for this endpoint
 				break
 			}
@@ -224,8 +279,9 @@ func (m *bucketRegionMap) Remove(bucketName string) {
 //
 // The handler should be added to the handler list for the Validate step.  For
 // example:
-//   sess := session.New(config)
-//   sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler())
+//
+//	sess := session.New(config)
+//	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler())
 //
 // This will ensure that this handler runs before the standard S3 client's Build
 // handlers (which make their own modifications to the URL), and before the Sign
@@ -251,9 +307,9 @@ func makeS3RegionCorrectingValidateHandler(log log.T) request.NamedHandler {
 // a different region.
 //
 // This handler should be added to the Retry handler chain, as follows:
-//   sess = session.New(config)
-//   sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log))
 //
+//	sess = session.New(config)
+//	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log))
 func makeS3RegionCorrectingRetryHandler(log log.T) request.NamedHandler {
 	return request.NamedHandler{
 		Name: "S3RegionCorrectingRetryHandler",
@@ -281,8 +337,9 @@ func makeS3RegionCorrectingRetryHandler(log log.T) request.NamedHandler {
 // Indicates whether the HTTP response code indicates that the response
 // may contain information about the bucket region.
 // References:
-//  https://docs.aws.amazon.com/AmazonS3/latest/dev/Redirects.html
-//  https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
+//
+//	https://docs.aws.amazon.com/AmazonS3/latest/dev/Redirects.html
+//	https://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
 func isRedirectResponseCode(responseCode int) bool {
 	return responseCode == 301 || responseCode == 307 || responseCode == 400
 }
@@ -380,9 +437,9 @@ type s3BucketRegionHeaderCapturingTransport struct {
 }
 
 // Create a new s3BucketRegionHeaderCapturingTransport
-func newS3BucketRegionHeaderCapturingTransport(log log.T) *s3BucketRegionHeaderCapturingTransport {
+func newS3BucketRegionHeaderCapturingTransport(log log.T, appConfig appconfig.SsmagentConfig) *s3BucketRegionHeaderCapturingTransport {
 	return &s3BucketRegionHeaderCapturingTransport{
-		delegate: network.GetDefaultTransport(log),
+		delegate: network.GetDefaultTransport(log, appConfig),
 		logger:   log,
 	}
 }
@@ -483,9 +540,9 @@ type xmlResponseError struct {
 // returns "".
 //
 // The following paths are checked:
-//  * Error/Region - if present, contains the region name (e.g. "us-east-1")
-//  * Error/Endpoint - if present, contains an endpoint url from which the
-//        region can be determined (e.g. "bucket-1.eu-west-1.amazonaws.com")
+//   - Error/Region - if present, contains the region name (e.g. "us-east-1")
+//   - Error/Endpoint - if present, contains an endpoint url from which the
+//     region can be determined (e.g. "bucket-1.eu-west-1.amazonaws.com")
 func (t *s3BucketRegionHeaderCapturingTransport) extractRegionFromBody(bodyContents []byte) (region string) {
 	resp := xmlResponseError{}
 	err := xml.Unmarshal(bodyContents, &resp)

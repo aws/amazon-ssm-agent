@@ -27,7 +27,6 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
 )
 
@@ -35,10 +34,6 @@ import (
 func parseFlags(log logger.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	flag.Usage = flagUsage
-
-	// instance id and region for overriding in dev test scenarios
-	instanceIDPtr = flag.String("i", "", "instance id")
-	regionPtr = flag.String("r", "", "instance region")
 
 	// managed instance registration
 	flag.BoolVar(&register, registerFlag, false, "")
@@ -99,10 +94,8 @@ func processRegistration(log logger.T) (exitCode int) {
 		return 1
 	}
 
-	platform.SetRegion(region)
-
 	// check if previously registered
-	if !force && registration.InstanceID() != "" {
+	if !force && registration.InstanceID(log, "", registration.RegVaultKey) != "" {
 		confirmation, err := askForConfirmation()
 		if err != nil {
 			log.Errorf("Registration failed due to %v", err)
@@ -127,7 +120,7 @@ func processRegistration(log logger.T) (exitCode int) {
 
 // processFingerprint handles flags related to the fingerprint category
 func processFingerprint(log logger.T) (exitCode int) {
-	if err := fingerprint.SetSimilarityThreshold(similarityThreshold); err != nil {
+	if err := fingerprint.SetSimilarityThreshold(log, similarityThreshold); err != nil {
 		log.Errorf("Error setting the SimilarityThreshold. %v", err)
 		return 1
 	}
@@ -144,19 +137,19 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	}
 
 	// checking write access before registering
-	err = registration.UpdateServerInfo("", "", privateKey, keyType)
+	err = registration.UpdateServerInfo("", "", "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return managedInstanceID,
 			fmt.Errorf("Unable to save registration information. %v\nTry running as sudo/administrator.", err)
 	}
 
 	// generate fingerprint
-	fingerprint, err := registration.Fingerprint()
+	fingerprint, err := registration.Fingerprint(log)
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error generating instance fingerprint. %v", err)
 	}
 
-	service := anonauth.NewAnonymousService(log, region)
+	service := anonauth.NewClient(log, region)
 	managedInstanceID, err = service.RegisterManagedInstance(
 		activationCode,
 		activationID,
@@ -169,7 +162,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 		return managedInstanceID, fmt.Errorf("error registering the instance with AWS SSM. %v", err)
 	}
 
-	err = registration.UpdateServerInfo(managedInstanceID, region, privateKey, keyType)
+	err = registration.UpdateServerInfo(managedInstanceID, region, "", privateKey, keyType, "", registration.RegVaultKey)
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error persisting the instance registration information. %v", err)
 	}
@@ -194,13 +187,18 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 
 // clearRegistration clears any existing registration data
 func clearRegistration(log logger.T) (exitCode int) {
-	err := registration.UpdateServerInfo("", "", "", "")
-	if err == nil {
-		log.Info("Registration information has been removed from the instance.")
-		return 0
+	err := registration.UpdateServerInfo("", "", "", "", "", "", registration.RegVaultKey)
+	if err != nil {
+		log.Errorf("error clearing the instance registration information. %v\nTry running as sudo/administrator.", err)
+		return 1
 	}
-	log.Errorf("error clearing the instance registration information. %v\nTry running as sudo/administrator.", err)
-	return 1
+
+	// Remove the registration file
+	os.Remove(registrationFile)
+
+	log.Info("Registration information has been removed from the instance.")
+	return 0
+
 }
 
 // askForConfirmation will ask user for confirmation if they want to proceed.

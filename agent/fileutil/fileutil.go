@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package fileutil contains utilities for working with the file system.
+// Package fileutil contains utilities for working with the file system.
 package fileutil
 
 import (
@@ -148,7 +148,7 @@ func removeInvalidColon(pluginName string) string {
 // MakeDirs create the directories along the path if missing.
 func MakeDirs(destinationDir string) (err error) {
 	// create directory
-	err = fs.MkdirAll(destinationDir, appconfig.ReadWriteAccess)
+	err = fs.MkdirAll(destinationDir, appconfig.ReadWriteExecuteAccess)
 	if err != nil {
 		err = fmt.Errorf("failed to create directory %v. %v", destinationDir, err)
 	}
@@ -269,6 +269,58 @@ func IsDirEmpty(location string) (bool, error) {
 		return true, nil
 	}
 	return false, err
+}
+
+// getAllDirectoriesWithFileInfo returns directories from the path
+func getAllDirectoriesWithFileInfo(srcPath string) ([]os.FileInfo, error) {
+	f, err := os.Open(srcPath)
+	if err != nil {
+		return nil, err
+	}
+	list, err := f.Readdir(-1)
+	f.Close()
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
+}
+
+// GetDirectoryNamesUnsortedOlderThan returns directory name unsorted ioutil.ReadDir uses sorting to sort the directory names
+// if date value passed in olderThan param, this function returns all files older than the passed time.
+func GetDirectoryNamesUnsortedOlderThan(srcPath string, olderThan *time.Time) ([]string, error) {
+	var err error
+	directories := make([]string, 0)
+	fileInfoList, err := getAllDirectoriesWithFileInfo(srcPath)
+	if err != nil {
+		return directories, err
+	}
+	for _, fileInfo := range fileInfoList {
+		if fileInfo.Mode().IsDir() {
+			if olderThan == nil || (olderThan != nil && fileInfo.ModTime().Before(*olderThan)) {
+				directories = append(directories, fileInfo.Name())
+			}
+		}
+	}
+	return directories, nil
+}
+
+// GetFileNamesUnsortedLaterThan returns directory name unsorted ioutil.ReadDir uses sorting to sort the directory names
+// if date value passed in laterThan param, this function returns all files after the passed time.
+func GetFileNamesUnsortedLaterThan(srcPath string, laterThan *time.Time) ([]string, error) {
+	var err error
+	fileNames := make([]string, 0)
+	fileInfoList, err := getAllDirectoriesWithFileInfo(srcPath)
+	if err != nil {
+		return fileNames, err
+	}
+	for _, fileInfo := range fileInfoList {
+		if !fileInfo.Mode().IsDir() {
+			if laterThan == nil || (laterThan != nil && fileInfo.ModTime().After(*laterThan)) {
+				fileNames = append(fileNames, fileInfo.Name())
+			}
+		}
+	}
+	return fileNames, nil
 }
 
 // GetDirectoryNames returns the names of all directories under a give srcPath

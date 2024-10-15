@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package proxy config to handle set/get functions of the Windows proxy settings
+// Package proxyconfig to handle set/get proxy settings
 package proxyconfig
 
 import (
@@ -23,14 +23,17 @@ import (
 	"unicode/utf16"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // WinHttpIEProxyConfig represents the Internet Explorer proxy configuration information
-// 	fAutoDetect: If TRUE, indicates that the Internet Explorer proxy configuration for the current user specifies "automatically detect settings".
-// 	lpszAutoConfigUrl: Pointer to a null-terminated Unicode string that contains the auto-configuration URL if the Internet Explorer proxy configuration for the current user specifies "Use automatic proxy configuration".
-// 	lpszProxy: Pointer to a null-terminated Unicode string that contains the proxy URL if the Internet Explorer proxy configuration for the current user specifies "use a proxy server".
-// 	lpszProxyBypass: Pointer to a null-terminated Unicode string that contains the optional proxy by-pass server list.
+//
+//	fAutoDetect: If TRUE, indicates that the Internet Explorer proxy configuration for the current user specifies "automatically detect settings".
+//	lpszAutoConfigUrl: Pointer to a null-terminated Unicode string that contains the auto-configuration URL if the Internet Explorer proxy configuration for the current user specifies "Use automatic proxy configuration".
+//	lpszProxy: Pointer to a null-terminated Unicode string that contains the proxy URL if the Internet Explorer proxy configuration for the current user specifies "use a proxy server".
+//	lpszProxyBypass: Pointer to a null-terminated Unicode string that contains the optional proxy by-pass server list.
 type WinHttpIEProxyConfig struct {
 	fAutoDetect       bool
 	lpszAutoConfigUrl *uint16
@@ -39,8 +42,9 @@ type WinHttpIEProxyConfig struct {
 }
 
 // WinHttpProxyInfo represents the WinHTTP machine proxy configuration.
-// 	lpszProxy: Pointer to a string value that contains the proxy server list.
-// 	lpszProxyBypass: Pointer to a string value that contains the proxy bypass list.
+//
+//	lpszProxy: Pointer to a string value that contains the proxy server list.
+//	lpszProxyBypass: Pointer to a string value that contains the proxy bypass list.
 type WinHttpProxyInfo struct {
 	dwAccessType    uint32
 	lpszProxy       *uint16
@@ -48,9 +52,10 @@ type WinHttpProxyInfo struct {
 }
 
 // HttpIEProxyConfig represents the Internet Explorer proxy configuration.
-// 	auto: indicates if the 'Automatically detect settings' option in IE is enabled
-// 	enabled: indicates if the 'Use proxy settings for your LAN' option in IE is enabled
-// 	proxy: specifies the proxy addresses to use.
+//
+//	auto: indicates if the 'Automatically detect settings' option in IE is enabled
+//	enabled: indicates if the 'Use proxy settings for your LAN' option in IE is enabled
+//	proxy: specifies the proxy addresses to use.
 //	bypass: specifies addresses that should be excluded from proxy
 type HttpIEProxyConfig struct {
 	proxy   string
@@ -61,24 +66,18 @@ type HttpIEProxyConfig struct {
 }
 
 // HttpDefaultProxyConfig represents the WinHTTP machine proxy configuration.
-// 	proxy: specifies the proxy addresses to use.
+//
+//	proxy: specifies the proxy addresses to use.
 //	bypass: specifies addresses that should be excluded from proxy
 type HttpDefaultProxyConfig struct {
 	proxy  string
 	bypass string
 }
 
-// HTTP Proxy environment variables possible values
-var ProxyEnvVariables = [3]string{
-	"https_proxy",
-	"http_proxy",
-	"no_proxy",
-}
-
 // ProxySettings represents the proxy settings for https_proxy and http_proxy
 type ProxySettings struct {
-	https_proxy *url.URL
-	http_proxy  *url.URL
+	HttpsProxy *url.URL
+	HttpProxy  *url.URL
 }
 
 // StringFromUTF16Ptr converts a *uint16 C string to a Go String
@@ -106,7 +105,7 @@ func StringFromUTF16Ptr(s *uint16) string {
 // Windows proxy configuration if no settings are provided in the
 // registry HKLM:\SYSTEM\CurrentControlSet\Services\AmazonSSMAgent\Environment
 
-func SetProxySettings(log log.T) {
+func SetProxyConfig(log log.T) (proxySettings map[string]string) {
 	var err error
 	var ie HttpIEProxyConfig
 	var df HttpDefaultProxyConfig
@@ -132,11 +131,11 @@ func SetProxySettings(log log.T) {
 		bypass = ie.bypass
 
 		if ie.auto {
-			log.Warnf("IE option 'Automatically  detect settings' is not supported")
+			log.Debugf("IE option 'Automatically  detect settings' is not supported")
 		}
 
 		if len(ie.config) > 0 {
-			log.Warnf("IE option 'Use automatic configuration script' is not supported")
+			log.Debugf("IE option 'Use automatic configuration script' is not supported")
 		}
 	} else {
 		if df, err = GetDefaultProxySettings(log); len(df.proxy) > 0 && err == nil {
@@ -160,50 +159,43 @@ func SetProxySettings(log log.T) {
 
 	settings := ParseProxySettings(log, proxy)
 
-	if settings.https_proxy != nil {
-		os.Setenv("https_proxy", settings.https_proxy.String())
+	if settings.HttpsProxy != nil {
+		os.Setenv("https_proxy", settings.HttpsProxy.String())
 	}
-	if settings.http_proxy != nil {
-		os.Setenv("http_proxy", settings.http_proxy.String())
+	if settings.HttpProxy != nil {
+		os.Setenv("http_proxy", settings.HttpProxy.String())
 	}
 
-	// Parse no_proxy settings allowing only valid URL or host[:port] values
-	// The proxy bypass string contains multiple addresses and host names, separate
-	// with blank spaces or semicolons
-	var bypassList = []string{}
+	bypassList := ParseProxyBypass(log, bypass)
+	if len(bypassList) > 0 {
+		os.Setenv("no_proxy", strings.Join(bypassList, ","))
+	}
+
+	return GetProxyConfig()
+}
+
+func ParseProxyBypass(log log.T, bypass string) []string {
+	var bypassList []string
 	for _, f := range strings.Fields(bypass) {
 		for _, s := range strings.Split(f, ";") {
 			if len(s) == 0 {
 				continue
 			}
-			url, err := ValidateHost(s)
+			parsedUrl, err := ValidateHost(s)
 			if err == nil {
-				bypassList = append(bypassList, url.Host)
+				bypassList = append(bypassList, parsedUrl.Host)
 			} else {
-				log.Warnf("SetProxySettings invalid URL or host for no_proxy: %v", err.Error())
+				log.Warnf("SetProxySettings invalid URL or host for no_proxy: %v\n", err.Error())
 			}
 		}
 	}
 
-	if len(bypassList) > 0 {
-		os.Setenv("no_proxy", strings.Join(bypassList, ","))
-	}
-
-	for _, value := range ProxyEnvVariables {
-		v = append(v, value+":"+os.Getenv(value))
-	}
-	log.Debugf("New proxy environment variables: %v", strings.Join(v, ";"))
-
-	return
+	return bypassList
 }
 
 // GetDefaultProxySettings returns the machine WinHTTP proxy configuration
 func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
-	winhttp, err := syscall.LoadLibrary("Winhttp.dll")
-	if err != nil {
-		log.Errorf("Failed to load Winhttp.dll library: %v", err.Error())
-		return p, err
-	}
+	winhttp := syscall.Handle(windows.NewLazySystemDLL("Winhttp.dll").Handle())
 
 	defer syscall.FreeLibrary(winhttp)
 
@@ -241,11 +233,7 @@ func GetDefaultProxySettings(log log.T) (p HttpDefaultProxyConfig, err error) {
 func GetIEProxySettings(log log.T) (p HttpIEProxyConfig, err error) {
 	p.auto = false
 	p.enabled = false
-	winhttp, err := syscall.LoadLibrary("Winhttp.dll")
-	if err != nil {
-		log.Error("Failed to load Winhttp.dll library: ", err.Error())
-		return p, err
-	}
+	winhttp := syscall.Handle(windows.NewLazySystemDLL("Winhttp.dll").Handle())
 
 	defer syscall.FreeLibrary(winhttp)
 
@@ -321,22 +309,22 @@ func ParseProxySettings(log log.T, proxy string) ProxySettings {
 	}
 
 	result := ProxySettings{
-		http_proxy:  http,
-		https_proxy: https,
+		HttpProxy:  http,
+		HttpsProxy: https,
 	}
 
 	// If no [<scheme>=] is provided http is the default option
 	if https == nil && http == nil {
-		result.http_proxy = other
+		result.HttpProxy = other
 	} else if https != nil && http == nil {
-		result.http_proxy = other
+		result.HttpProxy = other
 	} else if https == nil && http != nil {
-		result.https_proxy = other
+		result.HttpsProxy = other
 	}
 
 	log.Debugf("ParseProxySettings result: http_proxy:%v,https_proxy:%v",
-		result.http_proxy,
-		result.https_proxy,
+		result.HttpProxy,
+		result.HttpsProxy,
 	)
 
 	return result

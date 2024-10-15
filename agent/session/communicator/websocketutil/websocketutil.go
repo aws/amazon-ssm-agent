@@ -18,6 +18,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/gorilla/websocket"
@@ -36,13 +37,13 @@ type WebsocketUtil struct {
 }
 
 // NewWebsocketUtil is the factory function for websocketutil.
-func NewWebsocketUtil(logger log.T, dialerInput *websocket.Dialer) *WebsocketUtil {
+func NewWebsocketUtil(logger log.T, appConfig appconfig.SsmagentConfig, dialerInput *websocket.Dialer) *WebsocketUtil {
 
 	var websocketUtil *WebsocketUtil
 
 	if dialerInput == nil {
 		d := &websocket.Dialer{
-			TLSClientConfig: network.GetDefaultTLSConfig(logger),
+			TLSClientConfig: network.GetDefaultTLSConfig(logger, appConfig),
 			Proxy:           http.ProxyFromEnvironment,
 		}
 		websocketUtil = &WebsocketUtil{
@@ -74,7 +75,7 @@ func (u *WebsocketUtil) OpenConnection(url string, requestHeader http.Header) (*
 		return nil, err
 	}
 
-	u.log.Infof("Successfully opened websocket connection to: %s", url)
+	u.log.Infof("Successfully opened websocket connection to: %s", conn.RemoteAddr())
 
 	return conn, err
 }

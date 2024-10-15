@@ -15,9 +15,8 @@
 package manager
 
 import (
-	"sync"
-
 	"path/filepath"
+	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -25,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -44,28 +42,27 @@ func (m *Manager) ensurePluginsAreRunning() {
 	if len(m.runningPlugins) > 0 {
 		for n := range m.runningPlugins {
 			p, isRegistered := m.registeredPlugins[n]
-			if isRegistered && !p.Handler.IsRunning(m.context) {
+			if isRegistered && !p.Handler.IsRunning() {
 				log.Infof("Starting %s since it wasn't running before")
 				//todo: we arent using task pools anymore -> change the following implementation
 				m.startPlugin.Submit(m.context.Log(), n, func(cancelFlag task.CancelFlag) {
-					instanceID, _ := platform.InstanceID()
+					shortInstanceID, _ := m.context.Identity().ShortInstanceID()
 					orchestrationRootDir := filepath.Join(
 						appconfig.DefaultDataStorePath,
-						instanceID,
+						shortInstanceID,
 						appconfig.DefaultDocumentRootDirName,
 						m.context.AppConfig().Agent.OrchestrationRootDir)
 					orchestrationDir := fileutil.BuildPath(orchestrationRootDir)
-
 					ioConfig := contracts.IOConfiguration{
 						OrchestrationDirectory: orchestrationDir,
 						OutputS3BucketName:     "",
 						OutputS3KeyPrefix:      "",
 					}
-					out := iohandler.NewDefaultIOHandler(log, ioConfig)
-					defer out.Close(log)
-					out.Init(log, p.Info.Name)
-					p.Handler.Start(m.context, p.Info.Configuration, "", cancelFlag, out)
-					out.Close(log)
+					out := iohandler.NewDefaultIOHandler(m.context, ioConfig)
+					defer out.Close()
+					out.Init(p.Info.Name)
+					p.Handler.Start(p.Info.Configuration, "", cancelFlag, out)
+					out.Close()
 				})
 			}
 		}

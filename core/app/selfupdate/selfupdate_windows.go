@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package selfupdate provides an interface to force update with Message Gateway Service and S3
@@ -19,36 +20,6 @@
 package selfupdate
 
 import "os/exec"
-
-const (
-
-	// SourceVersionCmd represents the command argument for source version
-	SourceVersionCmd = "source-version"
-
-	// SourceLocationCmd represents the command argument for source location
-	SourceLocationCmd = "source-location"
-
-	// SourceHashCmd represents the command argument for source hash value
-	SourceHashCmd = "source-hash"
-
-	// TargetVersionCmd represents the command argument for target version
-	TargetVersionCmd = "target-version"
-
-	// TargetLocationCmd represents the command argument for target location
-	TargetLocationCmd = "target-location"
-
-	// TargetHashCmd represents the command argument for target hash value
-	TargetHashCmd = "target-hash"
-
-	// ValidateVersion represents the command argument for version validation
-	ValidateVersionCmd = "validate-version"
-
-	// ManifestFileUrlCmd represents the command argument for manifest file url
-	ManifestFileUrlCmd = "manifest-url"
-
-	// suffix for updater compress formate
-	CompressFormat = "zip"
-)
 
 func prepareProcess(command *exec.Cmd) {
 }

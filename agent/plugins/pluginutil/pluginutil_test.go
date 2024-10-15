@@ -19,7 +19,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -189,4 +189,31 @@ func TestCleanupJSONField(t *testing.T) {
 		result := CleanupJSONField(input)
 		assert.Equal(t, output, result)
 	}
+}
+
+func TestAddSingleQuotesAroundValue(t *testing.T) {
+	inOut := [][][]string{
+		{{"a'b", "ab"}, {"'a''b'", "'ab'"}},
+	}
+	for _, test := range inOut {
+		input, output := test[0], test[1]
+		result := AddSingleQuotesToStringArray(input)
+		assert.Equal(t, output, result)
+	}
+}
+
+func TestValidateIdInput(t *testing.T) {
+	var idValue string
+
+	idValue = "Test"
+	validity := ValidatePluginId(idValue)
+	assert.True(t, validity)
+
+	idValue = "../../../test"
+	validity2 := ValidatePluginId(idValue)
+	assert.False(t, validity2)
+
+	idValue = "~/Test"
+	validity3 := ValidatePluginId(idValue)
+	assert.False(t, validity3)
 }

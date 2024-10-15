@@ -28,6 +28,7 @@ import (
 
 // Plugin is the type for the refreshassociation plugin.
 type Plugin struct {
+	context context.T
 }
 
 // RefreshAssociationPluginInput represents one set of commands executed by the refreshassociation plugin.
@@ -38,9 +39,10 @@ type RefreshAssociationPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context: context,
+	}, nil
 }
 
 // Name returns the name of the plugin
@@ -48,8 +50,8 @@ func Name() string {
 	return appconfig.PluginNameRefreshAssociation
 }
 
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 
 	if cancelFlag.ShutDown() {

@@ -15,9 +15,15 @@ package tests
 
 import (
 	"errors"
+	"fmt"
+	"os"
 	"runtime/debug"
 	"testing"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -28,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	ssmsdkmock "github.com/aws/aws-sdk-go/service/ssm/ssmiface/mocks"
@@ -47,6 +54,8 @@ type AgentHealthIntegrationTestSuite struct {
 }
 
 func (suite *AgentHealthIntegrationTestSuite) SetupTest() {
+	var err error
+	var agentIdentity identity.IAgentIdentity
 	log := ssmlog.SSMLogger(true)
 	suite.log = log
 
@@ -58,35 +67,50 @@ func (suite *AgentHealthIntegrationTestSuite) SetupTest() {
 	config.Ssm.HealthFrequencyMinutes = 1
 	suite.config = config
 	// Add config into context
-	context := context.Default(log, config)
+	identitySelector := identity2.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err = identity2.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		log.Debugf("unable to assume identity - %v", err)
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
+
 	// Changing the minimum heathcheck frequency as 1 minute for testing
-	appConst := context.AppConstants()
-	appConst.MinHealthFrequencyMinutes = 1
-	suite.context = context
+	suite.context.AppConstants().MinHealthFrequencyMinutes = 1
 
 	// Use healthcheck service with mock ssm service injected.
-	healthcheck, ssmsdkMock := testutils.NewHealthCheck(context)
+	healthcheck, ssmsdkMock := testutils.NewHealthCheck(suite.context)
 	suite.ssmHealthCheck = healthcheck
 	suite.ssmSdkMock = ssmsdkMock
 
-	hs := hibernation.NewHibernateMode(healthcheck, context)
+	hs := hibernation.NewHibernateMode(healthcheck, suite.context)
 	assert.NotNil(suite.T(), hs)
 
-	var modules []contracts.ICoreModule
-	modules = append(modules, healthcheck)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, healthcheck))
 
 	// Only inject the healthcheck module into coremanager
 	var cpm *coremanager.CoreManager
-	var err error
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	log.Info("Finish Setting up Coremanager")
 	// Create core ssm agent and set the coremanager & context into it.
-	suite.ssmAgent = agent.NewSSMAgent(context, healthcheck, hs)
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent = agent.NewSSMAgent(suite.context, healthcheck, hs)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
+}
+
+func (suite *AgentHealthIntegrationTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
 }
 
 func (suite *AgentHealthIntegrationTestSuite) TestHealthCheck() {

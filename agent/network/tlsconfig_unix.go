@@ -11,13 +11,13 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 package network
 
 import (
 	"crypto/x509"
-	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/network/certreader"
@@ -27,15 +27,10 @@ func getSystemCertPool() (*x509.CertPool, error) {
 	return x509.SystemCertPool()
 }
 
-func getCustomCertificate() ([]byte, error) {
-
-	config, err := appconfig.Config(false)
-	if err != nil {
-		return nil, err
-	}
-
-	if !config.Agent.ContainerMode {
-		return nil, fmt.Errorf("Custom certificate only allowed in container mode")
+func getCustomCertificate(appConfig appconfig.SsmagentConfig) ([]byte, error) {
+	if !appConfig.Agent.ContainerMode {
+		// Custom certificate only supported in container mode
+		return nil, nil
 	}
 
 	return certreader.ReadCertificate(appconfig.CustomCertificatePath)

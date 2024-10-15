@@ -16,11 +16,14 @@ package s3util
 
 import (
 	"net/http"
+	"strings"
+	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
-	"github.com/cenkalti/backoff"
+	"github.com/cenkalti/backoff/v4"
 )
 
 type HttpProvider interface {
@@ -29,11 +32,12 @@ type HttpProvider interface {
 
 // HttpProviderImpl provides http capabilities
 type HttpProviderImpl struct {
-	logger log.T
+	logger    log.T
+	appConfig appconfig.SsmagentConfig
 }
 
-var getHeadBucketTransportDelegate = func(log log.T) http.RoundTripper {
-	return network.GetDefaultTransport(log)
+var getHeadBucketTransportDelegate = func(log log.T, appConfig appconfig.SsmagentConfig) http.RoundTripper {
+	return network.GetDefaultTransport(log, appConfig)
 }
 
 func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
@@ -43,11 +47,13 @@ func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
 	}
 
 	httpClient := &http.Client{
-		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate(p.logger)),
+		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate(p.logger, p.appConfig)),
+		Timeout:   30 * time.Second,
 	}
 
 	op := func() error {
 		resp, err = httpClient.Head(url)
+		err = wrapForRetryer(err)
 		if err != nil {
 			p.logger.Debugf("attempt failed for HTTP HEAD request: url=%v, error=%v", url, err)
 		}
@@ -76,7 +82,33 @@ func makeHeadBucketTransport(logger log.T, delegate http.RoundTripper) headBucke
 	}
 }
 
-// Sends an HTTP request an returns the result.  In most cases, returns the delegate's
+// If err is non-retryable, then wrap it in *PermanentError to signal to
+// cenkalti/backoff's retryer that the error should not be retried.
+func wrapForRetryer(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	var permanentErrorStrings = []string{
+		"certificate is valid for", // SSL cert validation error
+	}
+
+	isPermanent := false
+	for _, s := range permanentErrorStrings {
+		if strings.Contains(err.Error(), s) {
+			isPermanent = true
+			break
+		}
+	}
+
+	if isPermanent {
+		return &backoff.PermanentError{Err: err}
+	} else {
+		return err
+	}
+}
+
+// RoundTrip sends an HTTP request and returns the result.  In most cases, returns the delegate's
 // response without modification.  The only exception is when the delegate returns a redirect
 // response with no Location header.  In that case, we change the response code to 200 keep
 // the Go http.Client from swallowing the response and returning an error.
@@ -84,7 +116,7 @@ func (trans headBucketTransport) RoundTrip(request *http.Request) (resp *http.Re
 	resp, err = trans.delegate.RoundTrip(request)
 	if err == nil && resp != nil && goHttpClientWillFollowRedirect(resp.StatusCode) {
 		if resp.Header != nil && resp.Header.Get("Location") == "" && resp.Header.Get(bucketRegionHeader) != "" {
-			logger.Debugf("redirect response missing Location header, overriding status code")
+			trans.logger.Debugf("redirect response missing Location header, overriding status code")
 			resp.StatusCode = 200
 		}
 	}

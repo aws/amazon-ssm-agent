@@ -23,6 +23,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -31,7 +32,6 @@ import (
 )
 
 const (
-	PowershellCmd      = "powershell"
 	MaxValueCountLimit = 250
 	ValueLimitExceeded = "ValueLimitExceeded"
 )
@@ -41,6 +41,8 @@ type filterObj struct {
 	Recursive  bool
 	ValueNames []string
 }
+
+var PowershellCmd = appconfig.PowerShellPluginCommandName
 
 var ValueCountLimitExceeded = errors.New("Exceeded register value count limit")
 
@@ -128,6 +130,8 @@ func collectRegistryData(context context.T, config model.Config) (data []model.R
 			execScript += " -Recursive"
 		}
 		if valueNames != nil && len(valueNames) > 0 {
+			valueNames = pluginutil.AddSingleQuotesToStringArray(valueNames)
+			log.Infof("Formatted valueNames %v", valueNames)
 			valueNamesArg := strings.Join(valueNames, ",")
 			execScript += " -Values " + valueNamesArg
 		}

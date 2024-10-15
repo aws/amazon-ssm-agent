@@ -1,7 +1,7 @@
 package ec2infradetect
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 // Ec2Infrastructure contains information about instance, region and account
@@ -16,12 +16,12 @@ type Ec2Infrastructure struct {
 
 // CollectEc2Infrastructure queries Ec2 metadata service for infrastructure
 // information
-var CollectEc2Infrastructure = func(log log.T) (*Ec2Infrastructure, error) {
+var CollectEc2Infrastructure = func(identity identity.IAgentIdentity) (*Ec2Infrastructure, error) {
 
-	instanceID, _ := platformProviderdep.InstanceID(log)
-	instanceType, _ := platformProviderdep.InstanceType(log)
-	region, _ := platformProviderdep.Region(log)
-	availabilityZone, _ := platformProviderdep.AvailabilityZone(log)
+	instanceID, _ := identity.InstanceID()
+	instanceType, _ := identity.InstanceType()
+	region, _ := identity.Region()
+	availabilityZone, _ := identity.AvailabilityZone()
 
 	e := &Ec2Infrastructure{
 		InstanceID:       instanceID,

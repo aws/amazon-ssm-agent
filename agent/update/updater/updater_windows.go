@@ -11,18 +11,16 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package main represents the entry point of the ssm agent updater.
 package main
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/update/processor"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 )
 
-// updateRoot returns the platform specific path to update artifacts
-func updateRoot(detail *processor.UpdateDetail) error {
-	detail.UpdateRoot = appconfig.UpdaterArtifactsRoot
-	return nil
+func updateSSMUserShellProperties(log logger.T) {
+	return
 }

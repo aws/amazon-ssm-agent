@@ -16,9 +16,9 @@ package startup
 
 import (
 	"fmt"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 )
 
 const (
@@ -46,10 +46,11 @@ func (p *Processor) ModuleName() string {
 }
 
 // Execute executes the startup tasks and return error if any.
-func (p *Processor) ModuleExecute(context context.T) (err error) {
+func (p *Processor) ModuleExecute() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("Internal error occurred by startup processor: %v", r)
+			p.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 
@@ -60,6 +61,6 @@ func (p *Processor) ModuleExecute(context context.T) (err error) {
 }
 
 // RequestStop is not necessarily used since startup task only happens once.
-func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
+func (p *Processor) ModuleStop() (err error) {
 	return nil
 }

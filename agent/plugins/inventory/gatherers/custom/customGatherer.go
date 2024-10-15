@@ -28,9 +28,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -69,7 +67,6 @@ func (t *T) Name() string {
 // decoupling for easy testability
 var readDirFunc = ReadDir
 var readFileFunc = ReadFile
-var machineIDProvider = machineInfoProvider
 
 // ReadDir is a wrapper on ioutil.ReadDir for easy testability
 func ReadDir(dirname string) ([]os.FileInfo, error) {
@@ -79,10 +76,6 @@ func ReadDir(dirname string) ([]os.FileInfo, error) {
 // ReadFile is a wrapper on ioutil.ReadFile for easy testability
 func ReadFile(filename string) ([]byte, error) {
 	return ioutil.ReadFile(filename)
-}
-
-func machineInfoProvider() (name string, err error) {
-	return platform.InstanceID()
 }
 
 // LogError is a wrapper on log.Error for easy testability
@@ -103,7 +96,7 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 		var machineID string
 
 		//get machineID - return if not able to detect machineID
-		if machineID, err = machineIDProvider(); err != nil {
+		if machineID, err = context.Identity().InstanceID(); err != nil {
 			log.Infof("Unable to detect machineID because of %v", err.Error())
 			log.Infof("Custom gatherer's location will be agent's execution location")
 		} else {
@@ -156,10 +149,9 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 }
 
 // RequestStop stops the execution of custom gatherer
-func (t *T) RequestStop(stopType contracts.StopType) error {
+func (t *T) RequestStop() error {
 	//TODO: set a stop flag so Run thread would stop when flag is set to true
-	var err error
-	return err
+	return nil
 }
 
 // getItemFromFile Reads one custom inventory file

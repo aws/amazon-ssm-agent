@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin || dragonfly || freebsd || (!android && linux) || netbsd || openbsd || solaris
 // +build darwin dragonfly freebsd !android,linux netbsd openbsd solaris
 
 // package user re-implements os/user functions without the use of cgo for unix

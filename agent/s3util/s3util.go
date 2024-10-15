@@ -15,29 +15,30 @@
 package s3util
 
 import (
-	"math"
 	"os"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/cenkalti/backoff/v4"
 )
 
-var getRegion = platform.Region
 var makeAwsConfig = sdkutil.AwsConfigForRegion
-var getAppConfig = func() (appconfig.SsmagentConfig, error) {
-	return appconfig.Config(false)
-}
 var getS3Endpoint = GetS3Endpoint
 var getFallbackS3EndpointFunc = getFallbackS3Endpoint
-var getHttpProvider = func(logger log.T) HttpProvider {
+var backoffRetry = backoff.Retry
+var getBucketRegionFromSignedHeadBucketRequestFunc = getBucketRegionFromSignedHeadBucketRequest
+
+var getHttpProvider = func(logger log.T, appConfig appconfig.SsmagentConfig) HttpProvider {
 	return HttpProviderImpl{
-		logger: logger,
+		logger:    logger,
+		appConfig: appConfig,
 	}
 }
 
@@ -50,8 +51,29 @@ type AmazonS3Util struct {
 	myUploader *s3manager.Uploader
 }
 
-func NewAmazonS3Util(log log.T, bucketName string) (res *AmazonS3Util, err error) {
-	sess, err := GetS3CrossRegionCapableSession(log, bucketName)
+func shouldRetryS3Upload(err error) bool {
+	// Don't retry if no error
+	if err == nil {
+		return false
+	}
+
+	if awsErr, ok := err.(awserr.Error); ok {
+		code := awsErr.Code()
+		if _, ok := awsErr.(s3manager.MultiUploadFailure); ok {
+			return true
+		} else if code == "ChecksumValidationError" || code == "InvalidChecksum" || code == "ReadRequestBody" || code == "BodyHashError" || code == "SerializationError" || code == "ReadError" || code == "ResponseTimeout" || code == "InternalError" || code == "SlowDown" {
+			return true
+		}
+		return false
+	}
+
+	// Retry for any non-aws errors
+	return true
+}
+
+func NewAmazonS3Util(context context.T, bucketName string) (res *AmazonS3Util, err error) {
+	log := context.Log()
+	sess, err := GetS3CrossRegionCapableSession(context, bucketName)
 	if err == nil {
 		res = &AmazonS3Util{
 			myUploader: s3manager.NewUploader(sess),
@@ -92,18 +114,29 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 		}
 	}
 
-	for attempt := 1; attempt <= 4; attempt++ {
-		var result *s3manager.UploadOutput
-		if result, err = u.myUploader.Upload(params); err == nil {
-			log.Infof("Successfully uploaded file to ", result.Location)
-			break
-		} else {
-			log.Errorf("Attempt %s: Failed uploading %v to s3://%v/%v err:%v ", attempt, filePath, bucketName, objectKey, err)
-			time.Sleep(time.Duration(math.Pow(2, float64(attempt))*100) * time.Millisecond)
-		}
+	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
+	if err != nil {
+		log.Warnf("Failed to create backoff config with error: %v", err)
+		return err
 	}
 
-	return err
+	var result *s3manager.UploadOutput
+	_ = backoffRetry(func() error {
+		result, err = u.myUploader.Upload(params)
+		if shouldRetryS3Upload(err) {
+			log.Warnf("Failed uploading %v to s3://%v/%v err:%v - retrying", filePath, bucketName, objectKey, err)
+			return err
+		}
+		return nil
+	}, exponentialBackoff)
+
+	if err != nil {
+		log.Errorf("Failed to upload %v to s3://%v/%v err:%v", filePath, bucketName, objectKey, err)
+		return err
+	}
+	log.Infof("Successfully uploaded file to %s", result.Location)
+
+	return nil
 }
 
 // IsBucketEncrypted checks if the bucket is encrypted

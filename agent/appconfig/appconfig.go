@@ -92,17 +92,21 @@ func getAppConfigPath() (path string, err error) {
 func DefaultConfig() SsmagentConfig {
 
 	var credsProfile = CredentialProfile{
-		ShareCreds: true,
+		ShareCreds:        true,
+		KeyAutoRotateDays: defaultProfileKeyAutoRotateDays,
 	}
 	var s3 S3Cfg
 	var mds = MdsCfg{
-		CommandWorkersLimit: DefaultCommandWorkersLimit,
-		StopTimeoutMillis:   DefaultStopTimeoutMillis,
-		CommandRetryLimit:   DefaultCommandRetryLimit,
+		CommandWorkersLimit:      DefaultCommandWorkersLimit,
+		StopTimeoutMillis:        DefaultStopTimeoutMillis,
+		CommandRetryLimit:        DefaultCommandRetryLimit,
+		CommandWorkerBufferLimit: DefaultCommandWorkerBufferLimit,
 	}
 	var mgs = MgsConfig{
-		SessionWorkersLimit: DefaultSessionWorkersLimit,
-		StopTimeoutMillis:   DefaultStopTimeoutMillis,
+		SessionWorkersLimit:           DefaultSessionWorkersLimit,
+		StopTimeoutMillis:             DefaultStopTimeoutMillis,
+		SessionWorkerBufferLimit:      DefaultSessionWorkerBufferLimit,
+		DeniedPortForwardingRemoteIPs: DefaultDeniedPortForwardingRemoteIPs,
 	}
 	var ssm = SsmCfg{
 		HealthFrequencyMinutes:                DefaultSsmHealthFrequencyMinutes,
@@ -112,6 +116,9 @@ func DefaultConfig() SsmagentConfig {
 		AssociationLogsRetentionDurationHours: DefaultAssociationLogsRetentionDurationHours,
 		RunCommandLogsRetentionDurationHours:  DefaultRunCommandLogsRetentionDurationHours,
 		SessionLogsRetentionDurationHours:     DefaultSessionLogsRetentionDurationHours,
+		SessionLogsDestination:                SessionLogsDestinationNone,
+		PluginLocalOutputCleanup:              DefaultPluginOutputRetention,
+		OrchestrationDirectoryCleanup:         DefaultOrchestrationDirCleanup,
 	}
 	var agent = AgentInfo{
 		Name:                                    "amazon-ssm-agent",
@@ -123,14 +130,23 @@ func DefaultConfig() SsmagentConfig {
 		TelemetryMetricsNamespace:               DefaultTelemetryNamespace,
 		AuditExpirationDay:                      DefaultAuditExpirationDay,
 		LongRunningWorkerMonitorIntervalSeconds: defaultLongRunningWorkerMonitorIntervalSeconds,
+		ShouldPurgeInstanceProfileRoleCreds:     false,
 		ForceFileIPC:                            false,
+		GoMaxProcForAgentWorker:                 0,
 	}
+
 	var os = OsInfo{
 		Lang:    "en-US",
 		Version: "1",
 	}
+	var identity = IdentityCfg{
+		ConsumptionOrder: DefaultIdentityConsumptionOrder,
+		CustomIdentities: []*CustomIdentity{},
+	}
 	var birdwatcher BirdwatcherCfg
-	var kms KmsConfig
+	var kms = KmsConfig{
+		RequireKMSChallengeResponse: DefaultRequireKMSChallengeResponse,
+	}
 
 	var ssmagentCfg = SsmagentConfig{
 		Profile:     credsProfile,
@@ -142,6 +158,7 @@ func DefaultConfig() SsmagentConfig {
 		S3:          s3,
 		Birdwatcher: birdwatcher,
 		Kms:         kms,
+		Identity:    identity,
 	}
 
 	return ssmagentCfg

@@ -16,13 +16,16 @@ package tests
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
+	"net/http"
 	"os"
 	"path"
 	"runtime/debug"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -31,14 +34,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	mds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	mdssdkmock "github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
@@ -47,22 +51,33 @@ import (
 type SendFailedReplyTestSuite struct {
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
-	mdsSdkMock *mdssdkmock.SSMMDSAPI
-	log        log.T
+	mdsSdkMock *mdssdkmock.SsmmdsAPI
+	context    context.T
 }
 
 // SetupTest makes sure that all the components referenced in the test case are initialized
 // before each test
 func (suite *SendFailedReplyTestSuite) SetupTest() {
 	log := logger.SSMLogger(true)
-	suite.log = log
-
 	config, err := appconfig.Config(true)
 	if err != nil {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config)
+
+	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		log.Debugf("unable to assume identity - %v", err)
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
 
 	// Mock mds sdk, sendRequest should return error only in case of sending reply to MDS
 	sendMdsSdkRequest := func(req *request.Request) error {
@@ -74,29 +89,31 @@ func (suite *SendFailedReplyTestSuite) SetupTest() {
 		}
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
-	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(context, mdsService)
-	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, messageServiceModule))
 
 	// Create core manager that accepts runcommand core module
 	var cpm *coremanager.CoreManager
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	// Create core ssm agent
 	suite.ssmAgent = &agent.SSMAgent{}
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
 
 func (suite *SendFailedReplyTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
+
 	// Close the log only after the all tests are done.
-	suite.log.Close()
+	suite.context.Log().Close()
 }
 
 func cleanUpTest(suite *SendFailedReplyTestSuite) {
@@ -107,33 +124,33 @@ func cleanUpTest(suite *SendFailedReplyTestSuite) {
 		suite.T().Errorf("%s: %s", msg, debug.Stack())
 	}
 	//Empty the replies folder
-	repliesDirectory := mds.GetFailedReplyDirectory()
+	repliesDirectory := mds.GetFailedReplyDirectory(suite.context.Identity())
 	files, _ := fileutil.GetFileNames(repliesDirectory)
 	for _, file := range files {
 		fileutil.DeleteFile(path.Join(repliesDirectory, file))
 	}
 	// flush the log to get full logs after the test is done, don't close the log unless all tests are done
-	suite.log.Flush()
+	suite.context.Log().Flush()
 }
 
-//TestSaveFailedReply tests the agent saves mds reply to disk if it failed sending it
+// TestSaveFailedReply tests the agent saves mds reply to disk if it failed sending it
 func (suite *SendFailedReplyTestSuite) TestSaveFailedReply() {
 
 	// Mock MDs service so it returns only one messages, it'll return empty messages after that.
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.EchoMDSMessage)
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		return messageOutput
 	}, nil).Times(1)
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
 	// Mock sendReplyRequest to capture the first replyid and verify later that it has been saved to disk
 	// Explicitly set the input of the http request to SendReplyInput so we can detect it later in sendRequest
 	// and fail the request
-	httpSendReplyRequest := &request.Request{Params: &ssmmds.SendReplyInput{}}
+	httpSendReplyRequest := &request.Request{Params: &ssmmds.SendReplyInput{}, HTTPRequest: &http.Request{}}
 	var replyId string
 	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(httpSendReplyRequest, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		replyId = *input.ReplyId
@@ -156,7 +173,7 @@ func (suite *SendFailedReplyTestSuite) TestSaveFailedReply() {
 	go func() {
 		found := false
 		for i := 0; i < 40; i++ {
-			files, _ := fileutil.GetFileNames(mds.GetFailedReplyDirectory())
+			files, _ := fileutil.GetFileNames(mds.GetFailedReplyDirectory(suite.context.Identity()))
 			for _, file := range files {
 				if strings.HasPrefix(file, replyId) {
 					found = true
@@ -179,12 +196,12 @@ func (suite *SendFailedReplyTestSuite) TestSaveFailedReply() {
 	suite.ssmAgent.Stop()
 }
 
-//TestSendFailedReply tests the agent sends back to the service the saved mds reply on disk
+// TestSendFailedReply tests the agent sends back to the service the saved mds reply on disk
 func (suite *SendFailedReplyTestSuite) TestSendFailedReply() {
 	//Save test send reply input on disk
 	t := time.Now().UTC()
 	fileName := fmt.Sprintf("%v_%v", testdata.TestReplyId, t.Format("2006-01-02T15-04-05"))
-	absoluteFileName := path.Join(mds.GetFailedReplyDirectory(), fileName)
+	absoluteFileName := path.Join(mds.GetFailedReplyDirectory(suite.context.Identity()), fileName)
 	if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(testdata.TestSendReplyInput), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
 		suite.T().Logf("successfully persisted reply in %v", absoluteFileName)
 	} else {
@@ -197,8 +214,8 @@ func (suite *SendFailedReplyTestSuite) TestSendFailedReply() {
 	}()
 
 	// Mock MDs service to return empty messages.
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
@@ -206,7 +223,7 @@ func (suite *SendFailedReplyTestSuite) TestSendFailedReply() {
 	sentReply := make(chan bool)
 
 	// Mock sendReplyRequest to capture the replyid and verify later that it is equal to the saved reply on disk
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		replyId := *input.ReplyId
 		suite.T().Logf("Test is sending reply %v", replyId)
 		if replyId == testdata.TestReplyId {
@@ -222,11 +239,11 @@ func (suite *SendFailedReplyTestSuite) TestSendFailedReply() {
 	suite.ssmAgent.Stop()
 }
 
-//TestSendFailedReply tests the agent sends back to the service the saved mds reply on disk
+// TestSendFailedReply tests the agent sends back to the service the saved mds reply on disk
 func (suite *SendFailedReplyTestSuite) TestDeleteOldFailedReply() {
 	//Save test send reply input on disk
 	fileName := fmt.Sprintf("%v_%v", testdata.TestReplyId, "2006-01-02T15-04-05")
-	absoluteFileName := path.Join(mds.GetFailedReplyDirectory(), fileName)
+	absoluteFileName := path.Join(mds.GetFailedReplyDirectory(suite.context.Identity()), fileName)
 	if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(testdata.TestSendReplyInput), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
 		suite.T().Logf("successfully persisted reply in %v", absoluteFileName)
 	} else {
@@ -239,13 +256,13 @@ func (suite *SendFailedReplyTestSuite) TestDeleteOldFailedReply() {
 	}()
 
 	// Mock MDs service to return empty messages.
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
 	// Mock sendReplyRequest to capture the replyid and verify later that it is equal to the saved reply on disk
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		replyId := *input.ReplyId
 		suite.T().Logf("Test is sending reply %v", replyId)
 		assert.NotEqual(suite.T(), replyId, testdata.TestReplyId, "Agent should not send old sendReplyInput")
@@ -260,7 +277,7 @@ func (suite *SendFailedReplyTestSuite) TestDeleteOldFailedReply() {
 	// Launch go routine to check if the old sendReplyInput was deleted from disk
 	go func() {
 		for i := 0; i < 40; i++ {
-			files, _ := fileutil.GetFileNames(mds.GetFailedReplyDirectory())
+			files, _ := fileutil.GetFileNames(mds.GetFailedReplyDirectory(suite.context.Identity()))
 			found := false
 			for _, file := range files {
 				if strings.HasPrefix(file, testdata.TestReplyId) {

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package serialport implements serial port capabilities
@@ -23,6 +24,8 @@ import (
 	"time"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/startup/model"
 )
@@ -33,7 +36,7 @@ const (
 
 type SerialPort struct {
 	log        log.T
-	kernel32   *syscall.DLL
+	kernel32   *windows.LazyDLL
 	dcb        model.Dcb
 	handle     syscall.Handle
 	fileHandle *os.File
@@ -49,7 +52,7 @@ func NewSerialPort(log log.T, port string) (sp *SerialPort) {
 	dcb.Parity = 0
 	dcb.StopBits = 0
 
-	kernel32Loaded := syscall.MustLoadDLL(kernel32)
+	kernel32Loaded := windows.NewLazySystemDLL(kernel32)
 
 	return &SerialPort{
 		log:        log,
@@ -88,7 +91,7 @@ func (sp *SerialPort) OpenPort() (err error) {
 
 	// set communication state with default values.
 	var r uintptr
-	r, _, err = sp.kernel32.MustFindProc("SetCommState").Call(
+	r, _, err = sp.kernel32.NewProc("SetCommState").Call(
 		uintptr(sp.handle),
 		uintptr(unsafe.Pointer(&sp.dcb)),
 	)

@@ -19,6 +19,12 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"sync"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 )
 
 const (
@@ -32,6 +38,11 @@ const (
 const (
 	flagPrefix = "--"
 )
+
+// package variables to store agent identity state
+var agentIdentity identity.IAgentIdentity
+var agentIdentityErr error
+var agentIdentityOnce sync.Once
 
 // CliCommands is the set of support commands
 var CliCommands map[string]CliCommand
@@ -99,4 +110,24 @@ func ValidUrl(s string) bool {
 		return true
 	}
 	return false
+}
+
+// GetAgentIdentity returns the agent identity and only initializes it once
+func GetAgentIdentity() (identity.IAgentIdentity, error) {
+	agentIdentityOnce.Do(func() {
+		log := logger.NewSilentLogger()
+		config := appconfig.DefaultConfig()
+
+		selector := identity2.NewRuntimeConfigIdentitySelector(log)
+		agentIdentity, agentIdentityErr = identity2.NewAgentIdentity(log, &config, selector)
+
+		// Don't need to fallback to identity selection if runtimeconfig identity selector works
+		if agentIdentityErr == nil {
+			return
+		}
+
+		selector = identity2.NewDefaultAgentIdentitySelector(log)
+		agentIdentity, agentIdentityErr = identity2.NewAgentIdentity(log, &config, selector)
+	})
+	return agentIdentity, agentIdentityErr
 }

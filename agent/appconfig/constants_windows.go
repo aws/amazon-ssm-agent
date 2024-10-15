@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package appconfig manages the configuration of the agent.
@@ -23,6 +24,9 @@ import (
 )
 
 const (
+	// AmazonFolder is parent of SSMFolder
+	AmazonFolder = "Amazon"
+
 	// SSMFolder is the path under local app data.
 	SSMFolder = "Amazon\\SSM"
 
@@ -47,7 +51,10 @@ const (
 	// PowerShellPluginCommandArgs specifies the default arguments that we pass to powershell
 	// Use Unrestricted as Execution Policy for running the script.
 	// https://technet.microsoft.com/en-us/library/hh847748.aspx
-	PowerShellPluginCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted -f"
+	PowerShellCommandArgs = "-InputFormat None -Noninteractive -NoProfile -ExecutionPolicy unrestricted"
+
+	// Adding -f for file because powershell plugin writes script content to ps1 file and then executes
+	PowerShellPluginCommandArgs = PowerShellCommandArgs + " -f"
 
 	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
 	CommandStoppedPreemptivelyExitCode = -1
@@ -62,29 +69,38 @@ const (
 	ItemPropertyName = "Environment"
 )
 
-//PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
+// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 var PowerShellPluginCommandName = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
 
 // Program Folder
 var DefaultProgramFolder string
 
-//SSM Agent executable path
+// SSM Agent executable path
+var DefaultSSMAgentBinaryPath string
+
+// SSM Agent worker executable path
 var DefaultSSMAgentWorker string
 
-//Document executable path
+// Document executable path
 var DefaultDocumentWorker string
 
-//Session executable path
+// Session executable path
 var DefaultSessionWorker string
 
-//Session logger executable path
+// Session logger executable path
 var DefaultSessionLogger string
 
 // AppConfig Path
 var AppConfigPath string
 
+// Seelog file path
+var SeelogFilePath string
+
 // DefaultDataStorePath represents the directory for storing system data
 var DefaultDataStorePath string
+
+// DefaultEC2SharedCredentialsFilePath represents the filepath for storing credentials for ec2 identity
+var DefaultEC2SharedCredentialsFilePath string
 
 // PackageRoot specifies the directory under which packages will be downloaded and installed
 var PackageRoot string
@@ -137,6 +153,9 @@ var EC2UpdaterDownloadRoot string
 // UpdateContextFilePath is the path where the updatecontext.json file exists for Ec2 updater to find
 var UpdateContextFilePath string
 
+// AmazonDataPath specifies the parent directory of SSM data.
+var AmazonDataPath string
+
 // SSMData specifies the directory we used to store SSM data.
 var SSMDataPath string
 
@@ -152,8 +171,10 @@ var EnvWinDir string
 // Default Custom Inventory Data Folder
 var DefaultCustomInventoryFolder string
 
-// Plugin folder path
-var PluginFolder string
+// SSM Agent Update download legacy path
+var LegacyUpdateDownloadFolder string
+
+var RuntimeConfigFolderPath string
 
 func init() {
 	/*
@@ -162,26 +183,28 @@ func init() {
 		WindowsServer 2003  -> C:\Documents and Settings\All Users\Application Data
 		WindowsServer 2008+ -> C:\ProgramData
 	*/
-
 	programData := os.Getenv("ProgramData")
 	if programData == "" {
 		programData = filepath.Join(os.Getenv("AllUsersProfile"), "Application Data")
 	}
 	SSMDataPath = filepath.Join(programData, SSMFolder)
+	AmazonDataPath = filepath.Join(programData, AmazonFolder)
 
 	EnvProgramFiles = os.Getenv("ProgramFiles")
 	EnvWinDir = os.Getenv("WINDIR")
-	temp := os.Getenv("TEMP")
 
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
 	DefaultPluginPath = filepath.Join(EnvProgramFiles, SSMPluginFolder)
+	DefaultSSMAgentBinaryPath = filepath.Join(DefaultProgramFolder, "amazon-ssm-agent.exe")
 	DefaultSSMAgentWorker = filepath.Join(DefaultProgramFolder, "ssm-agent-worker.exe")
 	DefaultDocumentWorker = filepath.Join(DefaultProgramFolder, "ssm-document-worker.exe")
 	DefaultSessionWorker = filepath.Join(DefaultProgramFolder, "ssm-session-worker.exe")
 	DefaultSessionLogger = fmt.Sprintf("&'%s'", filepath.Join(DefaultProgramFolder, "ssm-session-logger.exe"))
 	ManifestCacheDirectory = filepath.Join(EnvProgramFiles, ManifestCacheFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
+	SeelogFilePath = filepath.Join(DefaultProgramFolder, SeelogConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
+	DefaultEC2SharedCredentialsFilePath = filepath.Join(DefaultProgramFolder, "credentials")
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")
 	PackageLockRoot = filepath.Join(SSMDataPath, "Locks\\Packages")
 	DaemonRoot = filepath.Join(SSMDataPath, "Daemons")
@@ -189,18 +212,41 @@ func init() {
 	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
 	LocalCommandRootCompleted = filepath.Join(LocalCommandRoot, "Completed")
 	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
-	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
-	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
-	UpdaterPidLockfile = filepath.Join(temp, SSMFolder, "update.lock")
-	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
-	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
+	DownloadRoot = filepath.Join(SSMDataPath, "Download") + string(os.PathSeparator)
+	UpdaterArtifactsRoot = filepath.Join(SSMDataPath, "Update")
+	UpdaterPidLockfile = filepath.Join(SSMDataPath, "update.lock")
+	LegacyUpdateDownloadFolder = DownloadRoot
 
 	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
-	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
-	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
+	EC2UpdateArtifactsRoot = filepath.Join(programData, EC2ConfigAppDataFolder, "Updater")
+	EC2UpdaterDownloadRoot = filepath.Join(programData, EC2ConfigAppDataFolder, "Downloads")
 	EC2ConfigDataStorePath = filepath.Join(programData, EC2ConfigAppDataFolder, "InstanceData")
 	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
 	EC2ConfigSettingPath = filepath.Join(EnvProgramFiles, EC2ConfigServiceFolder, "Settings")
 	SessionFilesPath = filepath.Join(SSMDataPath, "Session")
 
+	// Support reading configuration from relative path like in linux
+	// curdir is amazon-ssm-agent current directory path
+	curdir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return
+	}
+
+	const relativeConfigFolder = "configuration"
+	// check if relative appconfig file in configuration folder exists, if so use it
+	if shouldUseConfig(filepath.Join(curdir, relativeConfigFolder, AppConfigFileName)) {
+		AppConfigPath = filepath.Join(curdir, relativeConfigFolder, AppConfigFileName)
+	}
+	// check if relative seelog file in configuration folder exists, if so use it
+	if shouldUseConfig(filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)) {
+		SeelogFilePath = filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)
+	}
+
+	RuntimeConfigFolderPath = filepath.Join(SSMDataPath, "runtimeconfig")
+}
+
+func shouldUseConfig(filePath string) bool {
+	_, err := os.Stat(filePath)
+	// Return false for any stat error
+	return err == nil
 }

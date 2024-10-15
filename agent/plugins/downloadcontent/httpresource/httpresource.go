@@ -17,17 +17,19 @@
 package httpresource
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math"
+	"math/big"
 	"net/http"
 	"net/url"
 	"os"
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"
@@ -36,6 +38,7 @@ import (
 
 // HTTPResource represents an HTTP(s) resource
 type HTTPResource struct {
+	context context.T
 	Handler handler.IHTTPHandler
 }
 
@@ -49,7 +52,7 @@ type HTTPInfo struct {
 }
 
 // NewHTTPResource creates a new HTTP resource
-func NewHTTPResource(log log.T, info string, bridge ssmparameterresolver.ISsmParameterResolverBridge) (resource *HTTPResource, err error) {
+func NewHTTPResource(context context.T, info string, bridge ssmparameterresolver.ISsmParameterResolverBridge) (resource *HTTPResource, err error) {
 	var httpInfo HTTPInfo
 	if httpInfo, err = parseSourceInfo(info); err != nil {
 		return nil, err
@@ -64,6 +67,7 @@ func NewHTTPResource(log log.T, info string, bridge ssmparameterresolver.ISsmPar
 	httpClient.CloseIdleConnections()
 
 	return &HTTPResource{
+		context: context,
 		Handler: handler.NewHTTPHandler(httpClient, *parsedUrl, httpInfo.AllowInsecureDownload, handler.HTTPAuthConfig{
 			AuthMethod: httpInfo.AuthMethod,
 			Username:   httpInfo.Username,
@@ -73,8 +77,13 @@ func NewHTTPResource(log log.T, info string, bridge ssmparameterresolver.ISsmPar
 }
 
 // DownloadRemoteResource downloads a HTTP resource into a specific download path
-func (resource *HTTPResource) DownloadRemoteResource(log log.T, fileSystem filemanager.FileSystem, downloadPath string) (err error, result *remoteresource.DownloadResult) {
-	downloadPath = resource.adjustDownloadPath(downloadPath, fmt.Sprintf("%d", rand.Int()), fileSystem)
+func (resource *HTTPResource) DownloadRemoteResource(fileSystem filemanager.FileSystem, downloadPath string) (err error, result *remoteresource.DownloadResult) {
+	log := resource.context.Log()
+	randInt, randErr := rand.Int(rand.Reader, big.NewInt(math.MaxInt64))
+	if randErr != nil {
+		return fmt.Errorf("error in generating a random int: %w", randErr), nil
+	}
+	downloadPath = resource.adjustDownloadPath(downloadPath, fmt.Sprintf("%d", randInt), fileSystem)
 
 	err = fileSystem.MakeDirs(filepath.Dir(downloadPath))
 	if err != nil {
@@ -113,7 +122,7 @@ func (resource *HTTPResource) adjustDownloadPath(destPath, fileSuffix string, fi
 		destPath = appconfig.DownloadRoot
 	}
 
-	// Mimicking S3 download functionality, which treats the destination path differently based on the some conditions
+	// Mimicking S3 download functionality, which treats the destination path differently based on the following conditions
 	if (fileSystem.Exists(destPath) && fileSystem.IsDirectory(destPath)) || os.IsPathSeparator(destPath[len(destPath)-1]) {
 		destPath = filepath.Join(destPath, fmt.Sprintf("%s%s", "download", fileSuffix))
 	}

@@ -26,11 +26,13 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/twinj/uuid"
 )
 
@@ -89,7 +91,12 @@ func (c *SendOfflineCommand) Execute(subcommands []string, parameters map[string
 		return errors.New(strings.Join(validation, "\n")), ""
 	}
 
-	if err, content := c.loadContent(parameters[sendCommandContent][0]); err != nil {
+	agentIdentity, err := cliutil.GetAgentIdentity()
+	if err != nil {
+		return err, ""
+	}
+
+	if err, content := c.loadContent(agentIdentity, parameters[sendCommandContent][0]); err != nil {
 		return err, ""
 	} else if err := c.validateContent(content); err != nil {
 		return err, ""
@@ -150,7 +157,7 @@ func (SendOfflineCommand) validateSendCommandInput(subcommands []string, paramet
 }
 
 // loadContent loads raw json or json obtained from a URL into DocumentContent
-func (SendOfflineCommand) loadContent(rawContent string) (error, contracts.DocumentContent) {
+func (SendOfflineCommand) loadContent(agentIdentity identity.IAgentIdentity, rawContent string) (error, contracts.DocumentContent) {
 	var content contracts.DocumentContent
 	if cliutil.ValidJson(rawContent) {
 		err := json.Unmarshal([]byte(rawContent), &content)
@@ -162,8 +169,9 @@ func (SendOfflineCommand) loadContent(rawContent string) (error, contracts.Docum
 		url = url[7:]
 	}
 
+	context := context.Default(logger.NewSilentLogger(), appconfig.DefaultConfig(), agentIdentity)
 	input := &artifact.DownloadInput{SourceURL: url}
-	if output, err := artifact.Download(log.NewMockLog(), *input); err != nil {
+	if output, err := artifact.Download(context, *input); err != nil {
 		return err, content
 	} else {
 		err = jsonutil.UnmarshalFile(output.LocalFilePath, &content)
@@ -172,7 +180,7 @@ func (SendOfflineCommand) loadContent(rawContent string) (error, contracts.Docum
 	}
 }
 
-//validateContent checks to see that content has at least one runtimeConfig for 1.2 or mainSteps for 2.0 and no unbound parameters
+// validateContent checks to see that content has at least one runtimeConfig for 1.2 or mainSteps for 2.0 and no unbound parameters
 func (SendOfflineCommand) validateContent(content contracts.DocumentContent) error {
 	switch content.SchemaVersion {
 	case "1.2":

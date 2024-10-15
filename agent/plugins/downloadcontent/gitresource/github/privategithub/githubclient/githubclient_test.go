@@ -18,8 +18,8 @@ package githubclient
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/go-github/github"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/google/go-github/v61/github"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -16,31 +16,40 @@ package appconfig
 
 // CredentialProfile represents configurations for aws credential profile
 type CredentialProfile struct {
-	ShareCreds   bool
-	ShareProfile string
+	ShareCreds        bool
+	ShareProfile      string
+	ForceUpdateCreds  bool
+	KeyAutoRotateDays int
 }
 
 // MdsCfg represents configuration for Message delivery service (MDS)
 type MdsCfg struct {
-	Endpoint            string
-	CommandWorkersLimit int
-	StopTimeoutMillis   int64
-	CommandRetryLimit   int
+	Endpoint                 string
+	CommandWorkersLimit      int
+	CommandWorkerBufferLimit int
+	StopTimeoutMillis        int64
+	CommandRetryLimit        int
 }
 
 // SsmCfg represents configuration for Simple system manager (SSM)
 type SsmCfg struct {
-	Endpoint                    string
-	HealthFrequencyMinutes      int
-	AssociationFrequencyMinutes int
-	AssociationRetryLimit       int
-	// TODO: test hook, can be removed before release
-	// this is to skip ssl verification for the beta self signed certs
-	InsecureSkipVerify                    bool
-	CustomInventoryDefaultLocation        string
+	Endpoint                       string
+	HealthFrequencyMinutes         int
+	AssociationFrequencyMinutes    int
+	AssociationRetryLimit          int
+	CustomInventoryDefaultLocation string
+	// Hours to retain association logs in the orchestration folder
 	AssociationLogsRetentionDurationHours int
-	RunCommandLogsRetentionDurationHours  int
-	SessionLogsRetentionDurationHours     int
+	// Hours to retain run command logs in the orchestration folder
+	RunCommandLogsRetentionDurationHours int
+	// Hours to retain session logs in the orchestration folder
+	SessionLogsRetentionDurationHours int
+	// Configure where you want Session Manager to write session data
+	SessionLogsDestination string
+	// Configure when after execution it is safe to delete local plugin output files in orchestration folder
+	PluginLocalOutputCleanup string
+	// Configure only when it is safe to delete orchestration folder after document execution. This config overrides PluginLocalOutputCleanup when set.
+	OrchestrationDirectoryCleanup string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent
@@ -48,6 +57,7 @@ type AgentInfo struct {
 	Name                                    string
 	Version                                 string
 	Region                                  string
+	ServiceDomain                           string
 	OrchestrationRootDir                    string
 	DownloadRootDir                         string
 	ContainerMode                           bool
@@ -57,21 +67,28 @@ type AgentInfo struct {
 	TelemetryMetricsToSSM                   bool
 	TelemetryMetricsNamespace               string
 	LongRunningWorkerMonitorIntervalSeconds int
-	AuditExpirationDay                      int
-	ForceFileIPC                            bool
+	// Temp config to purge cached EC2 credentials on disk if using instance profile role
+	ShouldPurgeInstanceProfileRoleCreds bool
+	AuditExpirationDay                  int
+	ForceFileIPC                        bool
+	// denotes GOMAXPROCS value for legacy agent worker
+	GoMaxProcForAgentWorker int
 }
 
 // MgsConfig represents configuration for Message Gateway service
 type MgsConfig struct {
-	Region              string
-	Endpoint            string
-	StopTimeoutMillis   int64
-	SessionWorkersLimit int
+	Region                        string
+	Endpoint                      string
+	StopTimeoutMillis             int64
+	SessionWorkersLimit           int
+	SessionWorkerBufferLimit      int
+	DeniedPortForwardingRemoteIPs []string
 }
 
 // KmsConfig represents configuration for Key Management Service
 type KmsConfig struct {
-	Endpoint string
+	Endpoint                    string
+	RequireKMSChallengeResponse bool
 }
 
 // OsInfo represents os related information
@@ -105,6 +122,7 @@ type SsmagentConfig struct {
 	S3          S3Cfg
 	Birdwatcher BirdwatcherCfg
 	Kms         KmsConfig
+	Identity    IdentityCfg
 }
 
 // AppConstants represents some run time constant variable for various module.
@@ -112,4 +130,21 @@ type SsmagentConfig struct {
 type AppConstants struct {
 	MinHealthFrequencyMinutes int
 	MaxHealthFrequencyMinutes int
+}
+
+// CustomIdentity defines a single custom identity that the agent can assume
+type CustomIdentity struct {
+	InstanceID          string
+	Region              string
+	AvailabilityZone    string
+	AvailabilityZoneId  string
+	InstanceType        string
+	CredentialsProvider string
+}
+
+// IdentityCfg stores identity consumption order and custom identities
+type IdentityCfg struct {
+	Ec2SystemInfoDetectionResponse string
+	ConsumptionOrder               []string
+	CustomIdentities               []*CustomIdentity
 }

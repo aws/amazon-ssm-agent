@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package startup implements startup plugin processor
@@ -21,10 +22,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/startup/model"
@@ -59,6 +62,10 @@ const (
 	PvName            = "Name"
 	PvVersionProperty = "Version"
 
+	// NitroEnclavesEntity Properties
+	NitroEnclavesName            = "Name"
+	NitroEnclavesVersionProperty = "Version"
+
 	// PnpEntity Properties
 	deviceIDProperty = "DeviceID"
 	serviceProperty  = "Service"
@@ -89,6 +96,9 @@ const (
 
 	// PS command to get AWS PV package entry from registry HKLM:\SOFTWARE\Amazon\PVDriver
 	getPvPackageVersionCmd = "Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Amazon\\PVDriver'"
+
+	// PS command to get AWS Nitro Enclaves package entry from registry HKLM:\SOFTWARE\Amazon\AwsNitroEnclaves
+	getNitroEnclavesPackageVersionCmd = "Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Amazon\\AwsNitroEnclaves'"
 
 	// PS command to get AWS PV Storage Host Adapter entry shown in Device Manager
 	getPvDriverPnpEntityCmd = "Get-CimInstance Win32_PnPEntity | Where-Object { $_.Service -eq 'xenvbd' }"
@@ -183,6 +193,12 @@ func discoverPort(log log.T, windowsInfo model.WindowsInfo) (port string, err er
 
 // ExecuteTasks opens serial port, write agent verion, AWS driver info and bugchecks in console log.
 func (p *Processor) ExecuteTasks() (err error) {
+	defer func() {
+		if msg := recover(); msg != nil {
+			p.context.Log().Errorf("Failed to run through windows startup with err: %v", msg)
+			p.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	var sp *serialport.SerialPort
 
 	var driverInfo []model.DriverInfo
@@ -245,6 +261,12 @@ func (p *Processor) ExecuteTasks() (err error) {
 	// write AWS PV Driver Package version to serial port if exists
 	if PvError == nil {
 		sp.WritePort(fmt.Sprintf("Driver: AWS PV Driver Package v%v", pvPackageInfo.Version))
+	}
+
+	nitroEnclavesPackageInfo, NitroEnclavesError := getAWSNitroEnclavesPackageInfo(log)
+	// write AWS Nitro Enclaves Package version to serial port if exists
+	if NitroEnclavesError == nil {
+		sp.WritePort(fmt.Sprintf("Driver: AWS Nitro Enclaves Package v%v", nitroEnclavesPackageInfo.Version))
 	}
 
 	// write all running AWS drivers to serial port.
@@ -314,6 +336,17 @@ func getAWSPvPackageInfo(log log.T) (pvPackageInfo model.PvPackageInfo, err erro
 		err = errors.New("is a nano server")
 	}
 
+	return
+}
+
+// getAWSNitroEnclavesPackage queries AwsNitroEnclaves information from registry key.
+func getAWSNitroEnclavesPackageInfo(log log.T) (NitroEnclavesPackageInfo model.NitroEnclavesPackageInfo, err error) {
+
+	// this queries the registry for AWS Nitro Enclaves Package version
+	properties := []string{NitroEnclavesName, NitroEnclavesVersionProperty}
+	if err = runPowershell(&NitroEnclavesPackageInfo, getNitroEnclavesPackageVersionCmd, properties, false); err != nil {
+		log.Debugf("Error occurred while querying Version for AWSNitroEnclavesPackage: %v", err.Error())
+	}
 	return
 }
 
@@ -462,8 +495,14 @@ func runPowershell(jsonObj interface{}, command string, properties []string, exp
 	args = append(args, "| ConvertTo-Json -Depth 3")
 
 	// execute powershell with arguments in cmd.
-	if cmdOut, err = cmdExec.ExecuteCommand("powershell", args...); err != nil || len(cmdOut) == 0 {
+	cmdOut, err = cmdExec.ExecuteCommand(appconfig.PowerShellPluginCommandName, args...)
+	if err != nil {
 		err = errors.New(fmt.Sprintf("Error while running powershell %v: %v", args, err.Error()))
+		return
+	}
+
+	if len(cmdOut) == 0 {
+		err = errors.New(fmt.Sprintf("Error while running powershell %v: No output", args))
 		return
 	}
 

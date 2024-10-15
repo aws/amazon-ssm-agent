@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"path"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -35,8 +36,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/carlescere/scheduler"
 )
 
@@ -78,12 +79,13 @@ func NewAssociationProcessor(context context.T) *Processor {
 		OsVersion: config.Os.Version,
 	}
 
-	assocSvc := service.NewAssociationService(context.Log(), name)
+	assocSvc := service.NewAssociationService(context, name)
 	uploader := complianceUploader.NewComplianceUploader(context)
 
 	//TODO Rename everything to service and move package to framework
-	//association has no cancel worker
-	proc := processor.NewEngineProcessor(assocContext, documentWorkersLimit, documentWorkersLimit, []contracts.DocumentType{contracts.Association})
+	startWorker := processor.NewWorkerProcessorSpec(assocContext, documentWorkersLimit, contracts.Association, 0)
+	terminateWorker := processor.NewWorkerProcessorSpec(assocContext, documentWorkersLimit, "", 0) //association has no cancel worker
+	proc := processor.NewEngineProcessor(assocContext, startWorker, terminateWorker)
 	return &Processor{
 		context:            assocContext,
 		assocSvc:           assocSvc,
@@ -94,10 +96,10 @@ func NewAssociationProcessor(context context.T) *Processor {
 	}
 }
 
-func (p *Processor) ModuleExecute(context context.T) {
-	log := context.Log()
-	associationFrequenceMinutes := context.AppConfig().Ssm.AssociationFrequencyMinutes
-	log.Info("Starting association polling")
+func (p *Processor) ModuleExecute() {
+	log := p.context.Log()
+	associationFrequenceMinutes := p.context.AppConfig().Ssm.AssociationFrequencyMinutes
+	log.Debug("Starting association polling")
 	log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
 	var job *scheduler.Job
 	var err error
@@ -105,19 +107,19 @@ func (p *Processor) ModuleExecute(context context.T) {
 		log,
 		p.ProcessAssociation,
 		associationFrequenceMinutes); err != nil {
-		context.Log().Errorf("unable to schedule association processor. %v", err)
+		p.context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
 	p.InitializeAssociationProcessor()
 	p.SetPollJob(job)
 }
-func (p *Processor) ModuleRequestStop(stopType contracts.StopType) (err error) {
+func (p *Processor) ModuleStop() (err error) {
 	assocScheduler.Stop(p.pollJob)
 	signal.Stop()
-	p.proc.Stop(stopType)
+	p.proc.Stop()
 	return nil
 }
 
-// StartAssociationWorker starts worker to process scheduled association
+// InitializeAssociationProcessor starts worker to process scheduled association
 func (p *Processor) InitializeAssociationProcessor() {
 	log := p.context.Log()
 	if resChan, err := p.proc.Start(); err != nil {
@@ -127,7 +129,7 @@ func (p *Processor) InitializeAssociationProcessor() {
 		p.resChan = resChan
 	}
 
-	log.Info("Launching response handler")
+	log.Debug("Launching response handler")
 	go p.listenToResponses()
 
 	if err := p.proc.InitialProcessing(false); err != nil {
@@ -135,9 +137,9 @@ func (p *Processor) InitializeAssociationProcessor() {
 		return
 	}
 
-	log.Info("Initializing association scheduling service")
+	log.Debug("Initializing association scheduling service")
 	signal.InitializeAssociationSignalService(log, p.runScheduledAssociation)
-	log.Info("Association scheduling service initialized")
+	log.Debug("Association scheduling service initialized")
 }
 
 // SetPollJob represents setter for PollJob
@@ -152,13 +154,13 @@ func (p *Processor) ProcessAssociation() {
 
 	log.Debug("running ProcessAssociation")
 
-	instanceID, err := sys.InstanceID()
+	instanceID, err := p.context.Identity().InstanceID()
 	if err != nil {
 		log.Error("Unable to retrieve instance id", err)
 		return
 	}
 
-	p.assocSvc.CreateNewServiceIfUnHealthy(log)
+	p.assocSvc.CreateNewServiceIfUnHealthy(p.context)
 	p.complianceUploader.CreateNewServiceIfUnHealthy(log)
 
 	if associations, err = p.assocSvc.ListInstanceAssociations(log, instanceID); err != nil {
@@ -365,7 +367,7 @@ func (p *Processor) runScheduledAssociation(log log.T) {
 
 	updatePluginAssociationInstances(*scheduledAssociation.Association.AssociationId, docState)
 	log = p.context.With("[associationId=" + docState.DocumentInformation.AssociationID + "]").Log()
-	instanceID, _ := sys.InstanceID()
+	instanceID, _ := p.context.Identity().InstanceID()
 	p.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		docState.DocumentInformation.AssociationID,
@@ -429,13 +431,7 @@ func (p *Processor) parseAssociation(rawData *model.InstanceAssociation) (*contr
 	}
 	log.Debug("Executing association with document content: \n", jsonutil.Indent(parsedMessageContent))
 
-	isMI, err := sys.IsManagedInstance()
-	if err != nil {
-		errorMsg := "Error determining type of instance - internal error"
-		log.Debugf("error determining managed instance, %v", err)
-		return &docState, fmt.Errorf("%v", errorMsg)
-	}
-
+	isMI := identity.IsOnPremInstance(p.context.Identity())
 	if isMI && contracts.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)
 		if err = contracts.RemoveDependencyOnInstanceMetadata(context, &docState); err != nil {
@@ -456,7 +452,7 @@ func (r *Processor) pluginExecutionReport(
 	outputs map[string]*contracts.PluginResult,
 	totalNumberOfPlugins int) {
 
-	_, _, runtimeStatuses := contracts.DocumentResultAggregator(log, pluginID, outputs)
+	_, _, _, runtimeStatuses := contracts.DocumentResultAggregator(log, pluginID, outputs)
 	outputContent, err := jsonutil.Marshal(runtimeStatuses)
 	if err != nil {
 		log.Error("could not marshal plugin outputs! ", err)
@@ -470,7 +466,7 @@ func (r *Processor) pluginExecutionReport(
 		return
 	}
 
-	instanceID, err := platform.InstanceID()
+	instanceID, err := r.context.Identity().InstanceID()
 	if err != nil {
 		log.Error("failed to load instance id ", err)
 		return
@@ -501,7 +497,7 @@ func (r *Processor) associationExecutionReport(
 	errorCode string,
 	associationStatus string) {
 
-	_, _, runtimeStatuses := contracts.DocumentResultAggregator(log, "", outputs)
+	_, _, _, runtimeStatuses := contracts.DocumentResultAggregator(log, "", outputs)
 	runtimeStatusesContent, err := jsonutil.Marshal(runtimeStatuses)
 	if err != nil {
 		log.Error("could not marshal plugin outputs ", err)
@@ -510,7 +506,7 @@ func (r *Processor) associationExecutionReport(
 	log.Info("Update instance association status with results ", jsonutil.Indent(runtimeStatusesContent))
 
 	executionSummary, outputUrl := buildOutput(runtimeStatuses, totalNumberOfPlugins)
-	instanceID, _ := sys.InstanceID()
+	instanceID, _ := r.context.Identity().InstanceID()
 	r.assocSvc.UpdateInstanceAssociationStatus(
 		log,
 		associationID,
@@ -533,6 +529,12 @@ func (r *Processor) associationExecutionReport(
 
 func (r *Processor) listenToResponses() {
 	log := r.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Association processor listen panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	for res := range r.resChan {
 		if res.LastPlugin != "" {
 			log.Infof("update association status upon plugin $v completion", res.LastPlugin)
@@ -583,7 +585,7 @@ func (r *Processor) listenToResponses() {
 					contracts.AssociationStatusPending,
 				)
 			}
-			instanceID, _ := sys.InstanceID()
+			instanceID, _ := r.context.Identity().ShortInstanceID()
 			//clean association logs once the document state is moved to completed
 			//clean completed document state files and orchestration dirs. Takes care of only files generated by association in the folder
 			go assocBookkeeping.DeleteOldOrchestrationDirectories(log,
@@ -594,9 +596,7 @@ func (r *Processor) listenToResponses() {
 			//TODO move this part to service
 			schedulemanager.UpdateNextScheduledDate(log, res.AssociationID)
 			signal.ExecuteAssociation(log)
-
 		}
-
 	}
 }
 
@@ -655,8 +655,8 @@ func filterByStatus(runtimeStatuses map[string]*contracts.PluginRuntimeStatus, p
 	return result
 }
 
-//This operation is locked by runScheduledAssociation
-//lazy update, update only when the document is ready to run, update will validate and invalidate current attached association
+// This operation is locked by runScheduledAssociation
+// lazy update, update only when the document is ready to run, update will validate and invalidate current attached association
 func updatePluginAssociationInstances(associationID string, docState *contracts.DocumentState) {
 	currentPluginAssociations := getPluginAssociationInstances()
 	for i := 0; i < len(docState.InstancePluginsInformation); i++ {

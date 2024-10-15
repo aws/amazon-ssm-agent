@@ -15,15 +15,18 @@
 package config
 
 import (
+	"net/url"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/rip"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 )
 
 const (
-	SessionServiceName            = "MessageGatewayService"
-	DotDelimiter                  = "."
-	ServiceName                   = rip.MgsServiceName
+	SessionServiceName = "MessageGatewayService"
+	DotDelimiter       = "."
+
+	ServiceName                   = "ssmmessages"
 	HttpsPrefix                   = "https://"
 	WebSocketPrefix               = "wss://"
 	ControlChannel                = "control-channel"
@@ -39,13 +42,17 @@ const (
 	DefaultRoundTripTime          = 100 * time.Millisecond
 	DefaultRoundTripTimeVariation = 0
 	ResendSleepInterval           = 100 * time.Millisecond
-	WebSocketPingInterval         = 5 * time.Minute
+	WebSocketPingInterval         = 54 * time.Second //ping interval need to be less than pong wait timeout to for detection
+	WebSocketPongWaitTimeout      = 60 * time.Second
 
 	// Buffer capacity of 100000 items with each buffer item of 1024 bytes leads to max usage of 100MB (100000 * 1024 bytes = 100MB) of instance memory.
 	// When changing StreamDataPayloadSize, make corresponding change to buffer capacity to ensure no more than 100MB of instance memory is used.
 	StreamDataPayloadSize         = 1024
 	OutgoingMessageBufferCapacity = 100000
 	IncomingMessageBufferCapacity = 100000
+
+	// ControlChannelWriteBufferSizeLimit represents 142000 bytes is the maximum control channel can send in 1 message
+	ControlChannelWriteBufferSizeLimit = 142000
 
 	// Round trip time constant
 	RTTConstant = 1.0 / 8.0
@@ -64,10 +71,14 @@ const (
 	DataChannelRetryInitialDelayMillis = 100
 	DataChannelRetryMaxIntervalMillis  = 5000
 
-	IpcFileName      = "ipcTempFile"
-	LogFileExtension = ".log"
-	ScreenBufferSize = 30000
-	Exit             = "exit"
+	// MGS Errors
+	SessionAlreadyTerminatedError = "Session is already terminated"
+
+	IpcFileName        = "ipcTempFile"
+	ExecOutputFileName = "output"
+	LogFileExtension   = ".log"
+	ScreenBufferSize   = 30000
+	Exit               = "exit"
 
 	// ResumeReadExitCode indicates to resume reading from established connection.
 	ResumeReadExitCode = -1
@@ -81,6 +92,23 @@ const (
 	S3EncryptionErrorMsg                             = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
 )
 
-var GetMgsEndpointFromRip = func(region string) string {
-	return rip.GetMgsEndpoint(region)
+var GetMgsEndpoint = func(context context.T, region string) string {
+	appConfig := context.AppConfig()
+	if appConfig.Mgs.Endpoint != "" {
+		// use net/url package to parse endpoint, if endpoint doesn't contain protocol,
+		// fullUrl.Host is empty, should return fullUrl.Path. For backwards compatible, return the non-empty one.
+		fullUrl, err := url.Parse(appConfig.Mgs.Endpoint)
+		if err == nil {
+			if fullUrl.Host != "" {
+				return fullUrl.Host
+			}
+
+			return fullUrl.Path
+		}
+	}
+
+	endpointHelper := endpoint.NewEndpointHelper(context.Log(), appConfig)
+	mgsEndpoint := endpointHelper.GetServiceEndpoint(ServiceName, region)
+
+	return mgsEndpoint
 }

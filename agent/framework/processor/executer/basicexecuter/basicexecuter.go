@@ -15,18 +15,18 @@
 package basicexecuter
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-
+	"runtime/debug"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-//TODO currently BasicExecuter.Run() is not idempotent, we should make it so in future
+// TODO currently BasicExecuter.Run() is not idempotent, we should make it so in future
 // BasicExecuter is a thin wrapper over runPlugins().
 type BasicExecuter struct {
 	resChan chan contracts.DocumentResult
@@ -37,7 +37,7 @@ var pluginRunner = func(context context.T,
 	docState contracts.DocumentState,
 	resChan chan contracts.PluginResult,
 	cancelFlag task.CancelFlag) (pluginOutputs map[string]*contracts.PluginResult) {
-	return runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
+	return runpluginutil.RunPlugins(context, docState.InstancePluginsInformation, docState.IOConfig, docState.UpstreamServiceName, runpluginutil.SSMPluginRegistry, resChan, cancelFlag)
 
 }
 
@@ -48,6 +48,7 @@ func run(context context.T,
 	defer func() {
 		if msg := recover(); msg != nil {
 			context.Log().Errorf("Executer run panic: %v", msg)
+			context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 	docState := docStore.Load()
@@ -66,6 +67,7 @@ func run(context context.T,
 		defer func() {
 			if msg := recover(); msg != nil {
 				context.Log().Errorf("Executer listener panic: %v", msg)
+				context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 			wg.Done()
 		}()
@@ -73,7 +75,7 @@ func run(context context.T,
 		for res := range statusChan {
 			results[res.PluginID] = &res
 			//TODO decompose this function to return only Status
-			status, _, _ := contracts.DocumentResultAggregator(context.Log(), res.PluginID, results)
+			status, _, _, _ := contracts.DocumentResultAggregator(context.Log(), res.PluginID, results)
 			docResult := contracts.DocumentResult{
 				Status:          status,
 				PluginResults:   results,
@@ -96,7 +98,7 @@ func run(context context.T,
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 	//send DocLevel response
-	status, _, _ := contracts.DocumentResultAggregator(context.Log(), "", outputs)
+	status, _, _, _ := contracts.DocumentResultAggregator(context.Log(), "", outputs)
 	result := contracts.DocumentResult{
 		Status:          status,
 		PluginResults:   outputs,

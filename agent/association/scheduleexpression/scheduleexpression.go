@@ -31,7 +31,7 @@ const (
 	expressionTypeRate = "rate"
 )
 
-//ScheduleExpression defines operations of a valid schedule expression which association/model makes use of
+// ScheduleExpression defines operations of a valid schedule expression which association/model makes use of
 type ScheduleExpression interface {
 	Next(fromTime time.Time) time.Time
 }

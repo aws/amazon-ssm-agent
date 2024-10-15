@@ -11,7 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
-// +build darwin freebsd linux netbsd openbsd
+//go:build freebsd || linux || netbsd || openbsd
+// +build freebsd linux netbsd openbsd
 
 // Package runpluginutil run plugin utility functions without referencing the actually plugin impl packages
 package runpluginutil
@@ -20,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 

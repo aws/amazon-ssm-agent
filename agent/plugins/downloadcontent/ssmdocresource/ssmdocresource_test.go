@@ -16,6 +16,7 @@ package ssmdocresource
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"testing"
@@ -23,12 +24,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var logMock = log.NewMockLog()
+var contextMock = context.NewMockDefault()
+var logMock = contextMock.Log()
 
 func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 
@@ -37,7 +40,8 @@ func TestSSMDocResource_ValidateLocationInfo(t *testing.T) {
 	}`
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 	_, err = ssmresource.ValidateLocationInfo()
 
@@ -58,7 +62,8 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 	}
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 
 	dir := "destination"
@@ -71,7 +76,7 @@ func TestSSMDocResource_FullARNNameInput(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -95,7 +100,8 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 	}
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 
 	dir := "destination"
@@ -108,7 +114,7 @@ func TestSSMDocResource_FullARNNameInputWithVersion(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -126,7 +132,8 @@ func TestSSMDocResource_ValidateLocationInfoNoName(t *testing.T) {
 
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 	_, err = ssmresource.ValidateLocationInfo()
 
@@ -147,7 +154,8 @@ func TestSSMDocResource_Download(t *testing.T) {
 	}
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 	dir := "destination"
 	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
@@ -159,7 +167,7 @@ func TestSSMDocResource_Download(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -182,19 +190,20 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 	}
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 	dir := appconfig.DownloadRoot
 	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
 
 	fileMock.On("Exists", appconfig.DownloadRoot).Return(true)
 	fileMock.On("IsDirectory", appconfig.DownloadRoot).Return(true)
-	fileMock.On("MakeDirs", strings.TrimSuffix(dir, "/")).Return(nil)
+	fileMock.On("MakeDirs", strings.TrimSuffix(dir, string(os.PathSeparator))).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(fmt.Errorf("Error"))
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "")
 
 	assert.Error(t, err, "Error")
 	depMock.AssertExpectations(t)
@@ -215,7 +224,8 @@ func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
 	}
 	ssmDocInfo, err := parseSourceInfo(locationInfo)
 	ssmresource := &SSMDocResource{
-		Info: ssmDocInfo,
+		context: contextMock,
+		Info:    ssmDocInfo,
 	}
 	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
 
@@ -225,7 +235,7 @@ func TestSSMDocResource_DownloadToOtherName(t *testing.T) {
 
 	ssmresource.ssmdocdep = depMock
 
-	err, result := ssmresource.DownloadRemoteResource(logMock, fileMock, "destination")
+	err, result := ssmresource.DownloadRemoteResource(&fileMock, "destination")
 
 	assert.NoError(t, err)
 	depMock.AssertExpectations(t)
@@ -239,7 +249,7 @@ type ssmDocDepMock struct {
 	mock.Mock
 }
 
-func (s ssmDocDepMock) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
+func (s *ssmDocDepMock) GetDocument(log log.T, docName string, docVersion string) (response *ssm.GetDocumentOutput, err error) {
 	args := s.Called(log, docName, docVersion)
 	return args.Get(0).(*ssm.GetDocumentOutput), args.Error(1)
 }

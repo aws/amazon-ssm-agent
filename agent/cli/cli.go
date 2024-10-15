@@ -38,7 +38,7 @@ func RunCommand(args []string, out io.Writer) (exitCode int) {
 	err, _, command, subcommands, parameters := parseCommand(args)
 	if err != nil {
 		displayUsage(out)
-		fmt.Fprintln(out, err.Error())
+		fmt.Fprintln(out, "\nerror: "+err.Error())
 		// Exit with 2 if parseCommand error occurs
 		return cliutil.CLI_PARSE_FAIL_EXITCODE
 	}
@@ -49,7 +49,7 @@ func RunCommand(args []string, out io.Writer) (exitCode int) {
 			cmdErr, result := cmd.Execute(subcommands, parameters)
 			if cmdErr != nil {
 				displayUsage(out)
-				fmt.Fprintln(out, cmdErr.Error())
+				fmt.Fprintln(out, "\nerror: "+cmdErr.Error())
 				// Exit 255 if command failed
 				return cliutil.CLI_COMMAND_FAIL_EXITCODE
 			} else {

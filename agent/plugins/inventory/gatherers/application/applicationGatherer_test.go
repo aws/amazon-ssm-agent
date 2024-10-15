@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -46,7 +47,7 @@ func DataGenerator(context context.T) (appData []model.ApplicationData) {
 }
 
 func TestGatherer(t *testing.T) {
-	c := context.NewMockDefault()
+	c := contextmocks.NewMockDefault()
 	g := Gatherer(c)
 	collectData = DataGenerator
 	items, err := g.Run(c, model.Config{})

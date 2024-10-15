@@ -78,6 +78,7 @@ func cleanupJSONField(field string) string {
 	res = strings.Replace(res, `\`, `\\`, -1)
 	res = strings.Replace(res, `"`, `\"`, -1)
 	res = strings.Replace(res, "\t", `\t`, -1)
+	res = strings.Replace(res, "\x0D", "", -1)
 	if len(res) > maxSummaryLength {
 		res = res[0:maxSummaryLength]
 	}

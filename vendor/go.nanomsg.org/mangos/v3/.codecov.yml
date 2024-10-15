@@ -1,0 +1,9 @@
+ignore:
+ - "perf/*"
+ - "examples/*/*"
+ - "internal/test/*"
+ - "test/*"
+ - "*_test.go"
+ - "*/perf/*
+ - "*/examples/*
+ - "*/test/*

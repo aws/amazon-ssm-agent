@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build integration
 // +build integration
 
 // Package platform contains platform specific utilities.
@@ -19,7 +20,7 @@ package platform
 import (
 	"testing"
 
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	logger "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -46,28 +47,4 @@ func TestGetPlatformType(t *testing.T) {
 	data, err := PlatformType(log)
 	t.Logf("platform type is %v ", data)
 	assert.NoError(t, err, "get platform type should not result in err")
-}
-
-//GetDefaultEndpointTests
-
-type GetDefaultEndPointTest struct {
-	Region  string
-	Service string
-	Output  string
-}
-
-var (
-	getDefaultEndPointTests = []GetDefaultEndPointTest{
-		{"", "", ""},
-		{"val", "test", ""},
-		{"us-east-1", "ssm", ""},
-		{"cn-north-1", "ssm", "ssm.cn-north-1.amazonaws.com.cn"},
-	}
-)
-
-func TestGetDefaultEndPoint(t *testing.T) {
-	for _, test := range getDefaultEndPointTests {
-		output := GetDefaultEndPoint(test.Region, test.Service)
-		assert.Equal(t, test.Output, output)
-	}
 }

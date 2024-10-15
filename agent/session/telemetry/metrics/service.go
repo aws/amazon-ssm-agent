@@ -19,7 +19,6 @@ import (
 	"errors"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client"
@@ -54,7 +53,7 @@ type CloudWatchService struct {
 
 // NewCloudWatchService Creates a new instance of the CloudWatchService
 func NewCloudWatchService(context context.T) *CloudWatchService {
-	instance, err := platform.InstanceID()
+	instance, err := context.Identity().InstanceID()
 	if err != nil {
 		context.Log().Error("failed to get the instance id, %v", err)
 	}
@@ -156,22 +155,13 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
 func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.CloudWatch {
-	log := c.context.Log()
-	config := sdkutil.AwsConfig(log)
+	config := sdkutil.AwsConfig(c.context, "monitoring")
 
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,
 	})
 
 	appConfig := c.context.AppConfig()
-	if region, err := platform.Region(); err == nil {
-		if defaultEndpoint := platform.GetDefaultEndPoint(region, "logs"); defaultEndpoint != "" {
-			config.Endpoint = &defaultEndpoint
-		}
-	} else {
-		log.Errorf("error fetching the region, %v", err)
-	}
-
 	sess := session.New(config)
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 

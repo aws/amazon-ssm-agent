@@ -33,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/runscript"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/updatessmagent"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/interactivecommands"
+	"github.com/aws/amazon-ssm-agent/agent/session/plugins/noninteractivecommands"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/port"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/standardstream"
@@ -69,7 +70,7 @@ type CloudWatchFactory struct {
 }
 
 func (f CloudWatchFactory) Create(context context.T) (runpluginutil.T, error) {
-	return lrpminvoker.NewPlugin(appconfig.PluginNameCloudWatch)
+	return lrpminvoker.NewPlugin(context, appconfig.PluginNameCloudWatch)
 }
 
 type InventoryGathererFactory struct {
@@ -83,56 +84,56 @@ type RunPowerShellFactory struct {
 }
 
 func (f RunPowerShellFactory) Create(context context.T) (runpluginutil.T, error) {
-	return runscript.NewRunPowerShellPlugin()
+	return runscript.NewRunPowerShellPlugin(context)
 }
 
 type UpdateAgentFactory struct {
 }
 
 func (f UpdateAgentFactory) Create(context context.T) (runpluginutil.T, error) {
-	return updatessmagent.NewPlugin(updatessmagent.GetUpdatePluginConfig(context))
+	return updatessmagent.NewPlugin(context)
 }
 
 type ConfigureContainerFactory struct {
 }
 
 func (f ConfigureContainerFactory) Create(context context.T) (runpluginutil.T, error) {
-	return configurecontainers.NewPlugin()
+	return configurecontainers.NewPlugin(context)
 }
 
 type RunDockerFactory struct {
 }
 
 func (f RunDockerFactory) Create(context context.T) (runpluginutil.T, error) {
-	return dockercontainer.NewPlugin()
+	return dockercontainer.NewPlugin(context)
 }
 
 type ConfigurePackageFactory struct {
 }
 
 func (f ConfigurePackageFactory) Create(context context.T) (runpluginutil.T, error) {
-	return configurepackage.NewPlugin(context.Log())
+	return configurepackage.NewPlugin(context)
 }
 
 type RefreshAssociationFactory struct {
 }
 
 func (f RefreshAssociationFactory) Create(context context.T) (runpluginutil.T, error) {
-	return refreshassociation.NewPlugin()
+	return refreshassociation.NewPlugin(context)
 }
 
 type DownloadContentFactory struct {
 }
 
 func (d DownloadContentFactory) Create(context context.T) (runpluginutil.T, error) {
-	return downloadcontent.NewPlugin()
+	return downloadcontent.NewPlugin(context)
 }
 
 type RunDocumentFactory struct {
 }
 
 func (r RunDocumentFactory) Create(context context.T) (runpluginutil.T, error) {
-	return rundocument.NewPlugin()
+	return rundocument.NewPlugin(context)
 }
 
 type SessionPluginFactory struct {
@@ -140,7 +141,7 @@ type SessionPluginFactory struct {
 }
 
 func (f SessionPluginFactory) Create(context context.T) (runpluginutil.T, error) {
-	return sessionplugin.NewPlugin(f.newPluginFunc)
+	return sessionplugin.NewPlugin(context, f.newPluginFunc)
 }
 
 // RegisteredWorkerPlugins returns all registered core modules.
@@ -149,7 +150,7 @@ func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 	defer func() {
 		if msg := recover(); msg != nil {
 			context.Log().Errorf("Agent failed while getting registered worker plugins %v!", msg)
-			context.Log().Errorf("%s: %s", msg, debug.Stack())
+			context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 
@@ -201,6 +202,9 @@ func loadSessionPlugins() {
 
 	portPluginName := appconfig.PluginNamePort
 	sessionPlugins[portPluginName] = SessionPluginFactory{port.NewPlugin}
+
+	nonInteractiveCommandsPluginName := appconfig.PluginNameNonInteractiveCommands
+	sessionPlugins[nonInteractiveCommandsPluginName] = SessionPluginFactory{noninteractivecommands.NewPlugin}
 
 	registeredPlugins = &sessionPlugins
 }

@@ -3,18 +3,19 @@
 
 # Amazon SSM Agent
 
-The Amazon EC2 Simple Systems Manager (SSM) Agent is software developed for the [Simple Systems Manager Service](http://docs.aws.amazon.com/ssm/latest/APIReference/Welcome.html). The SSM Agent is the primary component of a feature called Run Command.
+The Amazon EC2 Simple Systems Manager (SSM) Agent is software developed for the [Simple Systems Manager Service](http://docs.aws.amazon.com/systems-manager/latest/APIReference/Welcome.html). The SSM Agent is the primary component of a feature called Run Command.
 
 ## Overview
 
-The SSM Agent runs on EC2 instances and enables you to quickly and easily execute remote commands or scripts against one or more instances. The agent uses SSM [documents](http://docs.aws.amazon.com/ssm/latest/APIReference/aws-ssm-document.html). When you execute a command, the agent on the instance processes the document and configures the instance as specified.
+The SSM Agent runs on EC2 instances and enables you to quickly and easily execute remote commands or scripts against one or more instances. The agent uses SSM [documents](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-ssm-docs.html). When you execute a command, the agent on the instance processes the document and configures the instance as specified.
 Currently, the agent and Run Command enable you to quickly run Shell scripts on an instance using the AWS-RunShellScript SSM document. 
-SSM Agent also enables the Session Manager capability that lets you manage your Amazon EC2 instance through an interactive one-click browser-based shell or through the AWS CLI. When the agent starts, it will create a user called "ssm-user" with sudo or administrator privilege. Session Manager sessions will be launched in context of this user.
+SSM Agent also enables the Session Manager capability that lets you manage your Amazon EC2 instance through an interactive one-click browser-based shell or through the AWS CLI. The first time a Session Manager session is started on an instance, the agent will create a user called "ssm-user" with sudo or administrator privilege. Session Manager sessions will be launched in context of this user.
 
 ### Verify Requirements
 
 * [SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
 * [SSM Session Manager Prerequisites and supported Operating Systems](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
+* Linux systems require kernel version 3.2 or above
 
 ### Setup
 
@@ -93,6 +94,15 @@ Please follow the user guide to [copy and install the SSM Agent](http://docs.aws
 * rpm and dpkg artifacts are under packaging
 * build scripts are under Tools/src
 
+### Linting
+
+To lint the entire module call the `lint-all` target. This executes golangci-lint on all packages in the module.
+You can configure golangci-lint with different linters using the `.golangci.yml` file.
+
+For golangci-lint installation instructions see https://golangci-lint.run/usage/install/
+For more information on the golangci-lint configuration file see https://golangci-lint.run/usage/configuration/
+For more information on the linters used see https://golangci-lint.run/usage/linters/
+
 ### GOPATH
 
 To use vendor dependencies, the suggested GOPATH format is `:<packagesource>/vendor:<packagesource>`
@@ -109,6 +119,8 @@ The following targets are available. Each may be run with `make <target>`.
 | `package`                | `package` packages build result into a RPM, DEB and ZIP package |
 | `pre-build`              | `pre-build` goes through Tools/src folder to make sure all the script files are executable |
 | `checkstyle`             | `checkstyle` runs the checkstyle script |
+| `analyze-install`        | `analyze-install` install static analysis dependencies for local use |
+| `analyze`                | `analyze` runs static analysis script to find possible vulnerabilities |
 | `quick-integtest`        | `quick-integtest` runs all tests tagged with integration using `go test` |
 | `quick-test`             | `quick-test` runs all the tests including integration and unit tests using `go test` |
 | `coverage`               | `coverage` runs all tests and calculate code coverage |
@@ -120,6 +132,7 @@ The following targets are available. Each may be run with `make <target>`.
 | `build-darwin-386`       | `build-darwin-386` builds the agent for execution in the Darwin 386 environment |
 | `build-arm`              | `build-arm` builds the agent for execution in the arm environment |
 | `build-arm64`            | `build-arm64` builds the agent for execution in the arm64 environment |
+| `lint-all`               | `lint-all` runs golangci-lint on all packages. golangci-lint is configured by .golangci.yml |
 | `package-rpm`            | `package-rpm` builds the agent and packages it into a RPM package for Linux amd64 based distributions |
 | `package-deb`            | `package-deb` builds the agent and packages it into a DEB package Debian amd64 based distributions |
 | `package-win`            | `package-win` builds the agent and packages it into a ZIP package Windows amd64 based distributions |
@@ -153,6 +166,10 @@ To set up your own custom configuration for the agent:
     * ShareCreds (boolean)
         * Default: true
     * ShareProfile (string)
+    * ForceUpdateCreds (boolean) - overwrite shared credentials file if existing one cannot be parsed
+        * Default: false
+    * KeyAutoRotateDays (int) - defines the maximum age in days for on-prem private key, default value might change to 30 in the close future
+        * Default: 0 (never rotate)
 * Mds - represents configuration for Message delivery service (MDS) where agent listens for incoming messages
     * CommandWorkersLimit (int)
         * Default: 5
@@ -172,6 +189,17 @@ To set up your own custom configuration for the agent:
         * Default: 336
     * SessionLogsRetentionDurationHours (int)
         * Default: 336
+    * SessionLogsDestination (string) - Configure where you want Session Manager to write session data.
+        * Default: "none" - Don't write session data anywhere when CloudWatch and S3 logging are disabled.
+        * OptionalValue: "disk" - Write session data to disk.
+    * PluginLocalOutputCleanup (string) - Configure when after execution it is safe to delete local plugin output logs in orchestration folder
+        * Default: "" - Don't delete logs immediately after execution. Fall back to AssociationLogsRetentionDurationHours, RunCommandLogsRetentionDurationHours, and SessionLogsRetentionDurationHours 
+        * OptionalValue: "after-execution" - Delete plugin output file locally after plugin execution
+        * OptionalValue: "after-upload" - Delete plugin output locally after successful s3 or cloudWatch upload
+    * OrchestrationDirectoryCleanup (string) - Configure only when it is safe to delete orchestration folder after document execution. This config overrides PluginLocalOutputCleanup when set.
+        * Default: "" - Don't delete orchestration folder after execution
+        * OptionalValue: "clean-success" - Deletes the orchestration folder only for successful document executions.
+        * OptionalValue: "clean-success-failed" - Deletes the orchestration folder for successful and failed document executions.
 * Mgs - represents configuration for Message Gateway service
     * Region (string)
     * Endpoint (string)
@@ -179,6 +207,8 @@ To set up your own custom configuration for the agent:
         * Default: 20000
     * SessionWorkersLimit (int)
         * Default: 1000
+    * DeniedPortForwardingRemoteIPs ([]string)
+        * Default: [ "169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "fd00:ec2::123", "169.254.169.250", "169.254.169.251", "fd00:ec2::240"]
 * Agent - represents metadata for amazon-ssm-agent
     * Region (string)
     * OrchestrationRootDir (string)
@@ -193,6 +223,8 @@ To set up your own custom configuration for the agent:
         * Default: 7
     * LongRunningWorkerMonitorIntervalSeconds (int)
         * Default: 60
+    * GoMaxProcForAgentWorker (int)
+        * Default: 0
 * Os - represents os related information, will be logged in reply messages
     * Lang (string)
         * Default: "en-US"
@@ -207,6 +239,8 @@ To set up your own custom configuration for the agent:
     * LogKey (string) - Ignored
 * Kms - represents configuration for Key Management Service if encryption is enabled for this session (i.e. kmsKeyId is set or using "Port" plugin) 
     * Endpoint (string)
+    * RequireKMSChallengeResponse (boolean) - if true, enforces that Session Manager clients support enhanced challenge-response authentication
+        * Default: false
 
 ## Release
 
@@ -223,5 +257,5 @@ The following commands can be used to pull the `VERSION` file and check the late
 
 The Amazon SSM Agent is licensed under the Apache 2.0 License.
 
-[ReportCard-URL]: http://goreportcard.com/report/aws/amazon-ssm-agent
-[ReportCard-Image]: http://goreportcard.com/badge/aws/amazon-ssm-agent
+[ReportCard-URL]: https://goreportcard.com/report/aws/amazon-ssm-agent
+[ReportCard-Image]: https://goreportcard.com/badge/aws/amazon-ssm-agent

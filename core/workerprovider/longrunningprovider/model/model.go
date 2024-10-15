@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package model contains data objects for long running container
+// Package model contains data objects for long running container
 package model
 
 // WorkerConfig contains worker configuration information, such as path and args.
@@ -36,6 +36,7 @@ type Process struct {
 }
 
 const (
+	SSMAgentName       = "amazon-ssm-agent"
 	SSMAgentWorkerName = "ssm-agent-worker"
 )
 

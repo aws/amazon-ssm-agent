@@ -17,7 +17,7 @@ package iomodulemock
 import (
 	"io"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -27,6 +27,6 @@ type MockIOModule struct {
 }
 
 // Read is a mocked method that acknowledges that the function has been called.
-func (m *MockIOModule) Read(log log.T, reader *io.PipeReader) {
-	m.Called(log, reader)
+func (m *MockIOModule) Read(context context.T, reader *io.PipeReader, exitCode int) {
+	m.Called(context, reader, exitCode)
 }

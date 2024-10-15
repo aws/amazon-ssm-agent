@@ -14,21 +14,39 @@
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
-import "os"
+import (
+	"os"
+	"syscall"
+)
 
 const (
 	// Agent defaults
-	DefaultAgentName   = "amazon-ssm-agent"
-	SSMAgentWorkerName = "ssm-agent-worker"
+	DefaultAgentName      = "amazon-ssm-agent"
+	SSMAgentWorkerName    = "ssm-agent-worker"
+	SSMDocumentWorkerName = "ssm-document-worker"
+	SSMSessionWorkerName  = "ssm-session-worker"
 
 	DefaultTelemetryNamespace = "amazon-ssm-agent-telemetry"
 
 	DefaultCommandWorkersLimit    = 5
 	DefaultCommandWorkersLimitMin = 1
 
+	// DefaultCommandWorkerBufferLimit represents the default job pool buffer limit for run commands
+	DefaultCommandWorkerBufferLimit = 5
+	// DefaultCommandWorkersBufferLimitMin represents the minimum job pool buffer limit for run commands
+	DefaultCommandWorkersBufferLimitMin = 1
+
+	// DefaultSessionWorkerBufferLimit represents the default job pool buffer limit for session documents
+	DefaultSessionWorkerBufferLimit = 1
+	// DefaultSessionWorkersBufferLimitMin represents the minimum job pool buffer limit for session documents
+	DefaultSessionWorkersBufferLimitMin = 1
+
 	DefaultCommandRetryLimit    = 15
 	DefaultCommandRetryLimitMin = 1
 	DefaultCommandRetryLimitMax = 100
+
+	// DefaultCancelWorkersLimit represents default cancel worker limit
+	DefaultCancelWorkersLimit = 3
 
 	DefaultStopTimeoutMillis    = 20000
 	DefaultStopTimeoutMillisMin = 10000
@@ -55,6 +73,24 @@ const (
 	DefaultLocationOfState       = "state"
 	DefaultLocationOfAssociation = "association"
 
+	// PluginLocalOutputCleanup
+	// Delete plugin output file locally after plugin execution
+	PluginLocalOutputCleanupAfterExecution = "after-execution"
+	// Delete plugin output locally after successful s3 or cloudWatch upload
+	PluginLocalOutputCleanupAfterUpload = "after-upload"
+
+	// OrchestrationDirCleanup
+	// Deletes the orchestration folder for successful and failed document execution.
+	OrchestrationDirCleanupForSuccessFailedCommand = "clean-success-failed"
+	// Deletes the orchestration folder only for successful document execution.
+	OrchestrationDirCleanupForSuccessCommand = "clean-success"
+	// Don't delete orchestration folder after execution
+	DefaultOrchestrationDirCleanup = "default"
+
+	// Don't delete logs immediately after execution. Fall back to AssociationLogsRetentionDurationHours,
+	// RunCommandLogsRetentionDurationHours, and SessionLogsRetentionDurationHours
+	DefaultPluginOutputRetention = "default"
+
 	//aws-ssm-agent state and orchestration logs duration for Run Command and Association
 	DefaultAssociationLogsRetentionDurationHours           = 24  // 1 day default retention
 	DefaultRunCommandLogsRetentionDurationHours            = 336 // 14 days default retention
@@ -64,6 +100,10 @@ const (
 	DefaultAuditExpirationDay    = 7  // 7 days default audit files count
 	DefaultAuditExpirationDayMax = 30 // 30 days max audit files count
 	DefaultAuditExpirationDayMin = 3  // 3 days min audit files count
+
+	// log destination for session manager
+	SessionLogsDestinationDisk = "disk"
+	SessionLogsDestinationNone = "none"
 
 	//aws-ssm-agent bookkeeping constants for long running plugins
 	LongRunningPluginsLocation         = "longrunningplugins"
@@ -81,6 +121,10 @@ const (
 
 	//aws-ssm-agent bookkeeping constants for failed sent replies
 	RepliesRootDirName = "replies"
+	//amazon-ssm-agent bookkeeping constants for failed sent replies
+	RepliesMGSRootDirName = "replies_mgs"
+	//amazon-ssm-agent bookkeeping constants for storing received commands
+	IdempotencyDirName = "idempotency"
 
 	//aws-ssm-agent bookkeeping constants for compliance
 	ComplianceRootDirName         = "compliance"
@@ -105,14 +149,19 @@ const (
 	defaultLongRunningWorkerMonitorIntervalSecondsMin = 30
 	defaultLongRunningWorkerMonitorIntervalSecondsMax = 1800
 
+	defaultProfileKeyAutoRotateDays    = 0
+	defaultProfileKeyAutoRotateDaysMin = 0
+	defaultProfileKeyAutoRotateDaysMax = 365
+
 	// Permissions defaults
 	//NOTE: Limit READ, WRITE and EXECUTE access to administrators/root.
 	ReadWriteAccess        = 0600
 	ReadWriteExecuteAccess = 0700
 
 	// Common file flags when opening/creating files
-	FileFlagsCreateOrAppend   = os.O_APPEND | os.O_WRONLY | os.O_CREATE
-	FileFlagsCreateOrTruncate = os.O_TRUNC | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrAppend          = os.O_APPEND | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrTruncate        = os.O_TRUNC | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrAppendReadWrite = os.O_APPEND | os.O_RDWR | os.O_CREATE
 
 	// ExitCodes
 	SuccessExitCode = 0
@@ -171,7 +220,8 @@ const (
 	// PluginNameAwsApplications is the name of the Applications plugin
 	PluginNameAwsApplications = "aws:applications"
 
-	AppConfigFileName    = "amazon-ssm-agent.json"
+	AppConfigFileName = "amazon-ssm-agent.json"
+
 	SeelogConfigFileName = "seelog.xml"
 
 	// Output truncation limits
@@ -188,12 +238,21 @@ const (
 	// PluginNameInteractiveCommands is the name for session manager interactive commands plugin.
 	PluginNameInteractiveCommands = "InteractiveCommands"
 
+	// PluginNameNonInteractiveCommands is the name for session manager non-interactive commands plugin.
+	PluginNameNonInteractiveCommands = "NonInteractiveCommands"
+
 	// PluginNamePort is the name for session manager port plugin.
 	PluginNamePort = "Port"
 
 	// Session default RunAs user name
 	DefaultRunAsUserName = "ssm-user"
+
+	// Permit excluding RandomChallenge from KMS encryption context for backward compatibility with older clients
+	DefaultRequireKMSChallengeResponse = false
 )
+
+// Default deny list IP addresses for remote host port forwarding: IMDS (ipv4, ipv6); VPC (ipv4, ipv6); Amazon Time Sync (ipv4, ipv6); Amazon Windows license activation (2x ipv4, ipv6)
+var DefaultDeniedPortForwardingRemoteIPs = []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "fd00:ec2::123", "169.254.169.250", "169.254.169.251", "fd00:ec2::240"}
 
 // Document versions that are supported by this Agent version.
 // Note that 1.1 and 2.1 are deprecated schemas and hence are not added here.
@@ -213,3 +272,26 @@ var SupportedDocumentVersions = map[string]struct{}{
 var SupportedSessionDocumentVersions = map[string]struct{}{
 	"1.0": {},
 }
+
+// All the control signals to handles interrupt input from SSM CLI
+// SIGINT captures Ctrl+C
+// SIGQUIT captures Ctrl+\
+var ByteControlSignalsLinux = map[byte]os.Signal{
+	'\003': syscall.SIGINT,
+	'\x1c': syscall.SIGQUIT,
+}
+
+// All the input control messages that can be transformed to SIGKILL signal on Windows platforms
+// Windows platforms do not support SIGINT or SIGQUIT signals.
+// It only processes SIGKILL signal, which is translated to taskkill command on the process.
+var ByteControlSignalsWindows = map[byte]os.Signal{
+	'\003': syscall.SIGKILL,
+	'\x1c': syscall.SIGKILL,
+}
+
+// DefaultIdentityConsumptionOrder defines the default order identities will be consumed
+var DefaultIdentityConsumptionOrder = []string{
+	"OnPrem", "EC2", "CustomIdentity",
+}
+
+var DefaultCustomIdentityCredentialsProvider = "DEFAULT"

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package fileutil contains utilities for working with the file system.
@@ -21,8 +22,14 @@ import (
 	"syscall"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+)
+
+const (
+	fileNotFoundErrorMessage = "open : The system cannot find the file specified."
 )
 
 // Uncompress unzips the installation package
@@ -41,7 +48,7 @@ func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
 	}
 
 	// Load kernel32.dll and find GetDiskFreeSpaceEX function
-	getDiskFreeSpace := syscall.MustLoadDLL("kernel32.dll").MustFindProc("GetDiskFreeSpaceExW")
+	getDiskFreeSpace := windows.NewLazySystemDLL("kernel32.dll").NewProc("GetDiskFreeSpaceExW")
 
 	// Get the available bytes (for arguments, GetDiskFreeSpace function takes dir name, avail, total, and free respectively)
 	_, _, err = getDiskFreeSpace.Call(
@@ -59,6 +66,6 @@ func GetDiskSpaceInfo() (diskSpaceInfo DiskSpaceInfo, err error) {
 
 // HardenDataFolder sets permission of %PROGRAM_DATA% folder for Windows. In
 // Linux, each components handles the permission of its data.
-func HardenDataFolder() error {
+func HardenDataFolder(log.T) error {
 	return Harden(appconfig.SSMDataPath)
 }

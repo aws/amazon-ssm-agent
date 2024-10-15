@@ -14,26 +14,26 @@
 
 // Package configurepackage implements the ConfigurePackage plugin.
 
+//go:build e2e
 // +build e2e
 
 package configurepackage
 
 import (
 	"errors"
-	"testing"
-
 	"io/ioutil"
+	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	facadeMock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -582,19 +582,19 @@ func TestPrepareUpdateWithAdditionalArguments(t *testing.T) {
 	repoMock.AssertExpectations(t)
 }
 
-func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
+func TestPrepareUpgrade_BirdwatcherService_InPlaceInstallationType(t *testing.T) {
 	// file stubs are needed for ensurePackage because it handles the unzip
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 
 	pluginInformation := createStubPluginInputUpdate()
 	installerMock := installerNotCalledMock()
-	repoMock := repoMockNotInvoked()
+	repoMock := repoUpdateMock_Birdwatcher(pluginInformation, installerMock)
 	serviceMock := birdwatcherServiceMockForPrepareUpdate()
 	tracer := trace.NewTracer(log.NewMockLog())
 	output := &trace.PluginOutputTrace{Tracer: tracer}
 
-	prepareConfigurePackage(
+	inst, uninst, isUpdateInPlace, installState, installedVersion := prepareConfigurePackage(
 		tracer,
 		buildConfigSimple(pluginInformation),
 		repoMock,
@@ -605,9 +605,15 @@ func TestPrepareUpgrade_BirdwatcherService_InvalidInPlaceInstallationType(t *tes
 		false,
 		output)
 
+	assert.NotNil(t, inst)
+	assert.NotNil(t, uninst)
+	assert.True(t, isUpdateInPlace)
+	assert.Equal(t, localpackages.Installed, installState)
+	assert.NotEmpty(t, installedVersion)
+	assert.Equal(t, 0, output.GetExitCode())
+	assert.Empty(t, tracer.ToPluginOutput().GetStderr())
+
 	installerMock.AssertExpectations(t)
-	repoMock.AssertExpectations(t)
-	serviceMock.AssertExpectations(t)
 }
 
 // Test that if Update is triggered but the requested package does not exist, use the install script to install
@@ -886,10 +892,11 @@ func TestExecute(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
@@ -912,10 +919,11 @@ func TestExecuteUpdate_PackageNotInstalled_TreatAsInstall(t *testing.T) {
 	serviceMock := serviceUpdateMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
@@ -929,6 +937,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
@@ -939,7 +948,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	rawPluginInputs = append(rawPluginInputs, pluginInformation)
 	config.Properties = rawPluginInputs
 
-	plugin.execute(contextMock, config, createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(config, createMockCancelFlag(), createMockIOHandler())
 }
 
 func TestConfigurePackage_InvalidAction(t *testing.T) {
@@ -953,23 +962,25 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 }
 
-func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
+func TestConfigurePackageForUpdate_BirdwatcherService_InPlaceInstallationType(t *testing.T) {
 	pluginInformation := createStubPluginInputUpdate()
-	installerMock := installerNotCalledMock()
-	repoMock := repoUpdateMock_BirdwatcherNotAllowed()
+	installerMock := trueUpdateInstallerMock(pluginInformation.Name, pluginInformation.Version)
+	repoMock := repoUpdateMock_Birdwatcher(pluginInformation, installerMock)
 	serviceMock := birdwatcherServiceMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -1290,7 +1301,7 @@ func TestSelectService(t *testing.T) {
 				Repository: "",
 			}
 
-			result, err := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
+			result, err := selectService(contextMock, tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
 
 			if !testdata.errorExpected {
 				assert.Equal(t, testdata.expectedType, result.PackageServiceName())
@@ -1336,13 +1347,14 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 
 	plugin := &Plugin{
+		context:                contextMock,
 		birdwatcherfacade:      &bwFacade,
 		localRepository:        repoMock,
 		packageServiceSelector: selectService,
 	}
 
 	// open network required
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
@@ -1375,7 +1387,7 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 	getDocument_DocVersion := "2"
 	fakeHash := "djfhsfdse3498234bbar8821344bncdklsr023445fskdsgg"
 
-	ec2infradetect.CollectEc2Infrastructure = func(log log.T) (*ec2infradetect.Ec2Infrastructure, error) {
+	ec2infradetect.CollectEc2Infrastructure = func(identity.IAgentIdentity) (*ec2infradetect.Ec2Infrastructure, error) {
 		return &ec2infradetect.Ec2Infrastructure{
 			InstanceID:       "i-1234",
 			Region:           "us-east-1",
@@ -1504,12 +1516,13 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
 
 			plugin := &Plugin{
+				context:                contextMock,
 				birdwatcherfacade:      &bwFacade,
 				localRepository:        repoMock,
 				packageServiceSelector: selectService,
 			}
 
-			plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockIOHandler)
+			plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), mockIOHandler)
 
 			if !testdata.getDocumentReturnsError {
 				repoMock.AssertExpectations(t)

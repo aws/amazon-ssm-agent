@@ -13,53 +13,37 @@
 package linuxcontainerutil
 
 import (
-	"runtime"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var loggerMock = log.NewMockLog()
-
 func successMock() *DepMock {
 	depmock := DepMock{}
-	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
+	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 
-	var context *updateutil.InstanceContext
-	context = &updateutil.InstanceContext{
-		Region:          "us-east-1",
-		Platform:        updateutil.PlatformLinux,
-		PlatformVersion: "",
-		InstallerName:   updateutil.PlatformLinux,
-		Arch:            runtime.GOARCH,
-		CompressFormat:  updateutil.CompressFormat,
-	}
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformLinux)
 
-	depmock.On("GetInstanceContext", mock.Anything).Return(context, nil)
+	depmock.On("GetInstanceInfo", mock.Anything).Return(info, nil)
 	return &depmock
 }
 
 func unsupportedPlatformMock() *DepMock {
 	depmock := DepMock{}
-	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
+	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 
-	var context *updateutil.InstanceContext
-	context = &updateutil.InstanceContext{
-		Region:          "us-east-1",
-		Platform:        updateutil.PlatformUbuntu,
-		PlatformVersion: "",
-		InstallerName:   updateutil.PlatformUbuntu,
-		Arch:            runtime.GOARCH,
-		CompressFormat:  updateutil.CompressFormat,
-	}
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformUbuntu)
 
-	depmock.On("GetInstanceContext", mock.Anything).Return(context, nil)
+	depmock.On("GetInstanceInfo", mock.Anything).Return(info, nil)
 	return &depmock
 }
 
@@ -70,11 +54,11 @@ func TestInstall(t *testing.T) {
 	defer func() { dep = depOrig }()
 
 	output := iohandler.DefaultIOHandler{}
-	RunInstallCommands(loggerMock, "", &output)
+	RunInstallCommands(context.NewMockDefault(), "", &output)
 
 	assert.Equal(t, output.GetExitCode(), 0)
 	assert.Contains(t, output.GetStdout(), "Installation complete")
-	containerMock.AssertCalled(t, "GetInstanceContext", mock.Anything)
+	containerMock.AssertCalled(t, "GetInstanceInfo", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 3)
 }
 
@@ -85,12 +69,12 @@ func TestInstallUnsupportedPlatform(t *testing.T) {
 	defer func() { dep = depOrig }()
 
 	output := iohandler.DefaultIOHandler{}
-	RunInstallCommands(loggerMock, "", &output)
+	RunInstallCommands(context.NewMockDefault(), "", &output)
 
 	assert.Equal(t, output.GetExitCode(), 1)
 	assert.Equal(t, output.GetStdout(), "")
 	assert.NotEqual(t, output.GetStderr(), "")
-	containerMock.AssertCalled(t, "GetInstanceContext", mock.Anything)
+	containerMock.AssertCalled(t, "GetInstanceInfo", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 0)
 }
 
@@ -101,11 +85,11 @@ func TestUnInstall(t *testing.T) {
 	defer func() { dep = depOrig }()
 
 	output := iohandler.DefaultIOHandler{}
-	RunUninstallCommands(loggerMock, "", &output)
+	RunUninstallCommands(context.NewMockDefault(), "", &output)
 
 	assert.Equal(t, output.GetExitCode(), 0)
 	assert.Contains(t, output.GetStderr(), "")
 	assert.Contains(t, output.GetStdout(), "Uninstall complete")
-	containerMock.AssertCalled(t, "GetInstanceContext", mock.Anything)
+	containerMock.AssertCalled(t, "GetInstanceInfo", mock.Anything)
 	containerMock.AssertNumberOfCalls(t, "UpdateUtilExeCommandOutput", 1)
 }

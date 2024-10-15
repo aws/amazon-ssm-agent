@@ -28,17 +28,11 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
 	"github.com/aws/amazon-ssm-agent/agent/network"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
-	"github.com/aws/aws-sdk-go/aws/session"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 )
 
@@ -57,19 +51,21 @@ type Service interface {
 
 // MessageGatewayService is a service wrapper that delegates to the message gateway service sdk.
 type MessageGatewayService struct {
-	region string
-	tr     *http.Transport
-	signer *v4.Signer
+	context context.T
+	region  string
+	tr      *http.Transport
+	signer  *v4.Signer
 }
 
 // NewService creates a new service instance.
-func NewService(log log.T, mgsConfig appconfig.MgsConfig, connectionTimeout time.Duration) Service {
-
+func NewService(context context.T, mgsConfig appconfig.MgsConfig, connectionTimeout time.Duration) Service {
+	log := context.Log()
+	identity := context.Identity()
 	var region *string
 	if mgsConfig.Region != "" {
 		region = aws.String(mgsConfig.Region)
 	} else {
-		fetchedRegion, err := platform.Region()
+		fetchedRegion, err := identity.Region()
 		if err != nil {
 			log.Errorf("Failed to get region with error: %s", err)
 		}
@@ -77,45 +73,25 @@ func NewService(log log.T, mgsConfig appconfig.MgsConfig, connectionTimeout time
 	}
 
 	log.Debug("Getting credentials for v4 signatures.")
-	var v4Signer *v4.Signer
-	creds, _ := getCredentials()
-	if creds != nil {
-		v4Signer = v4.NewSigner(creds)
-	} else {
-		config, _ := appconfig.Config(false)
-		if config.Agent.ContainerMode {
-			log.Debug("Getting credentials for v4 signatures from the task role credentials.")
-			config := sdkutil.AwsConfig(log)
-			v4Signer = v4.NewSigner(config.Credentials)
-		} else {
-			log.Debug("Getting credentials for v4 signatures from the metadata service.")
-
-			// load from the metadata service
-			metadataCreds := ec2rolecreds.NewCredentials(session.New())
-			if metadataCreds != nil {
-				v4Signer = v4.NewSigner(metadataCreds)
-			} else {
-				log.Debug("Failed to get the creds from the metadata service.")
-			}
-		}
-	}
+	v4Signer := v4.NewSigner(identity.Credentials())
 
 	// capture Transport so we can use it to cancel requests
-	tr := network.GetDefaultTransport(log)
+	tr := network.GetDefaultTransport(log, context.AppConfig())
 	tr.DialContext = (&net.Dialer{
 		Timeout:   connectionTimeout,
 		KeepAlive: 0,
 	}).DialContext
 
 	return &MessageGatewayService{
-		region: aws.StringValue(region),
-		tr:     tr,
-		signer: v4Signer,
+		context: context,
+		region:  aws.StringValue(region),
+		tr:      tr,
+		signer:  v4Signer,
 	}
 }
 
 // makeRestcall triggers rest api call.
-var makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 	httpRequest, err := http.NewRequest(methodType, url, bytes.NewBuffer(request))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request: %s", err)
@@ -127,7 +103,7 @@ var makeRestcall = func(log log.T, request []byte, methodType string, url string
 		return nil, fmt.Errorf("failed to sign the request: %s", err)
 	}
 
-	tr := network.GetDefaultTransport(log)
+	tr := network.GetDefaultTransport(log, appConfig)
 	client := &http.Client{
 		Timeout:   mgsClientTimeout,
 		Transport: tr,
@@ -143,6 +119,7 @@ var makeRestcall = func(log log.T, request []byte, methodType string, url string
 	if err != nil {
 		return nil, fmt.Errorf("failed to read bytes from http response: %s", err)
 	}
+
 	if resp.StatusCode == httpStatusCodeCreated {
 		return body, nil
 	} else {
@@ -154,9 +131,9 @@ var makeRestcall = func(log log.T, request []byte, methodType string, url string
 // control-channel: https://ssm-messages.{region}.amazonaws.com/v1/control-channel/{channel_id}
 // data-channel: https://ssm-messages.{region}.amazonaws.com/v1/data-channel/{session_id}
 // channelType can be control-channel or data-channel
-func getMGSBaseUrl(log log.T, channelType string, channelId string, region string) (output string, err error) {
+func getMGSBaseUrl(context context.T, channelType string, channelId string, region string) (output string, err error) {
 	// build url for CreateControlChannel or CreateDataChannel
-	hostName := mgsconfig.GetMgsEndpointFromRip(region)
+	hostName := mgsconfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("failed to get host name with error: %s", err)
 	}
@@ -172,18 +149,6 @@ func getMGSBaseUrl(log log.T, channelType string, channelId string, region strin
 	return mgsUrl.String(), nil
 }
 
-// getCredentials gets the current active credentials.
-func getCredentials() (*credentials.Credentials, error) {
-	// load managed instance credentials if applicable
-	isManaged, err := registration.HasManagedInstancesCredentials()
-
-	if isManaged && err == nil {
-		return rolecreds.ManagedInstanceCredentialsInstance(), nil
-	}
-
-	return nil, err
-}
-
 // GetV4Signer gets the v4 signer.
 func (mgsService *MessageGatewayService) GetV4Signer() *v4.Signer {
 	return mgsService.signer
@@ -197,7 +162,7 @@ func (mgsService *MessageGatewayService) GetRegion() string {
 // CreateControlChannel calls the CreateControlChannel MGS API
 func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createControlChannelInput *CreateControlChannelInput, channelId string) (createControlChannelOutput *CreateControlChannelOutput, err error) {
 
-	url, err := getMGSBaseUrl(log, mgsconfig.ControlChannel, channelId, mgsService.region)
+	url, err := getMGSBaseUrl(mgsService.context, mgsconfig.ControlChannel, channelId, mgsService.region)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
 	}
@@ -211,7 +176,7 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 		return nil, errors.New("unable to marshal the createControlChannelInput")
 	}
 
-	resp, err := makeRestcall(log, jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(log, mgsService.context.AppConfig(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
 	if err != nil {
 		return nil, fmt.Errorf("createControlChannel request failed: %s", err)
 	}
@@ -229,7 +194,7 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 // CreateDataChannel calls the CreateDataChannel MGS API
 func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createDataChannelInput *CreateDataChannelInput, sessionId string) (createDataChannelOutput *CreateDataChannelOutput, err error) {
 
-	url, err := getMGSBaseUrl(log, mgsconfig.DataChannel, sessionId, mgsService.region)
+	url, err := getMGSBaseUrl(mgsService.context, mgsconfig.DataChannel, sessionId, mgsService.region)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the mgs base url with error: %s", err)
 	}
@@ -243,7 +208,7 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 		return nil, errors.New("unable to marshal the createDataChannelInput")
 	}
 
-	resp, err := makeRestcall(log, jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(log, mgsService.context.AppConfig(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
 	if err != nil {
 		return nil, fmt.Errorf("createDataChannel request failed: %s", err)
 	}

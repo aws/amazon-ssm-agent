@@ -11,7 +11,7 @@ function error_exit
 # echo "Checking if the agent is installed"
 # uninstall the agent if it is present
 if [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
-  if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
+  if [[ "$(systemctl is-active snap.amazon-ssm-agent.amazon-ssm-agent.service)" == "active" ]]; then
 		# echo "-> Agent is running in the instance"
 		# echo "Stopping the agent"
 		systemctl stop snap.amazon-ssm-agent.amazon-ssm-agent.service

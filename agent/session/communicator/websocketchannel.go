@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"runtime/debug"
 	"sync"
@@ -43,7 +44,7 @@ type IWebSocketChannel interface {
 		signer *v4.Signer,
 		onMessageHandler func([]byte),
 		onErrorHandler func(error)) error
-	Open(log log.T) error
+	Open(log log.T, dialer *websocket.Dialer) error
 	Close(log log.T) error
 	GetChannelToken() string
 	SetChannelToken(token string)
@@ -66,6 +67,7 @@ type WebSocketChannel struct {
 	Region       string
 	IsOpen       bool
 	writeLock    *sync.Mutex
+	stopPinging  chan bool
 }
 
 // Initialize a WebSocketChannel object.
@@ -79,7 +81,7 @@ func (webSocketChannel *WebSocketChannel) Initialize(context context.T,
 	onMessageHandler func([]byte),
 	onErrorHandler func(error)) error {
 
-	hostName := mgsconfig.GetMgsEndpointFromRip(region)
+	hostName := mgsconfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return fmt.Errorf("no MGS endpoint found")
 	}
@@ -146,7 +148,7 @@ func (webSocketChannel *WebSocketChannel) SetChannelToken(token string) {
 }
 
 // Open upgrades the http connection to a websocket connection.
-func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
+func (webSocketChannel *WebSocketChannel) Open(log log.T, dialer *websocket.Dialer) error {
 
 	// initialize the write mutex
 	webSocketChannel.writeLock = &sync.Mutex{}
@@ -156,26 +158,35 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 		log.Errorf("Failed to get the v4 signature, %v", err)
 	}
 
-	ws, err := websocketutil.NewWebsocketUtil(log, nil).OpenConnection(webSocketChannel.Url, header)
+	ws, err := websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), dialer).OpenConnection(webSocketChannel.Url, header)
 	if err != nil {
 		return err
 	}
 
 	webSocketChannel.Connection = ws
 	webSocketChannel.IsOpen = true
+	webSocketChannel.stopPinging = make(chan bool, 1)
 	webSocketChannel.StartPings(log, mgsconfig.WebSocketPingInterval)
 
 	// spin up a different routine to listen to the incoming traffic
 	go func() {
+		defer log.Info("Ending websocket listener")
+		log.Info("Starting websocket listener")
 
 		defer func() {
 			if msg := recover(); msg != nil {
 				log.Errorf("WebsocketChannel listener run panic: %v", msg)
-				log.Errorf("%s: %s", msg, debug.Stack())
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 		}()
 
 		retryCount := 0
+		webSocketChannel.Connection.SetReadDeadline(time.Now().Add(mgsconfig.WebSocketPongWaitTimeout + mgsconfig.WebSocketPingInterval))
+		webSocketChannel.Connection.SetPongHandler(func(string) error {
+			webSocketChannel.Connection.SetReadDeadline(time.Now().Add(mgsconfig.WebSocketPongWaitTimeout))
+			log.Debug("WebsocketChannel: received pong, extend timeout to be ", time.Now().Add(mgsconfig.WebSocketPongWaitTimeout))
+			return nil
+		})
 		for {
 
 			if webSocketChannel.IsOpen == false {
@@ -186,7 +197,11 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 			messageType, rawMessage, err := webSocketChannel.Connection.ReadMessage()
 			if err != nil {
 				retryCount++
-				if retryCount >= mgsconfig.RetryAttempt {
+				if errors.Is(err, os.ErrDeadlineExceeded) {
+					log.Warnf("I/O timeout. Error: %v", err.Error())
+					webSocketChannel.OnError(err)
+					break
+				} else if retryCount >= mgsconfig.RetryAttempt {
 					log.Warnf("Reach the retry limit %v for receive messages. Error: %v", mgsconfig.RetryAttempt, err.Error())
 					webSocketChannel.OnError(err)
 					break
@@ -215,33 +230,48 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 // StartPings starts the pinging process to keep the websocket channel alive.
 func (webSocketChannel *WebSocketChannel) StartPings(log log.T, pingInterval time.Duration) {
 
-	go func() {
-		for {
-			if webSocketChannel.IsOpen == false {
-				return
-			}
+	go func(done chan bool) {
+		log.Info("Starting websocket pinger")
+		defer log.Info("Ending websocket pinger")
 
-			log.Debug("WebsocketChannel: Send ping. Message.")
-			webSocketChannel.writeLock.Lock()
-			err := webSocketChannel.Connection.WriteMessage(websocket.PingMessage, []byte("keepalive"))
-			webSocketChannel.writeLock.Unlock()
-			if err != nil {
-				log.Warnf("Error while sending websocket ping: %v", err)
-				return
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Websocket channel start pings panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
 			}
-			time.Sleep(pingInterval)
+		}()
+		ticker := time.NewTicker(pingInterval)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-done:
+				return
+
+			case <-ticker.C:
+				log.Debug("WebsocketChannel: Send ping. Message.")
+				err := webSocketChannel.SendMessage(log, []byte("keepalive"), websocket.PingMessage)
+				if err != nil {
+					log.Warnf("Error while sending websocket ping: %v", err)
+					// reconnection logic
+					return
+				}
+			}
 		}
-	}()
+	}(webSocketChannel.stopPinging) // explicitly passed in case it changes on Close/Reopen
 }
 
 // Close closes the corresponding connection.
 func (webSocketChannel *WebSocketChannel) Close(log log.T) error {
 
 	log.Info("Closing websocket channel connection to: " + webSocketChannel.Url)
+
+	// Send signal to stop receiving message
 	if webSocketChannel.IsOpen == true {
-		// Send signal to stop receiving message
 		webSocketChannel.IsOpen = false
-		return websocketutil.NewWebsocketUtil(log, nil).CloseConnection(webSocketChannel.Connection)
+
+		webSocketChannel.stopPinging <- true
+		close(webSocketChannel.stopPinging)
+		return websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), nil).CloseConnection(webSocketChannel.Connection)
 	}
 
 	log.Debugf("Websocket channel connection to: " + webSocketChannel.Url + " is already Closed!")
@@ -260,7 +290,7 @@ func (webSocketChannel *WebSocketChannel) SendMessage(log log.T, input []byte, i
 	}
 
 	webSocketChannel.writeLock.Lock()
+	defer webSocketChannel.writeLock.Unlock()
 	err := webSocketChannel.Connection.WriteMessage(inputType, input)
-	webSocketChannel.writeLock.Unlock()
 	return err
 }

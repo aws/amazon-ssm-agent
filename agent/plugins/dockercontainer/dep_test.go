@@ -3,6 +3,8 @@ package dockercontainer
 import (
 	"io"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
 )
@@ -12,6 +14,7 @@ type DepMock struct {
 }
 
 func (m *DepMock) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,

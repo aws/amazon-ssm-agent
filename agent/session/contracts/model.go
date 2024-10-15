@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// contracts package defines all channel messages structure.
+// Package contracts defines all channel messages structure.
 package contracts
 
 import (
@@ -31,6 +31,8 @@ const (
 	TaskReplyMessage string = "agent_task_reply"
 	// TaskCompleteMessage represents message type for task complete
 	TaskCompleteMessage string = "agent_task_complete"
+	// TaskAcknowledgeMessage represents message type for acknowledge of tasks sent over control channel
+	TaskAcknowledgeMessage string = "agent_task_acknowledge"
 	// AcknowledgeMessage represents message type for acknowledge
 	AcknowledgeMessage string = "acknowledge"
 	// AgentSessionState represents status of session
@@ -45,6 +47,14 @@ const (
 	PausePublicationMessage string = "pause_publication"
 	// StartPublicationMessage message type for start sending data packages.
 	StartPublicationMessage string = "start_publication"
+	// AgentJobMessage represents message type for agent job
+	AgentJobMessage string = "agent_job"
+	// AgentJobAcknowledgeMessage represents message for agent job acknowledge
+	AgentJobAcknowledgeMessage string = "agent_job_ack"
+	// AgentJobReplyAck represents message for agent job reply acknowledge
+	AgentJobReplyAck string = "agent_job_reply_ack"
+	// AgentJobReply represents message type for agent job reply
+	AgentJobReply string = "agent_job_reply"
 )
 
 type ShellProperties struct {
@@ -54,8 +64,11 @@ type ShellProperties struct {
 }
 
 type ShellConfig struct {
-	Commands      string `json:"commands" yaml:"commands"`
-	RunAsElevated bool   `json:"runAsElevated" yaml:"runAsElevated"`
+	Commands              string      `json:"commands" yaml:"commands"`
+	RunAsElevated         bool        `json:"runAsElevated" yaml:"runAsElevated"`
+	SeparateOutputStream  interface{} `json:"separateOutputStream" yaml:"separateOutputStream"`
+	StdOutSeparatorPrefix string      `json:"stdOutSeparatorPrefix" yaml:"stdOutSeparatorPrefix"`
+	StdErrSeparatorPrefix string      `json:"stdErrSeparatorPrefix" yaml:"stdErrSeparatorPrefix"`
 }
 
 type IMessage interface {
@@ -107,6 +120,31 @@ type AgentTaskPayload struct {
 	Parameters      map[string]interface{}           `json:"Parameters"`
 	RunAsUser       string                           `json:"RunAsUser"`
 	SessionOwner    string                           `json:"SessionOwner"`
+}
+
+// AgentJobPayload parallels the structure of a send-command or cancel-command job
+type AgentJobPayload struct {
+	Payload       string `json:"Content"`
+	JobId         string `json:"JobId"`
+	Topic         string `json:"Topic"`
+	SchemaVersion int    `json:"SchemaVersion"`
+}
+
+// AgentJobReplyContent parallels the structure of a send-command or cancel-command job
+type AgentJobReplyContent struct {
+	SchemaVersion int    `json:"schemaVersion"`
+	JobId         string `json:"jobId"`
+	Content       string `json:"content"`
+	Topic         string `json:"topic"`
+}
+
+// AgentJobAck is the acknowledge message sent back to MGS for AgentJobs
+type AgentJobAck struct {
+	JobId        string `json:"jobId"`
+	MessageId    string `json:"acknowledgedMessageId"`
+	CreatedDate  string `json:"createdDate"`
+	StatusCode   string `json:"statusCode"`
+	ErrorMessage string `json:"errorMessage"`
 }
 
 // AcknowledgeContent is used to inform the sender of an acknowledge message that the message has been received.
@@ -202,6 +240,65 @@ type AgentTaskCompletePayload struct {
 	S3UrlSuffix      string `json:"S3UrlSuffix"`
 	CwlGroup         string `json:"CwlGroup"`
 	CwlStream        string `json:"CwlStream"`
+	RetryNumber      int    `json:"RetryNumber"`
+}
+
+// AgentJobReplyAckContent is the acknowledge message sent back to MGS for AgentJobs
+type AgentJobReplyAckContent struct {
+	JobId                 string `json:"jobId"`
+	AcknowledgedMessageId string `json:"acknowledgedMessageId"`
+}
+
+// Deserialize parses taskAcknowledge message from payload of AgentMessage.
+func (replyAck *AgentJobReplyAckContent) Deserialize(log logger.T, agentMessage AgentMessage) (err error) {
+	if agentMessage.MessageType != AgentJobReplyAck {
+		err = fmt.Errorf("AgentMessage is not of type AgentJobReplyAck. Found message type: %s", agentMessage.MessageType)
+		return
+	}
+
+	if err = json.Unmarshal(agentMessage.Payload, replyAck); err != nil {
+		log.Errorf("Could not deserialize rawMessage to AgentJobReplyAckContent: %s", err)
+	}
+	return
+}
+
+// Serialize marshals AgentJobReplyAckContent as payload into bytes.
+func (replyAck *AgentJobReplyAckContent) Serialize(log logger.T) (result []byte, err error) {
+	result, err = json.Marshal(replyAck)
+	if err != nil {
+		log.Errorf("Could not serialize AgentJobReplyAckContent message: %v, err: %s", replyAck, err)
+	}
+	return
+}
+
+// AcknowledgeTaskContent parallels the structure of acknowledgement to task message
+type AcknowledgeTaskContent struct {
+	SchemaVersion int    `json:"SchemaVersion"`
+	MessageId     string `json:"MessageId"`
+	TaskId        string `json:"TaskId"`
+	Topic         string `json:"Topic"`
+}
+
+// Deserialize parses taskAcknowledge message from payload of AgentMessage.
+func (taskAcknowledge *AcknowledgeTaskContent) Deserialize(log logger.T, agentMessage AgentMessage) (err error) {
+	if agentMessage.MessageType != TaskAcknowledgeMessage {
+		err = fmt.Errorf("AgentMessage is not of type TaskAcknowledgeMessage. Found message type: %s", agentMessage.MessageType)
+		return
+	}
+
+	if err = json.Unmarshal(agentMessage.Payload, taskAcknowledge); err != nil {
+		log.Errorf("Could not deserialize rawMessage to AcknowledgeTaskContent: %s", err)
+	}
+	return
+}
+
+// Serialize marshals AcknowledgeTaskContent as payload into bytes.
+func (taskAcknowledge *AcknowledgeTaskContent) Serialize(log logger.T) (result []byte, err error) {
+	result, err = json.Marshal(taskAcknowledge)
+	if err != nil {
+		log.Errorf("Could not serialize AcknowledgeTaskContent message: %v, err: %s", taskAcknowledge, err)
+	}
+	return
 }
 
 // SessionPluginResultOutput represents PluginResult output sent to MGS as part of AgentTaskComplete message
@@ -226,6 +323,8 @@ const (
 	EncChallengeRequest  PayloadType = 8
 	EncChallengeResponse PayloadType = 9
 	Flag                 PayloadType = 10
+	StdErr               PayloadType = 11
+	ExitCode             PayloadType = 12
 )
 
 type PayloadTypeFlag uint32
@@ -268,13 +367,15 @@ const (
 
 // This is sent by the agent to initialize KMS encryption
 type KMSEncryptionRequest struct {
-	KMSKeyID string `json:"KMSKeyId"`
+	KMSKeyID  string `json:"KMSKeyId"`
+	Challenge string `json:"Challenge"`
 }
 
 // This is received by the agent to set up KMS encryption
 type KMSEncryptionResponse struct {
-	KMSCipherTextKey  []byte `json:"KMSCipherTextKey"`
-	KMSCipherTextHash []byte `json:"KMSCipherTextHash"`
+	KMSCipherTextKey         []byte `json:"KMSCipherTextKey"`
+	KMSCipherTextHash        []byte `json:"KMSCipherTextHash"`
+	ChallengeAcknowledgement bool   `json:"ChallengeAcknowledgement"`
 }
 
 type SessionTypeRequest struct {

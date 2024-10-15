@@ -16,8 +16,10 @@
 package cloudwatchlogsqueue
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -25,13 +27,20 @@ import (
 	"github.com/Workiva/go-datastructures/queue"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 const (
-	batchSize            int64 = 10000 // The Max Batch Supported by the AWS CW Logs Push API
-	initialQueueCapacity int64 = 10    // The initial capacity of slice. Would not need to resize till this length
-	queueLimit           int64 = 10000 // The Limit of the number of messages in the queue (~40kB of queue)
+	batchSize            int   = 10000   // The Max Batch Supported by the AWS CW Logs Push API
+	batchByteSizeMax     int   = 1000000 // CloudWatch batch size - 1 MB
+	initialQueueCapacity int64 = 10      // The initial capacity of slice. Would not need to resize till this length
+	queueLimit           int64 = 10000   // The Limit of the number of messages in the queue (~40kB of queue)
 	defaultLogGroup            = "SSMAgentLogs"
+
+	docWorkerLogGroupSeelogAttrib     = "document-worker-log-group"
+	sessionWorkerLogGroupSeelogAttrib = "session-worker-log-group"
+	agentWorkerLogGroupSeelogAttrib   = "log-group"
 )
 
 // logDataFacade stores the CloudWatchLogs Destination and Queue being used to store the messages
@@ -54,6 +63,7 @@ const (
 var logDataFacadeInstance *logDataFacade
 var once = new(sync.Once)
 var mutex sync.RWMutex
+var verifiedLogGroupName string
 
 // CloudWatchLogsEventsChannel channel used for communication with cloudwatch publisher
 var CloudWatchLogsEventsChannel = make(chan CloudWatchLogsEvents)
@@ -61,9 +71,12 @@ var CloudWatchLogsEventsChannel = make(chan CloudWatchLogsEvents)
 // CreateCloudWatchDataInstance creates an instance of logDataFacade if not created
 func CreateCloudWatchDataInstance(initArgs seelog.CustomReceiverInitArgs) (err error) {
 	// Acquiring Read Write Lock on the instance to ensure enqueue/dequeue not happening
-	fmt.Println("Create Instance")
+	fmt.Println("Creating CloudWatch Log Emitter for Agent Logs")
 	mutex.Lock()
 	defer mutex.Unlock()
+	if err := verifyLogGroupName(initArgs, os.Args); err != nil {
+		return err
+	}
 	// Ensuring just one instance is created. Returning the same instance if already created
 	once.Do(func() {
 		defer func() {
@@ -91,6 +104,11 @@ func CreateCloudWatchDataInstance(initArgs seelog.CustomReceiverInitArgs) (err e
 
 // setLogDestination updates the logGroup if needed
 func setLogDestination(initArgs seelog.CustomReceiverInitArgs) {
+	if !IsActive() {
+		fmt.Println("[ERROR] CloudWatch Log Data Facade not yet initialized")
+		return
+	}
+
 	logGroup, sharingDestination, logSharingEnabled := parseXMLConfigs(initArgs)
 	if logDataFacadeInstance.logGroup == logGroup && logDataFacadeInstance.logSharingEnabled == logSharingEnabled && logDataFacadeInstance.sharingDestination == sharingDestination {
 		return
@@ -112,14 +130,36 @@ func setLogDestination(initArgs seelog.CustomReceiverInitArgs) {
 	}
 }
 
+func verifyLogGroupName(xmlConfig seelog.CustomReceiverInitArgs, args []string) error {
+	invalidLogGroupErrMsg := "invalid log group name"
+	var logGroup = defaultLogGroup
+	var ok bool
+	if len(args) > 0 {
+		if args[0] == appconfig.DefaultDocumentWorker {
+			logGroup, ok = xmlConfig.XmlCustomAttrs[docWorkerLogGroupSeelogAttrib]
+			if logGroup == "" || !ok {
+				return fmt.Errorf(invalidLogGroupErrMsg)
+			}
+		} else if args[0] == appconfig.DefaultSessionWorker {
+			logGroup, ok = xmlConfig.XmlCustomAttrs[sessionWorkerLogGroupSeelogAttrib]
+			if logGroup == "" || !ok {
+				return fmt.Errorf(invalidLogGroupErrMsg)
+			}
+		} else {
+			logGroup, ok = xmlConfig.XmlCustomAttrs[agentWorkerLogGroupSeelogAttrib]
+			if logGroup == "" || !ok {
+				fmt.Println("No Log Group in Config. Will log in default group")
+				logGroup = defaultLogGroup
+			}
+		}
+	}
+	verifiedLogGroupName = logGroup
+	return nil
+}
+
 // parseXMLConfigs parses the logGroup from seelog config
 func parseXMLConfigs(xmlConfig seelog.CustomReceiverInitArgs) (logGroup, sharingDestination string, logSharingEnabled bool) {
 	// Getting the log group from seelog config
-	logGroup, ok := xmlConfig.XmlCustomAttrs["log-group"]
-	if !ok {
-		logGroup = defaultLogGroup
-		fmt.Println("No Log Group in Config. Will log in default group")
-	}
 
 	var err error
 	logSharingEnabledParam, ok := xmlConfig.XmlCustomAttrs["log-sharing-enabled"]
@@ -142,7 +182,7 @@ func parseXMLConfigs(xmlConfig seelog.CustomReceiverInitArgs) (logGroup, sharing
 		}
 	}
 
-	return
+	return verifiedLogGroupName, sharingDestination, logSharingEnabled
 }
 
 // Dequeue Returns the batch of messages present in the queue. Returns nil if no messages or no queue present
@@ -150,29 +190,51 @@ func Dequeue(pollingWaitTime time.Duration) ([]*cloudwatchlogs.InputLogEvent, er
 	// Acquiring Read Lock on the instance to allow multiple enqueuers/dequeuers to access queue
 	mutex.RLock()
 	defer mutex.RUnlock()
+
 	// Dequeue Message if queue present
 	if IsActive() {
-		genericMessages, err := logDataFacadeInstance.messageQueue.Poll(batchSize, pollingWaitTime)
+		messages := make([]*cloudwatchlogs.InputLogEvent, 0, 10)
+		cwCurrentBatchSize := 0
+		for i := 0; i < batchSize; i++ {
+			cwEvent, err := logDataFacadeInstance.messageQueue.Peek()
+			if err == nil {
+				if message, ok := cwEvent.(*cloudwatchlogs.InputLogEvent); ok {
+					if messageByte, marshallErr := json.Marshal(message); marshallErr == nil {
+						cwCurrentBatchSize += len(messageByte)
+						if cwCurrentBatchSize > batchByteSizeMax {
+							err = fmt.Errorf("cw batch byte size exceeded the limit")
+						}
+					}
+				}
+			}
 
-		if err != nil {
-			if err == queue.ErrTimeout {
-				// There were no messages in queue even after wait time
+			if err != nil {
+				if err == queue.ErrEmptyQueue {
+					return messages, nil
+				}
+				return messages, err
+			}
+
+			genericMessages, err := logDataFacadeInstance.messageQueue.Poll(1, pollingWaitTime)
+
+			if err != nil {
+				if err == queue.ErrTimeout {
+					// There were no messages in queue even after wait time
+					return messages, nil
+				}
+				return messages, err
+			}
+
+			// Returning nil if no messages in queue
+			if len(genericMessages) == 0 {
 				return nil, nil
 			}
-			return nil, err
-		}
 
-		// Returning nil if no messages in queue
-		if len(genericMessages) == 0 {
-			return nil, nil
-		}
-
-		// O(n) conversion of []interface{} to []*cloudwatchlogs.InputLogEvent is required
-		messages := make([]*cloudwatchlogs.InputLogEvent, 0, len(genericMessages))
-		for i := range genericMessages {
-			// Safe type conversion from interface{} to *cloudwatchlogs.InputLogEvent
-			if message, ok := genericMessages[i].(*cloudwatchlogs.InputLogEvent); ok {
-				messages = append(messages, message)
+			for i := range genericMessages {
+				// Safe type conversion from interface{} to *cloudwatchlogs.InputLogEvent
+				if message, ok := genericMessages[i].(*cloudwatchlogs.InputLogEvent); ok {
+					messages = append(messages, message)
+				}
 			}
 		}
 		return messages, nil
@@ -182,16 +244,24 @@ func Dequeue(pollingWaitTime time.Duration) ([]*cloudwatchlogs.InputLogEvent, er
 
 // GetLogGroup returns the log group intended for logging
 func GetLogGroup() string {
+	if !IsActive() {
+		return ""
+	}
+
 	return logDataFacadeInstance.logGroup
 }
 
 // IsLogSharingEnabled returns true if log sharing is enabled
 func IsLogSharingEnabled() bool {
-	return logDataFacadeInstance.logSharingEnabled
+	return IsActive() && logDataFacadeInstance.logSharingEnabled
 }
 
 // GetSharingDestination returns the destination for sharing
 func GetSharingDestination() string {
+	if !IsActive() {
+		return ""
+	}
+
 	return logDataFacadeInstance.sharingDestination
 }
 
@@ -200,14 +270,22 @@ func Enqueue(message *cloudwatchlogs.InputLogEvent) error {
 	// Acquiring Read Lock on the instance to allow multiple enquequers/dequeuers to access queue
 	mutex.RLock()
 	defer mutex.RUnlock()
-	// Enqueue if the queue is present
-	if IsActive() {
-		if logDataFacadeInstance.messageQueue.Len() < queueLimit {
-			return logDataFacadeInstance.messageQueue.Put(message)
-		}
-		return errors.New("CloudWatchLogs Queue Overflow. Enqueue failed")
+
+	if !IsActive() {
+		return errors.New("CloudWatchLogs Queue not initialized or destroyed on Enqueue")
 	}
-	return errors.New("CloudWatchLogs Queue not initialized or destroyed on Enqueue")
+	// skip log group when log group or logGroup is not set
+	if logDataFacadeInstance.logGroup == "" {
+		if logDataFacadeInstance.sharingDestination == "" || !logDataFacadeInstance.logSharingEnabled {
+			return fmt.Errorf("log group not found")
+		}
+	}
+
+	// Enqueue if the queue is present
+	if logDataFacadeInstance.messageQueue.Len() < queueLimit {
+		return logDataFacadeInstance.messageQueue.Put(message)
+	}
+	return errors.New("CloudWatchLogs Queue Overflow. Enqueue failed")
 }
 
 // createQueue creates a cloudwatchlogs queue

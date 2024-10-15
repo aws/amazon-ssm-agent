@@ -17,17 +17,16 @@ package runcommand
 import (
 	"encoding/json"
 	"io/ioutil"
-
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/stretchr/testify/assert"
 )
 
-//TODO once service is moved out, merge all the reply tests here
+// TODO once service is moved out, merge all the reply tests here
 var sampleMessageReplyFiles = []string{
 	"./testdata/sampleReply.json",
 	"./testdata/sampleReplyVersion2_0.json",

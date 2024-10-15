@@ -11,16 +11,20 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 package instancedetailedinformation
 
 import (
+	"bytes"
 	"fmt"
 	"math"
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"golang.org/x/sys/unix"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
@@ -39,45 +43,64 @@ const (
 // cmdExecutor decouples exec.Command for easy testability
 var cmdExecutor = executeCommand
 
+// unixUname decouples unix.Uname for easy testability
+var unixUname = executeUnixUname
+
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
+}
+
+func executeUnixUname(uname *unix.Utsname) error {
+	return unix.Uname(uname)
 }
 
 // collectPlatformDependentInstanceData collects data from the system.
 func collectPlatformDependentInstanceData(context context.T) (appData []model.InstanceDetailedInformation) {
 	log := context.Log()
 
-	var output []byte
-	var err error
-	cmd := lscpuCmd
+	var instanceDetailedInformation model.InstanceDetailedInformation
 
-	log.Infof("Executing command: %v", cmd)
-	if output, err = cmdExecutor(cmd); err != nil {
-		log.Errorf("Failed to execute command : %v; error: %v", cmd, err.Error())
+	log.Infof("Executing command: %v", lscpuCmd)
+	if output, err := cmdExecutor(lscpuCmd); err == nil {
+		log.Infof("Parsing output %v", string(output))
+		instanceDetailedInformation = parseLscpuOutput(string(output))
+		log.Infof("Parsed output %v", instanceDetailedInformation)
+	} else {
+		log.Errorf("Failed to execute command : %v; error: %v", lscpuCmd, err.Error())
 		log.Debugf("Command Stderr: %v", string(output))
 		return
 	}
 
-	log.Infof("Parsing output %v", string(output))
-	r := parseLscpuOutput(string(output))
-	log.Infof("Parsed output %v", r)
-	return r
+	var uname unix.Utsname
+	if err := unixUname(&uname); err == nil {
+		lastChar := bytes.IndexByte(uname.Release[:], 0)
+		instanceDetailedInformation.KernelVersion = string(uname.Release[:lastChar])
+	} else {
+		log.Errorf("Failed to gather kernel version %v", err.Error())
+	}
+
+	appData = append(appData, instanceDetailedInformation)
+	return
 }
 
 // parseLscpuOutput collects relevant fields from lscpu output, which has the following format (some lines omitted):
-//   CPU(s):                2
-//   Thread(s) per core:    1
-//   Core(s) per socket:    2
-//   Socket(s):             1
-//   Model name:            Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
-//   CPU MHz:               2400.072
-func parseLscpuOutput(output string) (data []model.InstanceDetailedInformation) {
+//
+//	CPU(s):                2
+//	Thread(s) per core:    1
+//	Core(s) per socket:    2
+//	Socket(s):             1
+//	Model name:            Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
+//	CPU MHz:               2400.072
+func parseLscpuOutput(output string) model.InstanceDetailedInformation {
 	cpuSpeedMHzStr := getFieldValue(output, cpuSpeedMHzKey)
 	if cpuSpeedMHzStr != "" {
 		cpuSpeedMHzStr = strconv.Itoa(int(math.Trunc(parseFloat(cpuSpeedMHzStr, 0))))
 	}
 
 	socketsStr := getFieldValue(output, socketsKey)
+	if socketsStr != "" {
+		socketsStr = parseString(socketsStr, "")
+	}
 
 	cpuCoresStr := ""
 	coresPerSocketStr := getFieldValue(output, coresPerSocketKey)
@@ -102,8 +125,7 @@ func parseLscpuOutput(output string) (data []model.InstanceDetailedInformation) 
 		CPUHyperThreadEnabled: hyperThreadEnabledStr,
 	}
 
-	data = append(data, itemContent)
-	return
+	return itemContent
 }
 
 // getFieldValue looks for the first substring of the form "key: value \n" and returns the "value"
@@ -134,6 +156,14 @@ func parseFloat(value string, defaultValue float64) float64 {
 		return defaultValue
 	}
 	return res
+}
+
+func parseString(value string, defaultValue string) string {
+	_, err := strconv.Atoi(value)
+	if err != nil {
+		return defaultValue
+	}
+	return value
 }
 
 func boolToStr(b bool) string {

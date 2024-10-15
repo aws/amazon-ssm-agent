@@ -15,12 +15,13 @@
 package executers
 
 import (
-	"errors"
-	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	mockIdentity "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,21 +31,6 @@ const (
 	testRegionName = "foo-bar-3"
 	testError      = "FooBar"
 )
-
-type instanceInfoStub struct {
-	instanceID      string
-	instanceIDError error
-	regionName      string
-	regionNameError error
-}
-
-func (m *instanceInfoStub) InstanceID() (string, error) {
-	return m.instanceID, m.instanceIDError
-}
-
-func (m *instanceInfoStub) Region() (string, error) {
-	return m.regionName, m.regionNameError
-}
 
 // Return the value of a named environment variable from a list of environment variable
 // where the format of each entry is name=value
@@ -58,39 +44,35 @@ func getEnvVariableValue(env []string, envVarName string) string {
 	return ""
 }
 
-func getTestCommand(t *testing.T) *exec.Cmd {
+func getTestCommand() *exec.Cmd {
 	command := exec.Command("test")
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID), fmt.Sprintf("%s is already defined", envVarInstanceID))
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName), fmt.Sprintf("%s is already defined", envVarRegionName))
+	command.Env = []string{}
 
 	return command
 }
 
 func TestEnvironmentVariables_All(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
-
-	command := getTestCommand(t)
+	os.Clearenv()
+	context := context.NewMockDefault()
+	command := getTestCommand()
 	env := make(map[string]string)
 	env["envKey"] = "envVal"
-	prepareEnvironment(command, env)
+	prepareEnvironment(context, command, env)
 
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceID), testInstanceID)
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), testRegionName)
-	assert.Equal(t, getEnvVariableValue(command.Env, "envKey"), "envVal")
+	assert.Equal(t, mockIdentity.MockInstanceID, getEnvVariableValue(command.Env, envVarInstanceID))
+	assert.Equal(t, mockIdentity.MockRegion, getEnvVariableValue(command.Env, envVarRegionName))
+	assert.Equal(t, "envVal", getEnvVariableValue(command.Env, "envKey"))
 }
 
 func TestEnvironmentVariables_None(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{"", errors.New(testError), "", errors.New(testError)}
-	defer func() { instance = instanceTemp }()
+	os.Clearenv()
+	context := context.NewMockDefault()
 
-	command := getTestCommand(t)
-	prepareEnvironment(command, make(map[string]string))
+	command := getTestCommand()
+	prepareEnvironment(context, command, make(map[string]string))
 
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID))
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName))
+	assert.Empty(t, getEnvVariableValue(command.Env, mockIdentity.MockInstanceID))
+	assert.Empty(t, getEnvVariableValue(command.Env, mockIdentity.MockRegion))
 }
 
 func TestQuoteShString(t *testing.T) {

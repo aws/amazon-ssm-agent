@@ -207,6 +207,18 @@ func TestParseOSreleaseFile(t *testing.T) {
 			"amazon", "2016.09", false,
 		},
 		{
+			[]string{`NAME="Amazon Linux"`, `VERSION="2"`, `ID="amzn"`, `ID_LIKE="centos rhel fedora"`, `VERSION_ID="2"`, `PRETTY_NAME="Amazon Linux 2"`, `ANSI_COLOR="0;33"`, `CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2"`, `HOME_URL="https://amazonlinux.com/"`},
+			"amazon", "2", false,
+		},
+		{
+			[]string{`NAME=Bottlerocket`, `ID=bottlerocket`, `VERSION="1.6.0 (aws-k8s-1.21)"`, `PRETTY_NAME="Bottlerocket OS 1.6.0 (aws-k8s-1.21)"`, `VARIANT_ID=aws-k8s-1.21`, `VERSION_ID=1.6.0`, `BUILD_ID=1602f3a8`, `HOME_URL="https://github.com/bottlerocket-os/bottlerocket"`, `SUPPORT_URL="https://github.com/bottlerocket-os/bottlerocket/discussions"`, `BUG_REPORT_URL="https://github.com/bottlerocket-os/bottlerocket/issues"`},
+			"bottlerocket", "1.6.0", false,
+		},
+		{
+			[]string{`NAME="Flatcar Container Linux by Kinvolk"`, `ID=flatcar`, `ID_LIKE=coreos`, `VERSION=3185.0.0`, `VERSION_ID=3185.0.0"`, `BUILD_ID=2022-03-22-0306`, `SYSEXT_LEVEL=1.0`, `PRETTY_NAME="Flatcar Container Linux by Kinvolk 3185.0.0 (Oklo)"`, `ANSI_COLOR="38;5;75"`, `HOME_URL="https://flatcar-linux.org/"`, `BUG_REPORT_URL="https://issues.flatcar-linux.org"`, `FLATCAR_BOARD="arm64-usr"`, `CPE_NAME="cpe:2.3:o:flatcar-linux:flatcar_linux:3185.0.0:*:*:*:*:*:*:*"`},
+			"flatcar", "3185.0.0", false,
+		},
+		{
 			[]string{`NAME="openSUSE Leap"`, `VERSION="42.1"`, `VERSION_ID="42.1"`, `PRETTY_NAME="openSUSE Leap 42.1 (x86_64)"`, `ID=opensuse`, `ANSI_COLOR="0;32"`, `CPE_NAME="cpe:/o:opensuse:opensuse:42.1"`, `BUG_REPORT_URL="https://bugs.opensuse.org"`, `HOME_URL="https://opensuse.org/"`, `ID_LIKE="suse"`},
 			"opensuseleap", "42.1", false,
 		},
@@ -269,7 +281,11 @@ func TestGetRedhatishPlatform(t *testing.T) {
 		{"Red Hat Enterprise Linux Server release 7.3 (Maipo)", "redhat", false},
 		{"Red Hat Enterprise Linux Server release 6.8 (Santiago)", "redhat", false},
 		{"Oracle Linux Server release 7.7", "oracle", false},
+		{"Rocky Linux release 8.4 (Green Obsidian)", "rocky", false},
 		{"Amazon Linux AMI release 2016.09", "amazon", false},
+		{"Amazon Linux 2", "amazon", false},
+		{"AlmaLinux release 8.7 (Stone Smilodon)", "almalinux", false},
+		{"Bottlerocket OS 1.6.0 (aws-k8s-1.21)", "bottlerocket", false},
 		{"asdf", "", true},
 		{"", "", true},
 	}
@@ -307,6 +323,8 @@ func TestGetRedhatishVersion(t *testing.T) {
 		{"Red Hat Enterprise Linux Server release 6.8 (Santiago)", "6.8", false},
 		{"Oracle Linux Server release 7.7", "7.7", false},
 		{"Amazon Linux AMI release 2016.09", "2016.09", false},
+		{"Amazon Linux 2", "2", false},
+		{"Bottlerocket OS 1.6.0 (aws-k8s-1.21)", "1.6.0", false},
 		{"asdf", "", true},
 		{"", "", true},
 	}
@@ -336,8 +354,10 @@ func TestPlatformFamilyForPlatform(t *testing.T) {
 		{"ubuntu", "debian", false},
 		{"centos", "rhel", false},
 		{"redhat", "rhel", false},
+		{"rocky", "rhel", false},
 		{"oracle", "rhel", false},
 		{"amazon", "rhel", false},
+		{"almalinux", "rhel", false},
 		{"suse", "suse", false},
 		{"opensuse", "suse", false},
 		{"opensuseleap", "suse", false},
@@ -346,6 +366,8 @@ func TestPlatformFamilyForPlatform(t *testing.T) {
 		{"arch", "arch", false},
 		{"alpine", "alpine", false},
 		{"asdf", "", true},
+		{"bottlerocket", "", true},
+		{"flatcar", "", true},
 	}
 
 	for _, m := range data {

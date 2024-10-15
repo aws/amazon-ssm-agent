@@ -16,25 +16,24 @@ package coremanager
 
 import (
 	"path/filepath"
+	"runtime/debug"
 	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 )
 
 const (
-	rebootPollingInterval = time.Second
-	hardStopTimeout       = time.Second * 5
+	softStopTimeout = time.Second * 15
+	hardStopTimeout = time.Second * 5
 )
 
 type ICoreManager interface {
@@ -53,52 +52,28 @@ type CoreManager struct {
 }
 
 // NewCoreManager creates a new core module manager.
-func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloudwatchlogspublisher.CloudWatchPublisher, instanceIdPtr *string, regionPtr *string, log logger.T, rbt rebooter.IRebootType) (cm *CoreManager, err error) {
-
-	// initialize region
-	if *regionPtr != "" {
-		if err = platform.SetRegion(*regionPtr); err != nil {
-			log.Errorf("error occurred setting the region, %v", err)
-			return
-		}
+func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloudwatchlogspublisher.CloudWatchPublisher, rbt rebooter.IRebootType) (cm *CoreManager, err error) {
+	log := context.Log()
+	shortInstanceId, err := context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("error fetching the ShortInstanceID: %v", err)
+		return nil, err
 	}
 
-	var region string
-	if region, err = platform.Region(); err != nil {
-		log.Errorf("error fetching the region, %v", err)
-		return
-	}
-	log.Debug("Using region:", region)
-
-	// initialize instance ID
-	if *instanceIdPtr != "" {
-		if err = platform.SetInstanceID(*instanceIdPtr); err != nil {
-			log.Errorf("error occurred setting the instance ID, %v", err)
-			return
-		}
-	}
-
-	var instanceId string
-	if instanceId, err = platform.InstanceID(); err != nil {
-		log.Errorf("error fetching the instanceID, %v", err)
-		return
-	}
-	log.Debug("Using instanceID:", instanceId)
-
-	if err = fileutil.HardenDataFolder(); err != nil {
+	if err = fileutil.HardenDataFolder(log); err != nil {
 		log.Errorf("error initializing SSM data folder with hardened ACL, %v", err)
 		return
 	}
 
 	//Initialize all folders where interim states of executing commands will be stored.
-	if !initializeBookkeepingLocations(log, instanceId) {
+	if !initializeBookkeepingLocations(log, shortInstanceId) {
 		log.Error("unable to initialize. Exiting")
 		return
 	}
 
 	// Initialize the client diagnostics
-	cwp.Init(log)
-	context = context.With("[instanceID=" + instanceId + "]")
+	cwp.Init()
+	context = context.With("[instanceID=" + shortInstanceId + "]")
 	runpluginutil.SSMPluginRegistry = plugin.RegisteredWorkerPlugins(context)
 
 	return &CoreManager{
@@ -110,7 +85,7 @@ func NewCoreManager(context context.T, mr coremodules.ModuleRegistry, cwp *cloud
 }
 
 // initializeBookkeepingLocations - initializes all folder locations required for bookkeeping
-func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
+func initializeBookkeepingLocations(log logger.T, shortInstanceID string) bool {
 
 	//TODO: initializations for all state tracking folders of core modules should be moved inside the corresponding core modules.
 
@@ -126,7 +101,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 	for _, folder := range folders {
 
 		directoryName := filepath.Join(appconfig.DefaultDataStorePath,
-			instanceID,
+			shortInstanceID,
 			appconfig.DefaultDocumentRootDirName,
 			appconfig.DefaultLocationOfState,
 			folder)
@@ -146,7 +121,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 	//Create folders for long running plugins
 	log.Infof("Initializing bookkeeping folders for long running plugins")
 	longRunningPluginsFolderName := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.LongRunningPluginsLocation,
 		appconfig.LongRunningPluginDataStoreLocation)
 
@@ -157,7 +132,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
 	log.Infof("Initializing replies folder for MDS reply requests that couldn't reach the service")
 	replies := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.RepliesRootDirName)
 
 	if err := fileutil.MakeDirs(replies); err != nil {
@@ -165,9 +140,19 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 		initStatus = false
 	}
 
+	log.Infof("Initializing replies folder for MGS reply requests that couldn't reach the service")
+	mgsReplies := filepath.Join(appconfig.DefaultDataStorePath,
+		shortInstanceID,
+		appconfig.RepliesMGSRootDirName)
+
+	if err := fileutil.MakeDirs(mgsReplies); err != nil {
+		log.Error("encountered error while creating folders for MGS replies", err)
+		initStatus = false
+	}
+
 	log.Infof("Initializing healthcheck folders for long running plugins")
 	f := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.LongRunningPluginsLocation,
 		appconfig.LongRunningPluginsHealthCheck)
 
@@ -179,7 +164,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 	//Create folders for inventory plugin
 	log.Infof("Initializing locations for inventory plugin")
 	inventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.InventoryRootDirName)
 
 	if err := fileutil.MakeDirs(inventoryLocation); err != nil {
@@ -189,7 +174,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
 	log.Infof("Initializing default location for custom inventory")
 	customInventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.InventoryRootDirName,
 		appconfig.CustomInventoryRootDirName)
 
@@ -200,7 +185,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
 	log.Infof("Initializing default location for file inventory")
 	fileInventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.InventoryRootDirName,
 		appconfig.FileInventoryRootDirName)
 
@@ -211,7 +196,7 @@ func initializeBookkeepingLocations(log logger.T, instanceID string) bool {
 
 	log.Infof("Initializing default location for role inventory")
 	roleInventoryLocation := filepath.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.InventoryRootDirName,
 		appconfig.RoleInventoryRootDirName)
 
@@ -232,7 +217,7 @@ func (c *CoreManager) Start() {
 // Stop requests the core modules to stop executing
 // Stop would be called by the agent and should be treated as hard stop
 func (c *CoreManager) Stop() {
-	c.stopCoreModules(contracts.StopTypeHardStop)
+	c.stopCoreModules(hardStopTimeout)
 }
 
 // executeCoreModules launches all the core modules
@@ -240,9 +225,15 @@ func (c *CoreManager) executeCoreModules() {
 	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
 		go func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					c.context.Log().Errorf("Execute core modules panic: %v", r)
+					c.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			module := c.coreModules[i]
 			var err error
-			if err = module.ModuleExecute(c.context); err != nil {
+			if err = module.ModuleExecute(); err != nil {
 				c.context.Log().Errorf("error occurred trying to start core module. Plugin name: %v. Error: %v",
 					module.ModuleName(),
 					err)
@@ -252,42 +243,45 @@ func (c *CoreManager) executeCoreModules() {
 }
 
 // stopCoreModules requests the core modules to stop
-func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
-	// use waitgroups in case of softstop to wait for the core modules to finish their work
-	// use timeout for hardstop and return control
+func (c *CoreManager) stopCoreModules(timeout time.Duration) {
 	log := c.context.Log()
-	log.Infof("core manager stop requested. Stop type: %v", stopType)
+	log.Infof("core manager stop requested. timeout: %v", timeout)
 	var wg sync.WaitGroup
 	l := len(c.coreModules)
+
 	for i := 0; i < l; i++ {
-		go func(wgc *sync.WaitGroup, i int) {
-			if stopType == contracts.StopTypeSoftStop {
-				wgc.Add(1)
-				defer wgc.Done()
-			}
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Core module stop request panic: %v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 
 			module := c.coreModules[i]
-			if err := module.ModuleRequestStop(stopType); err != nil {
+			if err := module.ModuleStop(timeout); err != nil {
 				log.Errorf("Plugin (%v) failed to stop with error: %v",
 					module.ModuleName(),
 					err)
 			}
-
-		}(&wg, i)
+		}(i)
 	}
 
-	// use waitgroups in case of softstop to wait for the core modules to finish their work
-	// use timeout for hardstop and return control
-	if stopType == contracts.StopTypeSoftStop {
-		wg.Wait()
-	} else {
-		time.Sleep(hardStopTimeout)
-	}
+	wg.Wait()
 }
 
 // watchForReboot watches for reboot events and request core modules to stop when necessary
 func (c *CoreManager) watchForReboot() {
 	log := c.context.Log()
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Watch for reboot panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 
 	ch := c.rebooter.GetChannel()
 	// blocking receive
@@ -295,8 +289,11 @@ func (c *CoreManager) watchForReboot() {
 	log.Info("A plugin has requested a reboot.")
 	if val == rebooter.RebootRequestTypeReboot {
 		log.Info("Processing reboot request...")
-		c.stopCoreModules(contracts.StopTypeSoftStop)
-		c.rebooter.RebootMachine(log)
+		c.stopCoreModules(softStopTimeout)
+		err := c.rebooter.RebootMachine(log)
+		if err != nil {
+			log.Criticalf("Error rebooting the machine. Agent restart required Err: %v", err)
+		}
 	} else {
 		log.Error("reboot type not supported yet")
 	}

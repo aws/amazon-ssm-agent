@@ -24,15 +24,15 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource"
 	gitcoremock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler/core/mock"
 	bridgemock "github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver/mock"
-	gogit "github.com/go-git/go-git"
-	"github.com/go-git/go-git/plumbing"
-	"github.com/go-git/go-git/plumbing/transport"
-	"github.com/go-git/go-git/plumbing/transport/http"
-	gitssh "github.com/go-git/go-git/plumbing/transport/ssh"
+	gogit "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/transport"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
+	gitssh "github.com/go-git/go-git/v5/plumbing/transport/ssh"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"golang.org/x/crypto/ssh"
@@ -503,7 +503,7 @@ func TestGitHandler_getAuthMethodPublicKey(t *testing.T) {
 				ssmParameterResolverBridge: bridge,
 			},
 			nil,
-			errors.New("Cannot authenticate: invalid PEM data"),
+			errors.New("Cannot authenticate: ssh: no key found"),
 		},
 		{
 			gitHandler{
@@ -631,37 +631,84 @@ func TestGitHandler_CloneRepository(t *testing.T) {
 	plainCloneMethod = PlainClone
 
 	tests := []struct {
-		handler  gitHandler
-		destPath string
-		err      error
+		handler          gitHandler
+		usereuid         int
+		homeVar          *string
+		shouldUpdateHOME bool
+		destPath         string
+		err              error
 	}{
 		{
-			gitHandler{
+			handler: gitHandler{
 				repositoryURL: "git@private-git-repo",
 			},
-			"unknown-host",
-			errors.New("Cannot clone repository git@private-git-repo: Unknown host key. Please add remote " +
+			usereuid: 0,
+			homeVar:  nil,
+			destPath: "unknown-host",
+			err: errors.New("Cannot clone repository git@private-git-repo: Unknown host key. Please add remote " +
 				"host key known_hosts file or set SourceInfo 'skipHostKeyChecking' parameter to true in order to skip " +
 				"host key validation"),
 		},
 		{
-			gitHandler{
+			handler: gitHandler{
 				repositoryURL: "git@private-git-repo",
 			},
-			"error",
-			errors.New("Cannot clone repository git@private-git-repo: random err"),
+			usereuid: 0,
+			homeVar:  nil,
+			destPath: "error",
+			err:      errors.New("Cannot clone repository git@private-git-repo: random err"),
 		},
 		{
-			gitHandler{
+			handler: gitHandler{
 				repositoryURL: "git@private-git-repo",
 			},
-			"/tmp",
-			nil,
+			usereuid: 0,
+			homeVar:  nil,
+			destPath: "/tmp",
+			err:      nil,
 		},
 	}
 
 	for _, test := range tests {
+		homeDirChecked := false
+		homeDirSet := false
+		homeDirUnset := false
+		geteuid = func() int {
+			return test.usereuid
+		}
+
+		getUserHomeDir = func() (string, error) {
+			homeDirChecked = true
+			if test.homeVar == nil {
+				return "", fmt.Errorf("$HOME is not defined")
+			}
+
+			return *test.homeVar, nil
+		}
+
+		setEnv = func(key, value string) error {
+			if key == "HOME" {
+				homeDirSet = true
+				assert.Equal(t, "/root", value, "Incorrect value set for root $HOME env variable")
+			}
+
+			return nil
+		}
+
+		unsetEnv = func(key string) error {
+			if key == "HOME" {
+				homeDirUnset = true
+			}
+
+			return nil
+		}
+
 		repository, err := test.handler.CloneRepository(logMock, nil, test.destPath)
+		assert.True(t, homeDirChecked, "$HOME environment variable was not checked before calling git clone")
+		if test.usereuid == 0 && test.homeVar == nil {
+			assert.True(t, homeDirSet, "$HOME env variable was not set before calling git clone")
+			assert.True(t, homeDirUnset, "$HOME env variable was not unset after calling git clone")
+		}
 
 		if test.err != nil {
 			assert.Error(t, err, getString(test))

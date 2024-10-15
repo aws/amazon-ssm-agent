@@ -38,6 +38,16 @@ const (
 	CancelCommandOffline DocumentType = "CancelCommandOffline"
 )
 
+// UpstreamServiceName defines which upstream service (MGS or MDS) the document request came from
+type UpstreamServiceName string
+
+const (
+	// MessageGatewayService represents messages that came from MGS
+	MessageGatewayService UpstreamServiceName = "MessageGatewayService"
+	// MessageDeliveryService represents messages that came from MDS
+	MessageDeliveryService UpstreamServiceName = "MessageDeliveryService"
+)
+
 // PluginState represents information stored as interim state for any plugin
 // This has both the configuration with which a plugin gets executed and a
 // corresponding plugin result.
@@ -78,7 +88,7 @@ type DocumentInfo struct {
 	SessionOwner    string
 }
 
-//CloudWatchConfiguration represents information relevant to command output in cloudWatch
+// CloudWatchConfiguration represents information relevant to command output in cloudWatch
 type CloudWatchConfiguration struct {
 	LogGroupName              string
 	LogStreamPrefix           string
@@ -101,6 +111,7 @@ type DocumentState struct {
 	InstancePluginsInformation []PluginState
 	CancelInformation          CancelCommandInfo
 	IOConfig                   IOConfiguration
+	UpstreamServiceName        UpstreamServiceName
 }
 
 // IsRebootRequired returns if reboot is needed

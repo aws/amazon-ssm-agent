@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -28,7 +29,7 @@ type BackoffConfigTestSuite struct {
 }
 
 func (suite *BackoffConfigTestSuite) SetupTest() {
-	suite.mockLog = log.NewMockLog()
+	suite.mockLog = logmocks.NewMockLog()
 }
 
 func TestArtifactTestSuite(t *testing.T) {

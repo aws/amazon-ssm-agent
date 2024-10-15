@@ -43,6 +43,9 @@ const PlatformRaspbian = "raspbian"
 // PlatformRedhat uses Ohai identifier for redhat platform
 const PlatformRedhat = "redhat"
 
+// PlatformRockyLinux uses ohai identifier for rocky linux platform
+const PlatformRockyLinux = "rocky"
+
 // PlatformOracleLinux uses Ohai identifier for oracle linux platform
 const PlatformOracleLinux = "oracle"
 
@@ -54,6 +57,12 @@ const PlatformFedora = "fedora"
 
 // PlatformAmazon uses Ohai identifier for amazon platform
 const PlatformAmazon = "amazon"
+
+// PlatformAlmaLinux uses Ohai identifier for alma linux platform
+const PlatformAlmaLinux = "almalinux"
+
+// PlatformBottlerocket uses Ohai identifier for bottlerocket platform
+const PlatformBottlerocket = "bottlerocket"
 
 // PlatformAlpine uses Ohai identifier for alpine platform
 const PlatformAlpine = "alpine"
@@ -69,6 +78,9 @@ const PlatformOpensuseLeap = "opensuseleap"
 
 // PlatformGentoo uses Ohai identifier for gentoo platform
 const PlatformGentoo = "gentoo"
+
+// PlatformFlatcar uses Ohai identifier for flatcar platform
+const PlatformFlatcar = "flatcar"
 
 // PlatformArch uses Ohai identifier for arch platform
 const PlatformArch = "arch"

@@ -15,17 +15,15 @@
 package custom
 
 import (
-	"testing"
-
 	"encoding/json"
-	"os"
-	"time"
-
 	"errors"
 	"fmt"
+	"os"
 	"strings"
+	"testing"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -353,7 +351,6 @@ func TestGatherer(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "Unexpected error thrown")
@@ -365,7 +362,6 @@ func TestReadFileAccessDenied(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileAccessDenied
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -377,7 +373,6 @@ func TestCustomInventoryDirNotExist(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDirNotExist
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as we should ignore if folder does not exist")
@@ -389,7 +384,6 @@ func TestCustomInventoryCountExceed(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDirCustomInventoryFileCountExceed
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.NotNil(t, err, "err shoud be nil as we should ignore if folder does not exist")
@@ -402,7 +396,6 @@ func TestDuplicateTypeName(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFile
 	readDirFunc = MockReadDirDuplicateType
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil")
@@ -414,7 +407,6 @@ func TestInvalidJson(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileInvalidJSON
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -426,7 +418,6 @@ func TestMissingTypeName(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileNoTypeName
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -438,7 +429,6 @@ func TestLongTypeName(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileLongTypeName
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -450,7 +440,6 @@ func TestTypeNameInvalidPrefix(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileTypeNameInvalidPrefix
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -462,7 +451,6 @@ func TestMissingSchemaVersion(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileNoSchemaVersion
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -474,7 +462,6 @@ func TestInvalidSchemaVersion(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileInvalidSchemaVersion
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -486,7 +473,6 @@ func TestMissingContent(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileNoContentProperty
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -498,7 +484,6 @@ func TestContentIsArray(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileContentIsArray
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -513,7 +498,6 @@ func TestContentAttributeCountExceedLimit(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileContentAttributeCountExceedLimit
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -525,7 +509,6 @@ func TestContentEmptyAttributeName(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileContentEmptyAttributeName
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -537,7 +520,6 @@ func TestContentLongAttributeName(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileContentLongAttributeName
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -549,7 +531,6 @@ func TestContentNonStringTypeAttributeValue(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileContentNonStringTypeAttributeValue
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")
@@ -561,7 +542,6 @@ func TestContentLongAttributeValue(t *testing.T) {
 	g := Gatherer(c)
 	readFileFunc = MockReadFileContentLongAttributeValue
 	readDirFunc = MockReadDir
-	machineIDProvider = mockMachineIDProvider
 
 	items, err := g.Run(c, model.Config{})
 	assert.Nil(t, err, "err shoud be nil as gather continues to load other custom inventory files")

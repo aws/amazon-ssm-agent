@@ -27,7 +27,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler"
 	httpMock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"
@@ -36,7 +36,9 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var logMock = log.NewMockLog()
+var contextMock = context.NewMockDefault()
+var logMock = contextMock.Log()
+var bm = bridgemock.GetSsmParamResolverBridge(map[string]string{})
 
 func getString(obj interface{}) string {
 	return fmt.Sprintf("%v", obj)
@@ -57,11 +59,12 @@ func getTestResource(url url.URL, authMethod, user, password string, allowInsecu
 	httpClient.CloseIdleConnections()
 
 	return HTTPResource{
+		context: contextMock,
 		Handler: handler.NewHTTPHandler(httpClient, url, allowInsecureDownload, handler.HTTPAuthConfig{
 			AuthMethod: types.NewTrimmedString(authMethod),
 			Username:   types.NewTrimmedString(user),
 			Password:   types.NewTrimmedString(password),
-		}, bridgemock.GetSsmParamResolverBridge(map[string]string{})),
+		}, bm),
 	}
 }
 
@@ -106,7 +109,7 @@ func TestNewHTTPResource(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		resource, err := NewHTTPResource(logMock, test.sourceInfo, bridgemock.GetSsmParamResolverBridge(map[string]string{}))
+		resource, err := NewHTTPResource(contextMock, test.sourceInfo, bm)
 
 		if test.err != nil {
 			assert.Error(t, err, getString(test))
@@ -200,25 +203,40 @@ func TestHTTPResource_adjustDownloadPath(t *testing.T) {
 			true,
 		},
 		{
-			"/tmp/download.txt",
+			filepath.Join("/tmp", "download.txt"),
 			"",
-			"/tmp/download.txt",
+			filepath.Join("/tmp", "download.txt"),
 			false,
 			false,
 		},
 		{
 			"/tmp/",
 			"123",
-			"/tmp/download123",
+			filepath.Join("/tmp", "download123"),
 			false,
 			false,
 		},
 		{
+			"/tmp/",
+			"123",
+			filepath.Join("/tmp", "download123"),
+			true,
+			true,
+		},
+		{
 			"/tmp",
 			"123",
-			"/tmp/download123",
+			filepath.Join("/tmp", "download123"),
 			true,
 			true,
+		},
+
+		{
+			"/tmp",
+			"123",
+			filepath.Join("/tmp"),
+			false,
+			false,
 		},
 	}
 
@@ -227,7 +245,7 @@ func TestHTTPResource_adjustDownloadPath(t *testing.T) {
 		fileSystemMock.On("Exists", mock.Anything).Return(test.pathExists)
 		fileSystemMock.On("IsDirectory", mock.Anything).Return(test.isDirectory)
 
-		downloadPath := testResource.adjustDownloadPath(test.givenPath, test.fileSuffix, fileSystemMock)
+		downloadPath := testResource.adjustDownloadPath(test.givenPath, test.fileSuffix, &fileSystemMock)
 		assert.Equal(t, test.downloadPath, filepath.Join(downloadPath), getString(test))
 	}
 }
@@ -237,6 +255,7 @@ func TestHTTPResource_ValidateLocationInfo(t *testing.T) {
 	httpHandlerMock.On("Validate").Return(true, nil).Once()
 
 	resource := HTTPResource{
+		context: contextMock,
 		Handler: &httpHandlerMock,
 	}
 
@@ -247,7 +266,7 @@ func TestHTTPResource_ValidateLocationInfo(t *testing.T) {
 func TestHTTPResource_DownloadRemoteResource(t *testing.T) {
 	destPath := filepath.Join(os.TempDir(), "testFile")
 
-	fileSystemMock := filemock.FileSystemMock{}
+	fileSystemMock := &filemock.FileSystemMock{}
 	fileSystemMock.On("MakeDirs", filepath.Dir(destPath)).Return(nil)
 	fileSystemMock.On("Exists", destPath).Return(true)
 	fileSystemMock.On("IsDirectory", destPath).Return(false)
@@ -256,9 +275,10 @@ func TestHTTPResource_DownloadRemoteResource(t *testing.T) {
 	httpHandlerMock.On("Download", logMock, fileSystemMock, destPath).Return(destPath, nil).Once()
 
 	resource := HTTPResource{
+		context: contextMock,
 		Handler: &httpHandlerMock,
 	}
-	err, result := resource.DownloadRemoteResource(logMock, fileSystemMock, destPath)
+	err, result := resource.DownloadRemoteResource(fileSystemMock, destPath)
 
 	assert.NoError(t, err)
 	assert.Equal(t, []string{destPath}, result.Files)

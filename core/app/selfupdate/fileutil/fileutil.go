@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package fileutil contains utilities for working with the file system.
+// Package fileutil contains utilities for working with the file system.
 package fileutil
 
 import (
@@ -112,7 +112,7 @@ func (futl *Fileutil) removeInvalidColon(pluginName string) string {
 // MakeDirs create the directories along the path if missing.
 func (futl *Fileutil) MakeDirs(destinationDir string) (err error) {
 	// create directory
-	err = futl.fs.MkdirAll(destinationDir, appconfig.ReadWriteAccess)
+	err = futl.fs.MkdirAll(destinationDir, appconfig.ReadWriteExecuteAccess)
 	if err != nil {
 		err = fmt.Errorf("failed to create directory %v. %v", destinationDir, err)
 	}

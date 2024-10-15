@@ -15,6 +15,7 @@
 package sdkutil
 
 import (
+	"errors"
 	"runtime"
 	"strings"
 
@@ -60,8 +61,9 @@ func HandleAwsError(log log.T, err error, stopPolicy *StopPolicy) {
 // GetAwsErrorCode tries to return AwsError code
 func GetAwsErrorCode(err error) string {
 	errorCode := ""
-	if aErr, ok := err.(awserr.Error); ok {
-		return aErr.Code()
+	var awsErr awserr.Error
+	if ok := errors.As(err, &awsErr); ok {
+		return awsErr.Code()
 	}
 
 	return errorCode

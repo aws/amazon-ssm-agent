@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -252,7 +253,7 @@ func TestRun(t *testing.T) {
 	var data []model.Item
 
 	//setup
-	c := context.NewMockDefault()
+	c := contextmocks.NewMockDefault()
 	g := Gatherer(c)
 	getApplicationData = MockGetApplicationDataForAmazonLinux
 
@@ -266,7 +267,7 @@ func TestCollectApplicationData(t *testing.T) {
 	var data []model.ApplicationData
 
 	//setup
-	c := context.NewMockDefault()
+	c := contextmocks.NewMockDefault()
 
 	//testing when platform provider throws error
 	osInfoProvider = MockPlatformInfoProviderReturningError

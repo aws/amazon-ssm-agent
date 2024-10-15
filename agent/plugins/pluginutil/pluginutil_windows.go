@@ -14,13 +14,12 @@
 // Package pluginutil implements some common functions shared by multiple plugins.
 // pluginutil_windows contains a function for returning the ResultStatus based on the exitCode
 //
+//go:build windows
 // +build windows
 
 package pluginutil
 
 import (
-	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -29,7 +28,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-var PowerShellCommand = filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
+var PowerShellCommand = appconfig.PowerShellPluginCommandName
 
 // GetStatus returns a ResultStatus variable based on the received exitCode
 func GetStatus(exitCode int, cancelFlag task.CancelFlag) contracts.ResultStatus {

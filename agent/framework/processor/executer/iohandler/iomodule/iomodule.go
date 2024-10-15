@@ -17,10 +17,10 @@ package iomodule
 import (
 	"io"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 )
 
 // IOModule is an interface for output modules
 type IOModule interface {
-	Read(log.T, *io.PipeReader)
+	Read(context.T, *io.PipeReader, int)
 }

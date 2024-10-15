@@ -106,7 +106,7 @@ func (f *FakeChannel) GetMessage() <-chan string {
 	return f.recvChan
 }
 
-//close stops the receiving channel
+// close stops the receiving channel
 func (f *FakeChannel) Close() {
 	if f.closed {
 		return
@@ -134,6 +134,10 @@ func (f *FakeChannel) CleanupOwnModeFiles() {
 			_, isPresent = sendQ.Dequeue()
 		}
 	}
+}
+
+func (f *FakeChannel) GetPath() string {
+	return f.name
 }
 
 func IsExists(name string) bool {

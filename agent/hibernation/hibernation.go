@@ -21,14 +21,14 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/health"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/carlescere/scheduler"
 	"github.com/cihub/seelog"
 )
 
-// Hibernate holds information about the current agent state
+// IHibernate holds information about the current agent state
 type IHibernate interface {
-	ExecuteHibernation() health.AgentState
+	ExecuteHibernation(context context.T) health.AgentState
 }
 
 type Hibernate struct {
@@ -50,7 +50,6 @@ var modeChan = make(chan health.AgentState, 10)
 var backOffRate = 3
 
 const (
-	hibernateMode      = "AgentHibernate"
 	hibernateLogFile   = "hibernate.log"
 	maxBackOffInterval = 60 * 60 //Minute conversion
 	multiplier         = 2
@@ -59,14 +58,10 @@ const (
 
 // NewHibernateMode creates an object of type NewHibernateMode
 func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibernate {
-
-	context.Log().Debug("Starting agent hibernate mode. Switching log to minimal logging...")
-	logger := log.GetLogger(context.Log(), getHibernateSeelogConfig())
-
+	context.Log().Debug("Initializing agent hibernate mode. Switching log to minimal logging...")
 	return &Hibernate{
 		healthModule:        healthModule,
 		currentMode:         health.Passive,
-		seelogger:           logger,
 		isLogged:            false,
 		currentPingInterval: initialPingRate,
 		maxInterval:         maxBackOffInterval,
@@ -76,7 +71,8 @@ func NewHibernateMode(healthModule health.IHealthCheck, context context.T) *Hibe
 }
 
 // ExecuteHibernation Starts the hibernate mode by blocking agent start and by scheduling health pings
-func (m *Hibernate) ExecuteHibernation() health.AgentState {
+func (m *Hibernate) ExecuteHibernation(context context.T) health.AgentState {
+	m.seelogger = logger.GetLogger(context.Log(), getHibernateSeelogConfig())
 	next := time.Duration(initialPingRate) * time.Second
 	m.seelogger.Info("Agent is in hibernate mode. Reducing logging. Logging will be reduced to one log per backoff period")
 	// Wait backoff time and then schedule health pings
@@ -92,7 +88,7 @@ loop:
 		case health.Active:
 			//Agent mode is now active. Agent can start. Exit loop
 			m.stopEmptyPing()
-			m.seelogger.Flush()
+			m.seelogger.Close()
 			return status //returning status for testing purposes.
 		case health.Passive:
 			continue loop

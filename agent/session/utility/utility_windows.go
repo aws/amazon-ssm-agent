@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // utility package implements all the shared methods between clients.
@@ -22,10 +23,11 @@ import (
 	"syscall"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/mgr"
@@ -97,14 +99,14 @@ type LOCALGROUP_MEMBERS_INFO_3 struct {
 }
 
 var (
-	modNetapi32             = syscall.NewLazyDLL("netapi32.dll")
+	modNetapi32             = windows.NewLazySystemDLL("netapi32.dll")
 	netUserSetInfo          = modNetapi32.NewProc("NetUserSetInfo")
 	netUserGetInfo          = modNetapi32.NewProc("NetUserGetInfo")
 	netUserAdd              = modNetapi32.NewProc("NetUserAdd")
 	netApiBufferFree        = modNetapi32.NewProc("NetApiBufferFree")
 	netLocalGroupAddMembers = modNetapi32.NewProc("NetLocalGroupAddMembers")
-	advapi32                = syscall.NewLazyDLL("advapi32.dll")
-	userenv                 = syscall.NewLazyDLL("userenv.dll")
+	advapi32                = windows.NewLazySystemDLL("advapi32.dll")
+	userenv                 = windows.NewLazySystemDLL("userenv.dll")
 	logonProc               = advapi32.NewProc("LogonUserW")
 	loadUserProfileW        = userenv.NewProc("LoadUserProfileW")
 	unloadUserProfile       = userenv.NewProc("UnloadUserProfile")
@@ -401,14 +403,13 @@ func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err e
 	return
 }
 
-//Impersonate attempts to impersonate the user.
+// Impersonate attempts to impersonate the user.
 func (u *SessionUtil) Impersonate(log log.T, user string, pass string) error {
 	token, err := logonUser(user, pass)
 	if err != nil {
 		return err
 	}
 	defer mustCloseHandle(log, token)
-
 	if rc, _, ec := syscall.Syscall(impersonateProc.Addr(), 1, uintptr(token), 0, 0); rc == 0 {
 		return error(ec)
 	}
@@ -416,7 +417,7 @@ func (u *SessionUtil) Impersonate(log log.T, user string, pass string) error {
 }
 
 // LoadUserProfile loads user profile and return user handle to user's registry hive
-func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Handle, syscall.Handle, error) {
+func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Token, syscall.Handle, error) {
 	token, err := logonUser(user, pass)
 	if err != nil {
 		return 0, 0, err
@@ -434,8 +435,8 @@ func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Handle,
 	return token, profileInfo.Profile, nil
 }
 
-//logonUser attempts to log a user on to the local computer to generate a token.
-func logonUser(user, pass string) (token syscall.Handle, err error) {
+// logonUser attempts to log a user on to the local computer to generate a token.
+func logonUser(user, pass string) (token syscall.Token, err error) {
 	// ".\0" meaning "this computer:
 	domain := [2]uint16{uint16('.'), 0}
 
@@ -460,7 +461,7 @@ func logonUser(user, pass string) (token syscall.Handle, err error) {
 }
 
 // UnloadUserProfile attempts to unload user profile
-func (u *SessionUtil) UnloadUserProfile(log log.T, token, profile syscall.Handle) {
+func (u *SessionUtil) UnloadUserProfile(log log.T, token syscall.Token, profile syscall.Handle) {
 	var ret uintptr
 	var err error
 	if ret, _, err = unloadUserProfile.Call(uintptr(token), uintptr(profile)); ret == 0 {
@@ -503,7 +504,7 @@ func (u *SessionUtil) EnablePowerShellTranscription(transcriptFilePath string, k
 	return
 }
 
-//revertToSelf reverts the impersonation process.
+// revertToSelf reverts the impersonation process.
 func (u *SessionUtil) RevertToSelf() error {
 	if rc, _, ec := syscall.Syscall(revertSelfProc.Addr(), 0, 0, 0, 0); rc == 0 {
 		return error(ec)
@@ -511,9 +512,9 @@ func (u *SessionUtil) RevertToSelf() error {
 	return nil
 }
 
-//mustCloseHandle ensures to close the user token handle.
-func mustCloseHandle(log log.T, handle syscall.Handle) {
-	if err := syscall.CloseHandle(handle); err != nil {
+// mustCloseHandle ensures to close the user token handle.
+func mustCloseHandle(log log.T, token syscall.Token) {
+	if err := token.Close(); err != nil {
 		log.Error(err)
 	}
 }
@@ -639,7 +640,7 @@ func NewListener(log log.T, address string) (listener net.Listener, err error) {
 }
 
 // DeleteIpcTempFile resets file properties of ipcTempFile and tries deletion
-func (u *SessionUtil) DeleteIpcTempFile(sessionOrchestrationPath string) (bool, error) {
+func (u *SessionUtil) DeleteIpcTempFile(log log.T, sessionOrchestrationPath string) (bool, error) {
 	// no deletion needed for windows since ipcTempFile properties are default and no issues during deletion
 	return false, nil
 }

@@ -16,48 +16,97 @@ package app
 
 import (
 	"runtime"
+	"time"
 
+	agentcontracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
+	"github.com/aws/amazon-ssm-agent/core/app/credentialrefresher"
 	reboot "github.com/aws/amazon-ssm-agent/core/app/reboot/model"
+	"github.com/aws/amazon-ssm-agent/core/app/registrar"
 	"github.com/aws/amazon-ssm-agent/core/app/selfupdate"
 	"github.com/aws/amazon-ssm-agent/core/ipc/messagebus"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider"
 )
 
 type CoreAgent interface {
-	Start()
+	Start(statusChan *agentcontracts.StatusComm) error
 	Stop()
 }
 
 // SSMCoreAgent encapsulates the core functionality of the agent
 type SSMCoreAgent struct {
-	context    context.ICoreAgentContext
-	container  longrunningprovider.IContainer
-	selfupdate selfupdate.ISelfUpdate
+	context        context.ICoreAgentContext
+	container      longrunningprovider.IContainer
+	selfupdate     selfupdate.ISelfUpdate
+	credsRefresher credentialrefresher.ICredentialRefresher
+	registrar      registrar.IRetryableRegistrar
 }
 
 // NewSSMCoreAgent creates and returns and object of type CoreAgent interface
 func NewSSMCoreAgent(context context.ICoreAgentContext, messageBus messagebus.IMessageBus) CoreAgent {
-
-	return &SSMCoreAgent{
-		context:    context,
-		container:  longrunningprovider.NewWorkerContainer(context, messageBus),
-		selfupdate: selfupdate.NewSelfUpdater(context),
+	coreAgent := &SSMCoreAgent{
+		context:        context,
+		container:      longrunningprovider.NewWorkerContainer(context, messageBus),
+		selfupdate:     selfupdate.NewSelfUpdater(context),
+		credsRefresher: credentialrefresher.NewCredentialRefresher(context),
 	}
+
+	if registrar := registrar.NewRetryableRegistrar(context); registrar != nil {
+		coreAgent.registrar = registrar
+	}
+
+	return coreAgent
 }
 
 // Start the core manager
-func (agent *SSMCoreAgent) Start() {
+func (agent *SSMCoreAgent) Start(statusChan *agentcontracts.StatusComm) error {
 	log := agent.context.Log()
 
 	log.Infof("amazon-ssm-agent - %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
+	log.Info("Starting Core Agent")
 
-	agent.container.Start()
-	go agent.container.Monitor()
-	agent.selfupdate.Start()
-	log.Flush()
+	if agent.registrar != nil {
+		log.Info("Registrar detected. Attempting registration")
+		if err := agent.registrar.Start(); err != nil {
+			return err
+		}
+
+		select {
+		case <-agent.registrar.GetRegistrationAttemptedChan():
+			log.Info("Registration attempted. Resuming core agent startup.")
+			break
+		case <-statusChan.TerminationChan:
+			log.Info("Received stop/termination signal from main routine")
+			statusChan.DoneChan <- struct{}{}
+			return nil
+		}
+	}
+
+	if err := agent.credsRefresher.Start(); err != nil {
+		return err
+	}
+
+	credentialsReadyChan := agent.credsRefresher.GetCredentialsReadyChan()
+	select {
+	case <-credentialsReadyChan:
+		log.Debug("Agent core module started after receiving credentials")
+		close(credentialsReadyChan)
+		agent.container.Start()
+		go agent.container.Monitor()
+		agent.selfupdate.Start()
+		// removing the below wait time will cause the agent worker to run orphaned when
+		// agent is stopped immediately after start
+		time.Sleep(3 * time.Second)
+		break
+	case <-statusChan.TerminationChan:
+		log.Info("Received stop/termination signal from main routine")
+		break
+	}
+
+	statusChan.DoneChan <- struct{}{}
+	return nil
 }
 
 // Stop the core manager
@@ -68,6 +117,11 @@ func (agent *SSMCoreAgent) Stop() {
 
 	agent.selfupdate.Stop()
 	agent.container.Stop(reboot.StopTypeHardStop)
+	agent.credsRefresher.Stop()
+	if agent.registrar != nil {
+		agent.registrar.Stop()
+	}
+
 	log.Info("Bye.")
 	log.Flush()
 }

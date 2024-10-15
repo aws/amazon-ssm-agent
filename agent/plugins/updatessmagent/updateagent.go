@@ -19,31 +19,34 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
-
-	"github.com/aws/amazon-ssm-agent/core/executor"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/nightlyone/lockfile"
+)
+
+const (
+	noOfRetries          = 2
+	updateRetryDelayBase = 1000 // 1000 millisecond
+	updateRetryDelay     = 500  // 500 millisecond
 )
 
 // Plugin is the type for the RunCommand plugin.
 type Plugin struct {
-	// Manifest location
-	ManifestLocation string
+	Context context.T
 }
 
 // UpdatePluginInput represents one set of commands executed by the UpdateAgent plugin.
@@ -56,75 +59,34 @@ type UpdatePluginInput struct {
 	UpdaterName    string `json:"-"`
 }
 
-// UpdatePluginConfig is used for initializing update agent plugin with default values
-type UpdatePluginConfig struct {
-	ManifestLocation string
-}
-
-type updateManager struct{}
-
-type pluginHelper interface {
-	generateUpdateCmd(log log.T,
-		manifest *Manifest,
-		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceContext,
-		updaterVersion string,
-		messageID string,
-		stdout string,
-		stderr string,
-		keyPrefix string,
-		bucketName string) (cmd string, err error)
-
-	downloadManifest(log log.T,
-		util updateutil.T,
-		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceContext,
-		out iohandler.IOHandler) (manifest *Manifest, err error)
-
-	downloadUpdater(log log.T,
-		util updateutil.T,
-		updaterPackageName string,
-		manifest *Manifest,
-		out iohandler.IOHandler,
-		context *updateutil.InstanceContext) (version string, err error)
-
-	validateUpdate(log log.T,
-		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceContext,
-		manifest *Manifest,
-		out iohandler.IOHandler) (noNeedToUpdate bool, err error)
-}
-
 // Assign method to global variables to allow unittest to override
-var getAppConfig = appconfig.Config
-var fileDownload = artifact.Download
-var fileUncompress = fileutil.Uncompress
+var currentAgentVersion = version.Version
 var updateAgent = runUpdateAgent
 var getLockObj = lockfile.New
 var updateUtilRef updateutil.T // added mainly for testing
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
-	var plugin Plugin
-	plugin.ManifestLocation = updatePluginConfig.ManifestLocation
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context,
+	}, nil
 }
 
 // updateAgent downloads the installation packages and update the agent
 func runUpdateAgent(
-	p *Plugin,
 	config contracts.Configuration,
-	log log.T,
-	manager pluginHelper,
+	context context.T,
 	util updateutil.T,
+	s3util updates3util.T,
+	manifest updatemanifest.T,
 	rawPluginInput interface{},
-	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	startTime time.Time,
-	exec executor.IExecutor) (pid int) {
+	exec executor.IExecutor,
+	downloadFolder string) (pid int) {
+	log := context.Log()
 	var pluginInput UpdatePluginInput
 	var err error
-	var context *updateutil.InstanceContext
 
 	pluginConfig := iohandler.DefaultOutputConfig()
 
@@ -133,72 +95,41 @@ func runUpdateAgent(
 		return
 	}
 
-	if context, err = util.CreateInstanceContext(log); err != nil {
-		output.MarkAsFailed(err)
-		return
-	}
-
-	//Use default manifest location is the override is not present
-	if len(pluginInput.Source) == 0 {
-		pluginInput.Source = p.ManifestLocation
-	}
-	//Calculate manifest location base on current instance's region
-	pluginInput.Source = strings.Replace(pluginInput.Source, updateutil.RegionHolder, context.Region, -1)
 	//Calculate updater package name base on agent name
-	pluginInput.UpdaterName = pluginInput.AgentName + updateutil.UpdaterPackageNamePrefix
-	//Generate update output
-	targetVersion := pluginInput.TargetVersion
-	if len(targetVersion) == 0 {
-		targetVersion = "latest"
+	pluginInput.UpdaterName = pluginInput.AgentName + updateconstants.UpdaterPackageNamePrefix
+
+	// if TargetVersion is Empty, set to None and it will be resolved in the updater
+	if len(pluginInput.TargetVersion) == 0 {
+		pluginInput.TargetVersion = "None"
 	}
-	output.AppendInfof("Updating %v from %v to %v\n",
-		pluginInput.AgentName,
-		version.Version,
-		targetVersion)
 
-	//Download manifest file
-	var manifest *Manifest
-	var downloadErr error
-
-	noOfRetries := 2
-	updateRetryDelayBase := 1000 // 1000 millisecond
-	updateRetryDelay := 500      // 500 millisecond
-
-	manifest, downloadErr = manager.downloadManifest(log, util, &pluginInput, context, output)
-	if downloadErr != nil {
-		output.MarkAsFailed(downloadErr)
+	//Download manifest file and populate manifest object
+	if downloadErr := s3util.DownloadManifest(manifest, pluginInput.Source); downloadErr != nil && downloadErr.Error != nil {
+		output.MarkAsFailed(downloadErr.Error)
 		return
 	}
-
-	//Validate update details
-	noNeedToUpdate := false
-	if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, context, manifest, output); noNeedToUpdate {
-		if err != nil {
-			output.MarkAsFailed(err)
-		}
-		return
-	}
+	output.AppendInfo("Successfully downloaded manifest\n")
 
 	//Download updater and retrieve the version number
 	updaterVersion := ""
-	if updaterVersion, err = manager.downloadUpdater(
-		log, util, pluginInput.UpdaterName, manifest, output, context); err != nil {
+	if updaterVersion, err = s3util.DownloadUpdater(manifest, pluginInput.UpdaterName, downloadFolder); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
+	output.AppendInfof("Successfully downloaded updater version %s\n", updaterVersion)
 
 	//Generate update command base on the update detail
-	cmd := ""
-	if cmd, err = manager.generateUpdateCmd(log,
-		manifest,
+	cmd, err := generateUpdateCmd(
 		&pluginInput,
-		context,
 		updaterVersion,
 		config.MessageId,
+		config.UpstreamServiceName,
 		pluginConfig.StdoutFileName,
 		pluginConfig.StderrFileName,
 		fileutil.BuildS3Path(output.GetIOConfig().OutputS3KeyPrefix, config.PluginID),
-		output.GetIOConfig().OutputS3BucketName); err != nil {
+		output.GetIOConfig().OutputS3BucketName)
+
+	if err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
@@ -217,7 +148,11 @@ func runUpdateAgent(
 	// If disk space is not sufficient, fail the update to prevent installation and notify user in output
 	// If loading disk space fails, continue to update (agent update is backed by rollback handler)
 	log.Infof("Checking available disk space ...")
-	if isDiskSpaceSufficient, err := util.IsDiskSpaceSufficientForUpdate(log); err == nil && !isDiskSpaceSufficient {
+	if isDiskSpaceSufficient, err := util.IsDiskSpaceSufficientForUpdate(log); !isDiskSpaceSufficient || err != nil {
+		if err != nil {
+			output.MarkAsFailed(err)
+			return
+		}
 		output.MarkAsFailed(errors.New("Insufficient available disk space"))
 		return
 	}
@@ -227,16 +162,17 @@ func runUpdateAgent(
 	//Execute updater, hand over the update process
 	workDir := updateutil.UpdateArtifactFolder(
 		appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
-
+	commandInput := &updateutil.CommandExecutionSettings{
+		Log:         log,
+		Cmd:         cmd,
+		WorkingDir:  workDir,
+		UpdaterRoot: appconfig.UpdaterArtifactsRoot,
+		StdOut:      pluginConfig.StdoutFileName,
+		StdErr:      pluginConfig.StderrFileName,
+		IsAsync:     true,
+	}
 	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
-		pid, _, err = util.ExeCommand(
-			log,
-			cmd,
-			workDir,
-			appconfig.UpdaterArtifactsRoot,
-			pluginConfig.StdoutFileName,
-			pluginConfig.StderrFileName,
-			true)
+		pid, _, err = util.ExeCommandWithSlice(commandInput)
 		if err == nil {
 			break
 		}
@@ -272,201 +208,26 @@ func runUpdateAgent(
 	return
 }
 
-//generateUpdateCmd generates cmd for the updater
-func (m *updateManager) generateUpdateCmd(log log.T,
-	manifest *Manifest,
-	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
-	updaterVersion string,
-	messageID string,
-	stdout string,
-	stderr string,
-	keyPrefix string,
-	bucketName string) (cmd string, err error) {
-	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
-	cmd = updaterPath + " -update"
-	source := ""
-	hash := ""
-
-	//Get download url and hash value from for the current version of ssm agent
-	if source, hash, err = manifest.DownloadURLAndHash(
-		context, pluginInput.AgentName, version.Version); err != nil {
-		return
-	}
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.SourceVersionCmd, version.Version)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.SourceLocationCmd, source)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.SourceHashCmd, hash)
-
-	//Get download url and hash value from for the target version of ssm agent
-	if source, hash, err = manifest.DownloadURLAndHash(
-		context, pluginInput.AgentName, pluginInput.TargetVersion); err != nil {
-		return
-	}
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.TargetVersionCmd, pluginInput.TargetVersion)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.TargetLocationCmd, source)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.TargetHashCmd, hash)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.PackageNameCmd, pluginInput.AgentName)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.MessageIDCmd, messageID)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.StdoutFileName, stdout)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.StderrFileName, stderr)
-
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.OutputKeyPrefixCmd, keyPrefix)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.OutputBucketNameCmd, bucketName)
-
-	versionSplit := strings.Split(updaterVersion, ".")
-	majorVersion, _ := strconv.Atoi(versionSplit[0])
-	if majorVersion > 2 {
-		cmd = updateutil.BuildUpdateCommand(cmd, updateutil.ManifestFileUrlCmd, pluginInput.Source)
-	}
-	return
-}
-
-//downloadManifest downloads manifest file from s3 bucket
-func (m *updateManager) downloadManifest(log log.T,
-	util updateutil.T,
-	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
-	out iohandler.IOHandler) (manifest *Manifest, err error) {
-	//Download source
-	var updateDownload = ""
-	updateDownload, err = util.CreateUpdateDownloadFolder()
-	if err != nil {
-		return nil, err
-	}
-
-	downloadInput := artifact.DownloadInput{
-		SourceURL:            pluginInput.Source,
-		DestinationDirectory: updateDownload,
-	}
-
-	downloadOutput, downloadErr := fileDownload(log, downloadInput)
-	if downloadErr != nil ||
-		downloadOutput.IsHashMatched == false ||
-		downloadOutput.LocalFilePath == "" {
-		return nil, downloadErr
-	}
-	out.AppendInfof("Successfully downloaded %v\n", downloadInput.SourceURL)
-	return ParseManifest(log, downloadOutput.LocalFilePath, context, pluginInput.AgentName)
-}
-
-//downloadUpdater downloads updater from the s3 bucket
-func (m *updateManager) downloadUpdater(log log.T,
-	util updateutil.T,
-	updaterPackageName string,
-	manifest *Manifest,
-	out iohandler.IOHandler,
-	context *updateutil.InstanceContext) (version string, err error) {
-	var hash = ""
-	var source = ""
-
-	if version, err = manifest.LatestVersion(log, context, updaterPackageName); err != nil {
-		return
-	}
-	if source, hash, err = manifest.DownloadURLAndHash(context, updaterPackageName, version); err != nil {
-		return
-	}
-	var updateDownloadFolder = ""
-	if updateDownloadFolder, err = util.CreateUpdateDownloadFolder(); err != nil {
-		return
-	}
-
-	downloadInput := artifact.DownloadInput{
-		SourceURL: source,
-		SourceChecksums: map[string]string{
-			updateutil.HashType: hash,
-		},
-		DestinationDirectory: updateDownloadFolder,
-	}
-	downloadOutput, downloadErr := fileDownload(log, downloadInput)
-	if downloadErr != nil ||
-		downloadOutput.IsHashMatched == false ||
-		downloadOutput.LocalFilePath == "" {
-
-		errMessage := fmt.Sprintf("failed to download file reliably, %v\n", downloadInput.SourceURL)
-		if downloadErr != nil {
-			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
-		}
-		return version, errors.New(errMessage)
-	}
-	out.AppendInfof("Successfully downloaded %v\n", downloadInput.SourceURL)
-	if uncompressErr := fileUncompress(
-		log,
-		downloadOutput.LocalFilePath,
-		updateutil.UpdateArtifactFolder(appconfig.UpdaterArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
-		return version, fmt.Errorf("failed to uncompress updater package, %v, %v\n",
-			downloadOutput.LocalFilePath,
-			uncompressErr.Error())
-	}
-
-	return version, nil
-}
-
-//validateUpdate validates manifest against update request
-func (m *updateManager) validateUpdate(log log.T,
-	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
-	manifest *Manifest,
-	out iohandler.IOHandler) (noNeedToUpdate bool, err error) {
-	currentVersion := version.Version
-	var allowDowngrade = false
-	if len(pluginInput.TargetVersion) == 0 {
-		if pluginInput.TargetVersion, err = manifest.LatestVersion(log, context, pluginInput.AgentName); err != nil {
-			return true, err
-		}
-	}
-
-	if allowDowngrade, err = strconv.ParseBool(pluginInput.AllowDowngrade); err != nil {
-		return true, err
-	}
-
-	res, err := updateutil.CompareVersion(pluginInput.TargetVersion, currentVersion)
-	if err != nil {
-		return true, err
-	}
-
-	if res == 0 {
-		out.AppendInfof("%v %v has already been installed, update skipped\n",
-			pluginInput.AgentName,
-			currentVersion)
-		out.MarkAsSucceeded()
-		return true, nil
-	}
-
-	if res == -1 && !allowDowngrade {
-		return true,
-			fmt.Errorf(
-				"updating %v to an older version, please enable allow downgrade to proceed\n",
-				pluginInput.AgentName)
-
-	}
-	if !manifest.HasVersion(context, pluginInput.AgentName, pluginInput.TargetVersion) {
-		return true,
-			fmt.Errorf(
-				"%v version %v is unsupported\n",
-				pluginInput.AgentName,
-				pluginInput.TargetVersion)
-	}
-	if !manifest.HasVersion(context, pluginInput.AgentName, currentVersion) {
-		return true,
-			fmt.Errorf(
-				"%v current version %v is unsupported on current platform\n",
-				pluginInput.AgentName,
-				currentVersion)
-	}
-
-	return false, nil
-}
-
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.Context.Log()
 	log.Info("RunCommand started with configuration ", config)
 	if updateUtilRef == nil {
-		updateUtilRef = new(updateutil.Utility)
+		updateUtilRef = &updateutil.Utility{
+			Context: p.Context,
+		}
 	}
-	manager := new(updateManager)
 	executor := executor.NewProcessExecutor(log)
+
+	updateInfo, err := updateinfo.New(p.Context)
+
+	if err != nil {
+		log.Warnf("Failed to create update info object: %s", err)
+		output.MarkAsFailed(fmt.Errorf("Failed to create update info object: %s", err))
+		return
+	}
+
+	manifest := updatemanifest.New(p.Context, updateInfo, "")
+	updateS3Util := updates3util.New(p.Context)
 
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
@@ -474,13 +235,15 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		output.MarkAsCancelled()
 	} else {
 		// create update directory before creating locks
-		if _, directoryErr := updateUtilRef.CreateUpdateDownloadFolder(); directoryErr != nil {
+		var downloadFolder string
+		var directoryErr error
+		if downloadFolder, directoryErr = updateUtilRef.CreateUpdateDownloadFolder(); directoryErr != nil {
 			log.Warnf("error while creating update directory: %v", directoryErr)
 		}
 
 		// First check if lock is locked by anyone
 		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
-		err := lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
+		err = lock.TryLockExpireWithRetry(updateconstants.UpdateLockFileMinutes)
 
 		if err != nil {
 			if err == lockfile.ErrBusy {
@@ -504,16 +267,17 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			}
 		}()
 
-		pid := updateAgent(p,
+		pid := updateAgent(
 			config,
-			log,
-			manager,
+			p.Context,
 			updateUtilRef,
+			updateS3Util,
+			manifest,
 			config.Properties,
-			cancelFlag,
 			output,
 			time.Now(),
-			executor)
+			executor,
+			downloadFolder)
 
 		// If starting update fails, we unlock
 		if output.GetStatus() != contracts.ResultStatusInProgress {
@@ -529,7 +293,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		// If we don't change ownership, other updates can start before before the updater has finished
 		err = lock.ChangeOwner(pid)
 		if err != nil {
-			log.Warnf("Failed to transfer ownership of update lockfile to updater, unlocking: %s", err)
+			log.Warnf("failed to transfer ownership of update lockfile to updater, unlocking: %s", err)
 			_ = lock.Unlock()
 		}
 	}
@@ -540,32 +304,46 @@ func Name() string {
 	return appconfig.PluginNameAwsAgentUpdate
 }
 
-// GetUpdatePluginConfig returns the default values for the update plugin
-func GetUpdatePluginConfig(context context.T) UpdatePluginConfig {
-	log := context.Log()
-	region, err := platform.Region()
+func generateUpdateCmd(
+	pluginInput *UpdatePluginInput,
+	updaterVersion string,
+	messageID string,
+	upstreamServiceName contracts.UpstreamServiceName,
+	stdout string,
+	stderr string,
+	keyPrefix string,
+	bucketName string) (cmd []string, err error) {
+
+	// quick return
+	allowDowngrade, err := strconv.ParseBool(pluginInput.AllowDowngrade)
 	if err != nil {
-		log.Errorf("Error retrieving agent region in update plugin config. error: %v\n", err)
+		return cmd, err
 	}
 
-	var manifestUrl string
-	manifestUrl = retrieveDynamicS3ManifestUrl(region, "s3")
-	if manifestUrl == "" {
-		if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
-			manifestUrl = ChinaManifestURL
-		} else {
-			manifestUrl = CommonManifestURL
-		}
+	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
+	cmd = append(cmd, updaterPath)
+	cmd = append(cmd, "-update")
+
+	// Tell the updater if downgrade is not allowed
+	if !allowDowngrade {
+		cmd = append(cmd, "-"+updateconstants.DisableDowngradeCmd)
 	}
 
-	return UpdatePluginConfig{
-		ManifestLocation: manifestUrl,
-	}
-}
+	cmd = append(cmd, "-"+updateconstants.SourceVersionCmd, currentAgentVersion)
+	cmd = append(cmd, "-"+updateconstants.TargetVersionCmd, pluginInput.TargetVersion)
 
-func retrieveDynamicS3ManifestUrl(region string, service string) string {
-	if dynamicS3Endpoint := platform.GetDefaultEndPoint(region, service); dynamicS3Endpoint != "" {
-		return "https://" + dynamicS3Endpoint + ManifestPath
-	}
-	return ""
+	cmd = append(cmd, "-"+updateconstants.PackageNameCmd, pluginInput.AgentName)
+	cmd = append(cmd, "-"+updateconstants.MessageIDCmd, messageID)
+
+	cmd = append(cmd, "-"+updateconstants.StdoutFileName, stdout)
+	cmd = append(cmd, "-"+updateconstants.StderrFileName, stderr)
+
+	cmd = append(cmd, "-"+updateconstants.OutputKeyPrefixCmd, keyPrefix)
+	cmd = append(cmd, "-"+updateconstants.OutputBucketNameCmd, bucketName)
+
+	cmd = append(cmd, "-"+updateconstants.ManifestFileUrlCmd, pluginInput.Source)
+
+	cmd = append(cmd, "-"+updateconstants.UpstreamServiceName, string(upstreamServiceName))
+
+	return
 }

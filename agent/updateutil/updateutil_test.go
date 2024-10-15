@@ -15,18 +15,23 @@
 package updateutil
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
@@ -34,145 +39,7 @@ import (
 
 var logger = log.NewMockLog()
 
-//Valid manifest file with Status field
-var sampleManifestWithStatus = []string{
-	"testdata/sampleManifestWithStatus.json",
-}
-
-type testCase struct {
-	Input  string
-	Output *Manifest
-}
-
 type testProcess struct {
-}
-
-type testInstanceContext struct {
-	region                string
-	platformName          string
-	platformNameErr       error
-	platformVersion       string
-	platformVersionErr    error
-	expectedPlatformName  string
-	expectedInstallerName string
-	expectingError        bool
-}
-
-// TestVersionStringCompare tests version string comparison
-func TestVersionStringCompare(t *testing.T) {
-	testCases := []struct {
-		a      string
-		b      string
-		result int
-	}{
-		{"0", "1.0.152.0", -1},
-		{"0.0.1.0", "1.0.152.0", -1},
-		{"1.05.00.0156", "1.0.221.9289", 1},
-		{"2.05.1", "1.3234.221.9289", 1},
-		{"1", "1.0.1", -1},
-		{"1.0.1", "1.0.2", -1},
-		{"1.0.2", "1.0.3", -1},
-		{"1.0.3", "1.1", -1},
-		{"1.1", "1.1.1", -1},
-		{"1.1.0", "1.0.152.0", 1},
-		{"1.1.45", "1.0.152.0", 1},
-		{"1.1.1", "1.1.2", -1},
-		{"1.1.2", "1.2", -1},
-		{"1.1.2", "1.1.2", 0},
-		{"2.1.2", "2.1.2", 0},
-		{"7.1", "7", 1},
-	}
-
-	for _, test := range testCases {
-		compareResult, err := VersionCompare(test.a, test.b)
-		assert.NoError(t, err)
-		assert.Equal(t, compareResult, test.result)
-	}
-}
-
-// TestVersionStringCompare tests version string comparison
-func TestVersionStringCompareWithError(t *testing.T) {
-	testCases := []struct {
-		a string
-		b string
-	}{
-		{"Invalid version", "1.0.152.0"},
-		{"0.0.1.0", "Invalid version"},
-	}
-
-	for _, test := range testCases {
-		_, err := VersionCompare(test.a, test.b)
-		assert.Error(t, err)
-	}
-}
-
-func TestCreateInstanceContext(t *testing.T) {
-	testCases := []testInstanceContext{
-		{"us-east-1", PlatformAmazonLinux, nil, "2015.9", nil, PlatformLinux, PlatformLinux, false},
-		{"us-east-1", PlatformCentOS, nil, "7.1", nil, PlatformCentOS, PlatformLinux, false},
-		{"us-east-1", PlatformSuseOS, nil, "12", nil, PlatformSuseOS, PlatformLinux, false},
-		{"us-east-1", PlatformRedHat, nil, "6.8", nil, PlatformRedHat, PlatformLinux, false},
-		{"us-east-1", PlatformOracleLinux, nil, "7.7", nil, PlatformOracleLinux, PlatformLinux, false},
-		{"us-east-1", PlatformUbuntu, nil, "12", nil, PlatformUbuntu, PlatformUbuntu, false},
-		{"us-east-1", PlatformWindows, nil, "5", nil, PlatformWindows, PlatformWindows, false},
-		{"us-east-1", PlatformMacOsX, nil, "10.14.2", nil, PlatformMacOsX, PlatformDarwin, false},
-		{"us-east-1", "", fmt.Errorf("error"), "", nil, "", "", true},
-		{"us-east-1", "", nil, "", fmt.Errorf("error"), "", "", true},
-		{"", "", nil, "", nil, "", "", true},
-	}
-
-	getRegion = RegionStub
-	getPlatformName = PlatformNameStub
-	getPlatformVersion = PlatformVersionStub
-	util := Utility{}
-
-	for _, test := range testCases {
-		// Setup stubs
-		context = test
-
-		context, err := util.CreateInstanceContext(logger)
-
-		if test.expectingError {
-			assert.Error(t, err)
-		} else {
-			assert.NoError(t, err)
-			assert.Equal(t, context.Platform, test.expectedPlatformName)
-			assert.Equal(t, context.InstallerName, test.expectedInstallerName)
-		}
-	}
-}
-
-var context testInstanceContext
-
-func PlatformVersionStub(log log.T) (version string, err error) {
-	return context.platformVersion, context.platformVersionErr
-}
-func PlatformNameStub(log log.T) (name string, err error) {
-	return context.platformName, context.platformNameErr
-}
-func RegionStub() (string, error) {
-	var err error = nil
-	if context.region == "" {
-		err = fmt.Errorf("error")
-	}
-	return context.region, err
-}
-
-func TestFileNameConstruction(t *testing.T) {
-	testCases := []struct {
-		context InstanceContext
-		result  string
-	}{
-		{InstanceContext{"us-east-1", "linux", "2015.9", "linux", "amd64", "tar.gz"}, "amazon-ssm-agent-linux-amd64.tar.gz"},
-		{InstanceContext{"us-east-1", "linux", "2015.9", "linux", "386", "tar.gz"}, "amazon-ssm-agent-linux-386.tar.gz"},
-		{InstanceContext{"us-west-1", "ubuntu", "12", "ubuntu", "386", "tar.gz"}, "amazon-ssm-agent-ubuntu-386.tar.gz"},
-		{InstanceContext{"us-west-1", "max os x", "10.14.2", "darwin", "amd64", "tar.gz"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
-	}
-
-	for _, test := range testCases {
-		fileNameResult := test.context.FileName("amazon-ssm-agent")
-		assert.Equal(t, fileNameResult, test.result)
-	}
 }
 
 func TestBuildMessage(t *testing.T) {
@@ -196,7 +63,11 @@ func TestCreateUpdateDownloadFolderSucceeded(t *testing.T) {
 	mkDirAll = func(path string, perm os.FileMode) error {
 		return nil
 	}
-	util := Utility{}
+
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
+
 	result, _ := util.CreateUpdateDownloadFolder()
 	assert.Contains(t, result, "update")
 }
@@ -205,7 +76,10 @@ func TestCreateUpdateDownloadFolderFailed(t *testing.T) {
 	mkDirAll = func(path string, perm os.FileMode) error {
 		return fmt.Errorf("Folder cannot be created")
 	}
-	util := Utility{}
+
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	_, err := util.CreateUpdateDownloadFolder()
 	assert.Error(t, err)
 }
@@ -228,6 +102,17 @@ func TestBuildUpdateCommand(t *testing.T) {
 	}
 }
 
+func TestConvertToUpdateErrorCode_MulipleCases(t *testing.T) {
+	output := ConvertToUpdateErrorCode(string(updateconstants.ErrorCreateUpdateFolder), "_", "Test")
+	assert.Equal(t, string(output), "ErrorCreateUpdateFolder_Test")
+	output = ConvertToUpdateErrorCode(string(updateconstants.ErrorCreateUpdateFolder))
+	assert.Equal(t, string(output), "ErrorCreateUpdateFolder")
+	output = ConvertToUpdateErrorCode("Test")
+	assert.Equal(t, string(output), "Test")
+	output = ConvertToUpdateErrorCode()
+	assert.Equal(t, string(output), "")
+}
+
 func TestUpdateArtifactFolder(t *testing.T) {
 	testCases := []struct {
 		pkgname string
@@ -246,12 +131,12 @@ func TestUpdateArtifactFolder(t *testing.T) {
 
 func TestUpdateContextFilePath(t *testing.T) {
 	result := UpdateContextFilePath(appconfig.UpdaterArtifactsRoot)
-	assert.Contains(t, result, UpdateContextFileName)
+	assert.Contains(t, result, updateconstants.UpdateContextFileName)
 }
 
 func TestUpdateOutputDirectory(t *testing.T) {
 	result := UpdateOutputDirectory(appconfig.UpdaterArtifactsRoot)
-	assert.Equal(t, strings.Contains(result, DefaultOutputFolder), true)
+	assert.Equal(t, strings.Contains(result, updateconstants.DefaultOutputFolder), true)
 }
 
 func TestUpdateStandOutPath(t *testing.T) {
@@ -260,7 +145,7 @@ func TestUpdateStandOutPath(t *testing.T) {
 		expectedFileName string
 	}{
 		{"std.out", "std.out"},
-		{"", DefaultStandOut},
+		{"", updateconstants.DefaultStandOut},
 	}
 
 	for _, test := range testCases {
@@ -275,7 +160,7 @@ func TestUpdateStandErrPath(t *testing.T) {
 		expectedFileName string
 	}{
 		{"std.err", "std.err"},
-		{"", DefaultStandErr},
+		{"", updateconstants.DefaultStandErr},
 	}
 
 	for _, test := range testCases {
@@ -286,7 +171,7 @@ func TestUpdateStandErrPath(t *testing.T) {
 
 func TestUpdatePluginResultFilePath(t *testing.T) {
 	result := UpdatePluginResultFilePath(appconfig.UpdaterArtifactsRoot)
-	assert.Contains(t, result, UpdatePluginResultFileName)
+	assert.Contains(t, result, updateconstants.UpdatePluginResultFileName)
 }
 
 func TestUpdaterFilePath(t *testing.T) {
@@ -302,11 +187,12 @@ func TestUpdaterFilePath(t *testing.T) {
 		result := UpdaterFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version)
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
-		assert.Contains(t, result, Updater)
+		assert.Contains(t, result, updateconstants.Updater)
 	}
 }
 
 func TestInstallerFilePath(t *testing.T) {
+	randomInstaller := "someinstaller.sh"
 	testCases := []struct {
 		pkgname string
 		version string
@@ -316,14 +202,15 @@ func TestInstallerFilePath(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := InstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version)
+		result := InstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version, randomInstaller)
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
-		assert.Contains(t, result, Installer)
+		assert.Contains(t, result, randomInstaller)
 	}
 }
 
 func TestUnInstallerFilePath(t *testing.T) {
+	randomUnInstaller := "someuninstaller.sh"
 	testCases := []struct {
 		pkgname string
 		version string
@@ -333,104 +220,10 @@ func TestUnInstallerFilePath(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := UnInstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version)
+		result := UnInstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version, randomUnInstaller)
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
-		assert.Contains(t, result, UnInstaller)
-	}
-}
-
-func TestIsPlatformUsingSystemD(t *testing.T) {
-	testCases := []struct {
-		context InstanceContext
-		result  bool
-	}{
-		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
-		{InstanceContext{"us-east-1", PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
-		{InstanceContext{"us-east-1", PlatformOracleLinux, "7.7", "linux", "amd64", "tar.gz"}, true},
-		{InstanceContext{"us-east-1", PlatformOracleLinux, "6.10", "linux", "amd64", "tar.gz"}, false},
-		{InstanceContext{"us-west-1", PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
-		{InstanceContext{"us-east-1", PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
-		{InstanceContext{"us-west-1", PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
-	}
-
-	for _, test := range testCases {
-		result, err := test.context.IsPlatformUsingSystemD(logger)
-		assert.NoError(t, err)
-		assert.Equal(t, result, test.result)
-	}
-}
-
-func TestIsPlatformUsingSystemDWithInvalidVersionNumber(t *testing.T) {
-	testCases := []struct {
-		context InstanceContext
-		result  bool
-	}{
-		{InstanceContext{"us-east-1", PlatformRedHat, "wrong version", "linux", "amd64", "tar.gz"}, false},
-	}
-
-	for _, test := range testCases {
-		_, err := test.context.IsPlatformUsingSystemD(logger)
-		assert.Error(t, err)
-	}
-}
-
-func TestIsPlatformUsingSystemDWithPossiblyUsingSystemD(t *testing.T) {
-	testCases := []struct {
-		context InstanceContext
-		result  bool
-	}{
-		{InstanceContext{"us-east-1", PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
-	}
-
-	// Stub exec.Command
-	execCommand = fakeExecCommand
-
-	for _, test := range testCases {
-		result, err := test.context.IsPlatformUsingSystemD(logger)
-		assert.NoError(t, err)
-		assert.Equal(t, result, test.result)
-	}
-}
-
-func TestIsServiceRunning(t *testing.T) {
-	util := Utility{}
-	testCases := []struct {
-		context InstanceContext
-		result  bool
-	}{
-		// test system with upstart
-		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
-		// test system with systemD
-		{InstanceContext{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
-	}
-
-	// Stub exec.Command
-	execCommand = fakeExecCommand
-
-	for _, test := range testCases {
-		result, _ := util.IsServiceRunning(logger, &test.context)
-		assert.Equal(t, result, test.result)
-	}
-}
-
-func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
-	util := Utility{}
-	testCases := []struct {
-		context InstanceContext
-	}{
-		// test system with upstart
-		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
-		// test system with systemD
-		{InstanceContext{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
-	}
-
-	// Stub exec.Command
-	execCommand = fakeExecCommandWithError
-
-	for _, test := range testCases {
-		_, err := util.IsServiceRunning(logger, &test.context)
-		assert.Error(t, err)
+		assert.Contains(t, result, randomUnInstaller)
 	}
 }
 
@@ -460,16 +253,21 @@ func TestExeCommandSucceeded(t *testing.T) {
 	execCommand = fakeExecCommand
 	cmdStart = func(*exec.Cmd) error { return nil }
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 
 	for _, test := range testCases {
-		_, _, err := util.ExeCommand(logger,
-			test.cmd,
-			test.workingDir,
-			appconfig.UpdaterArtifactsRoot,
-			test.stdOut,
-			test.stdErr,
-			test.isAsync)
+		commandInput := CommandExecutionSettings{
+			Log:         logger,
+			Cmd:         strings.Fields(test.cmd),
+			WorkingDir:  test.workingDir,
+			UpdaterRoot: appconfig.UpdaterArtifactsRoot,
+			StdOut:      test.stdOut,
+			StdErr:      test.stdErr,
+			IsAsync:     test.isAsync,
+		}
+		_, _, err := util.ExeCommand(&commandInput)
 
 		if test.expectingError {
 			assert.Error(t, err)
@@ -566,13 +364,15 @@ func TestExecCommandHelperProcess(*testing.T) {
 func TestIsDiskSpaceSufficientForUpdateWithSufficientSpace(t *testing.T) {
 	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
 		return fileutil.DiskSpaceInfo{
-			AvailBytes: MinimumDiskSpaceForUpdate,
+			AvailBytes: updateconstants.MinimumDiskSpaceForUpdate,
 			FreeBytes:  0,
 			TotalBytes: 0,
 		}, nil
 	}
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
 
 	assert.NoError(t, err)
@@ -582,13 +382,15 @@ func TestIsDiskSpaceSufficientForUpdateWithSufficientSpace(t *testing.T) {
 func TestIsDiskSpaceSufficientForUpdateWithInsufficientSpace(t *testing.T) {
 	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
 		return fileutil.DiskSpaceInfo{
-			AvailBytes: MinimumDiskSpaceForUpdate - 1,
+			AvailBytes: updateconstants.MinimumDiskSpaceForUpdate - 1,
 			FreeBytes:  0,
 			TotalBytes: 0,
 		}, nil
 	}
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
 
 	assert.NoError(t, err)
@@ -604,7 +406,9 @@ func TestIsDiskSpaceSufficientForUpdateWithDiskSpaceLoadFail(t *testing.T) {
 		}, fmt.Errorf("mock error - failed to load the disk space")
 	}
 
-	util := Utility{}
+	util := Utility{
+		Context: context.NewMockDefault(),
+	}
 	isSufficient, err := util.IsDiskSpaceSufficientForUpdate(logger)
 
 	assert.Error(t, err)
@@ -674,73 +478,139 @@ func TestCompareVersion(t *testing.T) {
 
 }
 
-// Test version status validation
-func TestVersionStatusValidation(t *testing.T) {
-	assert.True(t, isVersionActive("Active"))
-	assert.False(t, isVersionActive("Inactive"))
-	assert.False(t, isVersionActive("Deprecated"))
-	assert.True(t, isVersionActive(""))
-	assert.False(t, isVersionActive("Foo"))
+func TestGetStableURLFromManifestURL(t *testing.T) {
+	// Empty URL
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
+	agentIdentity.On("Region").Return("us-east-1", nil)
+
+	url, err := GetStableURLFromManifestURL("", agentIdentity)
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Invalid URL
+	url, err = GetStableURLFromManifestURL("InvalidUrl", agentIdentity)
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Invalid manifest url - artifact url
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz", agentIdentity)
+	assert.Error(t, err)
+	assert.Equal(t, "", url)
+
+	// Prod manifest url with region placeholder
+	url, err = GetStableURLFromManifestURL("https://s3.{Region}.amazonaws.com/amazon-ssm-{Region}/ssm-agent-manifest.json", agentIdentity)
+	assert.NoError(t, err)
+	assert.Equal(t, "https://s3.us-east-1.amazonaws.com/amazon-ssm-us-east-1/stable/VERSION", url)
+
+	// Valid s3 manifest link bucket in Path
+	url, err = GetStableURLFromManifestURL("https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json", agentIdentity)
+	assert.NoError(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com/bucket/stable/VERSION", url)
+
+	// Valid s3 manifest link with bucket in url
+	url, err = GetStableURLFromManifestURL("https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json", agentIdentity)
+	assert.NoError(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/stable/VERSION", url)
 }
 
-//Test parsing manifest file with version Status field
-func TestParseManifestWithStatus(t *testing.T) {
-	// generate test cases
-	var testCases []testCase
-	for _, manifestFile := range sampleManifestWithStatus {
-		testCases = append(testCases, testCase{
-			Input:  string(manifestFile),
-			Output: loadManifestFromFile(t, manifestFile),
-		})
-	}
-	agentName := "amazon-ssm-agent"
-	log := log.NewMockLog()
-	context := mockInstanceContext()
-	// run tests
-	for _, tst := range testCases {
-		// call method
-		parsedMsg, err := ParseManifest(log, tst.Input, context, agentName)
+func TestGetManifestURLFromSourceUrl(t *testing.T) {
+	// Empty URL
+	url, err := GetManifestURLFromSourceUrl("")
+	assert.NotNil(t, err)
+	assert.Equal(t, "", url)
 
-		// check results
-		assert.Nil(t, err)
-		assert.Equal(t, tst.Output, parsedMsg)
-		assert.Equal(t, parsedMsg.Packages[0].Name, agentName)
-		assert.Equal(t, parsedMsg.Packages[0].Files[0].Name, "amazon-ssm-agent-linux-amd64.tar.gz")
-		assert.Equal(
-			t,
-			parsedMsg.Packages[0].Files[0].AvailableVersions[0].Version,
-			"1.1.0.0")
-		assert.Equal(
-			t,
-			parsedMsg.Packages[0].Files[0].AvailableVersions[0].Checksum,
-			"84fc818a7e21068c47412ddd18d3748a04a16b8f8836a259191920f854c4edc7")
-		assert.Equal(t, parsedMsg.Packages[0].Files[0].AvailableVersions[0].Status, "Foo")
-	}
+	// Invalid URL
+	url, err = GetManifestURLFromSourceUrl("InvalidUrl")
+	assert.NotNil(t, err)
+	assert.Equal(t, "", url)
+
+	// Valid s3 link bucket in URL
+	url, err = GetManifestURLFromSourceUrl("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json", url)
+
+	// Valid s3 link bucket in Path
+	url, err = GetManifestURLFromSourceUrl("https://s3.region.amazonaws.com/bucket/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json", url)
+
+	// Valid s3 link bucket in URL - china
+	url, err = GetManifestURLFromSourceUrl("https://bucket.s3.region.amazonaws.com.cn/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com.cn/ssm-agent-manifest.json", url)
+
+	// Valid s3 link bucket in Path - china
+	url, err = GetManifestURLFromSourceUrl("https://s3.region.amazonaws.com.cn/bucket/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com.cn/bucket/ssm-agent-manifest.json", url)
+
+	// Valid s3 link but not expected path
+	url, err = GetManifestURLFromSourceUrl("https://s3.region.amazonaws.com/bucket")
+	assert.NotNil(t, err)
+	assert.Equal(t, "", url)
 }
 
-//Parse manifest file
-func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
-	var result []byte
-	var err error
-	if result, err = ioutil.ReadFile(fileName); err != nil {
-		t.Fatal(err)
-	}
+func TestIsV1UpdatePlugin(t *testing.T) {
+	// lower than
+	assert.True(t, IsV1UpdatePlugin("3.0.881.0"))
 
-	if err := json.Unmarshal(result, &manifest); err != nil {
-		t.Fatal(err)
-	}
+	// equal than
+	assert.True(t, IsV1UpdatePlugin("3.0.882.0"))
 
-	return manifest
+	// greater than
+	assert.False(t, IsV1UpdatePlugin("3.0.883.0"))
+
+	// invalid source
+	assert.False(t, IsV1UpdatePlugin("SomeInvalidVersion"))
 }
 
-func mockInstanceContext() *InstanceContext {
-	return &InstanceContext{
-		Region:         "us-east-1",
-		Platform:       "linux",
-		InstallerName:  "linux",
-		Arch:           "amd64",
-		CompressFormat: "tar.gz",
+func TestIsIdentityRuntimeConfigSupported(t *testing.T) {
+	// lower than
+	assert.False(t, IsIdentityRuntimeConfigSupported("3.0.281.0"))
+	assert.False(t, IsIdentityRuntimeConfigSupported("1.1.281.0"))
+	assert.False(t, IsIdentityRuntimeConfigSupported("3.1.281.0"))
+
+	// equal than
+	assert.False(t, IsIdentityRuntimeConfigSupported("3.1.282.0"))
+
+	// greater than
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.1.282.1"))
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.1.1111.0"))
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.1.283.0"))
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.2.283.0"))
+
+	// invalid source
+	assert.False(t, IsIdentityRuntimeConfigSupported("SomeInvalidVersion"))
+}
+
+func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_WhenIdentitySharesCredentials(t *testing.T) {
+	ctx := new(context.Mock)
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
+	ctx.On("Identity").Return(agentIdentity)
+	ctx.On("Log").Return(log.NewMockLog())
+
+	remoteProvider := &mocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
+	expectedShareProfile := "SomeShareFileLocation"
+	expectedShareFile := "SomeShareFileLocation"
+	remoteProvider.On("ShareProfile").Return(expectedShareProfile)
+	remoteProvider.On("ShareFile").Return(expectedShareFile)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
 	}
+
+	utility := &Utility{
+		Context: ctx,
+	}
+
+	command := &exec.Cmd{}
+	utility.setCommandEnvironmentVariables(command, nil)
+
+	expectedProfileVar := fmt.Sprintf("AWS_PROFILE=%s", expectedShareProfile)
+	expectedSharedFileVar := fmt.Sprintf("AWS_SHARED_CREDENTIALS_FILE=%s", expectedShareFile)
+
+	assert.Contains(t, command.Env, expectedProfileVar, "AWS_PROFILE environment variable not set")
+	assert.Contains(t, command.Env, expectedSharedFileVar, "AWS_SHARED_CREDENTIALS_FILE environment variable not set")
 }
 
 func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }

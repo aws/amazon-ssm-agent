@@ -1,5 +1,9 @@
 #!/bin/sh
 
-echo "Starting agent"
-launchctl load -w /Library/LaunchDaemons/com.amazon.aws.ssm.plist
-launchctl start com.amazon.aws.ssm
+if [ $3 == "/" ]; then
+    echo "Starting agent"
+    launchctl load -w /Library/LaunchDaemons/com.amazon.aws.ssm.plist
+    launchctl start com.amazon.aws.ssm
+else
+    echo "Skipping launchctl for non-root installation"
+fi

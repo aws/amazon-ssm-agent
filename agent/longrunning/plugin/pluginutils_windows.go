@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package plugin contains all essential structs/interfaces for long running plugins
@@ -42,7 +43,7 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	cwInfo.Configuration = ""
 	cwInfo.State = PluginState{}
 
-	if handler, err := cloudwatch.NewPlugin(iohandler.DefaultOutputConfig()); err == nil {
+	if handler, err := cloudwatch.NewPlugin(context, iohandler.DefaultOutputConfig()); err == nil {
 		cw.Info = cwInfo
 		cw.Handler = handler
 

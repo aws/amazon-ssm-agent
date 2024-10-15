@@ -23,13 +23,12 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"runtime/debug"
 	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/agent/rip"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -38,6 +37,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/gorilla/websocket"
 	"github.com/twinj/uuid"
@@ -48,7 +48,9 @@ const (
 	sequenceNumber = 0
 	messageFlags   = 3
 	// Timeout period before a handshake operation expires on the agent.
-	handshakeTimeout = 15 * time.Second
+	handshakeTimeout                        = 15 * time.Second
+	clientVersionWithoutOutputSeparation    = "1.2.295"
+	firstVersionWithOutputSeparationFeature = "1.2.312.0"
 )
 
 type IDataChannel interface {
@@ -72,6 +74,10 @@ type IDataChannel interface {
 	GetClientVersion() string
 	GetInstanceId() string
 	GetRegion() string
+	IsActive() bool
+	PrepareToCloseChannel(log log.T)
+	GetSeparateOutputPayload() bool
+	SetSeparateOutputPayload(separateOutputPayload bool)
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
@@ -88,6 +94,9 @@ type DataChannel struct {
 	ExpectedSequenceNumber int64
 	//records sequence number of last stream data message sent over data channel
 	StreamDataSequenceNumber int64
+	//ensure only one goroutine sending message with current StreamDataSequenceNumber in data channel
+	//check carefully for deadlock when not reusing of SendStreamDataMessage
+	StreamDataSequenceNumberMutex *sync.Mutex
 	//buffer to store outgoing stream messages until acknowledged
 	//using linked list for this buffer as access to oldest message is required and it support faster deletion from any position of list
 	OutgoingMessageBuffer ListMessageBuffer
@@ -109,7 +118,8 @@ type DataChannel struct {
 	//blockCipher stores encrytion keys and provides interface for encryption/decryption functions
 	blockCipher crypto.IBlockCipher
 	// Indicates whether encryption was enabled
-	encryptionEnabled bool
+	encryptionEnabled     bool
+	separateOutputPayload bool
 }
 
 type ListMessageBuffer struct {
@@ -158,11 +168,12 @@ func NewDataChannel(context context.T,
 	cancelFlag task.CancelFlag) (*DataChannel, error) {
 
 	log := context.Log()
+	identity := context.Identity()
 	appConfig := context.AppConfig()
 
 	messageGatewayServiceConfig := appConfig.Mgs
 	if messageGatewayServiceConfig.Region == "" {
-		fetchedRegion, err := platform.Region()
+		fetchedRegion, err := identity.Region()
 		if err != nil {
 			return nil, fmt.Errorf("failed to get region with error: %s", err)
 		}
@@ -170,7 +181,7 @@ func NewDataChannel(context context.T,
 	}
 
 	if messageGatewayServiceConfig.Endpoint == "" {
-		fetchedEndpoint, err := getMgsEndpoint(messageGatewayServiceConfig.Region)
+		fetchedEndpoint, err := getMgsEndpoint(context, messageGatewayServiceConfig.Region)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get MessageGatewayService endpoint with error: %s", err)
 		}
@@ -178,13 +189,9 @@ func NewDataChannel(context context.T,
 	}
 
 	connectionTimeout := time.Duration(messageGatewayServiceConfig.StopTimeoutMillis) * time.Millisecond
-	mgsService := service.NewService(log, messageGatewayServiceConfig, connectionTimeout)
+	mgsService := service.NewService(context, messageGatewayServiceConfig, connectionTimeout)
 
-	instanceID, err := platform.InstanceID()
-
-	if appConfig.Agent.ContainerMode {
-		instanceID, err = platform.TargetID()
-	}
+	instanceID, err := identity.InstanceID()
 
 	if instanceID == "" {
 		return nil, fmt.Errorf("no instanceID provided, %s", err)
@@ -235,6 +242,7 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 	dataChannel.Pause = false
 	dataChannel.ExpectedSequenceNumber = 0
 	dataChannel.StreamDataSequenceNumber = 0
+	dataChannel.StreamDataSequenceNumberMutex = &sync.Mutex{}
 	dataChannel.OutgoingMessageBuffer = ListMessageBuffer{
 		list.New(),
 		mgsConfig.OutgoingMessageBufferCapacity,
@@ -300,6 +308,7 @@ func (dataChannel *DataChannel) SetWebSocket(context context.T,
 			InitialDelayInMilli: rand.Intn(mgsConfig.DataChannelRetryInitialDelayMillis) + mgsConfig.DataChannelRetryInitialDelayMillis,
 			MaxDelayInMilli:     mgsConfig.DataChannelRetryMaxIntervalMillis,
 			MaxAttempts:         mgsConfig.DataChannelNumMaxAttempts,
+			NonRetryableErrors:  getNonRetryableDataChannelErrors(),
 		}
 		if _, err := retryer.Call(); err != nil {
 			log.Error(err)
@@ -324,7 +333,7 @@ func (dataChannel *DataChannel) SetWebSocket(context context.T,
 // Open opens the websocket connection and sends the token for service to acknowledge the connection.
 func (dataChannel *DataChannel) Open(log log.T) error {
 	// Opens websocket connection
-	if err := dataChannel.wsChannel.Open(log); err != nil {
+	if err := dataChannel.wsChannel.Open(log, nil); err != nil {
 		return fmt.Errorf("failed to connect data channel with error: %s", err)
 	}
 
@@ -375,6 +384,24 @@ func (dataChannel *DataChannel) Close(log log.T) error {
 	return dataChannel.wsChannel.Close(log)
 }
 
+// PrepareToCloseChannel waits for all messages to be sent to MGS
+func (dataChannel *DataChannel) PrepareToCloseChannel(log log.T) {
+	done := make(chan bool)
+	go func() {
+		for dataChannel.OutgoingMessageBuffer.Messages.Len() > 0 {
+			time.Sleep(10 * time.Millisecond)
+		}
+		done <- true
+	}()
+
+	select {
+	case <-done:
+		log.Tracef("Datachannel buffer is empty, datachannel can now be closed")
+	case <-time.After(2 * time.Second):
+		log.Debugf("Timeout waiting for datachannel buffer to empty.")
+	}
+}
+
 // SendStreamDataMessage sends a data message in a form of AgentMessage for streaming.
 func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgsContracts.PayloadType, inputData []byte) (err error) {
 	if len(inputData) == 0 {
@@ -382,16 +409,20 @@ func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgs
 		return nil
 	}
 
-	var flag uint64 = 0
-	if dataChannel.StreamDataSequenceNumber == 0 {
-		flag = 1
-	}
-
 	// If encryption has been enabled, encrypt the payload
-	if dataChannel.encryptionEnabled && payloadType == mgsContracts.Output {
+	if dataChannel.encryptionEnabled && (payloadType == mgsContracts.Output || payloadType == mgsContracts.StdErr || payloadType == mgsContracts.ExitCode) {
 		if inputData, err = dataChannel.blockCipher.EncryptWithAESGCM(inputData); err != nil {
 			return fmt.Errorf("error encrypting stream data message sequence %d, err: %v", dataChannel.StreamDataSequenceNumber, err)
 		}
+	}
+
+	// StreamDataSequenceNumber only changed in the code block below
+	dataChannel.StreamDataSequenceNumberMutex.Lock()
+	defer dataChannel.StreamDataSequenceNumberMutex.Unlock()
+
+	var flag uint64 = 0
+	if dataChannel.StreamDataSequenceNumber == 0 {
+		flag = 1
 	}
 
 	uuid.SwitchFormat(uuid.CleanHyphen)
@@ -436,6 +467,12 @@ func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgs
 // and resends first message if time elapsed since lastSentTime of the message is more than acknowledge wait time
 func (dataChannel *DataChannel) ResendStreamDataMessageScheduler(log log.T) error {
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Resend stream data message scheduler panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for {
 			time.Sleep(mgsConfig.ResendSleepInterval)
 			if dataChannel.Pause {
@@ -516,7 +553,7 @@ func (dataChannel *DataChannel) SendAgentSessionStateMessage(log log.T, sessionS
 		return err
 	}
 
-	log.Tracef("Send %s message with session status %s", mgsContracts.AgentSessionState, string(sessionStatus))
+	log.Debugf("Send %s message with session status %s", mgsContracts.AgentSessionState, string(sessionStatus))
 	if err := dataChannel.sendAgentMessage(log, mgsContracts.AgentSessionState, agentSessionStateContentBytes); err != nil {
 		return err
 	}
@@ -694,8 +731,11 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 			dataChannel.AddDataToIncomingMessageBuffer(streamingMessage)
 		}
 	} else {
-		log.Tracef("Discarding already processed message. Received Sequence Number: %d. Expected Sequence Number: %d",
+		log.Debugf("Resending acknowledge for already processed message. Received Sequence Number: %d. Expected Sequence Number: %d",
 			streamDataMessage.SequenceNumber, dataChannel.ExpectedSequenceNumber)
+		if err = dataChannel.SendAcknowledgeMessage(log, streamDataMessage); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -843,6 +883,7 @@ func (dataChannel *DataChannel) handleHandshakeResponse(log log.T, streamDataMes
 		}
 	}
 	dataChannel.handshake.clientVersion = handshakeResponse.ClientVersion
+	log.Infof("Client side session manager plugin version is: %s", handshakeResponse.ClientVersion)
 	dataChannel.handshake.responseChan <- true
 	return nil
 }
@@ -888,16 +929,20 @@ func (dataChannel *DataChannel) finalizeKMSEncryption(log log.T, actionResult js
 		return err
 	}
 
+	if dataChannel.context.AppConfig().Kms.RequireKMSChallengeResponse && !encryptionResponse.ChallengeAcknowledgement {
+		return fmt.Errorf("client does not support required encryption context random challenge")
+	}
+
 	sessionId := dataChannel.ChannelId // ChannelId is SessionId
-	if err := dataChannel.blockCipher.UpdateEncryptionKey(log, encryptionResponse.KMSCipherTextKey, sessionId, dataChannel.InstanceId); err != nil {
+	if err := dataChannel.blockCipher.UpdateEncryptionKey(log, encryptionResponse.KMSCipherTextKey, sessionId, dataChannel.InstanceId, encryptionResponse.ChallengeAcknowledgement); err != nil {
 		return fmt.Errorf("Fetching data key failed: %s", err)
 	}
 	dataChannel.encryptionEnabled = true
 	return nil
 }
 
-var newBlockCipher = func(log log.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
-	return crypto.NewBlockCipher(log, kmsKeyId)
+var newBlockCipher = func(context context.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
+	return crypto.NewBlockCipher(context, kmsKeyId)
 }
 
 // PerformHandshake performs handshake to share version string and encryption information with clients like cli/console
@@ -907,7 +952,7 @@ func (dataChannel *DataChannel) PerformHandshake(log log.T,
 	sessionTypeRequest mgsContracts.SessionTypeRequest) (err error) {
 
 	if encryptionEnabled {
-		if dataChannel.blockCipher, err = newBlockCipher(log, kmsKeyId); err != nil {
+		if dataChannel.blockCipher, err = newBlockCipher(dataChannel.context, kmsKeyId); err != nil {
 			return fmt.Errorf("Initializing BlockCipher failed: %s", err)
 		}
 	}
@@ -982,7 +1027,8 @@ func (dataChannel *DataChannel) buildHandshakeRequestPayload(log log.T,
 			mgsContracts.RequestedClientAction{
 				ActionType: mgsContracts.KMSEncryption,
 				ActionParameters: mgsContracts.KMSEncryptionRequest{
-					KMSKeyID: dataChannel.blockCipher.GetKMSKeyId(),
+					KMSKeyID:  dataChannel.blockCipher.GetKMSKeyId(),
+					Challenge: dataChannel.blockCipher.GetRandomChallenge(),
 				}})
 	}
 
@@ -995,9 +1041,17 @@ func (dataChannel *DataChannel) buildHandshakeCompletePayload(log log.T) mgsCont
 	handshakeComplete.HandshakeTimeToComplete =
 		dataChannel.handshake.handshakeEndTime.Sub(dataChannel.handshake.handshakeStartTime)
 
-	if dataChannel.encryptionEnabled == true {
-		handshakeComplete.CustomerMessage = "This session is encrypted using AWS KMS."
+	clientVersion := dataChannel.GetClientVersion()
+	if dataChannel.separateOutputPayload == true && versionutil.Compare(clientVersion, clientVersionWithoutOutputSeparation, true) <= 0 {
+		handshakeComplete.CustomerMessage = "Please update session manager plugin version (minimum required version " +
+			firstVersionWithOutputSeparationFeature +
+			") for fully support of separate StdOut/StdErr output.\r\n"
 	}
+
+	if dataChannel.encryptionEnabled == true {
+		handshakeComplete.CustomerMessage += "This session is encrypted using AWS KMS."
+	}
+
 	return handshakeComplete
 }
 
@@ -1080,6 +1134,23 @@ func (dataChannel *DataChannel) GetRegion() string {
 	return dataChannel.Service.GetRegion()
 }
 
+// IsActive returns a boolean value indicating the datachannel is actively listening
+// and communicating with service
+func (dataChannel *DataChannel) IsActive() bool {
+	return !dataChannel.Pause
+}
+
+// GetSeparateOutputPayload returns boolean value indicating separate
+// stdout/stderr output for non-interactive session or not
+func (dataChannel *DataChannel) GetSeparateOutputPayload() bool {
+	return dataChannel.separateOutputPayload
+}
+
+// SetSeparateOutputPayload set separateOutputPayload value
+func (dataChannel *DataChannel) SetSeparateOutputPayload(separateOutputPayload bool) {
+	dataChannel.separateOutputPayload = separateOutputPayload
+}
+
 // getDataChannelToken calls CreateDataChannel to get the token for this session.
 func getDataChannelToken(log log.T,
 	mgsService service.Service,
@@ -1103,8 +1174,8 @@ func getDataChannelToken(log log.T,
 }
 
 // getMgsEndpoint builds mgs endpoint.
-func getMgsEndpoint(region string) (string, error) {
-	hostName := rip.GetMgsEndpoint(region)
+func getMgsEndpoint(context context.T, region string) (string, error) {
+	hostName := mgsConfig.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("no MGS endpoint found in region %s", region)
 	}
@@ -1112,4 +1183,9 @@ func getMgsEndpoint(region string) (string, error) {
 	endpointBuilder.WriteString(mgsConfig.HttpsPrefix)
 	endpointBuilder.WriteString(hostName)
 	return endpointBuilder.String(), nil
+}
+
+// getNonRetryableDataChannelErrors returns list of non retryable errors for data channel retry strategy
+func getNonRetryableDataChannelErrors() []string {
+	return []string{mgsConfig.SessionAlreadyTerminatedError}
 }

@@ -19,7 +19,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
 const (
@@ -48,7 +48,7 @@ type PluginResult struct {
 type IPlugin interface {
 	Name() string
 	Execute(context context.T, input PluginConfig) (output PluginResult, err error)
-	RequestStop(stopType StopType) (err error)
+	RequestStop() (err error)
 }
 
 // ICoreModule is the very much of core itself will be implemented as plugins
@@ -56,8 +56,16 @@ type IPlugin interface {
 // The hardcoded plugins will implement the ICoreModule
 type ICoreModule interface {
 	ModuleName() string
-	ModuleExecute(context context.T) (err error)
-	ModuleRequestStop(stopType StopType) (err error)
+	ModuleExecute() (err error)
+	ModuleStop() error
+}
+
+// ICoreModuleWrapper is the
+type ICoreModuleWrapper interface {
+	ModuleName() string
+	ModuleExecute() (err error)
+
+	ModuleStop(waitTime time.Duration) error
 }
 
 // IWorkerPlugin is the plugins which do not form part of core
@@ -98,6 +106,7 @@ type Configuration struct {
 	RunAsUser                   string
 	ShellProfile                ShellProfileConfig
 	SessionOwner                string
+	UpstreamServiceName         UpstreamServiceName
 }
 
 // Plugin wraps the plugin configuration and plugin result.
@@ -140,7 +149,7 @@ func IsPreconditionEnabled(schemaVersion string) (response bool) {
 	response = false
 
 	// set precondition flag based on schema version
-	versionCompare, err := updateutil.VersionCompare(schemaVersion, preconditionSchemaVersion)
+	versionCompare, err := versionutil.VersionCompare(schemaVersion, preconditionSchemaVersion)
 	if err == nil && versionCompare >= 0 {
 		response = true
 	}

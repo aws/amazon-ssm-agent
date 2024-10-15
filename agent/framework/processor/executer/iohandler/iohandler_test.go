@@ -15,15 +15,16 @@ package iohandler
 
 import (
 	"fmt"
-	"testing"
-
+	"strings"
 	"sync"
+	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iomodulemock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -59,6 +60,12 @@ var testData = []truncateOutputTest{
 	{longMessage, "", sampleSize, "This is a sample text. This is a sample text. This is a sample text. This is \n---Output truncated---"},
 	{"", longMessage, sampleSize, "\n----------ERROR-------\nThis is a sample text. This is a sample text. This is\n---Error truncated----"},
 	{longMessage, longMessage, sampleSize, "This is a sampl\n---Output truncated---\n----------ERROR-------\nThis is a sampl\n---Error truncated----"},
+	{
+		strings.Repeat("o", ((sampleSize - len(errTitle)) / 2)), //stdout
+		strings.Repeat("e", sampleSize*3),                       //stderr
+		sampleSize,                                              //capacity
+		"oooooooooooooooooooooooooooooooooooooo\n----------ERROR-------\neeeeeeeeeeeeeee\n---Error truncated----", //expected
+	},
 }
 
 func TestTruncateOutput(t *testing.T) {
@@ -72,6 +79,7 @@ var logger = log.NewMockLog()
 
 func TestRegisterOutputSource(t *testing.T) {
 	mockDocumentIOMultiWriter := new(multiwritermock.MockDocumentIOMultiWriter)
+	mockContext := context.NewMockDefault()
 
 	mockDocumentIOMultiWriter.On("AddWriter", mock.Anything).Times(2)
 	wg := new(sync.WaitGroup)
@@ -82,12 +90,13 @@ func TestRegisterOutputSource(t *testing.T) {
 
 	// Create multiple test IOModules
 	testModule1 := new(iomodulemock.MockIOModule)
-	testModule1.On("Read", logger, mock.Anything).Return()
+	testModule1.On("Read", mockContext, mock.Anything, mock.AnythingOfType("int")).Return()
 	testModule2 := new(iomodulemock.MockIOModule)
-	testModule2.On("Read", logger, mock.Anything).Return()
+	testModule2.On("Read", mockContext, mock.Anything, mock.AnythingOfType("int")).Return()
 
-	output := DefaultIOHandler{}
-	output.RegisterOutputSource(logger, mockDocumentIOMultiWriter, testModule1, testModule2)
+	output := NewDefaultIOHandler(mockContext, contracts.IOConfiguration{})
+
+	output.RegisterOutputSource(mockDocumentIOMultiWriter, testModule1, testModule2)
 
 	// Sleep a bit to allow threads to finish in RegisterOutputSource to check WaitGroup
 	time.Sleep(250 * time.Millisecond)

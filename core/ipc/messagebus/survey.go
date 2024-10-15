@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package messagebus logic to send message and get reply over IPC
+// Package messagebus logic to send message and get reply over IPC
 package messagebus
 
 import (
@@ -48,10 +48,11 @@ type MessageBus struct {
 // NewMessageBus creates a new instance of message bus
 func NewMessageBus(context context.ICoreAgentContext) *MessageBus {
 	log := context.Log()
+	identity := context.Identity()
 	channels := make(map[message.TopicType]channel.IChannel)
-	channelCreator := channel.GetChannelCreator(log)
-	channels[message.GetWorkerHealthRequest] = channelCreator(log)
-	channels[message.TerminateWorkerRequest] = channelCreator(log)
+	channelCreator := channel.GetChannelCreator(log, *context.AppConfig(), identity)
+	channels[message.GetWorkerHealthRequest] = channelCreator(log, identity)
+	channels[message.TerminateWorkerRequest] = channelCreator(log, identity)
 
 	return &MessageBus{
 		context:        context.With("[MessageBus]"),
@@ -93,7 +94,7 @@ func (bus *MessageBus) SendSurveyMessage(survey *message.Message) ([]*message.Me
 		return []*message.Message{}, fmt.Errorf("unsupported topic: %s", survey.Topic)
 	}
 
-	if surveyChannel, ok := bus.surveyChannels[survey.Topic]; !ok || !surveyChannel.IsConnect() {
+	if surveyChannel, ok := bus.surveyChannels[survey.Topic]; !ok || !surveyChannel.IsChannelInitialized() {
 		if err := bus.createMessageChannelWithRetry(survey.Topic); err != nil {
 			return []*message.Message{}, err
 		}

@@ -1,7 +1,7 @@
 package envdetect
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/ec2infradetect"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/envdetect/osdetect"
 )
@@ -15,20 +15,20 @@ type Environment struct {
 }
 
 type Collector interface {
-	CollectData(log log.T) (*Environment, error)
+	CollectData(context context.T) (*Environment, error)
 }
 
 type CollectorImp struct {
 }
 
 // CollectData queries operating system and infrastructure data
-func (cd *CollectorImp) CollectData(log log.T) (*Environment, error) {
-	os, err := osdetect.CollectOSData(log)
+func (cd *CollectorImp) CollectData(context context.T) (*Environment, error) {
+	os, err := osdetect.CollectOSData(context.Log())
 	if err != nil {
 		return nil, err
 	}
 
-	ec2inf, err := ec2infradetect.CollectEc2Infrastructure(log)
+	ec2inf, err := ec2infradetect.CollectEc2Infrastructure(context.Identity())
 	if err != nil {
 		return nil, err
 	}

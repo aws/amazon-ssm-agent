@@ -17,7 +17,6 @@ package remoteresource_mock
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/stretchr/testify/mock"
 )
@@ -26,12 +25,12 @@ type RemoteResourceMock struct {
 	mock.Mock
 }
 
-func (resourceMock RemoteResourceMock) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error, result *remoteresource.DownloadResult) {
-	args := resourceMock.Called(log, filesys, destinationDir)
+func (resourceMock *RemoteResourceMock) DownloadRemoteResource(filesys filemanager.FileSystem, destinationDir string) (err error, result *remoteresource.DownloadResult) {
+	args := resourceMock.Called(filesys, destinationDir)
 	return args.Error(0), args.Get(1).(*remoteresource.DownloadResult)
 }
 
-func (resourceMock RemoteResourceMock) ValidateLocationInfo() (bool, error) {
+func (resourceMock *RemoteResourceMock) ValidateLocationInfo() (bool, error) {
 	args := resourceMock.Called()
 	return args.Bool(0), args.Error(1)
 }

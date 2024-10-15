@@ -17,17 +17,16 @@ package runcommand
 import (
 	"encoding/json"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	associationProcessor "github.com/aws/amazon-ssm-agent/agent/association/processor"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -48,10 +47,8 @@ const (
 	// SendCommandTopicPrefixOffline is the topic prefix for a send command MDS message received from the offline service.
 	SendCommandTopicPrefixOffline TopicPrefix = "aws.ssm.sendCommand.offline."
 
-	// CancelCommandTopicPrefix is the topic prefix for a cancel command MDS message received from the offline service.
+	// CancelCommandTopicPrefixOffline is the topic prefix for a cancel command MDS message received from the offline service.
 	CancelCommandTopicPrefixOffline TopicPrefix = "aws.ssm.cancelCommand.offline."
-
-	CancelWorkersLimit = 3
 
 	// mdsname is the core module name for the MDS processor
 	mdsName = "MessagingDeliveryService"
@@ -69,11 +66,9 @@ const (
 	// the default stoppolicy error threshold. After 10 consecutive errors the plugin will stop for 15 minutes.
 	stopPolicyErrorThreshold = 10
 
-	// CloudWatch output's log group name prefix
+	// CloudWatchLogGroupNamePrefix CloudWatch output's log group name prefix
 	CloudWatchLogGroupNamePrefix = "/aws/ssm/"
 )
-
-type persistData func(state *contracts.DocumentState, bookkeeping string)
 
 type ExecuterCreator func(ctx context.T) executer.Executer
 
@@ -81,7 +76,7 @@ type ExecuterCreator func(ctx context.T) executer.Executer
 type SendDocumentLevelResponse func(messageID string, resultStatus contracts.ResultStatus, documentTraceOutput string)
 type SendResponse func(messageID string, res contracts.DocumentResult)
 
-// Processor is an object that can process MDS messages.
+// RunCommandService is an object that can process MDS messages.
 type RunCommandService struct {
 	context              context.T
 	name                 string
@@ -91,15 +86,13 @@ type RunCommandService struct {
 	sendResponse         SendResponse
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
+	messagePollWaitGroup *sync.WaitGroup
 	sendReplyJob         *scheduler.Job
-	//TODO move association poller out, we surely have to
-	assocProcessor      *associationProcessor.Processor
-	processorStopPolicy *sdkutil.StopPolicy
-	pollAssociations    bool
-	processor           processor.Processor
+	processorStopPolicy  *sdkutil.StopPolicy
+	processor            processor.Processor
 }
 
-// NewOfflineProcessor initialize a new offline command document processor
+// NewOfflineService initialize a new offline command document processor
 func NewOfflineService(context context.T) (*RunCommandService, error) {
 	messageContext := context.With("[" + offlineName + "]")
 	log := messageContext.Log()
@@ -110,24 +103,22 @@ func NewOfflineService(context context.T) (*RunCommandService, error) {
 		return nil, err
 	}
 
-	return NewService(messageContext, offlineName, offlineService, 1, 1, false, []contracts.DocumentType{contracts.SendCommandOffline, contracts.CancelCommandOffline}), nil
+	startWorker := processor.NewWorkerProcessorSpec(messageContext, 1, contracts.SendCommandOffline, 0)
+	terminateWorker := processor.NewWorkerProcessorSpec(messageContext, 1, contracts.CancelCommandOffline, 0)
+	processor := processor.NewEngineProcessor(messageContext, startWorker, terminateWorker)
+	return NewService(messageContext, offlineName, offlineService, processor), nil
 }
 
-// NewMdsProcessor initializes a new mds processor with the given parameters.
-func NewMDSService(context context.T) *RunCommandService {
-	messageContext := context.With("[" + mdsName + "]")
-	mdsService := newMdsService(messageContext.Log(), context.AppConfig())
-	config := context.AppConfig()
+// NewService performs common initialization for Mds and Offline processors
+func NewService(ctx context.T,
+	serviceName string,
+	service mdsService.Service,
+	processor *processor.EngineProcessor) *RunCommandService {
 
-	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []contracts.DocumentType{contracts.SendCommand, contracts.CancelCommand})
-}
-
-// NewProcessor performs common initialization for Mds and Offline processors
-func NewService(ctx context.T, serviceName string, service mdsService.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []contracts.DocumentType) *RunCommandService {
 	log := ctx.Log()
 	config := ctx.AppConfig()
-
-	instanceID, err := platform.InstanceID()
+	identity := ctx.Identity()
+	instanceID, err := identity.InstanceID()
 	if instanceID == "" {
 		log.Errorf("no instanceID provided, %v", err)
 		return nil
@@ -146,8 +137,9 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 		InstanceID: instanceID,
 	}
 
-	// create new message processor
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
+	shortInstanceId, _ := identity.ShortInstanceID()
+
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, shortInstanceId, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 	stopPolicy := newStopPolicy(serviceName)
@@ -164,12 +156,6 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 		processSendReply(log, messageID, service, FormatPayload(log, pluginID, agentInfo, res.PluginResults), stopPolicy)
 	}
 
-	var assocProc *associationProcessor.Processor
-	if pollAssoc {
-		assocProc = associationProcessor.NewAssociationProcessor(ctx)
-	}
-
-	processor := processor.NewEngineProcessor(ctx, commandWorkerLimit, cancelWorkerLimit, supportedDocs)
 	return &RunCommandService{
 		context:              ctx,
 		name:                 serviceName,
@@ -179,8 +165,6 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 		sendResponse:         sendResponse,
 		orchestrationRootDir: orchestrationRootDir,
 		processorStopPolicy:  stopPolicy,
-		assocProcessor:       assocProc,
-		pollAssociations:     pollAssoc,
 		processor:            processor,
 	}
 }
@@ -217,14 +201,11 @@ var newOfflineService = func(log log.T) (mdsService.Service, error) {
 	return mdsService.NewOfflineService(log, string(SendCommandTopicPrefixOffline))
 }
 
-var newMdsService = func(log log.T, config appconfig.SsmagentConfig) mdsService.Service {
-	connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
+var newMdsService = func(context context.T) mdsService.Service {
+	connectionTimeout := time.Duration(context.AppConfig().Mds.StopTimeoutMillis) * time.Millisecond
 
 	return mdsService.NewService(
-		log,
-		config.Agent.Region,
-		config.Mds.Endpoint,
-		nil,
+		context,
 		connectionTimeout,
 	)
 }

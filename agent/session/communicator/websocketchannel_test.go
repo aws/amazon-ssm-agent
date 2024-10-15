@@ -21,9 +21,14 @@ import (
 	"net/url"
 	"sync"
 	"testing"
+	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/log/logger"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
@@ -50,6 +55,12 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
+var dialerInput = &websocket.Dialer{
+	TLSClientConfig: network.GetDefaultTLSConfig(logmocks.NewMockLog(), appconfig.DefaultConfig()),
+	Proxy:           http.ProxyFromEnvironment,
+	WriteBufferSize: mgsConfig.ControlChannelWriteBufferSizeLimit,
+}
+
 // handlerToBeTested echos all incoming input from a websocket connection back to the client while
 // adding the word "echo".
 func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
@@ -62,7 +73,7 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 		mt, p, err := conn.ReadMessage()
 
 		if err != nil {
-			log.DefaultLogger().Errorf("error: %v", err)
+			logger.DefaultLogger().Errorf("error: %v", err)
 			return
 		}
 
@@ -71,13 +82,36 @@ func handlerToBeTested(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+// handlerToSendPongForPing send back pong for any ping message
+func handlerToSendPongForPing(w http.ResponseWriter, req *http.Request) {
+	conn, err := upgrader.Upgrade(w, req, nil)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("cannot upgrade: %v", err), http.StatusInternalServerError)
+	}
+
+	conn.SetPingHandler(func(string) error {
+		conn.WriteMessage(websocket.PongMessage, []byte(""))
+		conn.WriteMessage(websocket.TextMessage, []byte("Received Ping and send back Pong"))
+		return nil
+	})
+	for {
+		_, _, err := conn.ReadMessage()
+
+		if err != nil {
+			logger.DefaultLogger().Errorf("error: %v", err)
+			return
+		}
+
+	}
+}
+
 func TestInitialize(t *testing.T) {
-	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
 
 	webControlChannel := &WebSocketChannel{}
-	webControlChannel.Initialize(context.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
+	webControlChannel.Initialize(contextmocks.NewMockDefault(), channelId, mgsConfig.ControlChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
 
 	assert.Equal(t, "wss://"+mgsHost+"/v1/control-channel/"+channelId+"?role=subscribe&stream=input", webControlChannel.Url)
 	assert.Equal(t, region, webControlChannel.Region)
@@ -85,7 +119,7 @@ func TestInitialize(t *testing.T) {
 	assert.Equal(t, signer, webControlChannel.Signer)
 
 	webDataChannel := &WebSocketChannel{}
-	webDataChannel.Initialize(context.NewMockDefault(), sessionId, mgsConfig.DataChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
+	webDataChannel.Initialize(contextmocks.NewMockDefault(), sessionId, mgsConfig.DataChannel, role, token, region, signer, onMessageHandler, onErrorHandler)
 
 	assert.Equal(t, "wss://"+mgsHost+"/v1/data-channel/"+sessionId+"?role="+role, webDataChannel.Url)
 	assert.Equal(t, region, webDataChannel.Region)
@@ -114,13 +148,37 @@ func TestOpenCloseWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	websocketchannel := WebSocketChannel{
-		Url: u.String(),
+		Url:     u.String(),
+		Context: contextmocks.NewMockDefault(),
 	}
 
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
+	assert.Nil(t, err, "Error opening the websocket connection.")
+	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
+	assert.True(t, websocketchannel.IsOpen, "IsOpen is not set to true.")
+
+	err = websocketchannel.Close(log)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
+	t.Log("Ending test: TestOpenCloseWebSocketChannel")
+}
+
+func TestOpenCloseWebSocketChannelWithWriteBuffer(t *testing.T) {
+	t.Log("Starting test: TestOpenCloseWebSocketChannel")
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = logmocks.NewMockLog()
+
+	websocketchannel := WebSocketChannel{
+		Url:     u.String(),
+		Context: contextmocks.NewMockDefault(),
+	}
+
+	err := websocketchannel.Open(log, dialerInput)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 	assert.True(t, websocketchannel.IsOpen, "IsOpen is not set to true.")
@@ -136,7 +194,7 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -151,10 +209,11 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 
@@ -168,12 +227,62 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	t.Log("Ending test: TestReadWriteWebSocketChannel ")
 }
 
+func TestSendPingAndReceivePongInWebSocketChannel(t *testing.T) {
+	t.Log("Starting test: TestSendPingAndReceivePongInWebSocketChannel ")
+	srv := httptest.NewServer(http.HandlerFunc(handlerToSendPongForPing))
+	defer srv.Close()
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = logmocks.NewMockLog()
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	onMessage := func(input []byte) {
+		defer wg.Done()
+		t.Log(input)
+		// Verify read from websocket server
+		assert.Equal(t, string(input), "Received Ping and send back Pong")
+	}
+
+	websocketchannel := WebSocketChannel{
+		Url:       u.String(),
+		OnMessage: onMessage,
+		Context:   contextmocks.NewMockDefault(),
+	}
+
+	// Open the websocket connection
+	err := websocketchannel.Open(log, nil)
+	assert.Nil(t, err, "Error opening the websocket connection.")
+	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
+
+	// Verify if websocket connection sent ping and received pong
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+		t.Log("Received reply from handler")
+	case <-time.After(2 * time.Minute):
+		t.Errorf("Timeout: ping pong not sent")
+	}
+
+	// Close the websocket connection
+	err = websocketchannel.Close(log)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
+	t.Log("Ending test: TestSendPingAndReceivePongInWebSocketChannel ")
+}
+
 func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {
 	t.Log("Starting test: TestReadWriteWebSocketChannel ")
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	var wg sync.WaitGroup
 	wg.Add(1)
@@ -188,10 +297,49 @@ func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
+	assert.Nil(t, err, "Error opening the websocket connection.")
+	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
+
+	// Verify write to websocket server
+	websocketchannel.SendMessage(log, []byte("channelreadwrite"), websocket.BinaryMessage)
+	wg.Wait()
+
+	err = websocketchannel.Close(log)
+	assert.Nil(t, err, "Error closing the websocket connection.")
+	assert.False(t, websocketchannel.IsOpen, "IsOpen is not set to false.")
+	t.Log("Ending test: TestReadWriteWebSocketChannel ")
+}
+
+func TestReadWriteBinaryToWebSocketChannelWithWriteBuffer(t *testing.T) {
+	t.Log("Starting test: TestReadWriteWebSocketChannel ")
+	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+	var log = logmocks.NewMockLog()
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	onMessage := func(input []byte) {
+		defer wg.Done()
+		t.Log(input)
+		// Verify read from websocket server
+		assert.Equal(t, string(input), "echo channelreadwrite")
+	}
+
+	websocketchannel := WebSocketChannel{
+		Url:       u.String(),
+		OnMessage: onMessage,
+		Context:   contextmocks.NewMockDefault(),
+	}
+
+	// Open the websocket connection
+	err := websocketchannel.Open(log, dialerInput)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 
@@ -210,7 +358,7 @@ func TestMultipleReadWriteWebSocketChannel(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(handlerToBeTested))
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
-	var log = log.NewMockLog()
+	var log = logmocks.NewMockLog()
 
 	read1 := make(chan bool)
 	read2 := make(chan bool)
@@ -229,10 +377,11 @@ func TestMultipleReadWriteWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
+		Context:   contextmocks.NewMockDefault(),
 	}
 
 	// Open the websocket connection
-	err := websocketchannel.Open(log)
+	err := websocketchannel.Open(log, nil)
 	assert.Nil(t, err, "Error opening the websocket connection.")
 	assert.NotNil(t, websocketchannel.Connection, "Open connection failed.")
 

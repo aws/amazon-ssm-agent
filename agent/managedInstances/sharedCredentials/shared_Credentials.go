@@ -19,9 +19,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/go-ini/ini"
+	"gopkg.in/ini.v1"
 )
 
 const (
@@ -31,11 +33,10 @@ const (
 	awsSessionToken    = "aws_session_token"
 )
 
-// filename returns the filename to use to read AWS shared credentials.
-//
+// GetSharedCredsFilePath returns the filename to use to read AWS shared credentials.
 // Will return an error if the user's home directory path cannot be found.
-func filename() (string, error) {
-	if credPath := os.Getenv("AWS_SHARED_CREDENTIALS_FILE"); credPath != "" {
+func GetSharedCredsFilePath(filename string) (string, error) {
+	if credPath := os.Getenv("AWS_SHARED_CREDENTIALS_FILE"); credPath != "" && filename == "" {
 		return credPath, nil
 	}
 
@@ -44,7 +45,11 @@ func filename() (string, error) {
 		return "", awserr.New("UserHomeNotFound", "user home directory not found.", nil)
 	}
 
-	return filepath.Join(homeDir, ".aws", "credentials"), nil
+	if filename == "" {
+		return filepath.Join(homeDir, ".aws", "credentials"), nil
+	} else {
+		return filepath.Join(homeDir, ".aws", filename), nil
+	}
 }
 
 func createFile(filePath string) error {
@@ -63,27 +68,27 @@ func createFile(filePath string) error {
 // Store function updates the shared credentials with the specified values:
 // * If the shared credentials file does not exist, it will be created. Any parent directories will also be created.
 // * If the section to update does not exist, it will be created.
-func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
+func Store(log log.T, accessKeyID, secretAccessKey, sessionToken, shareFilePath, profile string, force bool) error {
 	if profile == "" {
 		profile = defaultProfile
 	}
 
-	credPath, err := filename()
-	if err != nil {
-		return err
-	}
-
 	// check if file exists, if not create it
-	if !fileutil.Exists(credPath) {
-		err := createFile(credPath)
+	if !fileutil.Exists(shareFilePath) {
+		err := createFile(shareFilePath)
 		if err != nil {
 			return awserr.New("SharedCredentialsStore", "failed to create shared credentials file", err)
 		}
 	}
 
-	config, err := ini.Load(credPath)
+	config, err := ini.Load(shareFilePath)
 	if err != nil {
-		return awserr.New("SharedCredentialsStore", "failed to load shared credentials file", err)
+		if force {
+			log.Warn("Failed to load shared credentials file. Force update is enabled, creating a new empty config.", err)
+			config = ini.Empty()
+		} else {
+			return awserr.New("SharedCredentialsStore", "failed to load shared credentials file", err)
+		}
 	}
 
 	iniProfile := config.Section(profile)
@@ -95,10 +100,15 @@ func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
 
 	iniProfile.Key(awsSessionToken).SetValue(sessionToken)
 
-	err = config.SaveTo(credPath)
+	err = config.SaveTo(shareFilePath)
 	if err != nil {
 		return awserr.New("SharedCredentialsStore", "failed to save profile", err)
 	}
 
 	return nil
+}
+
+// Purge deletes the shared credentials file at the given path
+func Purge(shareFilePath string) error {
+	return fileutil.DeleteFile(shareFilePath)
 }

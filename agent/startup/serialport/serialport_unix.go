@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build linux
 // +build linux
 
 // Package serialport implements serial port capabilities
@@ -55,7 +56,7 @@ func (sp *SerialPort) openPort(name string) (err error) {
 
 	baudRate := uint32(syscall.B115200)
 	state := syscall.Termios{
-		Cflag:  syscall.CS8,
+		Cflag:  syscall.CS8 | syscall.CREAD | syscall.B115200,
 		Oflag:  0,
 		Ospeed: baudRate,
 	}

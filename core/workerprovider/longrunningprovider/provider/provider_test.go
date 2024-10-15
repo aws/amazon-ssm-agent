@@ -19,8 +19,9 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
-	"github.com/aws/amazon-ssm-agent/core/app/context"
 	contextmocks "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
@@ -42,17 +43,18 @@ type WorkerProviderTestSuite struct {
 
 func (suite *WorkerProviderTestSuite) SetupTest() {
 	coreContext := &contextmocks.ICoreAgentContext{}
-	appVariable := context.AppVariable{
-		InstanceId: "i-1203030",
-	}
-	mockLog := log.NewMockLog()
+
+	agentIdentity := &identityMocks.IAgentIdentity{}
+	agentIdentity.On("InstanceID").Return("i-1203030", nil)
+
+	mockLog := logmocks.NewMockLog()
 	suite.mockLog = mockLog
 	suite.exec = &executormocks.IExecutor{}
 	suite.config = &model.WorkerConfig{
 		Name: model.SSMAgentWorkerName,
 	}
 
-	coreContext.On("AppVariable").Return(appVariable)
+	coreContext.On("Identity").Return(agentIdentity)
 	coreContext.On("With", mock.Anything).Return(coreContext)
 	coreContext.On("Log").Return(mockLog)
 
@@ -64,7 +66,7 @@ func (suite *WorkerProviderTestSuite) SetupTest() {
 	}
 }
 
-//Execute the test suite
+// Execute the test suite
 func TestWorkerProviderTestSuite(t *testing.T) {
 	suite.Run(t, new(WorkerProviderTestSuite))
 }

@@ -19,7 +19,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/mocks/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -29,10 +30,11 @@ import (
 func MockInventoryUploader() *InventoryUploader {
 	var uploader InventoryUploader
 
-	optimizer := NewMockDefault()
+	optimizer := datauploader.NewMockDefault()
 	optimizer.On("GetContentHash", mock.AnythingOfType("string")).Return("RandomInventoryItem")
 	optimizer.On("UpdateContentHash", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
 
+	uploader.context = context.NewMockDefault()
 	uploader.optimizer = optimizer
 	return &uploader
 }
@@ -82,14 +84,13 @@ func TestConvertToSsmInventoryItems(t *testing.T) {
 	var inventoryItems []*ssm.InventoryItem
 	var err error
 
-	c := context.NewMockDefault()
 	u := MockInventoryUploader()
 
 	//testing positive scenario
 
 	//setting up inventory.Item
 	items = append(items, FakeInventoryItems(2)...)
-	inventoryItems, _, err = u.ConvertToSsmInventoryItems(c, items)
+	inventoryItems, _, err = u.ConvertToSsmInventoryItems(items)
 
 	assert.Nil(t, err, "Error shouldn't be thrown for multiple inventory items")
 	assert.Equal(t, len(items), len(inventoryItems), "Count of inventory items should be equal to input")
@@ -101,7 +102,7 @@ func TestConvertToSsmInventoryItems(t *testing.T) {
 	}
 	items = append(items, item)
 
-	inventoryItems, _, err = u.ConvertToSsmInventoryItems(c, items)
+	inventoryItems, _, err = u.ConvertToSsmInventoryItems(items)
 	assert.NotNil(t, err, "Error should be thrown for unsupported Item.Content")
 }
 
@@ -111,14 +112,13 @@ func TestConvertExcludedAndEmptyToSsmInventoryItems(t *testing.T) {
 	var inventoryItems []*ssm.InventoryItem
 	var err error
 
-	c := context.NewMockDefault()
 	u := MockInventoryUploader()
 
 	//testing positive scenario
 
 	//setting up inventory.Item
 	items = append(items, ApplicationInventoryItem()...)
-	inventoryItems, _, err = u.ConvertToSsmInventoryItems(c, items)
+	inventoryItems, _, err = u.ConvertToSsmInventoryItems(items)
 
 	assert.Nil(t, err, "Error shouldn't be thrown for application inventory item")
 	assert.Equal(t, len(items), len(inventoryItems), "Count of inventory items should be equal to input")
@@ -134,11 +134,10 @@ func TestGetDirtySsmInventoryItems_empty(t *testing.T) {
 	var dirtyInventoryItems []*ssm.InventoryItem
 	var err error
 
-	c := context.NewMockDefault()
 	u := MockInventoryUploader()
 
 	//setting up inventory.Item
-	dirtyInventoryItems, err = u.GetDirtySsmInventoryItems(c, items)
+	dirtyInventoryItems, err = u.GetDirtySsmInventoryItems(items)
 
 	assert.Nil(t, err, "Error shouldn't be thrown if there's no inventory items are given to check")
 	assert.Equal(t, len(dirtyInventoryItems), 0, "Dirty inventory items should be empty when no inventory items are given to check")
@@ -149,12 +148,11 @@ func TestGetDirtySsmInventoryItems_dirtyItemFound(t *testing.T) {
 	var dirtyInventoryItems []*ssm.InventoryItem
 	var err error
 
-	c := context.NewMockDefault()
 	u := MockInventoryUploader()
 
 	//setting up inventory.Item
 	items = append(items, ApplicationInventoryItem()...)
-	dirtyInventoryItems, err = u.GetDirtySsmInventoryItems(c, items)
+	dirtyInventoryItems, err = u.GetDirtySsmInventoryItems(items)
 
 	assert.Nil(t, err, "Error shouldn't be thrown if there's an dirty inventory item found")
 	assert.Equal(t, len(dirtyInventoryItems), 1, "Dirty inventory item found")
@@ -206,7 +204,6 @@ func testSendData(t *testing.T, putInventorySucceeds bool) {
 	inventoryItems = append(inventoryItems, inventoryItem)
 
 	// create mocks and setup expectations
-	machineIDProvider = func() (string, error) { return "i-12345678", nil }
 	mockSSM := NewMockSSMCaller()
 	output := &ssm.PutInventoryOutput{}
 	if putInventorySucceeds {
@@ -216,21 +213,20 @@ func testSendData(t *testing.T, putInventorySucceeds bool) {
 		mockSSM.On("PutInventory", mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, err)
 	}
 
-	mockOptimizer := NewMockDefault()
+	mockOptimizer := datauploader.NewMockDefault()
 	if putInventorySucceeds {
 		for _, item := range inventoryItems {
 			mockOptimizer.On("UpdateContentHash", *item.TypeName, hash).Return(nil)
 		}
 	}
 
-	c := context.NewMockDefault()
-
 	// call method
 	u := &InventoryUploader{
+		context:   context.NewMockDefault(),
 		ssm:       mockSSM,
 		optimizer: mockOptimizer,
 	}
-	u.SendDataToSSM(c, inventoryItems)
+	u.SendDataToSSM(inventoryItems)
 
 	// assert that the expectations were met
 	mockSSM.AssertExpectations(t)

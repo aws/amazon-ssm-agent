@@ -30,3 +30,8 @@ func (m *MockedChannel) CleanupOwnModeFiles() {
 	m.Called()
 	return
 }
+
+func (m *MockedChannel) GetPath() string {
+	args := m.Called()
+	return args.Get(0).(string)
+}

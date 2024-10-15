@@ -20,10 +20,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
@@ -56,7 +56,7 @@ var (
 
 // T represents interface for association
 type T interface {
-	CreateNewServiceIfUnHealthy(log log.T)
+	CreateNewServiceIfUnHealthy(context context.T)
 	ListInstanceAssociations(log log.T, instanceID string) ([]*model.InstanceAssociation, error)
 	LoadAssociationDetail(log log.T, assoc *model.InstanceAssociation) error
 	UpdateAssociationStatus(
@@ -81,16 +81,18 @@ type T interface {
 
 // AssociationService wraps the Ssm Service
 type AssociationService struct {
+	context    context.T
 	ssmSvc     ssmsvc.Service
 	stopPolicy *sdkutil.StopPolicy
 	name       string
 }
 
 // NewAssociationService returns a new association service
-func NewAssociationService(log log.T, name string) *AssociationService {
-	ssmService := ssmsvc.NewService(log)
+func NewAssociationService(context context.T, name string) *AssociationService {
+	ssmService := ssmsvc.NewService(context)
 	policy := sdkutil.NewStopPolicy(name, stopPolicyErrorThreshold)
 	svc := AssociationService{
+		context:    context,
 		ssmSvc:     ssmService,
 		stopPolicy: policy,
 		name:       name,
@@ -100,7 +102,8 @@ func NewAssociationService(log log.T, name string) *AssociationService {
 }
 
 // CreateNewServiceIfUnHealthy checks service healthy and create new service if original is unhealthy
-func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
+func (s *AssociationService) CreateNewServiceIfUnHealthy(context context.T) {
+	log := s.context.Log()
 	if s.stopPolicy == nil {
 		log.Debugf("creating new stop-policy.")
 		s.stopPolicy = sdkutil.NewStopPolicy(s.name, stopPolicyErrorThreshold)
@@ -112,7 +115,7 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 
 		// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
 		s.stopPolicy.ResetErrorCount()
-		s.ssmSvc = ssmsvc.NewService(log)
+		s.ssmSvc = ssmsvc.NewService(s.context)
 		return
 	}
 }
@@ -329,11 +332,7 @@ func (s *AssociationService) UpdateAssociationStatus(
 	status string,
 	executionSummary string) {
 
-	config, err := appconfig.Config(false)
-	if err != nil {
-		log.Errorf("unable to load config, %v", err)
-		return
-	}
+	config := s.context.AppConfig()
 
 	agentInfoContent, err := jsonutil.Marshal(config.Agent)
 	if err != nil {

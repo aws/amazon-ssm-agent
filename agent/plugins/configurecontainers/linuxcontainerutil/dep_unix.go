@@ -11,13 +11,16 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build darwin || freebsd || linux || netbsd || openbsd
 // +build darwin freebsd linux netbsd openbsd
 
 package linuxcontainerutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 )
 
 func init() {
@@ -26,12 +29,12 @@ func init() {
 
 type DepLinux struct{}
 
-func (DepLinux) GetInstanceContext(log log.T) (instanceContext *updateutil.InstanceContext, err error) {
-	updateUtil := new(updateutil.Utility)
-	return updateUtil.CreateInstanceContext(log)
+func (DepLinux) GetInstanceInfo(context context.T) (instancInfo updateinfo.T, err error) {
+	return updateinfo.New(context)
 }
 
 func (DepLinux) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,
@@ -41,6 +44,9 @@ func (DepLinux) UpdateUtilExeCommandOutput(
 	stdOut string,
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
-	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds}
+	util := updateutil.Utility{
+		Context:                               context,
+		CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds,
+	}
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }

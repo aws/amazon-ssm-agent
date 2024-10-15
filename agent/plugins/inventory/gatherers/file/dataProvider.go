@@ -1,16 +1,13 @@
 package file
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	"strings"
-
-	"encoding/json"
-
 	"path/filepath"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -37,7 +34,7 @@ const FileCountLimitExceeded = "File Count Limit Exceeded"
 const DirScanLimit = 5000
 const DirScanLimitExceeded = "Directory Scan Limit Exceeded"
 
-//decoupling for easy testability
+// decoupling for easy testability
 var readDirFunc = ReadDir
 var existsPath = exists
 var getFullPath func(path string, mapping func(string) string) (string, error)
@@ -52,7 +49,7 @@ func ReadDir(dirname string) ([]os.FileInfo, error) {
 	return ioutil.ReadDir(dirname)
 }
 
-//removeDuplicates deduplicates the input array of model.FileData
+// removeDuplicates deduplicates the input array of model.FileData
 func removeDuplicatesFileData(elements []model.FileData) (result []model.FileData) {
 	// Use map to record duplicates as we find them.
 	encountered := map[model.FileData]bool{}
@@ -68,7 +65,7 @@ func removeDuplicatesFileData(elements []model.FileData) (result []model.FileDat
 	return result
 }
 
-//removeDuplicatesString deduplicates array of strings
+// removeDuplicatesString deduplicates array of strings
 func removeDuplicatesString(elements []string) (result []string) {
 	encountered := map[string]bool{}
 	for v := range elements {
@@ -87,7 +84,7 @@ func LogError(log log.T, err error) {
 	log.Error(err)
 }
 
-//exists check if the file path exists
+// exists check if the file path exists
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -164,9 +161,10 @@ func getFiles(log log.T, path string, pattern []string, recursive bool, fileLimi
 	return
 }
 
-//getAllMeta processes the filter, gets paths of all filtered files, and get file info of all files
-func getAllMeta(log log.T, config model.Config) (data []model.FileData, err error) {
+// getAllMeta processes the filter, gets paths of all filtered files, and get file info of all files
+func getAllMeta(context context.T, config model.Config) (data []model.FileData, err error) {
 	jsonBody := []byte(strings.Replace(config.Filters, `\`, `/`, -1)) //this is to convert the backslash in windows path to slash
+	log := context.Log()
 	var filterList []filterObj
 	if err = json.Unmarshal(jsonBody, &filterList); err != nil {
 		LogError(log, err)
@@ -202,13 +200,13 @@ func getAllMeta(log log.T, config model.Config) (data []model.FileData, err erro
 	}
 
 	if len(fileList) > 0 {
-		data, err = getMetaDataFunc(log, fileList)
+		data, err = getMetaDataFunc(context, fileList)
 	}
 	log.Infof("Collected Files %d", len(data))
 	return
 }
 
-//fileMatchesAnyPattern returns true if file name matches any pattern specified
+// fileMatchesAnyPattern returns true if file name matches any pattern specified
 func fileMatchesAnyPattern(log log.T, pattern []string, fname string) bool {
 	for _, item := range pattern {
 		matched, matchErr := filepath.Match(item, fname)
@@ -223,10 +221,9 @@ func fileMatchesAnyPattern(log log.T, pattern []string, fname string) bool {
 	return false
 }
 
-//collectFileData returns a list of file information based on the given configuration
+// collectFileData returns a list of file information based on the given configuration
 func collectFileData(context context.T, config model.Config) (data []model.FileData, err error) {
-	log := context.Log()
 	getFullPath = expand
-	data, err = getAllMeta(log, config)
+	data, err = getAllMeta(context, config)
 	return
 }

@@ -19,7 +19,6 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
@@ -77,9 +76,8 @@ func (t *T) Run(context context.T, configuration model.Config) (items []model.It
 }
 
 // RequestStop stops the execution of application gatherer.
-func (t *T) RequestStop(stopType contracts.StopType) error {
-	var err error
-	return err
+func (t *T) RequestStop() error {
+	return nil
 }
 
 // CollectAWSComponentData collects aws component specific inventory data

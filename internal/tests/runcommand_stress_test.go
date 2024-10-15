@@ -16,8 +16,14 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
 	"runtime/debug"
 	"testing"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -27,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -40,9 +47,10 @@ import (
 // functionality from testify - including a T() method which
 // returns the current testing context
 type AgentStressTestSuite struct {
+	context context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
-	mdsSdkMock *mdssdkmock.SSMMDSAPI
+	mdsSdkMock *mdssdkmock.SsmmdsAPI
 	log        log.T
 }
 
@@ -57,49 +65,61 @@ func (suite *AgentStressTestSuite) SetupTest() {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config)
+	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		log.Debugf("unable to assume identity - %v", err)
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
 
 	// Mock MDS service to remove dependency on external service
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
-	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(context, mdsService)
-	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, messageServiceModule))
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules
 	var cpm *coremanager.CoreManager
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	// Create core ssm agent
 	suite.ssmAgent = &agent.SSMAgent{}
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
 
-//TestCoreAgent tests the agent by mocking MDS to send N messages to the agent and start the execution of those messages
+// TestCoreAgent tests the agent by mocking MDS to send N messages to the agent and start the execution of those messages
 func (suite *AgentStressTestSuite) TestCoreAgent() {
 	// This is the number of MDS messages that should be sent to the core agent
 	numberOfMessages := 100
 
 	// Mock MDs service so it returns only the desired number of messages, it'll return empty messages after that.
 	// That's because the agent is a loop and it keeps polling messages
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.EchoMDSMessage)
+
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		return messageOutput
 	}, nil).Times(numberOfMessages)
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
@@ -116,9 +136,9 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 		suite.log.Close()
 	}()
 
-	// a channel to block test execution untill the agent is done processing the required number of messages
+	// a channel to block test execution until the agent is done processing the required number of messages
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		payload := input.Payload
 		// unmarshal the reply sent back to MDS, verify that the document has succeed
 		// If one document failed, it'll mark the test as failed. If we got reply for all the required messages
@@ -144,6 +164,11 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 	// stop agent execution
 	suite.ssmAgent.Stop()
+}
+
+func (suite *AgentStressTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
 }
 
 func TestAgentStressTestSuite(t *testing.T) {

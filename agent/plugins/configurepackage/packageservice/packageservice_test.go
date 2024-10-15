@@ -16,18 +16,30 @@ package packageservice
 
 import (
 	"errors"
+	"sync"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-
 	"github.com/stretchr/testify/assert"
 )
 
 var loggerMock = log.NewMockLog()
 
+type timeMock struct {
+	cnt int64
+	mtx sync.Mutex
+}
+
+func (t *timeMock) NowUnixNano() int64 {
+	t.mtx.Lock()
+	defer t.mtx.Unlock()
+	t.cnt += 1000
+	return t.cnt
+}
+
 func TestPackageServiceTrace(t *testing.T) {
-	tracer := trace.NewTracer(loggerMock)
+	tracer := trace.NewTracerCustomTime(&timeMock{}, loggerMock)
 	tracea := tracer.BeginSection("traceA")
 	tracer.BeginSection("traceB").WithError(errors.New("testerror")).End()
 	tracea.WithExitcode(42).End()

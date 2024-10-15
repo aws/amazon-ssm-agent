@@ -16,13 +16,10 @@
 package facade
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	retry "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/retryer"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-
 	"github.com/aws/aws-sdk-go/aws/client"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -33,8 +30,8 @@ const (
 	maxRetries = 3
 )
 
-func NewBirdwatcherFacade(log log.T) BirdwatcherFacade {
-	awsConfig := sdkutil.AwsConfig(log)
+func NewBirdwatcherFacade(context context.T) BirdwatcherFacade {
+	awsConfig := sdkutil.AwsConfig(context, "ssm")
 	// overriding the retry strategy
 	retryer := retry.BirdwatcherRetryer{
 		DefaultRetryer: client.DefaultRetryer{
@@ -45,26 +42,20 @@ func NewBirdwatcherFacade(log log.T) BirdwatcherFacade {
 	cfg := request.WithRetryer(awsConfig, retryer)
 
 	// overrides ssm client config from appconfig if applicable
-	if appCfg, err := appconfig.Config(false); err == nil {
-		if appCfg.Ssm.Endpoint != "" {
-			cfg.Endpoint = &appCfg.Ssm.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
-					cfg.Endpoint = &defaultEndpoint
-				}
-			}
-		}
-		if appCfg.Agent.Region != "" {
-			cfg.Region = &appCfg.Agent.Region
-		}
+	appCfg := context.AppConfig()
+	if appCfg.Ssm.Endpoint != "" {
+		cfg.Endpoint = &appCfg.Ssm.Endpoint
+	}
+
+	if appCfg.Agent.Region != "" {
+		cfg.Region = &appCfg.Agent.Region
 	}
 	facadeClientSession := session.New(cfg)
 
 	// Define a request handler with current agentName and version
 	SSMAgentVersionUserAgentHandler := request.NamedHandler{
 		Name: "ssm.SSMAgentVersionUserAgentHandler",
-		Fn:   request.MakeAddToUserAgentHandler(appconfig.DefaultConfig().Agent.Name, version.Version),
+		Fn:   request.MakeAddToUserAgentHandler(context.AppConfig().Agent.Name, version.Version),
 	}
 
 	// Add the handler to each request to the BirdwatcherStationService

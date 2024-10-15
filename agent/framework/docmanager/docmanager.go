@@ -19,9 +19,12 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"runtime/debug"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -30,37 +33,44 @@ import (
 )
 
 const (
-	maxOrchestrationDirectoryDeletions int = 100
+	maxOrchestrationDirectoryDeletions int = 1000
 )
 
 type validString func(string) bool
 type modifyString func(string) string
 
 type DocumentMgr interface {
-	MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string)
-	PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState)
-	GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState
-	RemoveDocumentState(log log.T, fileName, instanceID, locationFolder string)
+	MoveDocumentState(fileName, srcLocationFolder, dstLocationFolder string)
+	PersistDocumentState(fileName, locationFolder string, state contracts.DocumentState)
+	GetDocumentState(fileName, locationFolder string) contracts.DocumentState
+	RemoveDocumentState(fileName, locationFolder string)
 }
 
-//TODO use class lock instead of global lock?
-//TODO decouple the DocState model to better fit the service-processor-executer architecture
-//DocumentFileMgr encapsulate the file access and perform bookkeeping operations at the specified file location
+// TODO use class lock instead of global lock?
+// TODO decouple the DocState model to better fit the service-processor-executer architecture
+// DocumentFileMgr encapsulate the file access and perform bookkeeping operations at the specified file location
 type DocumentFileMgr struct {
+	context       context.T
 	dataStorePath string
 	rootDirName   string
 	stateLocation string
 }
 
-func NewDocumentFileMgr(dataStorePath, rootDirName, stateLocation string) *DocumentFileMgr {
+func NewDocumentFileMgr(context context.T, dataStorePath, rootDirName, stateLocation string) *DocumentFileMgr {
 	return &DocumentFileMgr{
+		context:       context,
 		dataStorePath: dataStorePath,
 		rootDirName:   rootDirName,
 		stateLocation: stateLocation,
 	}
 }
 
-func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
+func (d *DocumentFileMgr) MoveDocumentState(fileName, srcLocationFolder, dstLocationFolder string) {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for MoveDocumentState: %v", err)
+	}
 
 	absoluteSource := path.Join(d.dataStorePath,
 		instanceID,
@@ -82,7 +92,12 @@ func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, src
 
 }
 
-func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState) {
+func (d *DocumentFileMgr) PersistDocumentState(fileName, locationFolder string, state contracts.DocumentState) {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for PersistDocumentState: %v", err)
+	}
 
 	absoluteFileName := path.Join(path.Join(d.dataStorePath,
 		instanceID,
@@ -106,7 +121,13 @@ func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, 
 	}
 }
 
-func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
+func (d *DocumentFileMgr) GetDocumentState(fileName, locationFolder string) contracts.DocumentState {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for GetDocumentState: %v", err)
+	}
+
 	filepath := path.Join(d.dataStorePath,
 		instanceID,
 		d.rootDirName,
@@ -117,6 +138,11 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 
 	var commandState contracts.DocumentState
 	var count, retryLimit int = 0, 3
+
+	if fileExists, _ := fileutil.LocalFileExist(absoluteFileName); !fileExists {
+		log.Warnf("file not found in the docState directory %v", absoluteFileName)
+		return commandState
+	}
 
 	// retry to avoid sync problem, which arises when OfflineService and MessageDeliveryService try to access the file at the same time
 	for count < retryLimit {
@@ -144,7 +170,7 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 				log.Infof("Document contents: %v", documentContents)
 			}
 
-			d.MoveDocumentState(log, fileName, instanceID, locationFolder, appconfig.DefaultLocationOfCorrupt)
+			d.MoveDocumentState(fileName, locationFolder, appconfig.DefaultLocationOfCorrupt)
 		}
 
 	}
@@ -153,11 +179,16 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 }
 
 // RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
-func (d *DocumentFileMgr) RemoveDocumentState(log log.T, commandID, instanceID, locationFolder string) {
+func (d *DocumentFileMgr) RemoveDocumentState(commandID, locationFolder string) {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for GetDocumentState: %v", err)
+	}
 
 	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
-	err := fileutil.DeleteFile(absoluteFileName)
+	err = fileutil.DeleteFile(absoluteFileName)
 	if err != nil {
 		log.Errorf("encountered error %v while deleting file %v", err, absoluteFileName)
 	} else {
@@ -165,7 +196,7 @@ func (d *DocumentFileMgr) RemoveDocumentState(log log.T, commandID, instanceID, 
 	}
 }
 
-//TODO rework this part
+// TODO rework this part
 // DocumentStateDir returns absolute filename where command states are persisted
 func DocumentStateDir(instanceID, locationFolder string) string {
 	return filepath.Join(appconfig.DefaultDataStorePath,
@@ -222,12 +253,13 @@ func isAssociationRunDirName(dirName string) (matched bool) {
 func cleanupAssociationDirectory(log log.T, deletedCount int, commandOrchestrationPath string, retentionDurationHours int) (canDeleteDirectory bool, deletedCountAfter int) {
 	subdirNames, err := fileutil.GetDirectoryNames(commandOrchestrationPath)
 	if err != nil {
-		log.Debugf("Error reading association orchestration directory %v: %v", commandOrchestrationPath, err)
+		log.Infof("Error reading association orchestration directory %v: %v", commandOrchestrationPath, err)
 		return false, deletedCount
 	}
 
 	canDeleteDirectory = true
 
+	log.Debugf("Starting deletion of association directories")
 	for _, subdirName := range subdirNames {
 		if deletedCount >= maxOrchestrationDirectoryDeletions {
 			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
@@ -256,6 +288,7 @@ func cleanupAssociationDirectory(log log.T, deletedCount int, commandOrchestrati
 		deletedCount += 1
 	}
 
+	log.Debugf("Finished deleting %v association directories", deletedCount)
 	return canDeleteDirectory, deletedCount
 }
 
@@ -276,11 +309,55 @@ func isLegacyAssociationDirectory(log log.T, commandOrchestrationPath string) (b
 	return false, nil
 }
 
+// Global variables to throttle the impact of constantly rechecking the stale orchestration files
+var cleanupLock sync.Mutex
+var inCleanup = make(map[string]bool)
+var nextCleanup = make(map[string]time.Time) // okay that these will default to start of epoch
+
+func getLock(name string) bool {
+	cleanupLock.Lock()
+	defer cleanupLock.Unlock()
+	if inCleanup[name] {
+		return false
+	}
+	if !nextCleanup[name].IsZero() && time.Now().Before(nextCleanup[name]) {
+		return false
+	}
+	inCleanup[name] = true
+	return true
+}
+
+func releaseLock(name string) {
+	cleanupLock.Lock()
+	defer cleanupLock.Unlock()
+	inCleanup[name] = false
+}
+
+func updateTime(name string) {
+	cleanupLock.Lock()
+	defer cleanupLock.Unlock()
+	nextCleanup[name] = time.Now().Add(time.Minute * 15)
+}
+
 // DeleteOldOrchestrationDirectories deletes expired orchestration directories based on retentionDurationHours and associationRetentionDurationHours.
 func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, associationRetentionDurationHours int) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Delete orchestration directories panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
+	// if somebody else is cleaning up this directory, or if it's too soon to try again, bail.
+	if !getLock(orchestrationRootDirName) {
+		return
+	}
+	// make certain that we release our hold if something goes sideways
+	defer releaseLock(orchestrationRootDirName)
+
 	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultDocumentRootDirName)
 	if err != nil {
-		log.Debugf("Failed to get orchestration directories under %v", err)
+		log.Errorf("Failed to get orchestration directories under %v", err)
 		return
 	}
 
@@ -289,7 +366,7 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 	deletedCount := 0
 	for _, dirName := range dirNames {
 		if deletedCount >= maxOrchestrationDirectoryDeletions {
-			log.Infof("Reached max number of deletions for orchestration directories: %v", deletedCount)
+			log.Warnf("Reached max number of deletions for orchestration directories: %v", deletedCount)
 			break
 		}
 
@@ -316,14 +393,29 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 			// Deletion of both document state and orchestration file was successful
 			deletedCount += 1
 		}
-
 	}
 
-	log.Debugf("Completed orchestration directory clean up")
+	updateTime(orchestrationRootDirName)
+	log.Debugf("Completed orchestration directory clean up of %v items", deletedCount)
+
 }
 
 // DeleteSessionOrchestrationDirectories deletes expired orchestration directories based on session retentionDurationHours.
 func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Delete session orchestration directories panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
+	// Add lock to prevent quadratic fs lookup for large volume session users.
+	sessionLockName := orchestrationRootDirName + appconfig.DefaultSessionRootDirName
+	if !getLock(sessionLockName) {
+		return
+	}
+	defer releaseLock(sessionLockName)
+
 	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultSessionRootDirName)
 	if err != nil {
 		log.Debugf("Failed to get orchestration directories under %v", err)
@@ -341,7 +433,6 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 
 		sessionOrchestrationPath := filepath.Join(orchestrationRootDir, dirName)
 
-		log.Debugf("Checking session orchestration directory: %v", sessionOrchestrationPath)
 		if isOlderThan(log, sessionOrchestrationPath, retentionDurationHours) {
 			log.Debugf("Attempting deletion of session orchestration directory: %v", sessionOrchestrationPath)
 
@@ -353,7 +444,7 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 				// This append only mode results into error while deletion of the file.
 				// Below logic is to attempt to delete ipcTempFile in case of such errors.
 				u := &utility.SessionUtil{}
-				success, err := u.DeleteIpcTempFile(sessionOrchestrationPath)
+				success, err := u.DeleteIpcTempFile(log, sessionOrchestrationPath)
 				if err != nil || !success {
 					log.Debugf("Retry attempt to delete session orchestration directory %s failed, %v", sessionOrchestrationPath, err)
 					continue
@@ -363,10 +454,10 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 			// Deletion of both document state and orchestration file was successful
 			deletedCount += 1
 		}
-
 	}
 
-	log.Debugf("Completed orchestration directory clean up")
+	updateTime(sessionLockName)
+	log.Debugf("Completed session orchestration directory clean up of %v items", deletedCount)
 }
 
 // isOlderThan checks whether the file is older than the retention duration

@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -20,6 +21,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -44,8 +46,8 @@ func (DepWindows) IsPlatformNanoServer(log log.T) (bool, error) {
 
 func (DepWindows) SetDaemonConfig(daemonConfigPath string, daemonConfigContent string) (err error) {
 	if _, err := os.Stat(daemonConfigPath); os.IsNotExist(err) {
-		os.MkdirAll(filepath.Dir(daemonConfigPath), 744)
-		err := ioutil.WriteFile(daemonConfigPath, []byte(daemonConfigContent), 0644)
+		os.MkdirAll(filepath.Dir(daemonConfigPath), 0744)
+		err := ioutil.WriteFile(daemonConfigPath, []byte(daemonConfigContent), 0600)
 		if err != nil {
 			return err
 		}
@@ -61,6 +63,7 @@ func (DepWindows) TempDir(dir, prefix string) (name string, err error) {
 }
 
 func (DepWindows) UpdateUtilExeCommandOutput(
+	context context.T,
 	customUpdateExecutionTimeoutInSeconds int,
 	log log.T,
 	cmd string,
@@ -70,12 +73,15 @@ func (DepWindows) UpdateUtilExeCommandOutput(
 	stdOut string,
 	stdErr string,
 	usePlatformSpecificCommand bool) (output string, err error) {
-	util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds}
+	util := updateutil.Utility{
+		Context:                               context,
+		CustomUpdateExecutionTimeoutInSeconds: customUpdateExecutionTimeoutInSeconds,
+	}
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }
 
-func (DepWindows) ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-	return artifact.Download(log, input)
+func (DepWindows) ArtifactDownload(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	return artifact.Download(context, input)
 }
 
 func openLocalRegistryKey(path string) (registry.Key, error) {

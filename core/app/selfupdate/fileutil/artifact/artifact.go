@@ -230,9 +230,9 @@ func (artifact *Artifact) VerifyHash(input DownloadInput, output DownloadOutput)
 
 	//backwards compatibility for empty HashValues and HashTypes
 	if len(checksums) == 1 {
-		for hashAlgorithm, hashValue := range checksums {
+		for _, hashValue := range checksums {
 			// this is the only pair in the map
-			if hashAlgorithm == "" || hashValue == "" {
+			if hashValue == "" {
 				return true, nil
 			}
 		}

@@ -1,3 +1,5 @@
+%global debug_package %{nil}
+
 Name         : amazon-ssm-agent
 Version      : %rpmversion
 Release      : 1%{?dist}
@@ -13,7 +15,7 @@ Source0      : https://github.com/aws/amazon-ssm-agent/%{name}-%{version}.tar.gz
 Packager     : Amazon.com, Inc. <http://aws.amazon.com>
 Vendor       : Amazon.com
 
-BuildRequires: golang >= 1.13.14
+BuildRequires: golang >= 1.15.12
 
 %if 0%{?amzn} >= 2
 BuildRequires: systemd-devel
@@ -32,15 +34,12 @@ sed -i -e 's#const[ \s]*Version.*#const Version = "%{version}"#g' agent/version/
 
 %build
 
-export GOPATH=`pwd`/vendor:`pwd`
-
-ln -s `pwd` vendor/src/github.com/aws/amazon-ssm-agent
-CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/amazon-ssm-agent -v core/agent.go core/agent_unix.go core/agent_parser.go
-CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-agent-worker -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
-CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
-CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
-CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-session-logger -v agent/session/logging/main.go
-CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-cli -v agent/cli-main/cli-main.go
+CGO_ENABLED=0 go build -ldflags "-extldflags=-Wl,-z,now,-z,relro,-z,defs -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -buildmode=pie -o bin/amazon-ssm-agent -v core/agent.go core/agent_unix.go core/agent_parser.go
+CGO_ENABLED=0 go build -ldflags "-extldflags=-Wl,-z,now,-z,relro,-z,defs -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -buildmode=pie -o bin/ssm-agent-worker -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
+CGO_ENABLED=0 go build -ldflags "-extldflags=-Wl,-z,now,-z,relro,-z,defs -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -buildmode=pie -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
+CGO_ENABLED=0 go build -ldflags "-extldflags=-Wl,-z,now,-z,relro,-z,defs -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -buildmode=pie -o bin/ssm-session-worker -v agent/framework/processor/executer/outofproc/sessionworker/main.go
+CGO_ENABLED=0 go build -ldflags "-extldflags=-Wl,-z,now,-z,relro,-z,defs -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -buildmode=pie -o bin/ssm-session-logger -v agent/session/logging/main.go
+CGO_ENABLED=0 go build -ldflags "-extldflags=-Wl,-z,now,-z,relro,-z,defs -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -buildmode=pie -o bin/ssm-cli -v agent/cli-main/cli-main.go
 
 %install
 
@@ -62,15 +61,10 @@ cp packaging/linux/amazon-ssm-agent.conf %{buildroot}%{_sysconfdir}/init/
 cp amazon-ssm-agent.json.template %{buildroot}%{_sysconfdir}/amazon/ssm/amazon-ssm-agent.json.template
 cp seelog_unix.xml %{buildroot}%{_sysconfdir}/amazon/ssm/seelog.xml.template
 
-strip --strip-unneeded %{buildroot}%{_prefix}/bin/{amazon-ssm-agent,ssm-agent-worker,ssm-document-worker,ssm-session-worker,ssm-session-logger,ssm-cli}
-
 %files
 %defattr(-,root,root,-)
 %{_sysconfdir}/amazon/ssm/amazon-ssm-agent.json.template
 %{_sysconfdir}/amazon/ssm/seelog.xml.template
-%{_sysconfdir}/amazon/ssm/README.md
-%{_sysconfdir}/amazon/ssm/RELEASENOTES.md
-%{_sysconfdir}/amazon/ssm/NOTICE.md
 %if 0%{?amzn} >= 2
 %{_unitdir}/amazon-ssm-agent.service
 %else

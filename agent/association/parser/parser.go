@@ -104,7 +104,7 @@ func InitializeDocumentState(context context.T,
 		MainSteps:     payload.DocumentContent.MainSteps,
 		Parameters:    payload.DocumentContent.Parameters,
 	}
-	return docparser.InitializeDocState(context.Log(), contracts.Association, docContent, documentInfo, parserInfo, payload.Parameters)
+	return docparser.InitializeDocState(context, contracts.Association, docContent, documentInfo, parserInfo, payload.Parameters)
 }
 
 // newDocumentInfo initializes new DocumentInfo object

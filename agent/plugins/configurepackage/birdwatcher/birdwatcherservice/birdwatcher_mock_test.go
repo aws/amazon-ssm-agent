@@ -15,8 +15,8 @@
 package birdwatcherservice
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // networkMock
@@ -26,7 +26,7 @@ type networkMock struct {
 	downloadError  error
 }
 
-func (p *networkMock) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+func (p *networkMock) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
 	p.downloadInput = input
 	return p.downloadOutput, p.downloadError
 }

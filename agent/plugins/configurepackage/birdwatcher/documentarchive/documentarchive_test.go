@@ -19,7 +19,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
@@ -295,9 +295,10 @@ func TestDownloadArchiveInfo(t *testing.T) {
 	manifest := "manifest"
 	docVersion := "1"
 	emptystring := ""
+	latestVersion := "latest"
 	documentActive := ssm.DocumentStatusActive
 	documentInactive := ssm.DocumentStatusCreating
-	myPrettyHash := "myPrettHash"
+	myPrettyHash := "myPrettyHash"
 	data := []struct {
 		name                string
 		version             string
@@ -436,6 +437,22 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			createDefaultDocumentDescription(packageName, myPrettyHash, documentActive),
 			createMemCache(myPrettyHash, manifest),
 		},
+		{
+			"version name is latest",
+			latestVersion,
+			false,
+			facade.FacadeStub{
+				GetDocumentOutput: &ssm.GetDocumentOutput{
+					Content:         &manifest,
+					Status:          &documentActive,
+					VersionName:     nil,
+					DocumentVersion: &docVersion,
+					Name:            &packageName,
+				},
+			},
+			createDefaultDocumentDescription(documentArn, myPrettyHash, documentActive),
+			createMemCache(myPrettyHash, manifest),
+		},
 	}
 	for _, testdata := range data {
 		t.Run(testdata.name, func(t *testing.T) {
@@ -473,8 +490,8 @@ func createDefaultDocumentDescription(packageName string, hash string, docStatus
 
 }
 
-func createMemCache(hash string, manifest string) cache_mock.ManifestCache {
-	cache := cache_mock.ManifestCache{}
+func createMemCache(hash string, manifest string) *cache_mock.ManifestCache {
+	cache := &cache_mock.ManifestCache{}
 	cache.On("ReadManifestHash", mock.Anything, mock.Anything).Return([]byte(hash), nil)
 	cache.On("ReadManifest", mock.Anything, mock.Anything).Return([]byte(manifest), nil)
 	cache.On("WriteManifestHash", mock.Anything, mock.Anything, mock.Anything).Return(nil)

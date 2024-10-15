@@ -64,7 +64,7 @@ type ComplianceUploader struct {
 func NewComplianceUploader(context context.T) *ComplianceUploader {
 	var err error
 
-	ssmService := ssmSvc.NewService(context.Log())
+	ssmService := ssmSvc.NewService(context)
 	policy := sdkutil.NewStopPolicy(Name, stopPolicyErrorThreshold)
 	uploader := &ComplianceUploader{
 		ssmSvc:     ssmService,
@@ -74,7 +74,7 @@ func NewComplianceUploader(context context.T) *ComplianceUploader {
 	}
 
 	if uploader.optimizer, err = datauploader.NewOptimizerImplWithLocation(
-		uploader.context.Log(),
+		uploader.context,
 		appconfig.ComplianceRootDirName,
 		appconfig.ComplianceContentHashFileName); err != nil {
 		uploader.context.Log().Errorf("Unable to load optimizer for compliance service because - %v", err.Error())
@@ -96,7 +96,7 @@ func (u *ComplianceUploader) CreateNewServiceIfUnHealthy(log log.T) {
 
 		// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
 		u.stopPolicy.ResetErrorCount()
-		u.ssmSvc = ssmSvc.NewService(u.context.Log())
+		u.ssmSvc = ssmSvc.NewService(u.context)
 	}
 }
 

@@ -11,12 +11,20 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build darwin freebsd linux netbsd openbsd
+//go:build freebsd || linux || netbsd || openbsd
+// +build freebsd linux netbsd openbsd
 
 package bootstrap
 
-import "github.com/aws/amazon-ssm-agent/common/message"
+import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/message"
+)
 
 func (bs *Bootstrap) createIPCFolder() error {
 	return bs.createIfNotExist(message.DefaultCoreAgentChannel)
+}
+
+func (bs *Bootstrap) updateSSMUserShellProperties(logger log.T) {
+	return
 }

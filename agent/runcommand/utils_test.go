@@ -17,6 +17,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/stretchr/testify/assert"
@@ -30,24 +34,36 @@ const (
 )
 
 func TestGenerateCloudWatchConfigWithOutputEnabled(t *testing.T) {
-	systemInfo = &systemStub{}
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("ShortInstanceID").Return(testInstanceID, nil)
+
+	contextMock := &context.Mock{}
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+
 	expectedLogGroupName := fmt.Sprintf("%s%s", CloudWatchLogGroupNamePrefix, testDocumentName)
 	expectedLogStreamName := fmt.Sprintf("%s/%s", testCommandID, testInstanceID)
 	mockParsedMessage := getSampleParsedMessage("", "true")
 
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(mockParsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(contextMock, mockParsedMessage)
 	assert.Nil(t, err)
 	assert.Equal(t, expectedLogGroupName, cloudWatchConfig.LogGroupName)
 	assert.Equal(t, expectedLogStreamName, cloudWatchConfig.LogStreamPrefix)
 }
 
 func TestGenerateCloudWatchConfigWithLogGroupNameAndOutputEnabled(t *testing.T) {
-	systemInfo = &systemStub{}
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("ShortInstanceID").Return(testInstanceID, nil)
+
+	contextMock := &context.Mock{}
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+
 	expectedLogStreamName := fmt.Sprintf("%s/%s", testCommandID, testInstanceID)
 	expectedLogGroupName := "myLogGroupName"
 	mockParsedMessage := getSampleParsedMessage(expectedLogGroupName, "true")
 
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(mockParsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(contextMock, mockParsedMessage)
 	assert.Nil(t, err)
 	assert.Equal(t, expectedLogGroupName, cloudWatchConfig.LogGroupName)
 	assert.Equal(t, expectedLogStreamName, cloudWatchConfig.LogStreamPrefix)
@@ -55,21 +71,21 @@ func TestGenerateCloudWatchConfigWithLogGroupNameAndOutputEnabled(t *testing.T) 
 
 func TestGenerateCloudWatchConfigWithOutputNotEnabled(t *testing.T) {
 	mockParsedMessage := getSampleParsedMessage("", "false")
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(mockParsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(context.NewMockDefault(), mockParsedMessage)
 	assert.Nil(t, err)
 	assert.Equal(t, contracts.CloudWatchConfiguration{}, cloudWatchConfig)
 }
 
 func TestGenerateCloudWatchConfigWithLogGroupNameAndOutputNotEnabled(t *testing.T) {
 	mockParsedMessage := getSampleParsedMessage(testLogGroupName, "false")
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(mockParsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(context.NewMockDefault(), mockParsedMessage)
 	assert.Nil(t, err)
 	assert.Equal(t, contracts.CloudWatchConfiguration{}, cloudWatchConfig)
 }
 
 func TestGenerateCloudWatchConfigWithEmptyCloudWatchConfigInPayload(t *testing.T) {
 	mockParsedMessage := getSampleParsedMessage("", "")
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(mockParsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(context.NewMockDefault(), mockParsedMessage)
 	assert.Equal(t, contracts.CloudWatchConfiguration{}, cloudWatchConfig)
 	assert.NotNil(t, err)
 }
@@ -79,12 +95,12 @@ func TestGenerateCloudWatchConfigWithoutEmptyValuesInParsedMessage(t *testing.T)
 		CommandID:    testCommandID,
 		DocumentName: testDocumentName,
 	}
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(emptyParsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(context.NewMockDefault(), emptyParsedMessage)
 	assert.Equal(t, contracts.CloudWatchConfiguration{}, cloudWatchConfig)
 	assert.NotNil(t, err)
 }
 
-//getSampleParsedMessage returns a mocked SendCommandPayload
+// getSampleParsedMessage returns a mocked SendCommandPayload
 func getSampleParsedMessage(logGroupName string, outputEnabled string) messageContracts.SendCommandPayload {
 
 	return messageContracts.SendCommandPayload{

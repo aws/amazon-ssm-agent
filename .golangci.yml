@@ -1,0 +1,167 @@
+# For more info on configuration options see https://golangci-lint.run/usage/configuration/
+linters-settings:
+  depguard:
+    list-type: blacklist
+    packages:
+      - github.com/aws/amazon-ssm-agent
+  dupl:
+    threshold: 100
+  exhaustruct:
+    exclude:
+      -.*Mock.*
+  funlen:
+    lines: 100
+    statements: 50
+  gci:
+    local-prefixes: github.com/aws/amazon-ssm-agent
+  goconst:
+    min-len: 2
+    min-occurrences: 2
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+    disabled-checks:
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+      - wrapperFunc
+  gocyclo:
+    min-complexity: 15
+  goimports:
+    local-prefixes: github.com/aws/amazon-ssm-agent
+  revive:
+    min-confidence: 0
+  gomnd:
+    settings:
+      mnd:
+        # don't include the "operation" and "assign"
+        checks: argument,case,condition,return
+  govet:
+    check-shadowing: true
+  lll:
+    line-length: 140
+  maligned:
+    suggest-new: true
+  misspell:
+    locale: US
+  nolintlint:
+    allow-leading-space: true # don't require machine-readable nolint directives (i.e. with no leading space)
+    allow-unused: false # report any unused nolint directives
+    require-explanation: false # don't require an explanation for nolint directives
+    require-specific: false # don't require nolint directives to be specific about which linter is being skipped
+  goheader:
+    template: |-
+      // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+      //
+      // Licensed under the Apache License, Version 2.0 (the "License"). You may not
+      // use this file except in compliance with the License. A copy of the
+      // License is located at
+      //
+      // http://aws.amazon.com/apache2.0/
+      //
+      // or in the "license" file accompanying this file. This file is distributed
+      // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+      // either express or implied. See the License for the specific language governing
+      // permissions and limitations under the License.
+  errcheck:
+    ignore: fmt:.*,github.com/aws/amazon-ssm-agent/agent/log:.*
+linters:
+  # please, do not use `enable-all`: it's deprecated and will be removed soon.
+  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
+  disable-all: true
+  enable:
+    - dogsled
+    - dupl
+    - errcheck
+    - exhaustive
+  #  - exhaustruct
+    - funlen
+    - gochecknoinits
+    - goconst
+    - gocognit
+    - gocritic
+    - gocyclo
+    - godox
+    - gofmt
+    - goimports
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - lll
+    - makezero
+    - misspell
+    - nakedret
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+issues:
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - golint
+        - govet
+        - lll
+        - goconst
+    - path: mock\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - golint
+        - govet
+        - lll
+        - goconst
+        - gocritic
+        - gosimple
+    - path: mock\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - golint
+        - govet
+        - lll
+        - goconst
+        - gocritic
+        - gosimple
+  # https://github.com/go-critic/go-critic/issues/926
+    - linters:
+        - gocritic
+      text: "unnecessaryDefer:"
+
+severity:
+  # Default value is empty string.
+  # Set the default severity for issues. If severity rules are defined and the issues
+  # do not match or no severity is provided to the rule this will be the default
+  # severity applied. Severities should match the supported severity names of the
+  default-severity: error
+
+  # The default value is false.
+  # If set to true severity-rules regular expressions become case sensitive.
+  case-sensitive: false
+
+  # Default value is empty list.
+  # When a list of severity rules are provided, severity information will be added to lint
+  # issues. Severity rules have the same filtering capability as exclude rules except you
+  # are allowed to specify one matcher per severity rule.
+  # Only affects out formats that support setting severity information.
+  rules:
+    - linters:
+        - dupl
+      severity: info
+
+run:
+  skip-dirs:
+    - vendor$

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin
 // +build darwin
 
 package instancedetailedinformation
@@ -18,7 +19,7 @@ package instancedetailedinformation
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -29,7 +30,13 @@ var (
 hw.physicalcpu: 4
 hw.logicalcpu: 8
 hw.cpufrequency: 2800000000
-hw.cputhreadtype: 1`,
+hw.cputhreadtype: 1
+kern.osrelease: 20.6.0`,
+		`machdep.cpu.brand_string: Apple M1 Pro
+hw.physicalcpu: 4
+hw.logicalcpu: 8
+hw.cpufrequency: 2800000000
+kern.osrelease: 20.6.0`,
 	}
 )
 
@@ -41,6 +48,17 @@ var sampleDataMacParsed = []model.InstanceDetailedInformation{
 		CPUSockets:            "",
 		CPUCores:              "4",
 		CPUHyperThreadEnabled: "true",
+		KernelVersion:         "20.6.0",
+	},
+
+	{
+		CPUModel:              "Apple M1 Pro",
+		CPUSpeedMHz:           "2800",
+		CPUs:                  "8",
+		CPUSockets:            "",
+		CPUCores:              "4",
+		CPUHyperThreadEnabled: "",
+		KernelVersion:         "20.6.0",
 	},
 }
 
@@ -60,8 +78,11 @@ func TestCollectPlatformDependentInstanceData(t *testing.T) {
 		assert.Equal(t, len(parsedItems), 1)
 		assert.Equal(t, sampleDataMacParsed[i], parsedItems[0])
 	}
+}
 
-	cmdExecutor = MockTestExecutorWithError
+func TestCollectPlatformDependentInstanceDataWithSysctlError(t *testing.T) {
+	mockContext := context.NewMockDefault()
+	cmdExecutor = createMockExecutorWithErrorOnNthExecution(1)
 	parsedItems := collectPlatformDependentInstanceData(mockContext)
 	assert.Equal(t, len(parsedItems), 0)
 }

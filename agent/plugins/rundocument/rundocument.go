@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -39,7 +38,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/go-yaml/yaml"
+	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -59,14 +58,15 @@ const (
 )
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context: context,
+	}, nil
 }
 
 // Plugin is the type for the aws:copyContent plugin.
 type Plugin struct {
+	context context.T
 	filesys filemanager.FileSystem
 	ssmSvc  ssmsvc.Service
 	execDoc ExecDocument
@@ -87,18 +87,18 @@ type ExecutePluginDepth struct {
 
 // Execute runs multiple sets of commands and returns their outputs.
 // res.Output will contain a slice of RunCommandPluginOutput.
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	p.filesys = filemanager.FileSystemImpl{}
-	p.ssmSvc = ssmsvc.NewService(context.Log())
-	exec := basicexecuter.NewBasicExecuter(context)
+	p.ssmSvc = ssmsvc.NewService(p.context)
+	exec := basicexecuter.NewBasicExecuter(p.context)
 	p.execDoc = ExecDocumentImpl{
 		DocExecutor: exec,
 	}
-	p.execute(context, config, cancelFlag, output)
+	p.execute(config, cancelFlag, output)
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Info("Plugin aws:runDocument started with configuration", config)
 
 	if cancelFlag.ShutDown() {
@@ -108,14 +108,14 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 	} else if input, err := parseAndValidateInput(config.Properties); err != nil {
 		output.MarkAsFailed(err)
 	} else {
-		p.runDocument(context, input, config, output)
+		p.runDocument(input, config, output)
 	}
 }
 
 // runCopyContent figures out the type of location, downloads the resource, saves it on disk and returns information required for it
-func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, config contracts.Configuration, output iohandler.IOHandler) {
+func (p *Plugin) runDocument(input *RunDocumentPluginInput, config contracts.Configuration, output iohandler.IOHandler) {
 
-	log := context.Log()
+	log := p.context.Log()
 	//Run aws:runDocument plugin
 	log.Debug("Inside aws:runDocument function")
 	var documentPath string
@@ -170,7 +170,7 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 
 	var resultsChannel chan contracts.DocumentResult
 	var pluginOutput map[string]*contracts.PluginResult
-	if resultsChannel, err = p.execDoc.ExecuteDocument(config, context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
+	if resultsChannel, err = p.execDoc.ExecuteDocument(config, p.context, pluginsInfo, config.BookKeepingFileName, times.ToIso8601UTC(time.Now())); err != nil {
 		output.MarkAsFailed(fmt.Errorf("There was an error while running documents - %v", err.Error()))
 	}
 	for res := range resultsChannel {
@@ -267,7 +267,7 @@ func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, confi
 	}
 	log.Infof("Sending the document received for parsing - %v", string(rawDocument))
 
-	return p.execDoc.ParseDocument(log, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
+	return p.execDoc.ParseDocument(p.context, rawDocument, config.OrchestrationDirectory, config.OutputS3BucketName, config.OutputS3KeyPrefix, config.MessageId, config.PluginID, config.DefaultWorkingDirectory, parameters)
 }
 
 // Name returns the plugin name
@@ -321,15 +321,3 @@ func readFileContents(log log.T, filesysdep filemanager.FileSystem, destinationP
 
 	return []byte(rawFile), nil
 }
-
-var instance instanceInfo = &instanceInfoImp{}
-
-// system represents the dependency for platform
-type instanceInfo interface {
-	InstanceID() (string, error)
-}
-
-type instanceInfoImp struct{}
-
-// InstanceID wraps platform InstanceID
-func (instanceInfoImp) InstanceID() (string, error) { return platform.InstanceID() }

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package updateec2config implements the UpdateEC2Config plugin.
@@ -31,7 +32,7 @@ type UpdateContextFile struct {
 	UpdateStdOut string `json:"UpdateStandardOut"`
 }
 
-//loadUpdateContextFile initializes and creates the context file
+// loadUpdateContextFile initializes and creates the context file
 func (m *updateManager) loadUpdateContext(log log.T,
 	path string) (updateContext *UpdateContextFile, err error) {
 

@@ -18,7 +18,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -95,11 +95,11 @@ func createMockReadAllText(output string, err error) func(string) (string, error
 	}
 }
 
-func testResultPath(log log.T) (path string, err error) {
+func testResultPath(context context.T) (path string, err error) {
 	return "path", nil
 }
 
-func testResultPathErr(log log.T) (path string, err error) {
+func testResultPathErr(context context.T) (path string, err error) {
 	return "", errors.New("error")
 }
 
@@ -109,7 +109,7 @@ func testReadAllText(path string) (xmlData string, err error) {
 
 func TestGetRoleData(t *testing.T) {
 
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 	cmdExecutor = createMockTestExecuteCommand(testRoleOutput, nil)
 	startMarker = "<starte0ca162a>"
 	endMarker = "<endf0d99a4f>"
@@ -125,12 +125,11 @@ func TestGetRoleDataUsingServerManager(t *testing.T) {
 	resultPath = testResultPath
 	readFile = createMockReadAllText(testServerManagerOutput, nil)
 
-	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
+	contextMock := contextmocks.NewMockDefault()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 17, len(roleInfo))
@@ -144,12 +143,11 @@ func TestGetRoleDataUsingServerManagerCmdError(t *testing.T) {
 	resultPath = testResultPath
 	readFile = createMockReadAllText(testServerManagerOutput, nil)
 
-	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
+	contextMock := contextmocks.NewMockDefault()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
@@ -159,12 +157,11 @@ func TestGetRoleDataUsingServerManagerXmlErr(t *testing.T) {
 	resultPath = testResultPath
 	readFile = createMockReadAllText("unexpected output", nil)
 
-	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
+	contextMock := contextmocks.NewMockDefault()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
@@ -174,12 +171,11 @@ func TestGetRoleDataUsingServerManagerReadError(t *testing.T) {
 	resultPath = testResultPath
 	readFile = createMockReadAllText("", errors.New("error"))
 
-	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
+	contextMock := contextmocks.NewMockDefault()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
@@ -189,18 +185,17 @@ func TestGetRoleDataUsingServerManagerFilePathError(t *testing.T) {
 	resultPath = testResultPathErr
 	readFile = createMockReadAllText("", errors.New("error"))
 
-	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
+	contextMock := contextmocks.NewMockDefault()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
 
 func TestGetRoleDataCmdExeError(t *testing.T) {
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 	cmdExecutor = createMockTestExecuteCommand("", errors.New("error"))
 	startMarker = "<starte0ca162a>"
 	endMarker = "<endf0d99a4f>"
@@ -212,7 +207,7 @@ func TestGetRoleDataCmdExeError(t *testing.T) {
 }
 
 func TestGetRoleDataCmdUnexpectedOutput(t *testing.T) {
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 	cmdExecutor = createMockTestExecuteCommand("invalid output", nil)
 	startMarker = "<starte0ca162a>"
 	endMarker = "<endf0d99a4f>"
@@ -224,7 +219,7 @@ func TestGetRoleDataCmdUnexpectedOutput(t *testing.T) {
 }
 
 func TestGetRoleDataInvalidMarkedFields(t *testing.T) {
-	contextMock := context.NewMockDefault()
+	contextMock := contextmocks.NewMockDefault()
 	cmdExecutor = createMockTestExecuteCommand(testRoleOutput, nil)
 	startMarker = "<starte0ca162a>"
 	endMarker = "<test>"

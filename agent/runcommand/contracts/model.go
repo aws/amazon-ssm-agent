@@ -47,7 +47,7 @@ type SendReplyPayload struct {
 	RuntimeStatus       map[string]*contracts.PluginRuntimeStatus `json:"runtimeStatus"`
 }
 
-//getCommandID gets CommandID from given MessageID
+// getCommandID gets CommandID from given MessageID
 func getCommandID(messageID string) string {
 	// MdsMessageID is in the format of : aws.ssm.CommandId.InstanceId
 	// E.g (aws.ssm.2b196342-d7d4-436e-8f09-3883a1116ac3.i-57c0a7be)

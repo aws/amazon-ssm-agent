@@ -11,16 +11,14 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin || freebsd || linux || netbsd || openbsd
 // +build darwin freebsd linux netbsd openbsd
 
 // Package hibernation is responsible for the agent in hibernate mode.
 package hibernation
 
 func getHibernateSeelogConfig() string {
-	var seelogConfig = `<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="error">
-		<exceptions>
-			<exception filepattern="*hibernation.go" minlevel="info"/>
-		</exceptions>
+	var seelogConfig = `<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="debug">
 		<outputs formatid="fmtinfo">
 			<console formatid="fmtinfo"/>
 			<rollingfile type="size" filename="/var/log/amazon/ssm/hibernate.log" maxsize="30000" maxrolls="2"/>

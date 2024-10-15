@@ -19,10 +19,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"path/filepath"
+	"runtime/debug"
 	"sync"
 	"time"
-
-	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -31,35 +31,32 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning"
+	"github.com/aws/amazon-ssm-agent/agent/longrunning/datastore"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/carlescere/scheduler"
 )
 
 const (
-	//name is the core module name for long running plugins manager
+	//Name is the core module name for long running plugins manager
 	Name = "LongRunningPluginsManager"
 
 	// NameOfCloudWatchJsonFile is the name of ec2 config cloudwatch local configuration file
 	NameOfCloudWatchJsonFile = "AWS.EC2.Windows.CloudWatch.json"
 
-	//number of long running workers
+	//NumberOfLongRunningPluginWorkers represents number of long-running workers
 	NumberOfLongRunningPluginWorkers = 5
 
-	//number of cancel workers
+	//NumberOfCancelWorkers represents number of cancel workers
 	NumberOfCancelWorkers = 5
 
-	//poll frequency for managing lifecycle of long running plugins
+	// PollFrequencyMinutes represents poll frequency for managing lifecycle of long running plugins
 	PollFrequencyMinutes = 15
 
-	//hardStopTimeout is the time before the manager will be shutdown during a hardstop = 4 seconds
-	HardStopTimeout = 4 * time.Second
-
-	//softStopTimeout is the time before the manager will be shutdown during a softstop = 20 seconds
-	SoftStopTimeout = 20 * time.Second
+	// StopTimeout is the time before the manager will be shutdown during a stop = 24 seconds
+	StopTimeout = 24 * time.Second
 )
 
 // T manages long running plugins - get information of long running plugins and starts, stops & configures long running plugins
@@ -74,6 +71,8 @@ type T interface {
 // Manager is the core module - that manages long running plugins
 type Manager struct {
 	context context.T
+
+	dataStore dataStoreT
 
 	//task pool to run long running plugins
 	startPlugin task.Pool
@@ -121,8 +120,8 @@ func EnsureInitialization(context context.T) {
 		// so we can define the number of workers for each pool
 		cancelWaitDuration := 10000 * time.Millisecond
 		clock := times.DefaultClock
-		startPluginPool := task.NewPool(log, NumberOfLongRunningPluginWorkers, cancelWaitDuration, clock)
-		stopPluginPool := task.NewPool(log, NumberOfCancelWorkers, cancelWaitDuration, clock)
+		startPluginPool := task.NewPool(log, NumberOfLongRunningPluginWorkers, 0, cancelWaitDuration, clock)
+		stopPluginPool := task.NewPool(log, NumberOfCancelWorkers, 0, cancelWaitDuration, clock)
 
 		fileSysUtil := &longrunning.FileSysUtilImpl{}
 
@@ -130,8 +129,14 @@ func EnsureInitialization(context context.T) {
 			FileSysUtil: fileSysUtil,
 		}
 
+		dataStore := ds{
+			dsImpl:  datastore.FsStore{},
+			context: context,
+		}
+
 		singletonInstance = &Manager{
 			context:            managerContext,
+			dataStore:          dataStore,
 			startPlugin:        startPluginPool,
 			stopPlugin:         stopPluginPool,
 			runningPlugins:     plugins,
@@ -166,7 +171,7 @@ func (m *Manager) ModuleName() string {
 }
 
 // Execute starts long running plugin manager
-func (m *Manager) ModuleExecute(context context.T) (err error) {
+func (m *Manager) ModuleExecute() (err error) {
 	log := m.context.Log()
 	defer func() {
 		if msg := recover(); msg != nil {
@@ -176,7 +181,7 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 	log.Infof("starting long running plugin manager")
 	//read from data store to determine if there were any previously long running plugins which need to be started again
 	var dataStoreMap map[string]managerContracts.PluginInfo
-	dataStoreMap, err = dataStore.Read()
+	dataStoreMap, err = m.dataStore.Read()
 	if len(dataStoreMap) != 0 {
 		m.runningPlugins = dataStoreMap
 	}
@@ -208,10 +213,10 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 				This is in sync with our task-pool - which rejects jobs with duplicate jobIds.
 			*/
 			//todo: orchestrationDir should be set accordingly - 3rd parameter for Start
-			instanceID, _ := platform.InstanceID()
+			shortInstanceID, _ := m.context.Identity().ShortInstanceID()
 			orchestrationRootDir := filepath.Join(
 				appconfig.DefaultDataStorePath,
-				instanceID,
+				shortInstanceID,
 				appconfig.DefaultDocumentRootDirName,
 				m.context.AppConfig().Agent.OrchestrationRootDir)
 			orchestrationDir := fileutil.BuildPath(orchestrationRootDir)
@@ -221,11 +226,11 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 				OutputS3BucketName:     "",
 				OutputS3KeyPrefix:      "",
 			}
-			out := iohandler.NewDefaultIOHandler(log, ioConfig)
-			defer out.Close(log)
-			out.Init(log, p.Info.Name)
-			p.Handler.Start(m.context, p.Info.Configuration, "", task.NewChanneledCancelFlag(), out)
-			out.Close(log)
+			out := iohandler.NewDefaultIOHandler(m.context, ioConfig)
+			defer out.Close()
+			out.Init(p.Info.Name)
+			p.Handler.Start(p.Info.Configuration, "", task.NewChanneledCancelFlag(), out)
+			out.Close()
 			m.registeredPlugins[pluginName] = p
 		}
 	} else {
@@ -234,28 +239,20 @@ func (m *Manager) ModuleExecute(context context.T) (err error) {
 	}
 
 	//if no previous CW has been found, start a new one based on the json config
-	if isPlatformSupported(context.Log(), appconfig.PluginNameCloudWatch) {
-		m.configCloudWatch(log)
+	if isPlatformSupported(log, appconfig.PluginNameCloudWatch) {
+		m.configCloudWatch()
 	}
 
 	//schedule periodic health check of all long running plugins
 	if m.managingLifeCycleJob, err = scheduler.Every(PollFrequencyMinutes).Minutes().Run(m.ensurePluginsAreRunning); err != nil {
-		context.Log().Errorf("unable to schedule long running plugins manager. %v", err)
+		log.Errorf("unable to schedule long running plugins manager. %v", err)
 	}
 
 	return
 }
 
 // RequestStop handles the termination of the long running plugin manager
-func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
-	var waitTimeout time.Duration
-
-	if stopType == contracts.StopTypeSoftStop {
-		waitTimeout = SoftStopTimeout
-	} else {
-		waitTimeout = HardStopTimeout
-	}
-
+func (m *Manager) ModuleStop() (err error) {
 	var wg sync.WaitGroup
 
 	// stop lifecycle management job that monitors execution of all long running plugins
@@ -267,19 +264,31 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	// shutdown the send command pool in a separate go routine
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				m.context.Log().Errorf("Shutdown start plugin panic: %v", r)
+				m.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		defer wg.Done()
-		m.startPlugin.ShutdownAndWait(waitTimeout)
+		m.startPlugin.ShutdownAndWait(StopTimeout)
 	}()
 
 	// shutdown the cancel command pool in a separate go routine
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				m.context.Log().Errorf("Shutdown stop plugin panic: %v", r)
+				m.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		defer wg.Done()
-		m.stopPlugin.ShutdownAndWait(waitTimeout)
+		m.stopPlugin.ShutdownAndWait(StopTimeout)
 	}()
 
 	if len(m.runningPlugins) > 0 {
-		m.stopLongRunningPlugins(stopType)
+		m.stopLongRunningPlugins()
 	}
 
 	// wait for everything to shutdown
@@ -288,29 +297,34 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 }
 
 // stopLongRunningPlugins requests the long running plugins to stop
-func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
+func (m *Manager) stopLongRunningPlugins() {
 	log := m.context.Log()
-	log.Infof("long running manager stop requested. Stop type: %v", stopType)
+	log.Infof("long running manager stop requested")
 
 	var wg sync.WaitGroup
-	i := 0
 	for pluginName := range m.runningPlugins {
-		go func(wgc *sync.WaitGroup, i int) {
-			if stopType == contracts.StopTypeSoftStop {
-				wgc.Add(1)
-				defer wgc.Done()
-			}
+		wg.Add(1)
 
-			plugin := m.registeredPlugins[pluginName]
-			if err := plugin.Handler.Stop(m.context, task.NewChanneledCancelFlag()); err != nil {
+		go func(innerPluginName string) {
+			defer wg.Done()
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Stop long running plugin %s panic: %v", innerPluginName, r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
+
+			plugin := m.registeredPlugins[innerPluginName]
+			if err := plugin.Handler.Stop(task.NewChanneledCancelFlag()); err != nil {
 				log.Errorf("Plugin (%v) failed to stop with error: %v",
-					pluginName,
+					innerPluginName,
 					err)
 			}
 
-		}(&wg, i)
-		i++
+		}(pluginName)
 	}
+
+	wg.Wait()
 }
 
 // EnsurePluginRegistered adds a long-running plugin if it is not already in the registry
@@ -322,12 +336,12 @@ func (m *Manager) EnsurePluginRegistered(name string, plugin managerContracts.Pl
 }
 
 // configCloudWatch checks the local configuration file for cloud watch plugin to see if any updates to config
-func (m *Manager) configCloudWatch(log log.T) {
-
+func (m *Manager) configCloudWatch() {
+	log := m.context.Log()
 	var err error
 
 	var instanceId string
-	if instanceId, err = platform.InstanceID(); err != nil {
+	if instanceId, err = m.context.Identity().InstanceID(); err != nil {
 		log.Errorf("Cannot get instance id.")
 		return
 	}
@@ -374,9 +388,9 @@ func (m *Manager) configCloudWatch(log log.T) {
 			OutputS3BucketName:     "",
 			OutputS3KeyPrefix:      "",
 		}
-		out := iohandler.NewDefaultIOHandler(log, ioConfig)
-		defer out.Close(log)
-		out.Init(log, appconfig.PluginNameCloudWatch)
+		out := iohandler.NewDefaultIOHandler(m.context, ioConfig)
+		defer out.Close()
+		out.Init(appconfig.PluginNameCloudWatch)
 		if err = m.StartPlugin(
 			appconfig.PluginNameCloudWatch,
 			config,
@@ -384,7 +398,7 @@ func (m *Manager) configCloudWatch(log log.T) {
 			task.NewChanneledCancelFlag(), out); err != nil {
 			log.Errorf("Failed to start the cloud watch plugin bacause: %s", err)
 		}
-		out.Close(log)
+		out.Close()
 
 		// check if configure cloudwatch successfully
 		stderrFilePath := fileutil.BuildPath(orchestrationDir, appconfig.PluginNameCloudWatch, "stderr")

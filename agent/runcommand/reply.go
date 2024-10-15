@@ -23,9 +23,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
-// build SendReply Payload from the internal plugins map
+// FormatPayload builds SendReply Payload from the internal plugins map
 func FormatPayload(log log.T, pluginID string, agentInfo contracts.AgentInfo, outputs map[string]*contracts.PluginResult) messageContracts.SendReplyPayload {
-	status, statusCount, runtimeStatuses := contracts.DocumentResultAggregator(log, pluginID, outputs)
+	status, statusCount, runtimeStatuses, _ := contracts.DocumentResultAggregator(log, pluginID, outputs)
 	additionalInfo := contracts.AdditionalInfo{
 		Agent:               agentInfo,
 		DateTime:            times.ToIso8601UTC(time.Now()),

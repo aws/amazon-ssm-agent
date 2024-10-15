@@ -100,13 +100,27 @@ func (_m *IBlockCipher) GetKMSKeyId() string {
 	return r0
 }
 
+// GetKMSKeyId provides a mock function with given fields:
+func (_m *IBlockCipher) GetRandomChallenge() string {
+	ret := _m.Called()
+
+	var r0 string
+	if rf, ok := ret.Get(0).(func() string); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(string)
+	}
+
+	return r0
+}
+
 // UpdateEncryptionKey provides a mock function with given fields: _a0, cipherTextKey, sessionId, instanceId
-func (_m *IBlockCipher) UpdateEncryptionKey(_a0 log.T, cipherTextKey []byte, sessionId string, instanceId string) error {
-	ret := _m.Called(_a0, cipherTextKey, sessionId, instanceId)
+func (_m *IBlockCipher) UpdateEncryptionKey(_a0 log.T, cipherTextKey []byte, sessionId string, instanceId string, useRandomChallenge bool) error {
+	ret := _m.Called(_a0, cipherTextKey, sessionId, instanceId, useRandomChallenge)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(log.T, []byte, string, string) error); ok {
-		r0 = rf(_a0, cipherTextKey, sessionId, instanceId)
+	if rf, ok := ret.Get(0).(func(log.T, []byte, string, string, bool) error); ok {
+		r0 = rf(_a0, cipherTextKey, sessionId, instanceId, useRandomChallenge)
 	} else {
 		r0 = ret.Error(0)
 	}

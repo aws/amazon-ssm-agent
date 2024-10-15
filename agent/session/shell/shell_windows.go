@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package shell implements session shell plugin.
@@ -23,15 +24,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
+	"github.com/google/shlex"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -46,14 +52,14 @@ import (
 
 var pty *winpty.WinPTY
 var u = &utility.SessionUtil{}
-var token, profile syscall.Handle
+var token syscall.Token
+var profile syscall.Handle
 
 const (
 	defaultConsoleCol                                = 200
 	defaultConsoleRow                                = 60
 	winptyDllName                                    = "winpty.dll"
 	winptyDllFolderName                              = "SessionManagerShell"
-	winptyCmd                                        = "powershell"
 	startRecordSessionCmd                            = "Start-Transcript"
 	newLineCharacter                                 = "\r\n"
 	shellProfileNewLineCharacter                     = "\r"
@@ -65,32 +71,34 @@ const (
 )
 
 var (
+	winptyCmd         = appconfig.PowerShellPluginCommandName
 	winptyDllDir      = fileutil.BuildPath(appconfig.DefaultPluginPath, winptyDllFolderName)
 	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
 
-//StartPty starts winpty agent and provides handles to stdin and stdout.
+// StartCommandExecutor starts winpty agent and provides handles to stdin and stdout.
 // isSessionLogger determines whether its a customer shell or shell used for logging.
-func StartPty(
+func StartCommandExecutor(
 	log log.T,
 	shellProps mgsContracts.ShellProperties,
 	isSessionLogger bool,
 	config agentContracts.Configuration,
 	plugin *ShellPlugin) (err error) {
 
-	log.Info("Starting winpty")
+	log.Info("Starting command executor")
 	if _, err := os.Stat(winptyDllFilePath); os.IsNotExist(err) {
 		return fmt.Errorf("Missing %s file.", winptyDllFilePath)
 	}
 
-	var finalCmd string
+	var cmdStr string
 	if strings.TrimSpace(shellProps.Windows.Commands) == "" || isSessionLogger {
-		finalCmd = winptyCmd
+		cmdStr = ""
 	} else {
-		finalCmd = winptyCmd + " " + shellProps.Windows.Commands
+		cmdStr = shellProps.Windows.Commands
 	}
+	fullCmdToPty := winptyCmd + " " + cmdStr
 
-	appConfig, _ := appconfig.Config(false)
+	appConfig := plugin.context.AppConfig()
 
 	if !shellProps.Windows.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
 		// Reset password for default ssm user
@@ -117,15 +125,30 @@ func StartPty(
 			}
 		}
 
+		if appconfig.PluginNameNonInteractiveCommands == plugin.name {
+			if token, profile, err = u.LoadUserProfile(appconfig.DefaultRunAsUserName, newPassword); err != nil {
+				return fmt.Errorf("error loading user profile: %v", err)
+			}
+			return plugin.startExecCmd(cmdStr, log, config)
+		}
+
 		var wg sync.WaitGroup
 		wg.Add(1)
 		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Start pty as user panic: \n%v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			defer wg.Done()
-			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
+			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, fullCmdToPty)
 		}()
 		wg.Wait()
+	} else if !isSessionLogger && appconfig.PluginNameNonInteractiveCommands == plugin.name {
+		return plugin.startExecCmd(cmdStr, log, config)
 	} else {
-		pty, err = winpty.Start(winptyDllFilePath, finalCmd, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
+		pty, err = winpty.Start(winptyDllFilePath, fullCmdToPty, defaultConsoleCol, defaultConsoleRow, winpty.DEFAULT_WINPTY_FLAGS)
 	}
 
 	if err != nil {
@@ -139,11 +162,59 @@ func StartPty(
 	return err
 }
 
-//stop closes winpty process handle and stdin/stdout.
+func (p *ShellPlugin) startExecCmd(finalCmd string, log log.T, config agentContracts.Configuration) (err error) {
+	var cmd *exec.Cmd
+	commands, err := shlex.Split(finalCmd)
+	if err != nil {
+		return fmt.Errorf("Failed to parse commands input: %s\n", err)
+	}
+	if len(commands) > 0 {
+		cmd = exec.Command(winptyCmd, commands[0:]...)
+	} else {
+		cmd = exec.Command(winptyCmd)
+	}
+
+	if p.separateOutput {
+		stdoutPipe, err := cmd.StdoutPipe()
+		if err != nil {
+			return fmt.Errorf("Failed to create command output pipe, error: %s\n", err)
+		}
+		errorPipe, err := cmd.StderrPipe()
+		if err != nil {
+			return fmt.Errorf("Failed to create command err pipe, error: %s\n", err)
+		}
+		p.stdin = nil
+		p.stdout = nil
+		p.stderrPipe = errorPipe
+		p.stdoutPipe = stdoutPipe
+	} else {
+		outputPath := filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)
+		outputWriter, err := os.OpenFile(outputPath, appconfig.FileFlagsCreateOrAppendReadWrite, appconfig.ReadWriteAccess)
+		if err != nil {
+			return fmt.Errorf("Failed to open file for writing command output. error: %s\n", err)
+		}
+		outputReader, err := os.Open(outputPath)
+		if err != nil {
+			return fmt.Errorf("Failed to read command output from file %s. error: %s\n", outputPath, err)
+		}
+		cmd.Stdout = outputWriter
+		cmd.Stderr = outputWriter
+		p.stdin = nil
+		p.stdout = outputReader
+	}
+	p.runAsUser = appconfig.DefaultRunAsUserName
+	cmd.SysProcAttr = &syscall.SysProcAttr{Token: token}
+	p.execCmd = execcmd.NewExecCmd(cmd)
+	return nil
+}
+
+// stop closes winpty process handle and stdin/stdout.
 func (p *ShellPlugin) stop(log log.T) (err error) {
-	log.Info("Stopping winpty")
-	if err = pty.Close(); err != nil {
-		return fmt.Errorf("Stop winpty failed: %s", err)
+	if pty != nil {
+		log.Info("Stopping winpty")
+		if err = pty.Close(); err != nil {
+			return fmt.Errorf("Stop winpty failed: %s", err)
+		}
 	}
 
 	log.Debugf("Disabling ssm-user")
@@ -156,8 +227,11 @@ func (p *ShellPlugin) stop(log log.T) (err error) {
 	return nil
 }
 
-//SetSize sets size of console terminal window.
+// SetSize sets size of console terminal window.
 func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
+	if pty == nil {
+		return nil
+	}
 	if err = pty.SetSize(ws_col, ws_row); err != nil {
 		return fmt.Errorf("Set winpty size failed: %s", err)
 	}
@@ -165,7 +239,7 @@ func SetSize(log log.T, ws_col, ws_row uint32) (err error) {
 	return nil
 }
 
-//startPtyAsUser starts a winpty process in runas user context.
+// startPtyAsUser starts a winpty process in runas user context.
 func (p *ShellPlugin) startPtyAsUser(log log.T, config agentContracts.Configuration, user string, pass string, shellCmd string) (transcriptDirPath string, err error) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
@@ -221,7 +295,9 @@ func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configura
 	if strings.TrimSpace(config.ShellProfile.Windows) == "" {
 		return nil
 	}
-
+	if p.stdin == nil {
+		return nil
+	}
 	commands := strings.Split(config.ShellProfile.Windows, "\n")
 
 	for _, command := range commands {
@@ -264,9 +340,9 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 		if err = p.generateTranscriptFile(log, transcriptFile, p.logger.ipcFilePath, false, config); err != nil {
 			return err
 		}
-		cleanControlCharacters(transcriptFile, p.logger.logFilePath)
+		cleanControlCharacters(log, transcriptFile, p.logger.logFilePath)
 	} else {
-		cleanControlCharacters(p.logger.ipcFilePath, p.logger.logFilePath)
+		cleanControlCharacters(log, p.logger.ipcFilePath, p.logger.logFilePath)
 	}
 
 	return nil
@@ -279,7 +355,7 @@ func (p *ShellPlugin) generateTranscriptFile(
 	loggerFile string,
 	enableVirtualTerminalProcessingForWindows bool,
 	config agentContracts.Configuration) error {
-	err := StartPty(log, mgsContracts.ShellProperties{}, true, config, p)
+	err := StartCommandExecutor(log, mgsContracts.ShellProperties{}, true, config, p)
 	if err != nil {
 		return err
 	}
@@ -324,18 +400,26 @@ func (p *ShellPlugin) generateTranscriptFile(
 }
 
 // cleanControlCharacters cleans up control characters from the log file
-func cleanControlCharacters(sourceFileName, destinationFileName string) error {
+func cleanControlCharacters(log log.T, sourceFileName, destinationFileName string) error {
 	sourceFile, err := os.Open(sourceFileName)
 	if err != nil {
 		return err
 	}
-	defer sourceFile.Close()
+	defer func() {
+		if closeErr := sourceFile.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing sourceFile, %v", closeErr)
+		}
+	}()
 
 	destinationFile, err := os.Create(destinationFileName)
 	if err != nil {
 		return err
 	}
-	defer destinationFile.Close()
+	defer func() {
+		if closeErr := destinationFile.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing destinationFile, %v", closeErr)
+		}
+	}()
 
 	escapeCharRegEx := regexp.MustCompile(`←`)
 	specialChar1RegEx := regexp.MustCompile(`\[\?[0-9]+[a-zA-Z]`)
@@ -375,6 +459,9 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 
 // isLogStreamingSupported checks if streaming of logs is supported since it depends on PowerShell's transcript logging
 func (p *ShellPlugin) isLogStreamingSupported(log log.T) (bool, error) {
+	if appconfig.PluginNameNonInteractiveCommands == p.name {
+		return false, nil
+	}
 	if powerShellVersionSupportedForLogStreaming, err := isPowerShellVersionSupportedForLogStreaming(log); err != nil {
 		return false, fmt.Errorf("PowerShell version can't be verified on the instance. No logs will be streamed to CloudWatch. The error is: %v", err)
 	} else if !powerShellVersionSupportedForLogStreaming {
@@ -456,7 +543,7 @@ func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
 	return false
 }
 
-//cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
+// cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
 func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	if p.logger.transcriptDirPath != "" {
 		log.Debugf("Deleting transcript directory: %s", p.logger.transcriptDirPath)
@@ -466,9 +553,11 @@ func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	}
 }
 
-// InputStreamMessageHandler passes payload byte stream to shell stdin
+// InputStreamMessageHandler passes payload byte stream to shell command executor
 func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
-	if p.stdin == nil || p.stdout == nil {
+	var isPluginNonInteractive = appconfig.PluginNameNonInteractiveCommands == p.name
+
+	if !isPluginNonInteractive && (p.stdin == nil || p.stdout == nil) {
 		// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
 		// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
 		log.Tracef("Pty unavailable. Reject incoming message packet")
@@ -478,6 +567,29 @@ func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgs
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
+
+		if isPluginNonInteractive {
+			var signal os.Signal = nil
+			for _, message := range streamDataMessage.Payload {
+				if sig, exists := appconfig.ByteControlSignalsWindows[message]; exists {
+					log.Debugf("Received control signal. message: %v, signal: %v", string(message), sig)
+					signal = sig
+					break
+				}
+			}
+			if signal != nil {
+				defer func() {
+					if err := p.execCmd.Wait(); err != nil {
+						log.Errorf("Error received after processing control signal: %s", err)
+					}
+				}()
+				if err := p.execCmd.Signal(signal); err != nil {
+					log.Errorf("Sending signal %v to command process %v failed with error %v", signal, p.execCmd.Pid(), err)
+					return err
+				}
+			}
+			return nil
+		}
 
 		// deal with powershell nextline issue https://github.com/lzybkr/PSReadLine/issues/579
 		payloadString := string(streamDataMessage.Payload)
@@ -493,6 +605,11 @@ func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgs
 			return err
 		}
 	case mgsContracts.Size:
+		// Do not handle terminal resize for non-interactive plugin as there is no pty
+		if isPluginNonInteractive {
+			log.Debug("Terminal resize message is ignored in NonInteractiveCommands plugin")
+			return nil
+		}
 		var size mgsContracts.SizeData
 		if err := json.Unmarshal(streamDataMessage.Payload, &size); err != nil {
 			log.Errorf("Invalid size message: %s", err)

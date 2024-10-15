@@ -19,14 +19,15 @@ import (
 	"testing"
 	"time"
 
-	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/compliance/uploader"
+	processor2 "github.com/aws/amazon-ssm-agent/agent/association/mocks/processor"
+	"github.com/aws/amazon-ssm-agent/agent/association/mocks/service"
+	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/mocks/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
-	"github.com/aws/amazon-ssm-agent/agent/association/service"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -49,13 +50,12 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	sys = &systemStub{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
 	processor.assocSvc = svcMock
 	processor.complianceUploader = complianceUploader
 
-	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
+	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*context.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
@@ -78,8 +78,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	parserMock := parserMock{}
-	sys = &systemStub{}
+	parserMock := processor2.ParserMock{}
 
 	complianceUploader := complianceUploader.NewMockDefault()
 
@@ -89,7 +88,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	assocParser = &parserMock
 
 	// Mock service
-	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
+	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*context.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
@@ -130,10 +129,9 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
 	output := ssm.UpdateInstanceAssociationStatusOutput{}
-	sys = &systemStub{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
-	parserMock := parserMock{}
+	parserMock := processor2.ParserMock{}
 
 	// Arrange
 	processor.assocSvc = svcMock
@@ -163,7 +161,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 }
 
 func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.InstanceAssociation, output *ssm.UpdateInstanceAssociationStatusOutput) {
-	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
+	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*context.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
@@ -187,11 +185,10 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
 	output := ssm.UpdateInstanceAssociationStatusOutput{}
-	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
 	docState := contracts.DocumentState{}
-	parserMock := parserMock{}
+	parserMock := processor2.ParserMock{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
 	processorMock := &processormock.MockedProcessor{}
@@ -227,7 +224,7 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	assert.True(t, complianceUploader.AssertNumberOfCalls(t, "UpdateAssociationCompliance", 0))
 }
 
-//make sure this operation is thread safe
+// make sure this operation is thread safe
 func TestUpdatePluginAssociationInstances(t *testing.T) {
 	testAssociationID := "testAssociationID"
 	testName := "testName"
@@ -284,7 +281,7 @@ func TestRemovePluginAssociationInstances(t *testing.T) {
 	assert.Equal(t, resultMap, pluginAssociationInstances)
 }
 
-func mockParser(parserMock *parserMock, payload *messageContracts.SendCommandPayload, docState contracts.DocumentState) {
+func mockParser(parserMock *processor2.ParserMock, payload *messageContracts.SendCommandPayload, docState contracts.DocumentState) {
 	parserMock.On(
 		"InitializeDocumentState",
 		mock.AnythingOfType("*context.Mock"),

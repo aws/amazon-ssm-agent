@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build freebsd || linux || netbsd || openbsd || darwin
 // +build freebsd linux netbsd openbsd darwin
 
 // Package domainjoin implements the domainjoin plugin.
@@ -22,6 +23,7 @@ import (
 	"io"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -31,7 +33,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -59,35 +60,42 @@ const (
 	NoProxy = " --no-proxy "
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
-	// KeepHostName is a flag to retain instance hostnames as assigned (by customers).
+	// SetHostName is an optional argument to set hostname name after domain join
 	KeepHostNameArgs = " --keep-hostname "
+	// KeepHostName is a flag to retain instance hostnames as assigned (by customers).
+	SetHostNameArg = " --set-hostname "
+	// SetHostNameNumAppendDigits is an optional argument to set hostname name after domain join
+	SetHostNameNumAppendDigitsArg = " --set-hostname-append-num-digits "
 )
 
 // Makes command as variables, so that we can mock this for unit tests
 var makeDir = fileutil.MakeDirs
 var makeArgs = makeArguments
-var getRegion = platform.Region
 var utilExe convert
 var createOrchesDir = createOrchestrationDir
 
 // Plugin is the type for the domain join plugin.
 type Plugin struct {
+	context context.T
 }
 
 // DomainJoinPluginInput represents one set of commands executed by the Domain join plugin.
 type DomainJoinPluginInput struct {
 	contracts.PluginInput
-	DirectoryId    string
-	DirectoryName  string
-	DirectoryOU    string
-	DnsIpAddresses []string
-	KeepHostName   bool
+	DirectoryId             string
+	DirectoryName           string
+	DirectoryOU             string
+	DnsIpAddresses          []string
+	HostName                string
+	HostNameNumAppendDigits string
+	KeepHostName            bool
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context: context,
+	}, nil
 }
 
 // Name returns the plugin name
@@ -97,8 +105,8 @@ func Name() string {
 
 type convert func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error)
 
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 
 	var properties map[string]interface{}
@@ -111,9 +119,12 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
+		util := updateutil.Utility{
+			Context:                               p.context,
+			CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds,
+		}
 		utilExe = util.NewExeCommandOutput
-		p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, output, utilExe)
+		p.runCommandsRawInput(config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, output, utilExe)
 
 		if output.GetStatus() == contracts.ResultStatusFailed {
 			output.AppendInfo("Domain join failed.")
@@ -127,17 +138,17 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, utilExe convert) {
+func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, utilExe convert) {
 	var pluginInput DomainJoinPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
-	log.Debugf("Plugin input %v", pluginInput)
+	p.context.Log().Debugf("Plugin input %v", pluginInput)
 
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
 		output.MarkAsFailed(errorString)
 		return
 	}
-	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, output, utilExe)
+	p.runCommands(pluginID, pluginInput, orchestrationDirectory, cancelFlag, output, utilExe)
 }
 
 // createOrchestrationDir Make orchestration dir to copy domainjoin script
@@ -162,10 +173,10 @@ func createOrchestrationDir(log log.T, orchestrationDir string, pluginInput Doma
 }
 
 // runCommands executes the command and returns the output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, out iohandler.IOHandler, utilExe convert) {
+func (p *Plugin) runCommands(pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, out iohandler.IOHandler, utilExe convert) {
 	var err error
 	var scriptPath string
-
+	log := p.context.Log()
 	if scriptPath, err = createOrchesDir(log, orchestrationDirectory, pluginInput); err != nil {
 		out.MarkAsFailed(fmt.Errorf("Failed to create orchestration directory because : %v", err.Error()))
 		return
@@ -175,13 +186,19 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinP
 
 	// Construct Command line with executable file name and parameters
 	var command string
-	if command, err = makeArgs(log, scriptPath, pluginInput); err != nil {
+	if command, err = makeArgs(p.context, scriptPath, pluginInput); err != nil {
 		out.MarkAsFailed(fmt.Errorf("Failed to build domain join command because : %v", err.Error()))
 		return
 	}
 
 	log.Infof("command line is : %v", command)
-	commandParts := strings.Fields(command)
+
+	var commandParts []string
+	if commandParts, err = makeCommandParts(command); err != nil {
+		out.MarkAsFailed(fmt.Errorf("Failed to parse domain join command because : %v", err.Error()))
+		return
+	}
+
 	out.SetStatus(contracts.ResultStatusInProgress)
 	var output string
 	output, err = utilExe(log,
@@ -211,22 +228,6 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinP
 	return
 }
 
-func isShellInjection(arg string) bool {
-	var backtick, _ = regexp.Compile("`")
-	matched := backtick.MatchString(arg)
-	if matched == true {
-		return true
-	}
-
-	var shellCmd, _ = regexp.Compile(`\$\(`)
-	matched = shellCmd.MatchString(arg)
-	if matched == true {
-		return true
-	}
-
-	return false
-}
-
 func isMatchingIPAddress(arg string) bool {
 	// Regex from AWS-JoinDirectoryServiceDomain SSM doc
 
@@ -237,10 +238,11 @@ func isMatchingIPAddress(arg string) bool {
 }
 
 // makeArguments Build the arguments for domain join plugin
-func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
+func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
 
 	var buffer bytes.Buffer
 	buffer.WriteString(scriptPath)
+	log := context.Log()
 
 	// required parameters for the domain join plugin
 	if len(pluginInput.DirectoryId) == 0 {
@@ -264,26 +266,56 @@ func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInp
 	buffer.WriteString(DirectoryNameArg)
 	buffer.WriteString(pluginInput.DirectoryName)
 
-	buffer.WriteString(InstanceRegionArg)
-	region, err := getRegion()
-	if err != nil {
+	region, err := context.Identity().Region()
+	if err != nil || region == "" {
 		return "", fmt.Errorf("cannot get the instance region information")
+	} else {
+		buffer.WriteString(InstanceRegionArg)
+		buffer.WriteString(region)
 	}
 
 	if isShellInjection(region) {
 		return "", fmt.Errorf("Shell command injection string " + region)
 	}
-	buffer.WriteString(region)
 
 	// check if user provides the directory OU parameter
 	if len(pluginInput.DirectoryOU) != 0 {
 		log.Debugf("Customized directory OU parameter provided: %v", pluginInput.DirectoryOU)
 		buffer.WriteString(DirectoryOUArg)
-		buffer.WriteString(pluginInput.DirectoryOU)
+		// when using OU name with spaces, we should expect users passing in the OU parameter within quotation marks
+		// need to remove such quotation marks for UNIX shell script
+		// adding outer single quotes to indicate the lexical parser this is a single token
+		buffer.WriteString("'")
+		buffer.WriteString(strings.Trim(pluginInput.DirectoryOU, "\""))
+		buffer.WriteString("'")
 	}
 
 	if isShellInjection(pluginInput.DirectoryOU) {
 		return "", fmt.Errorf("Shell command injection string " + pluginInput.DirectoryName)
+	}
+
+	if len(pluginInput.HostName) != 0 {
+		if isShellInjection(pluginInput.HostName) {
+			return "", fmt.Errorf("Shell command injection string " + pluginInput.DirectoryName)
+		}
+		buffer.WriteString(SetHostNameArg)
+		buffer.WriteString(pluginInput.HostName)
+
+		if len(pluginInput.HostNameNumAppendDigits) != 0 {
+			val, err := strconv.Atoi(pluginInput.HostNameNumAppendDigits)
+			if err != nil {
+				return "", fmt.Errorf("HostNameNumAppendDigits %s has non-digits " + pluginInput.HostNameNumAppendDigits)
+			} else {
+				log.Debugf("HostNameNumAppendDigits parameter is : %d", val)
+			}
+			buffer.WriteString(SetHostNameNumAppendDigitsArg)
+			buffer.WriteString(pluginInput.HostNameNumAppendDigits)
+		}
+	}
+
+	if pluginInput.KeepHostName {
+		buffer.WriteString(KeepHostNameArgs)
+		buffer.WriteString(" ")
 	}
 
 	if len(pluginInput.DnsIpAddresses) == 0 {
@@ -306,11 +338,6 @@ func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInp
 		} else {
 			return "", fmt.Errorf("Invalid DNS IP address " + pluginInput.DnsIpAddresses[index])
 		}
-	}
-
-	if pluginInput.KeepHostName {
-		buffer.WriteString(KeepHostNameArgs)
-		buffer.WriteString(" ")
 	}
 
 	return buffer.String(), nil

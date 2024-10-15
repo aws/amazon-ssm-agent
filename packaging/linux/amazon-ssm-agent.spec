@@ -1,3 +1,5 @@
+%define _buildhost build.amazon.com
+
 Name         : amazon-ssm-agent
 Version      : %rpmversion
 Release      : 1
@@ -41,6 +43,26 @@ This package provides Amazon SSM Agent for managing EC2 Instances using SSM APIs
 # Uninstall:     %preun
 # Upgrade:       %pre, %posttrans
 
+%pretrans
+# Verify kernel version
+if [[ $1 -eq 0 ]] ; then
+    REQ_KERNEL_MAJOR_VERSION=3
+    REQ_KERNEL_MINOR_VERSION=2
+
+    KERNEL_MAJOR_VERSION=`uname -r | awk -F. '{print $1}'`
+    KERNEL_MINOR_VERSION=`uname -r | awk -F. '{print $2}'`
+
+    if [ $KERNEL_MAJOR_VERSION -gt $REQ_KERNEL_MAJOR_VERSION ] || \
+        ( [ $KERNEL_MAJOR_VERSION -eq $REQ_KERNEL_MAJOR_VERSION ] && \
+          [ $KERNEL_MINOR_VERSION -ge $REQ_KERNEL_MINOR_VERSION ] ); then
+        exit 0
+    else
+        echo "FATAL: Minimum required kernel version is ${REQ_KERNEL_MAJOR_VERSION}.${REQ_KERNEL_MINOR_VERSION}"
+        echo "       System is running kernel version ${KERNEL_MAJOR_VERSION}.${KERNEL_MINOR_VERSION}"
+        exit 1
+    fi
+fi
+
 %pre
 # Stop the agent before the upgrade
 if [ $1 -ge 2 ]; then
@@ -48,7 +70,7 @@ if [ $1 -ge 2 ]; then
     if [[ `cat stdout.txt` =~ upstart ]]; then
         /sbin/stop amazon-ssm-agent
     elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl stop amazon-ssm-agent
+        systemctl stop amazon-ssm-agent.service
         systemctl daemon-reload
     fi
     rm stdout.txt
@@ -62,8 +84,8 @@ if [ $1 -eq 0 ] ; then
         /sbin/stop amazon-ssm-agent
         sleep 1
     elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl stop amazon-ssm-agent
-        systemctl disable amazon-ssm-agent
+        systemctl stop amazon-ssm-agent.service
+        systemctl disable amazon-ssm-agent.service
         systemctl daemon-reload
     fi
     rm stdout.txt
@@ -76,8 +98,8 @@ if [[ $1 -ge 0 ]]; then
     if [[ `cat stdout.txt` =~ upstart ]]; then
         /sbin/start amazon-ssm-agent
     elif [[ `systemctl` =~ -\.mount ]]; then
-        systemctl enable amazon-ssm-agent
-        systemctl start amazon-ssm-agent
+        systemctl enable amazon-ssm-agent.service
+        systemctl start amazon-ssm-agent.service
         systemctl daemon-reload
     fi
     rm stdout.txt

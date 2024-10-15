@@ -11,7 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//+build windows
+//go:build windows
+// +build windows
 
 // Package updateec2config implements the UpdateEC2Config plugin.
 package updateec2config
@@ -61,7 +62,7 @@ const (
 	S3Format = "https://s3.amazonaws.com/aws-ssm-{Region}"
 
 	//Manifest Path in S3 bucket
-	ManifestPath = "/amazon-ssm-{Region}/manifest.json"
+	ManifestPath = "/aws-ssm-{Region}/manifest.json"
 
 	// CommonManifestURL is the URL for the manifest file in regular regions
 	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath

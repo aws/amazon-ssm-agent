@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package hibernation is responsible for the agent in hibernate mode.
@@ -27,10 +28,7 @@ func getHibernateSeelogConfig() string {
 	seelogConfigDirPath := filepath.Join(appconfig.SSMDataPath, "Logs")
 	seelogConfigFilePath := filepath.Join(seelogConfigDirPath, hibernateLogFile)
 
-	seelogConfig := `<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="error">
-		<exceptions>
-			<exception filepattern="*hibernation.go" maxlevel="info"/>
-		</exceptions>
+	seelogConfig := `<seelog type="adaptive" mininterval="2000000" maxinterval="100000000" critmsgcount="500" minlevel="debug">
 		<outputs formatid="fmtinfo">
 			<console formatid="fmtinfo"/>
 			<rollingfile type="size" filename="` + seelogConfigFilePath + `" maxsize="30000" maxrolls="2"/>

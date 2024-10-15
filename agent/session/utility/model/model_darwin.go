@@ -11,11 +11,12 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin
 // +build darwin
 
-//Package model contains data objects for session utility
+// Package model contains data objects for session utility
 package model
 
 const (
-	AddUserCommand = "sysadminctl -addUser %s"
+	AddUserCommand = "sysadminctl -addUser %s -shell /usr/bin/false"
 )

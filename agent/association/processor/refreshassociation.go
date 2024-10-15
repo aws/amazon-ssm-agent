@@ -26,7 +26,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 
@@ -44,9 +43,9 @@ func (p *Processor) ProcessRefreshAssociation(log log.T, pluginRes *contracts.Pl
 		OutputS3BucketName:     pluginRes.OutputS3BucketName,
 		OutputS3KeyPrefix:      pluginRes.OutputS3KeyPrefix,
 	}
-	out := iohandler.NewDefaultIOHandler(log, ioConfig)
-	defer out.Close(log)
-	out.Init(log, pluginRes.PluginName)
+	out := iohandler.NewDefaultIOHandler(p.context, ioConfig)
+	defer out.Close()
+	out.Init(pluginRes.PluginName)
 
 	//this is the current plugin run, trigger refresh
 	if apply {
@@ -62,7 +61,7 @@ func (p *Processor) ProcessRefreshAssociation(log log.T, pluginRes *contracts.Pl
 			out.AppendInfof("Associations %v have been requested to execute immediately", associationIds)
 		}
 	}
-	out.Close(log)
+	out.Close()
 	pluginConfig := iohandler.DefaultOutputConfig()
 
 	pluginRes.Code = out.GetExitCode()
@@ -78,7 +77,7 @@ func (p *Processor) refreshAssociation(log log.T, associationIds []string, orche
 	var instanceID string
 	associations := []*model.InstanceAssociation{}
 
-	if instanceID, err = platform.InstanceID(); err != nil {
+	if instanceID, err = p.context.Identity().InstanceID(); err != nil {
 		out.MarkAsFailed(fmt.Errorf("failed to load instance ID, %v", err))
 		return
 	}

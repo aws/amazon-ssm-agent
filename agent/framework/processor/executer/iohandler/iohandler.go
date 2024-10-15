@@ -18,18 +18,21 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
 	// maximumPluginOutputSize represents the maximum output size that agent supports
 	MaximumPluginOutputSize = 2500
+	// errTitle represents the header that is printed before the error
+	errTitle = "\n----------ERROR-------\n"
 	// truncateOut represents the string appended when output is truncated
 	truncateOut = "\n---Output truncated---"
 	// truncateError represents the string appended when error is truncated
@@ -62,9 +65,9 @@ func DefaultOutputConfig() PluginConfig {
 
 // IOHandler Interface defines interface for IOHandler type
 type IOHandler interface {
-	Init(log.T, ...string)
-	RegisterOutputSource(log.T, multiwriter.DocumentIOMultiWriter, ...iomodule.IOModule)
-	Close(log.T)
+	Init(...string)
+	RegisterOutputSource(multiwriter.DocumentIOMultiWriter, ...iomodule.IOModule)
+	Close()
 	String() string
 	MarkAsFailed(err error)
 	MarkAsSucceeded()
@@ -96,6 +99,7 @@ type IOHandler interface {
 
 // DefaultIOHandler is used for writing output by the plugins
 type DefaultIOHandler struct {
+	context  context.T
 	ExitCode int
 	Status   contracts.ResultStatus
 	//private members - not exposed directly to plugins because they shouldn't write to these
@@ -111,17 +115,19 @@ type DefaultIOHandler struct {
 }
 
 // NewDefaultIOHandler returns a new instance of the IOHandler
-func NewDefaultIOHandler(log log.T, ioConfig contracts.IOConfiguration) *DefaultIOHandler {
-	log.Debugf("IOHandler Initialization with config: %v", ioConfig)
+func NewDefaultIOHandler(context context.T, ioConfig contracts.IOConfiguration) *DefaultIOHandler {
+
+	context.Log().Debugf("IOHandler Initialization with config: %v", ioConfig)
 	out := new(DefaultIOHandler)
+	out.context = context
 	out.ioConfig = ioConfig
 
 	return out
 }
 
 // Init initializes the plugin output object by creating the necessary writers
-func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
-
+func (out *DefaultIOHandler) Init(filePath ...string) {
+	log := out.context.Log()
 	pluginConfig := DefaultOutputConfig()
 	// Create path to output location for file and s3
 	fullPath := out.ioConfig.OrchestrationDirectory
@@ -134,13 +140,11 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 	stdOutLogStreamName := ""
 	stdErrLogStreamName := ""
 	if out.ioConfig.CloudWatchConfig.LogGroupName != "" {
-		cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(log)
-		if logGroupPresent, _ := cwl.IsLogGroupPresent(log, out.ioConfig.CloudWatchConfig.LogGroupName); !logGroupPresent {
-			if err := cwl.CreateLogGroup(log, out.ioConfig.CloudWatchConfig.LogGroupName); err != nil {
-				log.Errorf("Error Creating Log Group for CloudWatchLogs output: %v", err)
-				//Stop CloudWatch Streaming on Error
-				out.ioConfig.CloudWatchConfig.LogGroupName = ""
-			}
+		cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(out.context)
+		if err := cwl.CreateLogGroup(out.ioConfig.CloudWatchConfig.LogGroupName); err != nil {
+			log.Errorf("Error Creating Log Group for CloudWatchLogs output: %v", err)
+			//Stop CloudWatch Streaming on Error
+			out.ioConfig.CloudWatchConfig.LogGroupName = ""
 		}
 		stdOutLogStreamName = fmt.Sprintf("%s/%s", out.ioConfig.CloudWatchConfig.LogStreamPrefix, pluginConfig.StdoutFileName)
 		stdErrLogStreamName = fmt.Sprintf("%s/%s", out.ioConfig.CloudWatchConfig.LogStreamPrefix, pluginConfig.StderrFileName)
@@ -166,7 +170,7 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 	log.Debug("Initializing the Stdout Multi-writer with file and console listeners")
 	// Get a multi-writer for standard output
 	out.StdoutWriter = multiwriter.NewDocumentIOMultiWriter()
-	out.RegisterOutputSource(log, out.StdoutWriter, stdoutFile, stdoutConsole)
+	out.RegisterOutputSource(out.StdoutWriter, stdoutFile, stdoutConsole)
 
 	// Initialize file error module
 	stderrFile := iomodule.File{
@@ -188,15 +192,16 @@ func (out *DefaultIOHandler) Init(log log.T, filePath ...string) {
 	log.Debug("Initializing the Stderr Multi-writer with file and console listeners")
 	// Get a multi-writer for standard error
 	out.StderrWriter = multiwriter.NewDocumentIOMultiWriter()
-	out.RegisterOutputSource(log, out.StderrWriter, stderrFile, stderrConsole)
+	out.RegisterOutputSource(out.StderrWriter, stderrFile, stderrConsole)
 }
 
 // RegisterOutputSource returns a new output source by creating a multiwriter for the output modules.
-func (out *DefaultIOHandler) RegisterOutputSource(log log.T, multiWriter multiwriter.DocumentIOMultiWriter, IOModules ...iomodule.IOModule) {
+func (out *DefaultIOHandler) RegisterOutputSource(multiWriter multiwriter.DocumentIOMultiWriter, IOModules ...iomodule.IOModule) {
 	if len(IOModules) == 0 {
 		return
 	}
 
+	log := out.context.Log()
 	wg := multiWriter.GetWaitGroup()
 	// Create a Pipe for each IO Module and add it to the multi-writer.
 	for _, module := range IOModules {
@@ -205,8 +210,14 @@ func (out *DefaultIOHandler) RegisterOutputSource(log log.T, multiWriter multiwr
 		// Run the reader for each module
 		log.Debug("Starting a new stream reader go routing")
 		go func(module iomodule.IOModule, r *io.PipeReader) {
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Stream reader panic: %v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			defer wg.Done()
-			module.Read(log, r)
+			module.Read(out.context, r, out.ExitCode)
 		}(module, r)
 	}
 
@@ -214,7 +225,8 @@ func (out *DefaultIOHandler) RegisterOutputSource(log log.T, multiWriter multiwr
 }
 
 // Close closes all the attached writers.
-func (out *DefaultIOHandler) Close(log log.T) {
+func (out *DefaultIOHandler) Close() {
+	log := out.context.Log()
 	log.Debug("IOHandler closing all subscribed writers.")
 	if out.StdoutWriter != nil {
 		out.StdoutWriter.Close()
@@ -305,7 +317,7 @@ func (out *DefaultIOHandler) SetOutput(output interface{}) {
 }
 
 // Merge plugin output objects
-func (out *DefaultIOHandler) Merge(log log.T, mergeOutput *DefaultIOHandler) {
+func (out *DefaultIOHandler) Merge(mergeOutput *DefaultIOHandler) {
 
 	// Append Info
 	var stdoutBuffer bytes.Buffer
@@ -430,7 +442,7 @@ func TruncateOutput(stdout string, stderr string, capacity int) (response string
 	errorTitle := ""
 	lenErrorTitle := 0
 	if errorSize > 0 {
-		errorTitle = "\n----------ERROR-------\n"
+		errorTitle = errTitle
 		lenErrorTitle = len(errorTitle)
 	}
 
@@ -449,7 +461,7 @@ func TruncateOutput(stdout string, stderr string, capacity int) (response string
 	}
 
 	// truncate error when output is short
-	if outputSize < availableSpace/2 {
+	if outputSize <= availableSpace/2 {
 		truncateSize := availableSpace - len(truncateError)
 		return fmt.Sprint(stdout, errorTitle, stderr[:truncateSize-outputSize], truncateError)
 	}

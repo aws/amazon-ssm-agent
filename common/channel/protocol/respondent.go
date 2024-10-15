@@ -19,23 +19,38 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
+type IRespondent interface {
+	Initialize()
+	GetCommProtocolInfo() utils.SocketType
+	Send(message *message.Message) error
+	Close() error
+	Recv() ([]byte, error)
+	SetOption(name string, value interface{}) (err error)
+	Listen(address string) error
+	Dial(path string) error
+}
+
 // GetRespondentInstance returns the respondent instance
-func GetRespondentInstance(log log.T) *respondent {
+func GetRespondentInstance(log log.T, identity identity.IAgentIdentity) IRespondent {
 	return &respondent{
-		log: log,
+		log:      log,
+		identity: identity,
 	}
 }
 
 // respondent implements respondent actions from surveyor-respondent pattern
 type respondent struct {
 	log         log.T
+	identity    identity.IAgentIdentity
 	fileChannel filewatcherbasedipc.IPCChannel
 	socketType  utils.SocketType
 }
@@ -85,7 +100,6 @@ func (res *respondent) Recv() ([]byte, error) {
 		}
 		return []byte(message), nil
 	}
-	return nil, nil
 }
 
 // SetOption is used to specify additional options
@@ -102,10 +116,13 @@ func (res *respondent) Listen(path string) error {
 func (res *respondent) Dial(path string) error {
 	channelName := filepath.Base(path)
 	// added to make sure that respondent should not create file channel
-	if isPresent, err := filewatcherbasedipc.IsFileWatcherChannelPresent(channelName); !isPresent {
+	if isPresent, err := filewatcherbasedipc.IsFileWatcherChannelPresent(res.identity, channelName); !isPresent {
 		return fmt.Errorf("file channel not present to dial : %v", err)
 	}
-	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(res.log, filewatcherbasedipc.ModeRespondent, channelName, true)
+	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(res.log, res.identity, filewatcherbasedipc.ModeRespondent, channelName, true)
+	if err != nil {
+		return fmt.Errorf("error while dialing to path %v: %v", path, err)
+	}
 	res.fileChannel = channel
 	return err
 }

@@ -13,6 +13,8 @@
 
 // Package processor contains the methods for update ssm agent.
 // It also provides methods for sendReply and updateInstanceInfo
+
+//go:build e2e
 // +build e2e
 
 package processor
@@ -21,87 +23,76 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
 
-type ContextTestCase struct {
-	Context      *UpdateContext
+type DetailTestCase struct {
+	Detail       *UpdateDetail
 	InfoMessage  string
 	ErrorMessage string
 	HasMessageID bool
 }
 
 func TestUpdateStateChange(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
-	context := generateTestCase().Context
-	err := updater.mgr.inProgress(context, logger, Initialized)
+	detail := generateTestCase().Detail
+	err := updater.mgr.inProgress(detail, logger, Initialized)
 
-	assert.Equal(t, context.Current.State, Initialized)
-	assert.Equal(t, context.Current.Result, contracts.ResultStatusInProgress)
+	assert.Equal(t, Initialized, detail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, detail.Result)
 
 	assert.Equal(t, err, nil)
 }
 
 func TestUpdateSucceed(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
-	context := generateTestCase().Context
-	context.Current.OutputS3BucketName = "test"
-	err := updater.mgr.succeeded(context, logger)
+	detail := generateTestCase().Detail
+	detail.OutputS3BucketName = "test"
+	err := updater.mgr.succeeded(detail, logger)
 
-	emptyUpdate := &UpdateDetail{}
-
-	assert.Equal(t, context.Current.State, emptyUpdate.State)
-	assert.Equal(t, context.Current.Result, emptyUpdate.Result)
+	assert.Equal(t, Completed, detail.State)
+	assert.Equal(t, contracts.ResultStatusSuccess, detail.Result)
 
 	assert.Equal(t, err, nil)
-	assert.Equal(t, context.Histories[0].State, Completed)
-	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusSuccess)
 }
 
 func TestUpdateFailed(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
-	context := generateTestCase().Context
-	context.Current.OutputS3BucketName = "test"
-	err := updater.mgr.failed(context, logger, updateutil.ErrorInstallFailed, "Cannot Install", true)
+	detail := generateTestCase().Detail
+	detail.OutputS3BucketName = "test"
+	err := updater.mgr.failed(detail, logger, updateconstants.ErrorInstallFailed, "Cannot Install", true)
 
-	emptyUpdate := &UpdateDetail{}
-
-	assert.Equal(t, context.Current.State, emptyUpdate.State)
-	assert.Equal(t, context.Current.Result, emptyUpdate.Result)
+	assert.Equal(t, Completed, detail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, detail.Result)
 
 	assert.Equal(t, err, nil)
-	assert.Equal(t, context.Histories[0].State, Completed)
-	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusFailed)
 }
 
 func TestUpdateInactive(t *testing.T) {
+	var logger = logmocks.NewMockLog()
 	updater := createDefaultUpdaterStub()
-	context := generateTestCase().Context
-	context.Current.OutputS3BucketName = "test"
-	err := updater.mgr.inactive(context, logger, "")
+	detail := generateTestCase().Detail
+	detail.OutputS3BucketName = "test"
+	err := updater.mgr.inactive(detail, logger, "")
 
-	emptyUpdate := &UpdateDetail{}
-
-	assert.Equal(t, context.Current.State, emptyUpdate.State)
-	assert.Equal(t, context.Current.Result, emptyUpdate.Result)
+	assert.Equal(t, Completed, detail.State)
+	assert.Equal(t, contracts.ResultStatusSuccess, detail.Result)
 
 	assert.Equal(t, err, nil)
-	assert.Equal(t, context.Histories[0].State, Completed)
-	assert.Equal(t, context.Histories[0].Result, contracts.ResultStatusSuccess)
 }
 
-func generateTestCase() ContextTestCase {
-	testCase := ContextTestCase{
-		Context:      &UpdateContext{},
+func generateTestCase() DetailTestCase {
+	return DetailTestCase{
+		Detail: &UpdateDetail{
+			MessageID: "MessageId",
+		},
 		InfoMessage:  "Test Message",
 		ErrorMessage: "Error Message",
 		HasMessageID: true,
 	}
-
-	testCase.Context.Current = &UpdateDetail{
-		MessageID: "MessageId",
-	}
-	testCase.Context.Histories = []*UpdateDetail{}
-	return testCase
 }

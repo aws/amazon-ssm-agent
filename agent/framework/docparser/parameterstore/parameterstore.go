@@ -15,11 +15,16 @@
 package parameterstore
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
+	"runtime/debug"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/paramvalidator"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -32,7 +37,7 @@ const (
 	// ParamTypeString represents the Param Type is String
 	ParamTypeString = "String"
 
-	// ParamTypeString represents the Param Type is SecureString
+	// ParamTypeSecureString represents the Param Type is SecureString
 	ParamTypeSecureString = "SecureString"
 
 	// ParamTypeStringList represents the Param Type is StringList
@@ -49,9 +54,11 @@ const (
 )
 
 var callParameterService = callGetParameters
+var resolve = Resolve
 
 // Resolve resolves ssm parameters of the format {{ssm:*}}
-func Resolve(log log.T, input interface{}) (interface{}, error) {
+func Resolve(context context.T, input interface{}) (interface{}, error) {
+	log := context.Log()
 	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
 	if err != nil {
 		return input, err
@@ -66,7 +73,7 @@ func Resolve(log log.T, input interface{}) (interface{}, error) {
 	}
 
 	// Get ssm parameter values
-	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams)
+	resolvedSSMParamMap, err := getSSMParameterValues(context, ssmParams)
 	if err != nil {
 		return input, err
 	}
@@ -83,18 +90,20 @@ func Resolve(log log.T, input interface{}) (interface{}, error) {
 
 // ValidateSSMParameters validates SSM parameters
 func ValidateSSMParameters(
-	log log.T,
+	context context.T,
 	documentParameters map[string]*contracts.Parameter,
-	parameters map[string]interface{}) error {
+	parameters map[string]interface{},
+	invokedPlugin string) (err error) {
+	log := context.Log()
 
 	/*
 		This function validates the following things before the document is sent for execution
 
 		1. Document doesn't contain SecureString SSM Parameters
-		2. SSM parameter values match the allowed pattern in the document
+		2. SSM parameter values match the allowed pattern, allowed values, min/max items and min/max chars in the document
 	*/
-
-	resolvedParameters, err := Resolve(log, parameters)
+	var resolvedParameters interface{}
+	resolvedParameters, err = resolve(context, parameters)
 	if err != nil {
 		return err
 	}
@@ -107,42 +116,63 @@ func ValidateSSMParameters(
 		return fmt.Errorf("%v", ErrorMsg)
 	}
 
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("panic during parameter validation: \n%v", r)
+			log.Error(err)
+			log.Errorf("stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
+	var validationErrors []string
+	paramValidators := paramvalidator.GetMandatoryValidators()
 	for paramName, paramObj := range documentParameters {
-		// Check SSM parameter values match the allowed pattern in the document
-		if paramObj.AllowedPattern != "" {
-			validParamValue, err := regexp.Compile(paramObj.AllowedPattern)
-			if err != nil {
-				log.Debug(err)
-				return fmt.Errorf("%v", ErrorMsg)
-			}
-
-			errorString := fmt.Errorf("Parameter value for %v does not match the allowed pattern %v", paramName, paramObj.AllowedPattern)
-			switch input := reformatResolvedParameters[paramName].(type) {
-			case string:
-				if !validParamValue.MatchString(input) {
-					return errorString
-				}
-
-			case []string:
-				for _, v := range input {
-					if !validParamValue.MatchString(v) {
-						return errorString
-					}
-				}
-
-			case []interface{}:
-				for _, v := range input {
-					if !validParamValue.MatchString(v.(string)) {
-						return errorString
-					}
-				}
-
-			default:
-				return fmt.Errorf("Unable to determine parameter value type for %v", paramName)
+		for _, paramValidator := range paramValidators {
+			if err = paramValidator.Validate(log, reformatResolvedParameters[paramName], paramObj); err != nil {
+				mandatoryValidationErr := fmt.Errorf("error thrown in '%v' while validating parameter /%v/: %v", paramValidator.GetName(), paramName, err)
+				validationErrors = append(validationErrors, mandatoryValidationErr.Error())
 			}
 		}
 	}
+
+	// currently, optional validators is applicable only for the inner document parameters
+	// coming from the document invoked by runDocument plugin
+	if invokedPlugin == appconfig.PluginRunDocument {
+		paramValidators = paramvalidator.GetOptionalValidators()
+		for paramName, paramObj := range documentParameters {
+			// skip validations if the text contains SSM parameter store reference
+			if val, ok := parameters[paramName]; ok {
+				if isParameterResolvedFromSSMParameterStore(log, val) {
+					log.Debugf("optional validators ignored for parameter %v", paramName)
+					continue
+				}
+			}
+			for _, paramValidator := range paramValidators {
+				if err = paramValidator.Validate(log, reformatResolvedParameters[paramName], paramObj); err != nil {
+					optionalValidationErr := fmt.Errorf("error thrown in '%v' while validating parameter /%v/: %v", paramValidator.GetName(), paramName, err)
+					validationErrors = append(validationErrors, optionalValidationErr.Error())
+				}
+			}
+		}
+	}
+	if len(validationErrors) > 0 {
+		errorVal := fmt.Errorf("all errors during param validation errors: %v", strings.Join(validationErrors, "\n"))
+		log.Error(errorVal)
+		return errorVal
+	}
 	return nil
+}
+
+// isParameterResolvedFromSSMParameterStore checks whether the parameter is resolved from SSM parameter store
+func isParameterResolvedFromSSMParameterStore(log log.T, input interface{}) bool {
+	if byteString, err := json.Marshal(input); err == nil {
+		if validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName); err == nil {
+			if ssmParams := validSSMParam.Find(byteString); ssmParams != nil {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // getValidSSMParamRegexCompiler returns a regex compiler
@@ -165,7 +195,8 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 }
 
 // getSSMParameterValues takes a list of strings and resolves them by calling the GetParameters API
-func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter, error) {
+func getSSMParameterValues(context context.T, ssmParams []string) (map[string]Parameter, error) {
+	log := context.Log()
 	var result *GetParametersResponse
 	var err error
 
@@ -188,7 +219,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 		}
 	}
 
-	if result, err = callParameterService(log, paramNames); err != nil {
+	if result, err = callParameterService(context, paramNames); err != nil {
 		return nil, err
 	}
 
@@ -264,10 +295,11 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 }
 
 // callGetParameters makes a GetParameters API call to the service
-func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, error) {
+func callGetParameters(context context.T, paramNames []string) (*GetParametersResponse, error) {
+	log := context.Log()
 	finalResult := GetParametersResponse{}
 
-	ssmSvc := ssm.NewService(log)
+	ssmSvc := ssm.NewService(context)
 
 	for i := 0; i < len(paramNames); i = i + MaxParametersPerCall {
 		limit := i + MaxParametersPerCall

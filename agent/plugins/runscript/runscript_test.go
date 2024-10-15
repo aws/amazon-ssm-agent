@@ -17,15 +17,22 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/executers"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
+	credentialprovidermocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
+
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/twinj/uuid"
@@ -40,7 +47,7 @@ type TestCase struct {
 	MessageID      string
 }
 
-type CommandTester func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
+type CommandTester func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler)
 
 const (
 	orchestrationDirectory  = "OrchesDir"
@@ -71,7 +78,7 @@ func generateTestCaseOk(id string, envVars map[string]string) TestCase {
 	input := RunScriptPluginInput{
 		RunCommand:       []string{"echo " + id},
 		ID:               id + ".aws:runScript",
-		WorkingDirectory: "/Dir" + id,
+		WorkingDirectory: rootAbsPath + "Dir" + id,
 		TimeoutSeconds:   "1",
 	}
 	if len(envVars) != 0 {
@@ -137,7 +144,7 @@ func TestRunScripts(t *testing.T) {
 func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 	logger.On("Error", mock.Anything).Return(nil)
 	logger.Infof("test run commands %v", testCase)
-	runScriptTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runScriptTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
@@ -151,13 +158,103 @@ func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 			err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 			assert.Nil(t, err)
 
-			p.runCommandsRawInput(logger, pluginID, rawPluginInput, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler, runCommandID)
+			p.runCommandsRawInput(pluginID, rawPluginInput, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler, runCommandID)
 		} else {
-			p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
+			p.runCommands(pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
 		}
 	}
 
 	testExecution(t, runScriptTester)
+}
+
+func TestSetSharedCredsEnvironment(t *testing.T) {
+	oldFunc := getRemoteProvider
+	defer func() { getRemoteProvider = oldFunc }()
+
+	p := &Plugin{
+		Context: context.NewMockDefault(),
+	}
+	pluginInput := RunScriptPluginInput{
+		Environment: map[string]string{},
+	}
+
+	// Test identity not credential rotation agent identity
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return nil, false
+	}
+	p.setShareCredsEnvironment(pluginInput)
+	assert.Len(t, pluginInput.Environment, 0)
+
+	// Test identity does not share creds
+	remoteProvider := &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(false)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
+	}
+	p.setShareCredsEnvironment(pluginInput)
+	assert.Len(t, pluginInput.Environment, 0)
+	remoteProvider.AssertExpectations(t)
+
+	// Test failed to read identity runtime config
+	remoteProvider = &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
+	}
+	r := &mocks.IIdentityRuntimeConfigClient{}
+	r.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, fmt.Errorf("SomeError"))
+	p.IdentityRuntimeClient = r
+	p.setShareCredsEnvironment(pluginInput)
+	assert.Len(t, pluginInput.Environment, 0)
+	r.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
+
+	// Test shareProfile and shareFile values empty
+	remoteProvider = &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
+
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
+	}
+	r = &mocks.IIdentityRuntimeConfigClient{}
+	r.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{}, nil)
+	p.IdentityRuntimeClient = r
+	p.setShareCredsEnvironment(pluginInput)
+	assert.Len(t, pluginInput.Environment, 0)
+	r.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
+
+	// Test shareProfile and shareFile values not empty
+	remoteProvider = &credentialprovidermocks.IRemoteProvider{}
+	remoteProvider.On("SharesCredentials").Return(true)
+	r = &mocks.IIdentityRuntimeConfigClient{}
+	r.On("GetConfig").Return(runtimeconfig.IdentityRuntimeConfig{
+		ShareProfile: "SomeProfile",
+		ShareFile:    "SomeFile",
+	}, nil)
+	p.IdentityRuntimeClient = r
+	getRemoteProvider = func(agentIdentity identity.IAgentIdentity) (credentialproviders.IRemoteProvider, bool) {
+		return remoteProvider, true
+	}
+	p.setShareCredsEnvironment(pluginInput)
+	assert.Len(t, pluginInput.Environment, 2)
+	assert.Equal(t, "SomeFile", pluginInput.Environment["AWS_SHARED_CREDENTIALS_FILE"])
+	assert.Equal(t, "SomeProfile", pluginInput.Environment["AWS_PROFILE"])
+	r.AssertExpectations(t)
+	remoteProvider.AssertExpectations(t)
+}
+
+func TestSetCommandIdEnvironment(t *testing.T) {
+	p := &Plugin{}
+	pluginInput := RunScriptPluginInput{
+		Environment: map[string]string{},
+	}
+
+	p.setCommandIdEnvironment(pluginInput, "")
+	assert.Len(t, pluginInput.Environment, 0)
+
+	p.setCommandIdEnvironment(pluginInput, "SomeCommandId")
+	assert.Len(t, pluginInput.Environment, 1)
 }
 
 // TestBucketsInDifferentRegions tests runScripts when S3Buckets are present in IAD and PDX region.
@@ -172,13 +269,13 @@ func TestBucketsInDifferentRegions(t *testing.T) {
 func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucketsInDifferentRegions bool) {
 	logger.On("Error", mock.Anything).Return(nil)
 	logger.Infof("test run commands %v", testCase)
-	runScriptTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	runScriptTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// set expectations
 		setExecuterExpectations(mockExecuter, testCase, mockCancelFlag, p)
 		setIOHandlerExpectations(mockIOHandler, testCase)
 
 		// call method under test
-		p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
+		p.runCommands(pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
 	}
 
 	testExecution(t, runScriptTester)
@@ -243,9 +340,8 @@ func buildOutputs(testCases []TestCase) (out string, err string, combined string
 }
 
 func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
-		mockContext := context.NewMockDefault()
 
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, len(testCases))
@@ -262,7 +358,6 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
 				Properties:             pluginProperties,
 				OutputS3BucketName:     s3BucketName,
@@ -279,9 +374,8 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 
 // testExecute tests the run command plugin's Execute method.
 func testExecute(t *testing.T, testCase TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
-		mockContext := context.NewMockDefault()
 
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, 1)
@@ -296,7 +390,6 @@ func testExecute(t *testing.T, testCase TestCase) {
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
 				Properties:             pluginProperties,
 				OutputS3BucketName:     s3BucketName,
@@ -313,9 +406,8 @@ func testExecute(t *testing.T, testCase TestCase) {
 
 // testExecuteWithEnvironment tests the run command plugin's Execute method with environment variables sent to the executer
 func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
-	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
+	executeTester := func(p *Plugin, mockCancelFlag *taskmocks.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
-		mockContext := context.NewMockDefault()
 
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, 1)
@@ -330,7 +422,6 @@ func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
 				Properties:             pluginProperties,
 				OutputS3BucketName:     s3BucketName,
@@ -351,12 +442,13 @@ func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
 // and assert specific result conditions.
 func testExecution(t *testing.T, commandtester CommandTester) {
 	// create mocked objects
-	mockCancelFlag := new(task.MockCancelFlag)
+	mockCancelFlag := new(taskmocks.MockCancelFlag)
 	mockExecuter := new(executers.MockCommandExecuter)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
 	// create plugin
 	p := new(Plugin)
+	p.Context = context.NewMockDefault()
 	p.CommandExecuter = mockExecuter
 	p.Name = "aws:runShellScript"
 	p.ScriptName = "_script.sh"
@@ -389,7 +481,7 @@ func setIOHandlerExpectations(mockIOHandler *iohandlermocks.MockIOHandler, t Tes
 	}
 }
 
-func setCancelFlagExpectations(mockCancelFlag *task.MockCancelFlag, times int) {
+func setCancelFlagExpectations(mockCancelFlag *taskmocks.MockCancelFlag, times int) {
 	mockCancelFlag.On("Canceled").Return(false).Times(times)
 	mockCancelFlag.On("ShutDown").Return(false).Times(times)
 }

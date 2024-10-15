@@ -16,6 +16,7 @@ package s3util
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,11 +28,6 @@ type s3EndpointTest struct {
 var (
 	getFallbackS3EndpointTests = []s3EndpointTest{
 		// {region, output},
-		{"us-east-1", "s3.amazonaws.com"},
-		{"us-west-1", "s3.amazonaws.com"},
-		{"af-south-1", "s3.amazonaws.com"},
-		{"eu-south-1", "s3.amazonaws.com"},
-		{"ap-southeast-2", "s3.amazonaws.com"},
 		{"us-gov-east-1", "s3.us-gov-west-1.amazonaws.com"},
 		{"us-gov-west-1", "s3.us-gov-east-1.amazonaws.com"},
 		{"cn-north-1", "s3.cn-northwest-1.amazonaws.com.cn"},
@@ -41,16 +37,7 @@ var (
 
 func TestGetFallbackS3Endpoint(t *testing.T) {
 	for _, test := range getFallbackS3EndpointTests {
-		output := getFallbackS3Endpoint(test.region)
+		output := getFallbackS3Endpoint(context.NewMockDefault(), test.region)
 		assert.Equal(t, test.output, output, "The two urls should be the same")
 	}
-}
-
-func TestIsKnownRegion(t *testing.T) {
-	assert.True(t, isKnownRegion("us-east-1"))
-	assert.True(t, isKnownRegion("eu-west-1"))
-	assert.True(t, isKnownRegion("us-gov-east-1"))
-	assert.True(t, isKnownRegion("cn-north-1"))
-	assert.False(t, isKnownRegion(""))
-	assert.False(t, isKnownRegion("not-a-region"))
 }

@@ -19,10 +19,17 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 )
 
 const (
@@ -44,21 +51,64 @@ const (
 	updateFailed = "UpdateFailed"
 	// testFailed represents tests fail during update
 	testFailed = "TestFailed"
+	// testPassed represents tests passed during update
+	testPassed = "TestPassed"
+	// noAlarm represents suffix which will be added to unimportant error messages
+	noAlarm = "NoAlarm"
 )
 
 var ssmSvc ssm.Service
 var ssmSvcOnce sync.Once
 
 var newSsmSvc = ssm.NewService
+var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ecs.NewECSIdentity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+	if identityRef := onprem.NewOnPremIdentity(log, config); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
 
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
 	var svc ssm.Service
-	if svc, err = getSsmSvc(log); err != nil {
+	if svc, err = getSsmSvc(s.context); err != nil {
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
-	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName); err != nil {
+	appConfig := s.context.AppConfig()
+	var isEC2, isECS, isOnPrem bool
+	var ec2Identity, ecsIdentity identity.IAgentIdentityInner
+	onpremIdentity := newOnPremIdentity(log, &appConfig)
+	isOnPrem = onpremIdentity != nil && onpremIdentity.IsIdentityEnvironment()
+	if !isOnPrem {
+		ec2Identity = newEC2Identity(log)
+		ecsIdentity = newECSIdentity(log)
+		isEC2 = ec2Identity != nil && ec2Identity.IsIdentityEnvironment()
+		isECS = ecsIdentity != nil && ecsIdentity.IsIdentityEnvironment()
+	}
+	var availabilityZone = ""
+	var availabilityZoneId = ""
+	if isEC2 && !isECS && !isOnPrem {
+		availabilityZone, _ = ec2Identity.AvailabilityZone()
+		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
+	}
+
+	//TODO populate ssmConnectionChannel if UUI call during Agent update requires data store update.
+	var ssmConnectionChannel = ""
+
+	if _, err = svc.UpdateInstanceInformation(log, update.SourceVersion, status, health.AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel); err != nil {
 		return
 	}
 
@@ -66,9 +116,9 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 }
 
 // getSsmSvc loads ssm service
-func getSsmSvc(log log.T) (ssm.Service, error) {
+func getSsmSvc(context context.T) (ssm.Service, error) {
 	ssmSvcOnce.Do(func() {
-		ssmSvc = newSsmSvc(log)
+		ssmSvc = newSsmSvc(context)
 	})
 
 	if ssmSvc == nil {
@@ -78,8 +128,8 @@ func getSsmSvc(log log.T) (ssm.Service, error) {
 }
 
 // prepareHealthStatus prepares health status payload
-func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatus string) (result string) {
-	switch update.State {
+func PrepareHealthStatus(updateDetail *UpdateDetail, errorCode string, additionalStatus string) (result string) {
+	switch updateDetail.State {
 	default:
 		result = active
 	case NotStarted:
@@ -91,20 +141,27 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 	case Installed:
 		result = updateInProgress
 	case Completed:
-		if update.Result == contracts.ResultStatusFailed {
+		if updateDetail.Result == contracts.ResultStatusFailed {
 			result = updateFailed
 		}
-		if update.Result == contracts.ResultStatusSuccess {
+		if updateDetail.Result == contracts.ResultStatusSuccess {
 			result = updateSucceeded
 		}
 	case TestExecution:
-		if update.Result == contracts.ResultStatusTestFailure {
+		if updateDetail.Result == contracts.ResultStatusTestFailure {
 			result = testFailed
+		} else if updateDetail.Result == contracts.ResultStatusTestPass {
+			result = testPassed
 		}
 	case Rollback:
 		result = rollingBack
 	case RolledBack:
 		result = rollBackCompleted
+	}
+
+	// please maintain the if condition order.
+	if updateDetail.SelfUpdate {
+		result = fmt.Sprintf("%v_%v", result, updateconstants.SelfUpdatePrefix)
 	}
 
 	if len(errorCode) > 0 {
@@ -113,6 +170,10 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 
 	if len(additionalStatus) > 0 {
 		result = fmt.Sprintf("%v-%v", result, additionalStatus)
+	}
+
+	if _, ok := updateconstants.NonAlarmingErrors[updateconstants.ErrorCode(errorCode)]; ok {
+		result = fmt.Sprintf("%v-%v", result, noAlarm)
 	}
 
 	return result

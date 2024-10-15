@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
@@ -57,6 +56,7 @@ var duration_Seconds time.Duration = 30 * time.Second
 
 // Plugin is the type for the plugin.
 type Plugin struct {
+	context context.T
 	// ExecuteCommand is an object that can execute commands.
 	CommandExecuter executers.T
 }
@@ -80,11 +80,11 @@ type DockerContainerPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	plugin.CommandExecuter = executers.ShellCommandExecuter{}
-
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context:         context,
+		CommandExecuter: executers.ShellCommandExecuter{},
+	}, nil
 }
 
 // Name returns the name of the plugin
@@ -92,37 +92,41 @@ func Name() string {
 	return appconfig.PluginNameDockerContainer
 }
 
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
-	log.Infof("%v started with configuration %v", Name(), config)
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	p.context.Log().Infof("%v started with configuration %v", Name(), config)
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		p.runCommandsRawInput(log, config.PluginID, config.Properties, config.OrchestrationDirectory, cancelFlag, output)
+		p.runCommandsRawInput(config.PluginID, config.Properties, config.OrchestrationDirectory, cancelFlag, output)
 	}
 	return
 }
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var pluginInput DockerContainerPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
-	log.Debugf("Plugin input %v", pluginInput)
+	p.context.Log().Debugf("Plugin input %v", pluginInput)
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
 		output.MarkAsFailed(errorString)
 		return
 	}
 
-	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, output)
+	p.runCommands(pluginID, pluginInput, orchestrationDirectory, cancelFlag, output)
 }
 
 // runCommands executes one set of commands and returns their output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerContainerPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+func (p *Plugin) runCommands(pluginID string, pluginInput DockerContainerPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	var err error
+
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
 
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
@@ -288,7 +292,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, pluginInput.TimeoutSeconds)
 
 	// Execute Command
-	exitCode, err := p.CommandExecuter.NewExecute(log, pluginInput.WorkingDirectory, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments, make(map[string]string))
+	exitCode, err := p.CommandExecuter.NewExecute(p.context, pluginInput.WorkingDirectory, output.GetStdoutWriter(), output.GetStderrWriter(), cancelFlag, executionTimeout, commandName, commandArguments, make(map[string]string))
 
 	// Set output status
 	output.SetExitCode(exitCode)
@@ -308,11 +312,11 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DockerConta
 func validateInputs(pluginInput DockerContainerPluginInput) (err error) {
 	validContainerName := regexp.MustCompile(`^[a-zA-Z0-9_\-\\\/]*$`)
 	if !validContainerName.MatchString(pluginInput.Container) {
-		return errors.New("Invalid container name, only [a-zA-Z0-9_-] are allowed")
+		return errors.New("Invalid container name, only [a-zA-Z0-9_-\\/] are allowed")
 	}
-	validImageValue := regexp.MustCompile(`^[a-zA-Z0-9_\-\\\/]*$`)
+	validImageValue := regexp.MustCompile(`^[a-zA-Z0-9.:_\-\\\/]*$`)
 	if !validImageValue.MatchString(pluginInput.Image) {
-		return errors.New("Invalid image value, only [a-zA-Z0-9_-] are allowed")
+		return errors.New("Invalid image value, only [a-zA-Z0-9.:_-\\/] are allowed")
 	}
 	validUserValue := regexp.MustCompile(`^[a-zA-Z0-9_-]*$`)
 	if !validUserValue.MatchString(pluginInput.User) {
@@ -330,7 +334,7 @@ func validateInputs(pluginInput DockerContainerPluginInput) (err error) {
 	}
 	validMemoryValue := regexp.MustCompile(`^[0-9]*[bkmg]?$`)
 	if !validMemoryValue.MatchString(pluginInput.Memory) {
-		return errors.New("Invalid CpuShares value")
+		return errors.New("Invalid Memory value")
 	}
 	validPublishValue := regexp.MustCompile(`^[0-9a-zA-Z:\-\/.]*$`)
 	if !validPublishValue.MatchString(pluginInput.Publish) {

@@ -15,95 +15,64 @@
 package interactivecommands
 
 import (
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/session/plugins/sessionplugin"
-	"github.com/aws/amazon-ssm-agent/agent/session/shell"
+	"github.com/aws/amazon-ssm-agent/agent/session/plugins/singlecommand"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-// InteractiveCommandsPlugin is the type for the plugin.
+// InteractiveCommandsPlugin is the type for the sessionPlugin.
 type InteractiveCommandsPlugin struct {
-	shell shell.IShellPlugin
+	context       context.T
+	sessionPlugin sessionplugin.ISessionPlugin
 }
 
 // Returns parameters required for CLI/console to start session
 func (p *InteractiveCommandsPlugin) GetPluginParameters(parameters interface{}) interface{} {
-	return nil
+	return p.sessionPlugin.GetPluginParameters(parameters)
 }
 
 // InteractiveCommands plugin doesn't require handshake to establish session
 func (p *InteractiveCommandsPlugin) RequireHandshake() bool {
-	return false
+	return p.sessionPlugin.RequireHandshake()
 }
 
-// NewPlugin returns a new instance of the Interactive Commands Plugin
-func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	shellPlugin, err := shell.NewPlugin(appconfig.PluginNameInteractiveCommands)
+// NewPlugin returns a new instance of the InteractiveCommands Plugin
+func NewPlugin(context context.T) (sessionplugin.ISessionPlugin, error) {
+	singleCommandPlugin, err := singlecommand.NewPlugin(context, appconfig.PluginNameInteractiveCommands)
 	if err != nil {
 		return nil, err
 	}
 
 	var plugin = InteractiveCommandsPlugin{
-		shell: shellPlugin,
+		context:       context,
+		sessionPlugin: singleCommandPlugin,
 	}
-
 	return &plugin, nil
 }
 
-// name returns the name of Interactive commands Plugin
+// name returns the name of interactive commands Plugin
 func (p *InteractiveCommandsPlugin) name() string {
 	return appconfig.PluginNameInteractiveCommands
 }
 
-// Execute starts pseudo terminal.
-// It reads incoming message from data channel and writes to pty.stdin.
-// It reads message from pty.stdout and writes to data channel
-func (p *InteractiveCommandsPlugin) Execute(context context.T,
-	config agentContracts.Configuration,
+// Execute executes command as passed in from document parameter via pty.stdin.
+// It reads message from cmd.stdout and writes to data channel.
+func (p *InteractiveCommandsPlugin) Execute(config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	dataChannel datachannel.IDataChannel) {
 
-	logger := context.Log()
-	var shellProps mgsContracts.ShellProperties
-	err := jsonutil.Remarshal(config.Properties, &shellProps)
-	logger.Debugf("Plugin properties %v", shellProps)
-	if err != nil {
-		sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
-		output.SetExitCode(appconfig.ErrorExitCode)
-		output.SetStatus(agentContracts.ResultStatusFailed)
-		sessionPluginResultOutput.Output = fmt.Sprintf("Invalid format in session properties %v;\nerror %v", config.Properties, err)
-		output.SetOutput(sessionPluginResultOutput)
-		logger.Error(sessionPluginResultOutput.Output)
-		return
-	}
-
-	if err := p.validateProperties(shellProps); err != nil {
-		sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
-		output.SetExitCode(appconfig.ErrorExitCode)
-		output.SetStatus(agentContracts.ResultStatusFailed)
-		sessionPluginResultOutput.Output = err.Error()
-		output.SetOutput(sessionPluginResultOutput)
-		logger.Error(sessionPluginResultOutput.Output)
-		return
-	}
-
-	// streaming of logs is not supported for interactive commands scenario, set it to false
-	config.CloudWatchStreamingEnabled = false
-
-	p.shell.Execute(context, config, cancelFlag, output, dataChannel, shellProps)
+	p.sessionPlugin.Execute(config, cancelFlag, output, dataChannel)
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin
 func (p *InteractiveCommandsPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
-	return p.shell.InputStreamMessageHandler(log, streamDataMessage)
+	return p.sessionPlugin.InputStreamMessageHandler(log, streamDataMessage)
 }

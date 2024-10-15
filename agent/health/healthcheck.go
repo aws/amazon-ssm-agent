@@ -16,20 +16,28 @@ package health
 
 import (
 	"math/rand"
+	"runtime/debug"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
+
 	"github.com/carlescere/scheduler"
 )
 
 type IHealthCheck interface {
 	ModuleName() string
-	ModuleExecute(context context.T) (err error)
-	ModuleRequestStop(stopType contracts.StopType) (err error)
+	ModuleExecute() (err error)
+	ModuleStop() (err error)
 	GetAgentState() (a AgentState, err error)
 }
 
@@ -48,6 +56,25 @@ const (
 )
 
 var healthModule *HealthCheck
+
+var newEC2Identity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ec2.NewEC2Identity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newECSIdentity = func(log log.T) identity.IAgentIdentityInner {
+	if identityRef := ecs.NewECSIdentity(log); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
+var newOnPremIdentity = func(log log.T, config *appconfig.SsmagentConfig) identity.IAgentIdentityInner {
+	if identityRef := onprem.NewOnPremIdentity(log, config); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
 
 // AgentState enumerates active and passive agentMode
 type AgentState int32
@@ -89,17 +116,47 @@ func (h *HealthCheck) scheduleUpdateHealth() {
 // updates SSM with the instance health information
 func (h *HealthCheck) updateHealth() {
 	log := h.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Update health panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
 	log.Infof("%s reporting agent health.", name)
+
+	appConfig := h.context.AppConfig()
+	var isEC2, isECS, isOnPrem bool
+	var ec2Identity, ecsIdentity identity.IAgentIdentityInner
+	onpremIdentity := newOnPremIdentity(log, &appConfig)
+	isOnPrem = onpremIdentity != nil && onpremIdentity.IsIdentityEnvironment()
+	if !isOnPrem {
+		ec2Identity = newEC2Identity(log)
+		ecsIdentity = newECSIdentity(log)
+		isEC2 = ec2Identity != nil && ec2Identity.IsIdentityEnvironment()
+		isECS = ecsIdentity != nil && ecsIdentity.IsIdentityEnvironment()
+	}
+	var availabilityZone = ""
+	var availabilityZoneId = ""
+	if isEC2 && !isECS && !isOnPrem {
+		availabilityZone, _ = ec2Identity.AvailabilityZone()
+		availabilityZoneId, _ = ec2Identity.AvailabilityZoneId()
+	}
+
+	var ssmConnectionChannel = ""
+	channel := ssmconnectionchannel.GetConnectionChannel()
+	ssmConnectionChannel = string(channel)
+	log.Debugf("got SSM connection channel value: %v", ssmConnectionChannel)
 
 	var err error
 	//TODO when will status become inactive?
 	// If both ssm config and command is inactive => agent is inactive.
-	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName); err != nil {
+	if _, err = h.service.UpdateInstanceInformation(log, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel); err != nil {
 		sdkutil.HandleAwsError(log, err, h.healthCheckStopPolicy)
 	}
 
 	if !h.healthCheckStopPolicy.IsHealthy() {
-		h.service = ssm.NewService(log)
+		h.service = ssm.NewService(h.context)
 		h.healthCheckStopPolicy.ResetErrorCount()
 	}
 
@@ -132,10 +189,10 @@ func (h *HealthCheck) ModuleName() string {
 }
 
 // ModuleExecute starts the scheduling of the health check module
-func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
+func (h *HealthCheck) ModuleExecute() (err error) {
 	defer func() {
 		if msg := recover(); msg != nil {
-			context.Log().Errorf("health check ModuleExecute run panic: %v", msg)
+			h.context.Log().Errorf("health check ModuleExecute run panic: %v", msg)
 		}
 	}()
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -158,8 +215,8 @@ func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
 	return
 }
 
-// ModuleRequestStop handles the termination of the health check module job
-func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error) {
+// ModuleStop handles the termination of the health check module job
+func (h *HealthCheck) ModuleStop() (err error) {
 	if h.healthJob != nil {
 		h.context.Log().Info("stopping update instance health job.")
 		h.healthJob.Quit <- true
@@ -167,10 +224,10 @@ func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error)
 	return nil
 }
 
-//ping sends an empty ping to the health service to identify if the service exists
+// ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
 	if h.healthCheckStopPolicy.HasError() {
-		h.service = ssm.NewService(h.context.Log())
+		h.service = ssm.NewService(h.context)
 		h.healthCheckStopPolicy.ResetErrorCount()
 	}
 

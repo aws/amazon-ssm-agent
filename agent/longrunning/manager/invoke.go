@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -28,7 +28,7 @@ func CreateResult(msg string, status contracts.ResultStatus, res *contracts.Plug
 	return
 }
 
-func Invoke(log logger.T, pluginID string, res *contracts.PluginResult, orchestrationDir string) {
+func Invoke(context context.T, pluginID string, res *contracts.PluginResult, orchestrationDir string) {
 	var lrpm T
 	var err error
 	var startType = res.StandardOutput
@@ -36,6 +36,7 @@ func Invoke(log logger.T, pluginID string, res *contracts.PluginResult, orchestr
 	jsonutil.Remarshal(res.Output, &property)
 	res.StandardOutput = ""
 	res.Output = ""
+	log := context.Log()
 	lrpm, err = GetInstance()
 	var pluginsMap = lrpm.GetRegisteredPlugins()
 	if _, ok := pluginsMap[lrpName]; !ok {
@@ -51,7 +52,7 @@ func Invoke(log logger.T, pluginID string, res *contracts.PluginResult, orchestr
 	//check if plugin is enabled or not - which would be stored in settings
 	switch startType {
 	case "Enabled":
-		enablePlugin(log, orchestrationDir, pluginID, lrpm, cancelFlag, property, res)
+		enablePlugin(context, orchestrationDir, pluginID, lrpm, cancelFlag, property, res)
 
 	case "Disabled":
 		log.Infof("Disabling %s", lrpName)
@@ -75,7 +76,8 @@ func Invoke(log logger.T, pluginID string, res *contracts.PluginResult, orchestr
 	return
 }
 
-func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, lrpm T, cancelFlag task.CancelFlag, property string, res *contracts.PluginResult) {
+func enablePlugin(context context.T, orchestrationDirectory string, pluginID string, lrpm T, cancelFlag task.CancelFlag, property string, res *contracts.PluginResult) {
+	log := context.Log()
 	log.Infof("Enabling %s", lrpName)
 
 	//loading properties as string since aws:cloudWatch uses properties as string. Properties has new configuration for cloudwatch plugin.
@@ -86,14 +88,15 @@ func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, 
 	if err := lrpm.StopPlugin(lrpName, cancelFlag); err != nil {
 		log.Errorf("Unable to stop the plugin - %s: %s", lrpName, err.Error())
 	}
+
 	ioConfig := contracts.IOConfiguration{
 		OrchestrationDirectory: orchestrationDirectory,
 		OutputS3BucketName:     res.OutputS3BucketName,
 		OutputS3KeyPrefix:      res.OutputS3KeyPrefix,
 	}
-	out := iohandler.NewDefaultIOHandler(log, ioConfig)
-	defer out.Close(log)
-	out.Init(log, appconfig.PluginNameCloudWatch)
+	out := iohandler.NewDefaultIOHandler(context, ioConfig)
+	defer out.Close()
+	out.Init(appconfig.PluginNameCloudWatch)
 
 	//start the plugin with the new configuration
 	if err := lrpm.StartPlugin(lrpName, property, orchestrationDirectory, cancelFlag, out); err != nil {
@@ -118,6 +121,6 @@ func enablePlugin(log logger.T, orchestrationDirectory string, pluginID string, 
 			CreateResult("success", contracts.ResultStatusSuccess, res)
 		}
 	}
-	out.Close(log)
+	out.Close()
 	return
 }

@@ -33,8 +33,8 @@ type PluginState struct {
 	IsEnabled                     bool
 }
 
-//PluginInfo reflects information about long running plugins
-//This is also used by lrpm manager to persisting information & then later use it for reference
+// PluginInfo reflects information about long running plugins
+// This is also used by lrpm manager to persisting information & then later use it for reference
 type PluginInfo struct {
 	Name          string
 	Configuration string
@@ -47,19 +47,19 @@ type Plugin struct {
 	Handler LongRunningPlugin
 }
 
-//LongRunningPlugin is the interface that must be implemented by all long running plugins
+// LongRunningPlugin is the interface that must be implemented by all long running plugins
 type LongRunningPlugin interface {
-	IsRunning(context context.T) bool
-	Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error
-	Stop(context context.T, cancelFlag task.CancelFlag) error
+	IsRunning() bool
+	Start(configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error
+	Stop(cancelFlag task.CancelFlag) error
 }
 
-//PluginSettings reflects settings that can be applied to long running plugins like aws:cloudWatch
+// PluginSettings reflects settings that can be applied to long running plugins like aws:cloudWatch
 type PluginSettings struct {
 	StartType string
 }
 
-//LongRunningPluginInput represents input for long running plugin like aws:cloudWatch
+// LongRunningPluginInput represents input for long running plugin like aws:cloudWatch
 type LongRunningPluginInput struct {
 	Settings   PluginSettings
 	Properties string
@@ -136,6 +136,7 @@ func loadDaemonPlugins(context context.T) map[string]Plugin {
 						State:         PluginState{IsEnabled: true},
 					},
 					Handler: &rundaemon.Plugin{
+						Context:     context,
 						ExeLocation: input.PackageLocation,
 						Name:        input.Name,
 						CommandLine: input.Command,

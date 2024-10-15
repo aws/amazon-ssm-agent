@@ -23,7 +23,7 @@ type ManifestCache struct {
 }
 
 // ReadManifest provides a mock function with given fields: packageArn, packageVersion
-func (_m ManifestCache) ReadManifest(packageArn string, packageVersion string) ([]byte, error) {
+func (_m *ManifestCache) ReadManifest(packageArn string, packageVersion string) ([]byte, error) {
 	ret := _m.Called(packageArn, packageVersion)
 
 	var r0 []byte
@@ -46,7 +46,7 @@ func (_m ManifestCache) ReadManifest(packageArn string, packageVersion string) (
 }
 
 // ReadManifestHash provides a mock function with given fields: packageArn, documentVersion
-func (_m ManifestCache) ReadManifestHash(packageArn string, documentVersion string) ([]byte, error) {
+func (_m *ManifestCache) ReadManifestHash(packageArn string, documentVersion string) ([]byte, error) {
 	ret := _m.Called(packageArn, documentVersion)
 
 	var r0 []byte
@@ -69,7 +69,7 @@ func (_m ManifestCache) ReadManifestHash(packageArn string, documentVersion stri
 }
 
 // WriteManifest provides a mock function with given fields: packageArn, packageVersion, content
-func (_m ManifestCache) WriteManifest(packageArn string, packageVersion string, content []byte) error {
+func (_m *ManifestCache) WriteManifest(packageArn string, packageVersion string, content []byte) error {
 	ret := _m.Called(packageArn, packageVersion, content)
 
 	var r0 error
@@ -83,7 +83,7 @@ func (_m ManifestCache) WriteManifest(packageArn string, packageVersion string, 
 }
 
 // DeleteManifest provides a mock function with given fields: packageArn, packageVersion
-func (_m ManifestCache) DeleteManifest(packageArn string, packageVersion string) error {
+func (_m *ManifestCache) DeleteManifest(packageArn string, packageVersion string) error {
 	ret := _m.Called(packageArn, packageVersion)
 
 	var r0 error
@@ -97,7 +97,7 @@ func (_m ManifestCache) DeleteManifest(packageArn string, packageVersion string)
 }
 
 // WriteManifestHash provides a mock function with given fields: packageArn, documentVersion, content
-func (_m ManifestCache) WriteManifestHash(packageArn string, documentVersion string, content []byte) error {
+func (_m *ManifestCache) WriteManifestHash(packageArn string, documentVersion string, content []byte) error {
 	ret := _m.Called(packageArn, documentVersion, content)
 
 	var r0 error

@@ -11,9 +11,10 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
-//winpty package is wrapper package for calling procedures of winpty.dll
+// winpty package is wrapper package for calling procedures of winpty.dll
 package winpty
 
 import (
@@ -32,7 +33,7 @@ type IWinPTY interface {
 	Close() error
 }
 
-//WinPTY contains handlers and pointers needed for launching winpty agent process
+// WinPTY contains handlers and pointers needed for launching winpty agent process
 type WinPTY struct {
 	IWinPTY
 	StdIn  *os.File
@@ -44,7 +45,7 @@ type WinPTY struct {
 	closed        bool
 }
 
-//Start launches winpty agent as a separate process
+// Start launches winpty agent as a separate process
 func Start(winptyDllFilePath, cmdLine string, window_size_cols, window_size_rows uint32, winptyFlag int32) (*WinPTY, error) {
 
 	var winpty WinPTY = WinPTY{}
@@ -71,7 +72,7 @@ func Start(winptyDllFilePath, cmdLine string, window_size_cols, window_size_rows
 	return &winpty, nil
 }
 
-//configureAgent configures agent and sets initial window size.
+// configureAgent configures agent and sets initial window size.
 func (winpty *WinPTY) configureAgent(window_size_cols, window_size_rows uint32, winptyFlag int32) (err error) {
 	var errorPtr uintptr
 	defer winpty_error_free.Call(errorPtr)
@@ -99,7 +100,7 @@ func (winpty *WinPTY) configureAgent(window_size_cols, window_size_rows uint32, 
 	return nil
 }
 
-//startAgent launches winpty agent.
+// startAgent launches winpty agent.
 func (winpty *WinPTY) startAgent() (err error) {
 	var errorPtr uintptr
 	defer winpty_error_free.Call(errorPtr)
@@ -117,7 +118,7 @@ func (winpty *WinPTY) startAgent() (err error) {
 	return nil
 }
 
-//getIOPipes gets handle for stdin and stdout.
+// getIOPipes gets handle for stdin and stdout.
 func (winpty *WinPTY) getIOPipes() (err error) {
 	conin_name, _, lastErr := winpty_conin_name.Call(winpty.agent)
 	if conin_name == uintptr(NIL_POINTER_VALUE) {
@@ -162,7 +163,7 @@ func (winpty *WinPTY) getIOPipes() (err error) {
 	return nil
 }
 
-//spawnProcess creates a new winpty agent process.
+// spawnProcess creates a new winpty agent process.
 func (winpty *WinPTY) spawnProcess(cmdLine string) (err error) {
 	var errorPtr uintptr
 	defer winpty_error_free.Call(errorPtr)
@@ -214,7 +215,7 @@ func (winpty *WinPTY) spawnProcess(cmdLine string) (err error) {
 	return nil
 }
 
-//SetSize sets given console window size.
+// SetSize sets given console window size.
 func (winpty *WinPTY) SetSize(ws_col, ws_row uint32) (err error) {
 	var errorPtr uintptr
 	defer winpty_error_free.Call(errorPtr)
@@ -238,7 +239,7 @@ func (winpty *WinPTY) SetSize(ws_col, ws_row uint32) (err error) {
 	return nil
 }
 
-//Close closes stdin, stdout and winpty process handle.
+// Close closes stdin, stdout and winpty process handle.
 func (winpty *WinPTY) Close() (err error) {
 	if winpty == nil || winpty.closed {
 		return
@@ -262,7 +263,7 @@ func (winpty *WinPTY) Close() (err error) {
 	return nil
 }
 
-//getWinptyErrorMessage returns string error message for given error pointer.
+// getWinptyErrorMessage returns string error message for given error pointer.
 func (winpty *WinPTY) getWinptyErrorMessage(winptyErr uintptr) string {
 	winptyErrorMsgPtr, _, lastErr := winpty_error_msg.Call(winptyErr)
 	if winptyErrorMsgPtr == uintptr(NIL_POINTER_VALUE) {
@@ -271,7 +272,7 @@ func (winpty *WinPTY) getWinptyErrorMessage(winptyErr uintptr) string {
 	return convertUTF16PtrToString((*uint16)(unsafe.Pointer(winptyErrorMsgPtr)))
 }
 
-//getWinptyErrorCode gets winpty error code for give error pointer.
+// getWinptyErrorCode gets winpty error code for give error pointer.
 func (winpty *WinPTY) getWinptyErrorCode(winptyErr uintptr) (errCode uint32, err error) {
 	winptyErrorCodePtr, _, lastErr := winpty_error_code.Call(uintptr(unsafe.Pointer(&winptyErr)))
 	if winptyErrorCodePtr == uintptr(NIL_POINTER_VALUE) {
@@ -283,7 +284,7 @@ func (winpty *WinPTY) getWinptyErrorCode(winptyErr uintptr) (errCode uint32, err
 	return *(*uint32)(unsafe.Pointer(winptyErrorCodePtr)), nil
 }
 
-//convertUTF16PtrToString converts utf16 pointer to string
+// convertUTF16PtrToString converts utf16 pointer to string
 func convertUTF16PtrToString(UTF16Ptr *uint16) string {
 
 	var inputStrChar uint16
@@ -301,7 +302,7 @@ func convertUTF16PtrToString(UTF16Ptr *uint16) string {
 	}
 }
 
-//getWindowsErrorMessage fetches windows error message for given error code
+// getWindowsErrorMessage fetches windows error message for given error code
 func getWindowsErrorMessage(errorCode uint32) string {
 	flags := uint32(windows.FORMAT_MESSAGE_FROM_SYSTEM | windows.FORMAT_MESSAGE_IGNORE_INSERTS)
 	langId := uint32(windows.SUBLANG_ENGLISH_US)<<10 | uint32(windows.LANG_ENGLISH)
@@ -314,7 +315,7 @@ func getWindowsErrorMessage(errorCode uint32) string {
 	return strings.TrimSpace(syscall.UTF16ToString(buf))
 }
 
-//getFormattedErrorMessage returns formatted error containing custom error string, syscall error and winpty error
+// getFormattedErrorMessage returns formatted error containing custom error string, syscall error and winpty error
 func (winpty *WinPTY) getFormattedErrorMessage(errString string, syscallErr error, winptyErr uintptr) (err error) {
 	return fmt.Errorf(
 		"%s Error returned by syscall: %s Error returned by winpty: %s",

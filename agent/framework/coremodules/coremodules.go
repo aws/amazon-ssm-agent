@@ -19,13 +19,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
+	"github.com/aws/amazon-ssm-agent/agent/messageservice"
 	"github.com/aws/amazon-ssm-agent/agent/runcommand"
-	"github.com/aws/amazon-ssm-agent/agent/session"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
 
 // ModuleRegistry stores a set of core modules.
-type ModuleRegistry []contracts.ICoreModule
+type ModuleRegistry []contracts.ICoreModuleWrapper
 
 // registeredCoreModules stores the registered core modules.
 var registeredCoreModules ModuleRegistry
@@ -41,16 +41,17 @@ func RegisteredCoreModules(context context.T) *ModuleRegistry {
 // register core modules here
 func loadCoreModules(context context.T) {
 	if !context.AppConfig().Agent.ContainerMode {
-		registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context, ssm.NewService(context.Log())))
-		registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
+		registeredCoreModules = append(registeredCoreModules, NewCoreModuleWrapper(context.Log(), health.NewHealthCheck(context, ssm.NewService(context))))
 	}
-	sessionCoreModule := session.NewSession(context)
-	if sessionCoreModule != nil {
-		registeredCoreModules = append(registeredCoreModules, sessionCoreModule)
+
+	messageServiceCoreModule := messageservice.NewService(context)
+	if messageServiceCoreModule != nil {
+		registeredCoreModules = append(registeredCoreModules, NewCoreModuleWrapper(context.Log(), messageServiceCoreModule))
 	}
+
 	if !context.AppConfig().Agent.ContainerMode {
 		if offlineProcessor, err := runcommand.NewOfflineService(context); err == nil {
-			registeredCoreModules = append(registeredCoreModules, offlineProcessor)
+			registeredCoreModules = append(registeredCoreModules, NewCoreModuleWrapper(context.Log(), offlineProcessor))
 		} else {
 			context.Log().Errorf("Failed to start offline command document processor")
 		}
@@ -58,7 +59,7 @@ func loadCoreModules(context context.T) {
 		// registering the long running plugin manager as a core module
 		manager.EnsureInitialization(context)
 		if lrpm, err := manager.GetInstance(); err == nil {
-			registeredCoreModules = append(registeredCoreModules, lrpm)
+			registeredCoreModules = append(registeredCoreModules, NewCoreModuleWrapper(context.Log(), lrpm))
 		} else {
 			context.Log().Errorf("Something went wrong during initialization of long running plugin manager")
 		}

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build linux
 // +build linux
 
 package startup
@@ -38,6 +39,7 @@ const (
 
 // IsAllowed returns true if the current environment allows startup processor.
 func (p *Processor) IsAllowed() bool {
+	// TODO: Check if is EC2 identity type instead of calling imds, first confirm if onprem on ec2 should be allowed
 	// check if metadata is reachable which indicates the instance is in EC2.
 	// maximum retry is 10 to ensure the failure/error is not caused by arbitrary reason.
 	ec2MetadataService := ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(10)))

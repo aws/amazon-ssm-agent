@@ -17,6 +17,7 @@ package retry
 import (
 	"math"
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -34,6 +35,7 @@ type ExponentialRetryer struct {
 	InitialDelayInMilli int
 	MaxDelayInMilli     int
 	MaxAttempts         int
+	NonRetryableErrors  []string
 }
 
 // Init initializes the retryer
@@ -63,7 +65,7 @@ func (retryer *ExponentialRetryer) Call() (channel interface{}, err error) {
 	failedAttemptsSoFar := 0
 	for {
 		channel, err := retryer.CallableFunc()
-		if err == nil || failedAttemptsSoFar == retryer.MaxAttempts {
+		if err == nil || failedAttemptsSoFar == retryer.MaxAttempts || retryer.isNonRetryableError(err) {
 			return channel, err
 		}
 		sleep, exceedMaxDelay := retryer.NextSleepTime(attempt)
@@ -73,4 +75,14 @@ func (retryer *ExponentialRetryer) Call() (channel interface{}, err error) {
 		time.Sleep(sleep)
 		failedAttemptsSoFar++
 	}
+}
+
+// isNonRetryableError returns true if passed error is in the list of NonRetryableErrors
+func (retryer *ExponentialRetryer) isNonRetryableError(err error) bool {
+	for _, nonRetryableError := range retryer.NonRetryableErrors {
+		if strings.Contains(err.Error(), nonRetryableError) {
+			return true
+		}
+	}
+	return false
 }

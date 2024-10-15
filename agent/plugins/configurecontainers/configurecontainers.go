@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -35,6 +36,7 @@ const (
 
 // Plugin is the type for the plugin.
 type Plugin struct {
+	context context.T
 	// ExecuteCommand is an object that can execute commands.
 	CommandExecuter executers.T
 }
@@ -47,11 +49,11 @@ type ConfigureContainerPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	plugin.CommandExecuter = executers.ShellCommandExecuter{}
-
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context:         context,
+		CommandExecuter: executers.ShellCommandExecuter{},
+	}, nil
 }
 
 // Name returns the name of the plugin
@@ -59,8 +61,8 @@ func Name() string {
 	return appconfig.PluginNameConfigureDocker
 }
 
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 
 	if cancelFlag.ShutDown() {
@@ -92,6 +94,10 @@ func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput 
 func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	var err error
 
+	if !pluginutil.ValidatePluginId(pluginInput.ID) {
+		pluginInput.ID = ""
+	}
+
 	// TODO:MF: This subdirectory is only needed because we could be running multiple sets of properties for the same plugin - otherwise the orchestration directory would already be unique
 	orchestrationDir := fileutil.BuildPath(orchestrationDirectory, pluginInput.ID)
 	log.Debugf("OrchestrationDir %v ", orchestrationDir)
@@ -106,9 +112,9 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput ConfigureCo
 	log.Info("********************************starting configure Docker plugin**************************************")
 	switch pluginInput.Action {
 	case INSTALL:
-		runInstallCommands(log, pluginInput, orchestrationDir, output)
+		runInstallCommands(p.context, pluginInput, orchestrationDir, output)
 	case UNINSTALL:
-		runUninstallCommands(log, pluginInput, orchestrationDir, output)
+		runUninstallCommands(p.context, pluginInput, orchestrationDir, output)
 
 	default:
 		output.MarkAsFailed(fmt.Errorf("configure Action is set to unsupported value: %v", pluginInput.Action))

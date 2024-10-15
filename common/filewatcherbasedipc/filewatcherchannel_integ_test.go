@@ -11,21 +11,20 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build integration
 // +build integration
 
-//Package channel defines and implements the communication interface between agent and command runner process
+// Package channel defines and implements the communication interface between agent and command runner process
 package filewatcherbasedipc
 
 import (
-	"testing"
-	"time"
-
-	"errors"
 	"os"
 	"path"
 	"path/filepath"
+	"testing"
+	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -69,7 +68,7 @@ func TestChannelDuplexTransmission(t *testing.T) {
 
 }
 
-//agent channel is reopened, and starts receiving only after re-open
+// agent channel is reopened, and starts receiving only after re-open
 func TestChannelReopen(t *testing.T) {
 	done := make(chan bool)
 	agentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster, path.Join(defaultRootDir, channelName), false)
@@ -100,7 +99,7 @@ func TestChannelReopen(t *testing.T) {
 	newAgentChannel.Destroy()
 }
 
-//verify the given set of messages are received
+// verify the given set of messages are received
 func verifyReceive(t *testing.T, ch IPCChannel, messages []string, name string, done chan bool) {
 
 	//timer := time.After(5 * time.Second)
@@ -113,7 +112,7 @@ func verifyReceive(t *testing.T, ch IPCChannel, messages []string, name string, 
 	done <- true
 }
 
-//send a given set of messages
+// send a given set of messages
 func send(ch IPCChannel, messages []string, name string) {
 
 	for _, testMsg := range messages {
@@ -130,7 +129,6 @@ func TestReadFile(t *testing.T) {
 	}()
 
 	fd, err := os.Create(filePath)
-	osStatFn = os.Stat
 
 	assert.Nil(t, err)
 	fileBytes := []byte("sample content1")
@@ -147,7 +145,6 @@ func TestReadFileWithRetry(t *testing.T) {
 	defer func() {
 		os.Remove(filePath)
 	}()
-	osStatFn = os.Stat
 	fd, err := os.Create(filePath)
 	assert.Nil(t, err)
 	fileBytes := []byte("sample content2")
@@ -159,23 +156,29 @@ func TestReadFileWithRetry(t *testing.T) {
 	assert.Equal(t, string(output), string(fileBytes))
 }
 
-// Test case for reading file through retry and produce error
+// Using no file to simulate read failure.
 func TestReadFileRetryWithError(t *testing.T) {
+	_, err := fileReadWithRetry(filePath)
+	assert.NotNil(t, err)
+}
+
+func createFileAfterTwoSeconds(content string) {
+	time.Sleep(2 * time.Second)
+	fd, _ := os.Create(filePath)
+	fileBytes := []byte(content)
+	fd.Write(fileBytes)
+	fd.Close()
+}
+
+// Test case for reading file through retry and file become
+// available after a few seconds.
+func TestReadFileRetryThenSucceed(t *testing.T) {
 	defer func() {
 		os.Remove(filePath)
 	}()
-	dummyError := "dummy error"
-	osStatFn = func(name string) (info os.FileInfo, err error) {
-		return info, errors.New("dummy error")
-	}
-
-	fd, err := os.Create(filePath)
+	content := "sample content3"
+	go createFileAfterTwoSeconds(content)
+	output, err := fileReadWithRetry(filePath)
 	assert.Nil(t, err)
-	fileBytes := []byte("sample content3")
-	fd.Write(fileBytes)
-	fd.Close()
-
-	_, err = fileReadWithRetry(filePath)
-	assert.NotNil(t, err)
-	assert.Equal(t, err.Error(), dummyError)
+	assert.Equal(t, string(output), string(content))
 }

@@ -17,6 +17,7 @@ package runcommand
 import (
 	"fmt"
 	"math/rand"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -58,12 +59,23 @@ func (s *RunCommandService) sendReplyLoop() {
 
 // loop reads messages from MDS then processes them.
 func (s *RunCommandService) messagePollLoop() {
+	log := s.context.Log()
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("message poll loop panic: %v", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+	s.messagePollWaitGroup.Add(1)
+	defer s.messagePollWaitGroup.Done()
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
+	if s.name == mdsName {
+		log.Debug("Starting message poll")
+	}
 	updateLastPollTime(s.name, pollStartTime)
 
-	log := s.context.Log()
 	if err := s.checkStopPolicy(log); err != nil {
 		return
 	}
@@ -82,9 +94,13 @@ func (s *RunCommandService) messagePollLoop() {
 
 	// check if any other poll loop has started in the meantime
 	// to prevent any possible race condition due to the scheduler
-	if getLastPollTime(s.name) == pollStartTime {
+	if pollStartTime.Equal(getLastPollTime(s.name)) {
 		// skip waiting for the next scheduler polling event and start polling immediately
 		scheduleNextRun(s.messagePollJob)
+	} else {
+		if s.name == mdsName {
+			log.Debugf("Other message poll already started at %v, scheduler wait will not be skipped", getLastPollTime(s.name))
+		}
 	}
 }
 
@@ -118,32 +134,36 @@ func (s *RunCommandService) reset() {
 
 	// creating a new mds service object for the retry
 	// this is extra insurance to avoid service object getting corrupted - adding resiliency
-	config := s.context.AppConfig()
 	if s.name == mdsName {
-		s.service = newMdsService(log, config)
+		s.service = newMdsService(s.context)
 	}
 }
 
 // Stop stops the message poller.
 func (s *RunCommandService) stop() {
 	log := s.context.Log()
-	log.Debugf("Stopping processor:%v", s.name)
-	s.service.Stop()
+	log.Debugf("Stopping module:%v", s.name)
 
+	// Ask scheduler not to schedule more jobs
 	if s.messagePollJob != nil {
 		s.messagePollJob.Quit <- true
 	}
 	if s.sendReplyJob != nil {
 		s.sendReplyJob.Quit <- true
 	}
+
+	// Stop any ongoing calls
+	s.service.Stop()
+
+	// Wait for ongoing messagePoll loops to terminate
+	log.Debugf("Waiting for polling function to return")
+	s.messagePollWaitGroup.Wait()
+	log.Debugf("ended message poll wait")
 }
 
 // pollOnce calls GetMessages once and processes the result.
 func (s *RunCommandService) pollOnce() {
 	log := s.context.Log()
-	if s.name == mdsName {
-		log.Debugf("Polling for messages")
-	}
 	messages, err := s.service.GetMessages(log, s.config.InstanceID)
 	if err != nil {
 		sdkutil.HandleAwsError(log, err, s.processorStopPolicy)
@@ -157,6 +177,6 @@ func (s *RunCommandService) pollOnce() {
 		processMessage(s, msg)
 	}
 	if s.name == mdsName {
-		log.Debugf("Done poll once")
+		log.Debugf("Finished message poll")
 	}
 }

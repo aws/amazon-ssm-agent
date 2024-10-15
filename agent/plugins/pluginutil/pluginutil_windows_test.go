@@ -13,6 +13,7 @@
 //
 // Package pluginutil implements some common functions shared by multiple plugins.
 //
+//go:build windows
 // +build windows
 
 package pluginutil
@@ -22,7 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -41,14 +42,14 @@ var TestCases = []TestCase{
 		Output: contracts.ResultStatusSuccessAndReboot,
 	},
 	{
-		Input:  commandStoppedPreemptivelyExitCode,
+		Input:  appconfig.CommandStoppedPreemptivelyExitCode,
 		Output: contracts.ResultStatusTimedOut,
 	},
 }
 
 // testGetStatus tests that exitCodes are mapped correctly to their respective ResultStatus
 func TestGetStatus(t *testing.T) {
-	var mockCancelFlag *task.MockCancelFlag
+	var mockCancelFlag = &task.MockCancelFlag{}
 	setCancelFlagExpectations(mockCancelFlag)
 
 	for _, testCase := range TestCases {

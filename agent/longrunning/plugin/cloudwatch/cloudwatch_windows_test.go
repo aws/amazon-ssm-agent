@@ -11,22 +11,27 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package cloudwatch implements cloudwatch plugin and its configuration
 package cloudwatch
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"strings"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/executers"
+	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
+	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/executers"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
+
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -43,11 +48,22 @@ var pluginConfig = iohandler.PluginConfig{
 // TestStartFailFileNotExist tests the Start method, which returns nil when start the executable file successfully.
 func TestStartSuccess(t *testing.T) {
 	context := context.NewMockDefault()
-	cancelFlag := task.NewMockDefault()
-	execMock := new(mock.Mock)
+	cancelFlag := taskmocks.NewMockDefault()
+	execMock := &executers.MockCommandExecuter{}
 	stdout := strings.NewReader("False")
 	stderr := strings.NewReader("")
+	ioHandler := &iohandlermocks.MockIOHandler{}
+	testPid := 1986
+	findProcessCalled := false
+	killProcessCalled := false
+	process := &os.Process{
+		Pid: testPid,
+	}
 
+	cancelFlag.On("Wait").Return(task.Completed)
+	cancelFlag.On("Canceled").Return(false)
+	ioHandler.On("GetStdoutWriter").Return(&multiwritermock.MockDocumentIOMultiWriter{})
+	ioHandler.On("GetStderrWriter").Return(&multiwritermock.MockDocumentIOMultiWriter{})
 	execMock.On("Execute", mock.Anything,
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
@@ -55,42 +71,40 @@ func TestStartSuccess(t *testing.T) {
 		mock.Anything,
 		mock.AnythingOfType("int"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
 
 	execMock.On("StartExe", mock.Anything,
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
 		mock.Anything,
-		mock.AnythingOfType("int"),
+		mock.Anything,
+		mock.Anything,
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
+		mock.AnythingOfType("[]string")).Return(process, 0, nil)
 
 	fileExist = func(filePath string) bool {
 		return true
 	}
 
-	createScript = func(log.T, string, []string) error {
+	findProcess = func(pid int) (*os.Process, error) {
+		findProcessCalled = true
+		assert.Equal(t, testPid, pid)
+		return process, nil
+	}
+
+	killProcess = func(p *os.Process) error {
+		killProcessCalled = true
+		assert.Equal(t, testPid, p.Pid)
 		return nil
 	}
 
-	getInstanceId = func() (string, error) {
-		return "i-0123456789", nil
-	}
-
-	getRegion = func() (string, error) {
-		return "us-east-1", nil
-	}
-
-	var execVar = executers.MockCommandExecuter{*execMock}
-	getProcess = execVar.GetProcess
-	startExe = execVar.StartExe
-	waitExe = execVar.Execute
-
-	var p, _ = NewPlugin(pluginConfig)
-	res := p.Start(context, "", "C:\\abc", cancelFlag)
+	p, _ := NewPlugin(context, pluginConfig)
+	p.CommandExecuter = execMock
+	res := p.Start("", "C:\\abc", cancelFlag, ioHandler)
 
 	assert.Equal(t, nil, res)
+	assert.False(t, findProcessCalled)
+	assert.False(t, killProcessCalled)
 }
 
 // TestStartFailFileNotExist tests the Start method, which returns error when system cannot find the executable file.
@@ -98,40 +112,49 @@ func TestStartFailFileNotExist(t *testing.T) {
 	fileExist = func(filePath string) bool {
 		return false
 	}
+	ioHandler := &iohandlermocks.MockIOHandler{}
 	context := context.NewMockDefault()
-	cancelFlag := task.NewMockDefault()
-	var p, _ = NewPlugin(pluginConfig)
-	res := p.Start(context, "", "", cancelFlag)
-	expectErr := errors.New("Unable to locate cloudwatch.exe")
+	cancelFlag := taskmocks.NewMockDefault()
+
+	p, _ := NewPlugin(context, pluginConfig)
+	res := p.Start("", "", cancelFlag, ioHandler)
+	expectErr := errors.New("unable to locate cloudwatch.exe")
 	assert.Equal(t, expectErr, res)
 }
 
-// TestStopFail tests the Stop method, which returns false when stops the executable successfully.
 func TestStopSuccess(t *testing.T) {
-	cancelFlag := task.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
 	context := context.NewMockDefault()
-	var p, _ = NewPlugin(pluginConfig)
-	var process = os.Process{
-		Pid: 1986,
+	execMock := &executers.MockCommandExecuter{}
+
+	testPid := 1986
+	findProcessCalled := false
+	killProcessCalled := false
+	cwProcInfo := CloudwatchProcessInfo{
+		PId: testPid,
 	}
 
-	p.Process = process
-	res := p.Stop(context, cancelFlag)
-	assert.Equal(t, nil, res)
-}
-
-// TestStopFail tests the Stop method, which returns false when cannot stop the executable successfully.
-func TestStopFail(t *testing.T) {
-	cancelFlag := task.NewMockDefault()
-	context := context.NewMockDefault()
-	var p, _ = NewPlugin(pluginConfig)
-	var process = os.Process{
-		Pid: 0,
-	}
-
-	execMock := new(mock.Mock)
-	stdout := strings.NewReader("Process not found")
+	procInfoJSON, _ := json.Marshal(cwProcInfo)
+	stdout := strings.NewReader(string(procInfoJSON))
 	stderr := strings.NewReader("")
+
+	p, _ := NewPlugin(context, pluginConfig)
+	process := &os.Process{
+		Pid: testPid,
+	}
+
+	findProcess = func(pid int) (*os.Process, error) {
+		findProcessCalled = true
+		assert.Equal(t, testPid, pid)
+		return process, nil
+	}
+
+	killProcess = func(p *os.Process) error {
+		killProcessCalled = true
+		assert.Equal(t, testPid, p.Pid)
+		return nil
+	}
+
 	execMock.On("Execute", mock.Anything,
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
@@ -139,23 +162,128 @@ func TestStopFail(t *testing.T) {
 		mock.Anything,
 		mock.AnythingOfType("int"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
 
-	var execVar = executers.MockCommandExecuter{*execMock}
-	waitExe = execVar.Execute
-
+	p.CommandExecuter = execMock
 	p.Process = process
-	res := p.Stop(context, cancelFlag)
-	cloudwatchProcessName := "EC2Config.CloudWatch"
-	expectErr := errors.New(fmt.Sprintf("%s is not running", cloudwatchProcessName))
-	assert.Equal(t, expectErr, res)
+	res := p.Stop(cancelFlag)
+	assert.Equal(t, nil, res)
+	assert.True(t, findProcessCalled)
+	assert.True(t, killProcessCalled)
+}
+
+func TestStopFail_FailedToFindCloudWatchProcess(t *testing.T) {
+	cancelFlag := taskmocks.NewMockDefault()
+	context := context.NewMockDefault()
+	execMock := &executers.MockCommandExecuter{}
+
+	testPid := 1986
+	findProcessCalled := false
+	killProcessCalled := false
+	cwProcInfo := CloudwatchProcessInfo{
+		PId: testPid,
+	}
+
+	procInfoJSON, _ := json.Marshal(cwProcInfo)
+	stdout := strings.NewReader(string(procInfoJSON))
+	stderr := strings.NewReader("")
+
+	p, _ := NewPlugin(context, pluginConfig)
+	process := &os.Process{
+		Pid: testPid,
+	}
+
+	findProcess = func(pid int) (*os.Process, error) {
+		findProcessCalled = true
+		assert.Equal(t, testPid, pid)
+		return nil, fmt.Errorf("failed to find process with pid %v", pid)
+	}
+
+	killProcess = func(p *os.Process) error {
+		killProcessCalled = true
+		return nil
+	}
+
+	execMock.On("Execute", mock.Anything,
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.Anything,
+		mock.AnythingOfType("int"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
+
+	p.CommandExecuter = execMock
+	p.Process = process
+	res := p.Stop(cancelFlag)
+	assert.NotNil(t, res)
+	assert.Contains(t, res.Error(), "failed to find process CloudWatch process")
+	assert.True(t, findProcessCalled)
+	assert.False(t, killProcessCalled)
+}
+
+func TestStopFail_FailedToKillProcess(t *testing.T) {
+	cancelFlag := taskmocks.NewMockDefault()
+	context := context.NewMockDefault()
+	execMock := &executers.MockCommandExecuter{}
+	expProcessKillError := errors.New("failed to kill process")
+
+	testPid := 1986
+	findProcessCalled := false
+	killProcessCalled := false
+	cwProcInfo := CloudwatchProcessInfo{
+		PId: testPid,
+	}
+
+	procInfoJSON, _ := json.Marshal(cwProcInfo)
+	stdout := strings.NewReader(string(procInfoJSON))
+	stderr := strings.NewReader("")
+
+	p, _ := NewPlugin(context, pluginConfig)
+	process := &os.Process{
+		Pid: testPid,
+	}
+
+	findProcess = func(pid int) (*os.Process, error) {
+		findProcessCalled = true
+		assert.Equal(t, testPid, pid)
+		return process, nil
+	}
+
+	killProcess = func(p *os.Process) error {
+		killProcessCalled = true
+		assert.Equal(t, testPid, p.Pid)
+		return expProcessKillError
+	}
+
+	execMock.On("Execute", mock.Anything,
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.Anything,
+		mock.AnythingOfType("int"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
+
+	p.CommandExecuter = execMock
+	p.Process = process
+	res := p.Stop(cancelFlag)
+	assert.NotNil(t, res)
+	assert.Equal(t, expProcessKillError, res)
+	assert.True(t, findProcessCalled)
+	assert.True(t, killProcessCalled)
 }
 
 // TestIsCloudWatchExeRunning tests the IsCloudWatchExeRunning method, which returns true when the cloud watch exe is running.
 func TestIsCloudWatchExeRunningTrue(t *testing.T) {
-	mocklog := log.NewMockLog()
-	cancelFlag := task.NewMockDefault()
-	execMock := new(mock.Mock)
+	context := context.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
+	cancelFlag.On("Wait").Return(task.Completed)
+	cancelFlag.On("Canceled").Return(false)
+	execMock := &executers.MockCommandExecuter{}
 	stdout := strings.NewReader("True")
 	stderr := strings.NewReader("")
 
@@ -166,34 +294,25 @@ func TestIsCloudWatchExeRunningTrue(t *testing.T) {
 		mock.Anything,
 		mock.AnythingOfType("int"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
 
 	fileExist = func(filePath string) bool {
 		return true
 	}
 
-	createScript = func(log.T, string, []string) error {
-		return nil
-	}
-
-	//readPrefix = func(io.Reader, int, string) (string, error) {
-	//	return "True", nil
-	//}
-
-	var execVar = executers.MockCommandExecuter{*execMock}
-	startExe = execVar.StartExe
-	waitExe = execVar.Execute
-
-	var p, _ = NewPlugin(pluginConfig)
-	res := p.IsCloudWatchExeRunning(mocklog, "", "", cancelFlag)
+	var p, _ = NewPlugin(context, pluginConfig)
+	p.CommandExecuter = execMock
+	res := p.IsCloudWatchExeRunning("", "", cancelFlag)
 	assert.True(t, res)
 }
 
 // TestIsCloudWatchExeRunning tests the IsCloudWatchExeRunning method, which returns false when the cloud watch exe is not running.
 func TestIsCloudWatchExeRunningFalse(t *testing.T) {
-	mocklog := log.NewMockLog()
-	cancelFlag := task.NewMockDefault()
-	execMock := new(mock.Mock)
+	cancelFlag := taskmocks.NewMockDefault()
+	cancelFlag.On("Wait").Return(task.Completed)
+	cancelFlag.On("Canceled").Return(false)
+	execMock := &executers.MockCommandExecuter{}
 	stdout := strings.NewReader("False")
 	stderr := strings.NewReader("")
 
@@ -204,67 +323,33 @@ func TestIsCloudWatchExeRunningFalse(t *testing.T) {
 		mock.Anything,
 		mock.AnythingOfType("int"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
 
 	fileExist = func(filePath string) bool {
 		return true
 	}
 
-	createScript = func(log.T, string, []string) error {
-		return nil
-	}
-
-	var execVar = executers.MockCommandExecuter{*execMock}
-	startExe = execVar.StartExe
-	waitExe = execVar.Execute
-
-	var p, _ = NewPlugin(pluginConfig)
-	res := p.IsCloudWatchExeRunning(mocklog, "", "", cancelFlag)
+	var p, _ = NewPlugin(context.NewMockDefault(), pluginConfig)
+	res := p.IsCloudWatchExeRunning("", "", cancelFlag)
 	assert.False(t, res)
 
 }
 
-// TestGetPidOfCloudWatchExe tests the GetPidOfCloudWatchExe method when the result is Process not found.
-func TestGetPidOfCloudWatchExeNotProcess(t *testing.T) {
-	mocklog := log.NewMockLog()
-	cancelFlag := task.NewMockDefault()
-	execMock := new(mock.Mock)
-	stdout := strings.NewReader("Process not found")
-	stderr := strings.NewReader("")
-	execMock.On("Execute", mock.Anything,
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("string"),
-		mock.Anything,
-		mock.AnythingOfType("int"),
-		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
-
-	var execVar = executers.MockCommandExecuter{*execMock}
-	startExe = execVar.StartExe
-	waitExe = execVar.Execute
-
-	fileExist = func(filePath string) bool {
-		return true
-	}
-
-	createScript = func(log.T, string, []string) error {
-		return nil
-	}
-	cloudwatchProcessName := "EC2Config.CloudWatch"
-	expectErr := errors.New(fmt.Sprintf("%s is not running", cloudwatchProcessName))
-	var p, _ = NewPlugin(pluginConfig)
-	pid, err := p.GetPidOfCloudWatchExe(mocklog, "", "", cancelFlag)
-	assert.Equal(t, 0, pid)
-	assert.Equal(t, expectErr, err)
-}
-
 // TestGetPidOfCloudWatchExe tests the GetPidOfCloudWatchExe method, which returns if the said plugin is running or not.
 func TestGetPidOfCloudWatchExeSuccess(t *testing.T) {
-	mocklog := log.NewMockLog()
-	cancelFlag := task.NewMockDefault()
-	execMock := new(mock.Mock)
-	stdout := strings.NewReader("1978")
+	context := context.NewMockDefault()
+	cancelFlag := taskmocks.NewMockDefault()
+	cancelFlag.On("Wait").Return(task.Completed)
+	cancelFlag.On("Canceled").Return(false)
+	execMock := &executers.MockCommandExecuter{}
+	testPid := 1978
+	cwProcInfo := CloudwatchProcessInfo{
+		PId: testPid,
+	}
+
+	procInfoJSON, _ := json.Marshal(cwProcInfo)
+	stdout := strings.NewReader(string(procInfoJSON))
 	stderr := strings.NewReader("")
 	execMock.On("Execute", mock.Anything,
 		mock.AnythingOfType("string"),
@@ -273,21 +358,17 @@ func TestGetPidOfCloudWatchExeSuccess(t *testing.T) {
 		mock.Anything,
 		mock.AnythingOfType("int"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("[]string")).Return(stdout, stderr, 0, []error{})
-
-	var execVar = executers.MockCommandExecuter{*execMock}
-	startExe = execVar.StartExe
-	waitExe = execVar.Execute
+		mock.AnythingOfType("[]string"),
+		mock.AnythingOfType("map[string]string")).Return(stdout, stderr, 0, []error{})
 
 	fileExist = func(filePath string) bool {
 		return true
 	}
 
-	createScript = func(log.T, string, []string) error {
-		return nil
-	}
-
-	var p, _ = NewPlugin(pluginConfig)
-	pid, _ := p.GetPidOfCloudWatchExe(mocklog, "", "", cancelFlag)
-	assert.Equal(t, 1978, pid)
+	var p, _ = NewPlugin(context, pluginConfig)
+	p.CommandExecuter = execMock
+	procInfos, _ := p.GetProcInfoOfCloudWatchExe("", "", cancelFlag)
+	assert.NotNil(t, procInfos)
+	assert.Equal(t, 1, len(procInfos))
+	assert.Equal(t, 1978, procInfos[0].PId)
 }

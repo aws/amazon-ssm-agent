@@ -17,7 +17,7 @@
 package mock
 
 import (
-	"github.com/go-git/go-git"
+	"github.com/go-git/go-git/v5"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -25,7 +25,7 @@ type GitWorktreeMock struct {
 	mock.Mock
 }
 
-func (gitWorktree GitWorktreeMock) Checkout(opts *git.CheckoutOptions) error {
+func (gitWorktree *GitWorktreeMock) Checkout(opts *git.CheckoutOptions) error {
 	args := gitWorktree.Called(opts)
 	return args.Error(0)
 }

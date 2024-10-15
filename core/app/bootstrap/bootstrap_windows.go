@@ -11,11 +11,20 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 package bootstrap
 
+import (
+	"github.com/aws/amazon-ssm-agent/agent/log"
+)
+
 // windows uses named pipeline and store under root, creating IPC folder is not needed
 func (bs *Bootstrap) createIPCFolder() error {
 	return nil
+}
+
+func (bs *Bootstrap) updateSSMUserShellProperties(logger log.T) {
+	return
 }

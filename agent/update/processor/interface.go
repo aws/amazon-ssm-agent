@@ -16,48 +16,64 @@
 package processor
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 )
 
 // T represents the interface for agent update
 type T interface {
 	// StartOrResumeUpdate starts/resumes update.
-	StartOrResumeUpdate(log log.T, context *UpdateContext) (err error)
+	StartOrResumeUpdate(log log.T, updateDetail *UpdateDetail) (err error)
 
-	// InitializeUpdate initializes update, creates update context
-	InitializeUpdate(log log.T, detail *UpdateDetail) (context *UpdateContext, err error)
+	// InitializeUpdate initializes update
+	InitializeUpdate(log log.T, detail *UpdateDetail) (err error)
 
 	// Failed sets update to failed with error messages
-	Failed(context *UpdateContext, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
+	Failed(updateDetail *UpdateDetail, log log.T, code updateconstants.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
 }
 
-type prepare func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type update func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type verify func(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) (err error)
-type rollback func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
-type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
-type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error)
-type clean func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type runTests func(logger log.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
+type initPrep func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type update func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type verify func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error)
+type rollback func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type uninstall func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
+type install func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
+type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error)
+type clean func(log log.T, updateDetail *UpdateDetail)
+type runTests func(context context.T, reportResults func(contracts.ResultStatus, string))
+type finalize func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error)
 
 type updateManager struct {
-	util      updateutil.T
-	svc       Service
-	ctxMgr    ContextMgr
-	prepare   prepare
-	update    update
-	verify    verify
-	rollback  rollback
-	uninstall uninstall
-	install   install
-	download  download
-	clean     clean
-	runTests  runTests
-	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback. It is good to place it here as UpdateContext is being saved on the filesystem
+	Context             context.T
+	Info                updateinfo.T
+	util                updateutil.T
+	S3util              updates3util.T
+	preconditions       []updateprecondition.T
+	svc                 Service
+	ctxMgr              ContextMgr
+	initManifest        initPrep
+	initSelfUpdate      initPrep
+	determineTarget     initPrep
+	validateUpdateParam initPrep
+	populateUrlHash     initPrep
+	downloadPackages    initPrep
+	update              update
+	verify              verify
+	rollback            rollback
+	uninstall           uninstall
+	install             install
+	download            download
+	clean               clean
+	runTests            runTests
+	finalize            finalize
+	subStatus           string // Values currently being used - downgrade, InstallRollback, VerificationRollback.
 }
 
 // Updater contains logic for performing agent update

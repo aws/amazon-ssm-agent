@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -71,7 +72,7 @@ type isSimilarHashTestData struct {
 
 func TestIsSimilarHardwareHash(t *testing.T) {
 	empty := make(map[string]string)
-	log := log.NewMockLog()
+	log := logmocks.NewMockLog()
 
 	origin := map[string]string{
 		hardwareID:      "hardwareValue",
@@ -95,6 +96,7 @@ func TestIsSimilarHardwareHash(t *testing.T) {
 	testData := []isSimilarHashTestData{
 		{origin, empty, 0, false},
 		{empty, origin, 0, false},
+		{origin, empty, -1, true},
 		{origin, origin, 100, true},
 		{origin, hwChanged, 0, false},
 		{origin, ipChanged, 66, true},         // 2 out of 3 items matched > 66%
@@ -178,14 +180,13 @@ func deepCopy(original map[string]string) (copied map[string]string) {
 
 func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	failedGenerateHwHashError := "Failed to generate hardware hash"
 	currentHwHash = func() (map[string]string, error) {
 		return make(map[string]string), fmt.Errorf(failedGenerateHwHashError)
 	}
 
 	// Act
-	fingerprint, err := generateFingerprint()
+	fingerprint, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.Error(t, err, "expected no error from the call")
@@ -195,7 +196,6 @@ func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 
 func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -209,7 +209,7 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 	}
 
 	// Act
-	actual, err := generateFingerprint()
+	actual, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -219,7 +219,6 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 
 func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -243,7 +242,7 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	}
 
 	// Act
-	actual, err := generateFingerprint()
+	actual, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -253,7 +252,6 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 
 func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "changed"
@@ -276,7 +274,7 @@ func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testin
 	}
 
 	// Act
-	actual, err := generateFingerprint()
+	actual, err := generateFingerprint(logmocks.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -285,7 +283,6 @@ func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testin
 
 func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = invalidUTF8String
@@ -296,7 +293,7 @@ func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t 
 	vault = vaultMock
 
 	//Act
-	fingerprint, err := generateFingerprint()
+	fingerprint, err := generateFingerprint(logmocks.NewMockLog())
 
 	//Assert
 	assert.Error(t, err)
@@ -305,7 +302,6 @@ func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t 
 
 func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	savedHwHash := getHwHash("original")
 	currentHwHash = func() (map[string]string, error) {
 		return savedHwHash, nil
@@ -313,7 +309,7 @@ func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	savedHwInfo := &hwInfo{
 		HardwareHash:        savedHwHash,
 		Fingerprint:         sampleFingerprint,
-		SimilarityThreshold: minimumMatchPercent,
+		SimilarityThreshold: defaultMatchPercent,
 	}
 
 	savedHwData, _ := json.Marshal(savedHwInfo)
@@ -323,17 +319,16 @@ func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	vault = vaultMock
 
 	// Act
-	generateFingerprint()
+	generateFingerprint(logmocks.NewMockLog())
 }
 
 func TestSave_SavesNewFingerprint(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	sampleHwHash := getHwHash("backup")
 	sampleHwInfo := hwInfo{
 		HardwareHash:        sampleHwHash,
 		Fingerprint:         sampleFingerprint,
-		SimilarityThreshold: minimumMatchPercent,
+		SimilarityThreshold: defaultMatchPercent,
 	}
 	sampleHwInfoData, _ := json.Marshal(sampleHwInfo)
 	vaultMock := &fpFsVaultMock{}
@@ -349,7 +344,6 @@ func TestSave_SavesNewFingerprint(t *testing.T) {
 
 func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	sampleHash := make(map[string]string)
 	sampleHash[hardwareID] = "sample"
 
@@ -362,7 +356,6 @@ func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
 
 func TestIsValidHardwareHash_ReturnsHashIsInvalid(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	sampleHash := make(map[string]string)
 	sampleHash[hardwareID] = invalidUTF8String
 
@@ -386,11 +379,11 @@ type vaultStub struct {
 	retrieveErr error
 }
 
-func (v vaultStub) Store(key string, data []byte) error {
+func (v vaultStub) Store(manifestFileNamePrefix string, key string, data []byte) error {
 	return v.storeErr
 }
 
-func (v vaultStub) Retrieve(key string) ([]byte, error) {
+func (v vaultStub) Retrieve(manifestFileNamePrefix string, key string) ([]byte, error) {
 	return v.data, v.retrieveErr
 }
 
@@ -424,6 +417,10 @@ func (f *fakeLog) Debugf(format string, params ...interface{}) {
 func (f *fakeLog) Info(v ...interface{}) {
 	message := concat(v...)
 	f.infoMessages = append(f.infoMessages, message)
+}
+
+func (f fakeLog) Log(v ...interface{}) {
+	f.Info(v)
 }
 
 func (f *fakeLog) Infof(format string, params ...interface{}) {

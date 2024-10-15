@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"strconv"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -26,6 +27,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 	communicatorMocks "github.com/aws/amazon-ssm-agent/agent/session/communicator/mocks"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -42,12 +46,12 @@ import (
 )
 
 var (
-	mockContext                                = context.NewMockDefault()
-	mockLog                                    = log.NewMockLog()
+	mockContext                                = contextmocks.NewMockDefault()
+	mockLog                                    = logmocks.NewMockLog()
 	mockService                                = &serviceMock.Service{}
 	mockWsChannel                              = &communicatorMocks.IWebSocketChannel{}
 	mockCipher                                 = &cryptoMocks.IBlockCipher{}
-	mockCancelFlag                             = &task.MockCancelFlag{}
+	mockCancelFlag                             = &taskmocks.MockCancelFlag{}
 	clientId                                   = "dd01e56b-ff48-483e-a508-b5f073f31b16"
 	createdDate                                = uint64(1503434274948)
 	sessionId                                  = "2b196342-d7d4-436e-8f09-3883a1116ac3"
@@ -129,7 +133,7 @@ func TestSetWebSocket(t *testing.T) {
 func TestOpen(t *testing.T) {
 	dataChannel := getDataChannel()
 
-	mockWsChannel.On("Open", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
@@ -145,7 +149,7 @@ func TestReconnect(t *testing.T) {
 	dataChannel := getDataChannel()
 
 	mockWsChannel.On("Close", mock.Anything).Return(nil)
-	mockWsChannel.On("Open", mock.Anything).Return(nil)
+	mockWsChannel.On("Open", mock.Anything, mock.Anything).Return(nil)
 	mockWsChannel.On("GetChannelToken").Return(token)
 	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
@@ -169,6 +173,23 @@ func TestClose(t *testing.T) {
 	mockWsChannel.AssertExpectations(t)
 }
 
+// test PrepareToCloseChannel
+func TestPrepareToCloseChannel(t *testing.T) {
+	dataChannel := getDataChannel()
+	defer dataChannel.Close(mockLog)
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[1])
+	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[2])
+	assert.Equal(t, 2, dataChannel.OutgoingMessageBuffer.Messages.Len())
+
+	dataChannel.ResendStreamDataMessageScheduler(mockLog)
+	dataChannel.PrepareToCloseChannel(mockLog)
+
+	mockWsChannel.AssertExpectations(t)
+}
+
 func TestSendStreamDataMessage(t *testing.T) {
 	dataChannel := getDataChannel()
 
@@ -178,6 +199,78 @@ func TestSendStreamDataMessage(t *testing.T) {
 
 	assert.Equal(t, streamDataSequenceNumber+1, dataChannel.StreamDataSequenceNumber)
 	assert.Equal(t, 1, dataChannel.OutgoingMessageBuffer.Messages.Len())
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestSendStreamDataMessageWhenPayloadTypeIsStdErr(t *testing.T) {
+	dataChannel := getDataChannel()
+	mockCipher := &cryptoMocks.IBlockCipher{}
+	dataChannel.blockCipher = mockCipher
+	dataChannel.encryptionEnabled = true
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockCipher.On("EncryptWithAESGCM", payload).Return([]byte("STDERR: error"), nil)
+
+	dataChannel.SendStreamDataMessage(mockLog, mgsContracts.StdErr, payload)
+
+	assert.Equal(t, streamDataSequenceNumber+1, dataChannel.StreamDataSequenceNumber)
+	assert.Equal(t, 1, dataChannel.OutgoingMessageBuffer.Messages.Len())
+	mockCipher.AssertExpectations(t)
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestSendStreamDataMessageWhenPayloadTypeIsExitCode(t *testing.T) {
+	dataChannel := getDataChannel()
+	mockCipher := &cryptoMocks.IBlockCipher{}
+	dataChannel.blockCipher = mockCipher
+	dataChannel.encryptionEnabled = true
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockCipher.On("EncryptWithAESGCM", payload).Return([]byte("ExitCode=1"), nil)
+
+	dataChannel.SendStreamDataMessage(mockLog, mgsContracts.ExitCode, payload)
+
+	assert.Equal(t, streamDataSequenceNumber+1, dataChannel.StreamDataSequenceNumber)
+	assert.Equal(t, 1, dataChannel.OutgoingMessageBuffer.Messages.Len())
+	mockCipher.AssertExpectations(t)
+	mockWsChannel.AssertExpectations(t)
+}
+
+func TestSendStreamDataMessageWithStreamDataSequenceNumberMutexLocked(t *testing.T) {
+	dataChannel := getDataChannel()
+	mockCipher := &cryptoMocks.IBlockCipher{}
+	dataChannel.blockCipher = mockCipher
+	dataChannel.encryptionEnabled = true
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockCipher.On("EncryptWithAESGCM", payload).Return([]byte("testPayload"), nil)
+	isLockedChan := make(chan struct{})
+	go func() {
+		dataChannel.StreamDataSequenceNumberMutex.Lock()
+		isLockedChan <- struct{}{}
+		time.Sleep(1000 * time.Millisecond)
+		dataChannel.StreamDataSequenceNumberMutex.Unlock()
+	}()
+
+	select {
+	case <-isLockedChan:
+	case <-time.After(1000 * time.Millisecond):
+		assert.Fail(t, "test setup timed out")
+	}
+
+	go func() {
+		dataChannel.SendStreamDataMessage(mockLog, mgsContracts.Output, payload)
+	}()
+	go func() {
+		dataChannel.SendStreamDataMessage(mockLog, mgsContracts.StdErr, payload)
+	}()
+	time.Sleep(500 * time.Millisecond)
+	assert.Equal(t, streamDataSequenceNumber, dataChannel.StreamDataSequenceNumber)
+	assert.Equal(t, 0, dataChannel.OutgoingMessageBuffer.Messages.Len())
+	time.Sleep(1000 * time.Millisecond)
+	assert.Equal(t, streamDataSequenceNumber+2, dataChannel.StreamDataSequenceNumber)
+	assert.Equal(t, 2, dataChannel.OutgoingMessageBuffer.Messages.Len())
+	mockCipher.AssertExpectations(t)
 	mockWsChannel.AssertExpectations(t)
 }
 
@@ -386,6 +479,30 @@ func TestDataChannelIncomingMessageHandlerForUnexpectedInputStreamDataMessage(t 
 	assert.Nil(t, bufferedStreamMessage.Content)
 }
 
+func TestDataChannelIncomingMessageHandlerForAlreadyProcessedInputStreamDataMessage(t *testing.T) {
+	dataChannel := getDataChannel()
+	dataChannel.Pause = true
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+
+	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	// First scenario is to test when incoming message sequence number matches with expected sequence number
+	// and no message found in IncomingMessageBuffer
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), dataChannel.ExpectedSequenceNumber)
+	assert.Equal(t, 0, len(dataChannel.IncomingMessageBuffer.Messages))
+	mockChannel.AssertNumberOfCalls(t, "SendMessage", 1)
+	assert.Equal(t, false, dataChannel.Pause)
+
+	// Second scenario is to test when incoming message sequence number is less with expected sequence number
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
+	assert.Nil(t, err)
+	// verify it should resend the ack message
+	mockChannel.AssertNumberOfCalls(t, "SendMessage", 2)
+}
+
 func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessageWhenHandlerNotReady(t *testing.T) {
 	dataChannel := getDataChannel()
 	dataChannel.inputStreamMessageHandler = inputStreamMessageHandlerNotReady
@@ -517,7 +634,7 @@ func TestDataChannelHandshakeResponse(t *testing.T) {
 		uint32(mgsContracts.HandshakeResponse), handshakeResponsePayload).Serialize(mockLog)
 
 	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
-	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId, instanceId).Return(nil)
+	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId, instanceId, mock.Anything).Return(nil)
 
 	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, agentMessageBytes)
 	assert.Nil(t, err)
@@ -576,7 +693,7 @@ func TestDataChannelHandshakeResponseEncryptionAgentFailure(t *testing.T) {
 	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	// Throw error when processing handshake response
 	errorString := "Failed to update encryption key. Something bad happened."
-	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId, instanceId).Return(errors.New(errorString))
+	mockCipher.On("UpdateEncryptionKey", mockLog, datakey, sessionId, instanceId, mock.Anything).Return(errors.New(errorString))
 
 	mockCancelFlag.On("Set", task.Canceled).Return()
 
@@ -590,13 +707,14 @@ func TestDataChannelHandshakeResponseEncryptionAgentFailure(t *testing.T) {
 	mockCancelFlag.AssertExpectations(t)
 }
 
-func TestDataCHannelHandshakeInitiate(t *testing.T) {
+func TestDataChannelHandshakeInitiate(t *testing.T) {
 	dataChannel := getDataChannel()
 	mockChannel := &communicatorMocks.IWebSocketChannel{}
 	dataChannel.wsChannel = mockChannel
 
 	// Set up block cipher
 	mockCipher.On("GetKMSKeyId").Return(kmskey)
+	mockCipher.On("GetRandomChallenge").Return("aaaabbbbccccdddd")
 	dataChannel.blockCipher = mockCipher
 	dataChannel.encryptionEnabled = true
 
@@ -639,7 +757,7 @@ func TestDataCHannelHandshakeInitiate(t *testing.T) {
 	dataChannel.handshake.encryptionConfirmedChan <- true
 
 	// This is necessary because PerformHandshake initializes the cipher
-	newBlockCipher = func(log log.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
+	newBlockCipher = func(context context.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
 		return mockCipher, nil
 	}
 
@@ -650,6 +768,45 @@ func TestDataCHannelHandshakeInitiate(t *testing.T) {
 	assert.Nil(t, dataChannel.handshake.error)
 	mockCipher.AssertExpectations(t)
 	mockChannel.AssertExpectations(t)
+}
+
+func TestBuildHandshakeCompletePayload(t *testing.T) {
+	dataChannel := getDataChannel()
+	dataChannel.SetSeparateOutputPayload(true)
+	handshake := Handshake{}
+	handshake.clientVersion = "1.2.219"
+	handshake.handshakeEndTime = time.Now()
+	handshake.handshakeStartTime = time.Now().Add(-1 * time.Second)
+
+	dataChannel.handshake = handshake
+	dataChannel.encryptionEnabled = true
+
+	handshakeComplete := dataChannel.buildHandshakeCompletePayload(mockLog)
+	assert.True(t, strings.Contains(handshakeComplete.CustomerMessage, "Please update session manager plugin version"+
+		" (minimum required version 1.2.312.0) for fully support of separate StdOut/StdErr output."))
+	assert.True(t, strings.Contains(handshakeComplete.CustomerMessage, "This session is encrypted using AWS KMS."))
+}
+
+func TestBuildHandshakeCompletePayloadWithoutVersionUpdateNotification(t *testing.T) {
+	dataChannel := getDataChannel()
+	dataChannel.SetSeparateOutputPayload(true)
+	handshake := Handshake{}
+	handshake.clientVersion = "1.2.400"
+	handshake.handshakeEndTime = time.Now()
+	handshake.handshakeStartTime = time.Now().Add(-1 * time.Second)
+
+	dataChannel.handshake = handshake
+	dataChannel.encryptionEnabled = true
+
+	handshakeComplete := dataChannel.buildHandshakeCompletePayload(mockLog)
+	assert.False(t, strings.Contains(handshakeComplete.CustomerMessage, "Please update session manager plugin version"))
+	assert.True(t, strings.Contains(handshakeComplete.CustomerMessage, "This session is encrypted using AWS KMS."))
+}
+
+func TestGetSeparateOutputPayload(t *testing.T) {
+	dataChannel := getDataChannel()
+	dataChannel.SetSeparateOutputPayload(true)
+	assert.True(t, dataChannel.GetSeparateOutputPayload())
 }
 
 func getDataChannel() *DataChannel {

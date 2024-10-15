@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build integration
 // +build integration
 
 // Package runcommand implements runcommand core processing module
@@ -19,12 +20,14 @@ package runcommand
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -47,10 +50,26 @@ var (
 	stopPolicyTimeout = time.Second * 2
 )
 
+// verifyWaitGroup verifies that the waitgroup counter is zero or until it times out
+func verifyWaitGroup(wg *sync.WaitGroup, timeout time.Duration) bool {
+	waitCh := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(waitCh)
+	}()
+
+	select {
+	case <-waitCh:
+		return true
+	case <-time.After(timeout):
+		return false
+	}
+}
+
 // NewMockDefault returns an instance of Mock with default expectations set.
-func MockContext() *context.Mock {
-	ctx := new(context.Mock)
-	log := logger.NewMockLog()
+func MockContext() *contextmocks.Mock {
+	ctx := new(contextmocks.Mock)
+	log := logmocks.NewMockLog()
 	config := appconfig.SsmagentConfig{}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
@@ -72,7 +91,7 @@ func TestLoop_Once(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(context.T) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -81,15 +100,20 @@ func TestLoop_Once(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollJob:       messagePollJob,
+		messagePollWaitGroup: wg,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	proc.messagePollLoop()
+
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 
 	time.Sleep(1 * time.Second)
 	assert.Equal(t, 1, called)
@@ -103,7 +127,7 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(context.T) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -112,12 +136,14 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	start := time.Now()
@@ -129,43 +155,12 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	// elapsed should be greater than number of polls in seconds as we force a 1 second delay
 	elapsed := time.Since(start)
 
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 	time.Sleep(1 * time.Second)
 
 	assert.Equal(t, multipleRetryCount, called)
 	assert.True(t, multipleRetryCount < elapsed.Seconds())
-}
-
-func TestLoop_Multiple_Parallel(t *testing.T) {
-	// Test loop multiple times in parallel with valid response
-	contextMock := MockContext()
-	log := contextMock.Log()
-
-	// create mocked service and set expectations
-	mdsMock := new(runcommandmock.MockedMDS)
-	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
-		return mdsMock
-	}
-	called := 0
-	job := func() {
-		called++
-	}
-	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
-
-	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
-	}
-
-	for i := 0; i < multipleRetryCount; i++ {
-		go proc.messagePollLoop()
-	}
-
-	time.Sleep(4 * time.Second)
-	assert.Equal(t, 1, called)
 }
 
 func TestLoop_Once_Error(t *testing.T) {
@@ -176,7 +171,7 @@ func TestLoop_Once_Error(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(context.T) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -185,15 +180,20 @@ func TestLoop_Once_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	proc.messagePollLoop()
+
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 
 	time.Sleep(1 * time.Second)
 	assert.Equal(t, 1, called)
@@ -207,7 +207,7 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(context.T) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -216,12 +216,14 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	start := time.Now()
@@ -233,6 +235,8 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	// elapsed should be greater than number of polls in seconds as we force a 1 second delay
 	elapsed := time.Since(start)
 
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 	time.Sleep(1 * time.Second)
 
 	// number of tries should be the same as stop threshold +1
@@ -249,7 +253,7 @@ func TestSendReplyLoop_Multiple_Serial_Error(t *testing.T) {
 	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(errSample)
 	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
 	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(context.T) mds.Service {
 		return mdsMock
 	}
 	proc := RunCommandService{
@@ -267,37 +271,4 @@ func TestSendReplyLoop_Multiple_Serial_Error(t *testing.T) {
 
 	// number of tries should be the same as stop threshold
 	mdsMock.AssertNumberOfCalls(t, "SendReplyWithInput", stopPolicyThreshold+1)
-}
-
-func TestLoop_Multiple_Parallel_Error(t *testing.T) {
-	// Test loop multiple times in parallel with simple error
-	contextMock := MockContext()
-	log := contextMock.Log()
-
-	// create mocked service and set expectations
-	mdsMock := new(runcommandmock.MockedMDS)
-	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
-		return mdsMock
-	}
-	called := 0
-	job := func() {
-		called++
-	}
-	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
-
-	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
-	}
-
-	for i := 0; i < multipleRetryCount; i++ {
-		go proc.messagePollLoop()
-	}
-
-	time.Sleep(5 * time.Second)
-	assert.Equal(t, 1, called)
 }

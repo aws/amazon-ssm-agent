@@ -2,17 +2,19 @@ package messaging
 
 import (
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-
-	"time"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
 
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
 )
 
-var contextMock = context.NewMockDefault()
+var contextMock = contextmocks.NewMockDefault()
 var testInstanceID = "i-400e1090"
 var testDocumentID = "13e8e6ad-e195-4ccb-86ee-328153b0dafe"
 var testMessageID = "MessageID"
@@ -30,14 +32,14 @@ var testPluginsRawJSON string
 var testCancelRawJSON string
 
 type TestCase struct {
-	context      *context.Mock
+	context      *contextmocks.Mock
 	docState     contracts.DocumentState
 	results      map[string]*contracts.PluginResult
 	resultStatus contracts.ResultStatus
 }
 
 func CreateTestCase() *TestCase {
-	contextMock := context.NewMockDefaultWithContext([]string{"MASTER"})
+	contextMock := contextmocks.NewMockDefaultWithContext([]string{"MASTER"})
 	docInfo := contracts.DocumentInfo{
 		CreatedDate:     "2017-06-10T01-23-07.853Z",
 		MessageID:       testMessageID,
@@ -84,9 +86,9 @@ func CreateTestCase() *TestCase {
 	results["plugin2"] = &result2
 	//corresponding rawJSON data
 	//TODO this is V2 Schema, add V1 schema later
-	testPluginReplyRawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"error occurred\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin1\\\",\\\"NPlugins\\\":0}\"}"
-	testPluginReply2RawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"error occurred\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin2\\\",\\\"NPlugins\\\":0}\"}"
-	testDocumentCompleteRawJSON = "{\"version\":\"1.0\",\"type\":\"complete\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"error occurred\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"Success\\\",\\\"LastPlugin\\\":\\\"\\\",\\\"NPlugins\\\":0}\"}"
+	testPluginReplyRawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"pluginID\\\":\\\"plugin1\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"error occurred\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin1\\\",\\\"NPlugins\\\":0,\\\"UpstreamServiceName\\\":\\\"\\\",\\\"RelatedDocumentType\\\":\\\"\\\",\\\"ResultType\\\":\\\"\\\"}\"}"
+	testPluginReply2RawJSON = "{\"version\":\"1.0\",\"type\":\"reply\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"error occurred\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"InProgress\\\",\\\"LastPlugin\\\":\\\"plugin2\\\",\\\"NPlugins\\\":0,\\\"UpstreamServiceName\\\":\\\"\\\",\\\"RelatedDocumentType\\\":\\\"\\\",\\\"ResultType\\\":\\\"\\\"}\"}"
+	testDocumentCompleteRawJSON = "{\"version\":\"1.0\",\"type\":\"complete\",\"content\":\"{\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"PluginResults\\\":{\\\"plugin1\\\":{\\\"pluginID\\\":\\\"plugin1\\\",\\\"pluginName\\\":\\\"aws:runScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"error occurred\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"plugin2\\\":{\\\"pluginID\\\":\\\"plugin2\\\",\\\"pluginName\\\":\\\"aws:runPowershellScript\\\",\\\"status\\\":\\\"Success\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:01Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"stepName\\\":\\\"\\\",\\\"error\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"}},\\\"Status\\\":\\\"Success\\\",\\\"LastPlugin\\\":\\\"\\\",\\\"NPlugins\\\":0,\\\"UpstreamServiceName\\\":\\\"\\\",\\\"RelatedDocumentType\\\":\\\"\\\",\\\"ResultType\\\":\\\"\\\"}\"}"
 	testPluginsRawJSON = "{\"version\":\"1.0\",\"type\":\"pluginconfig\",\"content\":\"{\\\"DocumentInformation\\\":{\\\"DocumentID\\\":\\\"\\\",\\\"CommandID\\\":\\\"\\\",\\\"AssociationID\\\":\\\"\\\",\\\"InstanceID\\\":\\\"\\\",\\\"MessageID\\\":\\\"\\\",\\\"RunID\\\":\\\"\\\",\\\"CreatedDate\\\":\\\"\\\",\\\"DocumentName\\\":\\\"\\\",\\\"DocumentVersion\\\":\\\"\\\",\\\"DocumentStatus\\\":\\\"\\\",\\\"RunCount\\\":0,\\\"ProcInfo\\\":{\\\"Pid\\\":0,\\\"StartTime\\\":\\\"2006-01-02T15:04:05Z\\\"}},\\\"DocumentType\\\":\\\"SendCommand\\\",\\\"SchemaVersion\\\":\\\"\\\",\\\"InstancePluginsInformation\\\":[{\\\"Configuration\\\":{\\\"Settings\\\":null,\\\"Properties\\\":null,\\\"OutputS3KeyPrefix\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"MessageId\\\":\\\"\\\",\\\"BookKeepingFileName\\\":\\\"\\\",\\\"PluginName\\\":\\\"\\\",\\\"PluginID\\\":\\\"\\\",\\\"DefaultWorkingDirectory\\\":\\\"\\\",\\\"Preconditions\\\":null,\\\"IsPreconditionEnabled\\\":false},\\\"Name\\\":\\\"aws:runScript\\\",\\\"Result\\\":{\\\"pluginName\\\":\\\"\\\",\\\"status\\\":\\\"\\\",\\\"code\\\":0,\\\"output\\\":null,\\\"startDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"endDateTime\\\":\\\"2017-08-13T00:00:00Z\\\",\\\"outputS3BucketName\\\":\\\"\\\",\\\"outputS3KeyPrefix\\\":\\\"\\\",\\\"error\\\":\\\"\\\",\\\"standardOutput\\\":\\\"\\\",\\\"standardError\\\":\\\"\\\"},\\\"Id\\\":\\\"aws:runScript\\\"}],\\\"CancelInformation\\\":{\\\"CancelMessageID\\\":\\\"\\\",\\\"CancelCommandID\\\":\\\"\\\",\\\"Payload\\\":\\\"\\\",\\\"DebugInfo\\\":\\\"\\\"},\\\"IOConfig\\\":{\\\"OrchestrationDirectory\\\":\\\"\\\",\\\"OutputS3BucketName\\\":\\\"\\\",\\\"OutputS3KeyPrefix\\\":\\\"\\\"}}\"}"
 	testUnknownTypeRawJSON = "{\"version\":\"1.0\",\"type\":\"some unknown type\",\"content\":\"\"}"
 	testUnknownTypeRawJSON2 = "a very bad string"
@@ -99,7 +101,7 @@ func CreateTestCase() *TestCase {
 	}
 }
 
-//TODO test cancel message
+// TODO test cancel message
 func TestExecuterBackendStart_Shutdown(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
@@ -121,19 +123,20 @@ func TestExecuterBackendStart_Shutdown(t *testing.T) {
 		closed <- true
 	}()
 	cancel.Set(task.ShutDown)
-	backend.start(testCase.docState)
+	logMock := log.NewMockLog()
+	backend.start(logMock, testCase.docState)
 	//make sure input is closed
 	<-inputChan
 	//make sure assertion are made
 	<-closed
 }
 
-//test the datagram mashalling v1
+// test the datagram mashalling v1
 func TestExecuterBackend_ProcessV1(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
 	stopChan := make(chan int, 1)
-	cancel := task.NewMockDefault()
+	cancel := taskmocks.NewMockDefault()
 	backend := ExecuterBackend{
 		cancelFlag: cancel,
 		output:     outputChan,
@@ -169,12 +172,12 @@ func TestExecuterBackend_ProcessV1(t *testing.T) {
 	cancel.AssertExpectations(t)
 }
 
-//test the datagram mashalling v1
+// test the datagram mashalling v1
 func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 	testCase := CreateTestCase()
 	outputChan := make(chan contracts.DocumentResult, 10)
 	stopChan := make(chan int, 1)
-	cancel := task.NewMockDefault()
+	cancel := taskmocks.NewMockDefault()
 	backend := ExecuterBackend{
 		cancelFlag: cancel,
 		output:     outputChan,
@@ -192,7 +195,7 @@ func TestExecuterBackend_ProcessUnsupportedVersion(t *testing.T) {
 func TestWorkerBackend_ProcessCancelV1(t *testing.T) {
 	_ = CreateTestCase()
 	inputChan := make(chan string, 10)
-	cancelFlag := new(task.MockCancelFlag)
+	cancelFlag := new(taskmocks.MockCancelFlag)
 	cancelFlag.On("Set", task.Canceled).Return(nil)
 	isRunnerCalled := false
 	pluginRunner := func(
@@ -257,7 +260,7 @@ func TestWorkerBackendPluginListener(t *testing.T) {
 
 }
 
-//this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
+// this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
 func assertValueEqual(t *testing.T, a map[string]*contracts.PluginResult, b map[string]*contracts.PluginResult) {
 	assert.Equal(t, len(a), len(b))
 	for key, val := range a {

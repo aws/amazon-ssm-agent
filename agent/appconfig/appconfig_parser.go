@@ -17,16 +17,30 @@ package appconfig
 
 import (
 	"log"
+	"runtime"
 )
 
-//func parser(config *T) {
+// func parser(config *T) {
 func parser(config *SsmagentConfig) {
 	log.Printf("processing appconfig overrides")
+
+	booleanStringOptions := []string{
+		"true",
+		"false",
+	}
+
+	// Agent creds profile
+	config.Profile.KeyAutoRotateDays = getNumericValue(
+		config.Profile.KeyAutoRotateDays,
+		defaultProfileKeyAutoRotateDaysMin,
+		defaultProfileKeyAutoRotateDaysMax,
+		defaultProfileKeyAutoRotateDays)
 
 	// Agent config
 	config.Agent.Name = getStringValue(config.Agent.Name, DefaultAgentName)
 	config.Agent.OrchestrationRootDir = getStringValue(config.Agent.OrchestrationRootDir, defaultOrchestrationRootDirName)
 	config.Agent.Region = getStringValue(config.Agent.Region, "")
+	config.Agent.ServiceDomain = getStringValue(config.Agent.ServiceDomain, "")
 	config.Agent.TelemetryMetricsNamespace = getStringValue(config.Agent.TelemetryMetricsNamespace, DefaultTelemetryNamespace)
 	config.Agent.LongRunningWorkerMonitorIntervalSeconds = getNumericValue(
 		config.Agent.LongRunningWorkerMonitorIntervalSeconds,
@@ -38,6 +52,11 @@ func parser(config *SsmagentConfig) {
 		DefaultSsmSelfUpdateFrequencyDaysMin,
 		DefaultSsmSelfUpdateFrequencyDaysMax,
 		DefaultSsmSelfUpdateFrequencyDays)
+	config.Agent.GoMaxProcForAgentWorker = getNumericValue(config.Agent.GoMaxProcForAgentWorker,
+		1,
+		runtime.NumCPU(),
+		0)
+
 	config.Agent.AuditExpirationDay = getNumericValue(
 		config.Agent.AuditExpirationDay,
 		DefaultAuditExpirationDayMin,
@@ -50,6 +69,19 @@ func parser(config *SsmagentConfig) {
 		DefaultCommandWorkersLimitMin,
 		config.Mds.CommandWorkersLimit, // we do not restrict max number of worker limit here
 		DefaultCommandWorkersLimit)
+	config.Mds.CommandWorkerBufferLimit = getNumericValue(
+		config.Mds.CommandWorkerBufferLimit,
+		DefaultCommandWorkersBufferLimitMin,
+		config.Mds.CommandWorkerBufferLimit, // we do not restrict max number of worker buffer limit here
+		DefaultCommandWorkerBufferLimit)
+
+	// MGS config
+	config.Mgs.SessionWorkerBufferLimit = getNumericValue(
+		config.Mgs.SessionWorkerBufferLimit,
+		DefaultSessionWorkersBufferLimitMin,
+		config.Mgs.SessionWorkerBufferLimit, // we do not restrict max number of worker buffer limit here
+		DefaultSessionWorkerBufferLimit)
+
 	config.Mds.CommandRetryLimit = getNumericValue(
 		config.Mds.CommandRetryLimit,
 		DefaultCommandRetryLimitMin,
@@ -82,6 +114,43 @@ func parser(config *SsmagentConfig) {
 		config.Ssm.RunCommandLogsRetentionDurationHours,
 		DefaultStateOrchestrationLogsRetentionDurationHoursMin,
 		DefaultRunCommandLogsRetentionDurationHours)
+	sessionLogsDestinationOptions := []string{SessionLogsDestinationDisk, SessionLogsDestinationNone}
+	config.Ssm.SessionLogsDestination = getStringEnum(config.Ssm.SessionLogsDestination,
+		sessionLogsDestinationOptions,
+		SessionLogsDestinationNone)
+	pluginLocalOutputCleanupOptions := []string{PluginLocalOutputCleanupAfterExecution,
+		PluginLocalOutputCleanupAfterUpload,
+		DefaultPluginOutputRetention}
+	config.Ssm.PluginLocalOutputCleanup = getStringEnum(config.Ssm.PluginLocalOutputCleanup,
+		pluginLocalOutputCleanupOptions,
+		DefaultPluginOutputRetention)
+
+	OrchestartionDirCleanupOtions := []string{
+		DefaultOrchestrationDirCleanup,
+		OrchestrationDirCleanupForSuccessFailedCommand,
+		OrchestrationDirCleanupForSuccessCommand,
+	}
+	config.Ssm.OrchestrationDirectoryCleanup = getStringEnum(config.Ssm.OrchestrationDirectoryCleanup,
+		OrchestartionDirCleanupOtions,
+		DefaultOrchestrationDirCleanup)
+
+	config.Identity.Ec2SystemInfoDetectionResponse = getStringEnum(config.Identity.Ec2SystemInfoDetectionResponse, booleanStringOptions, "")
+	IdentityConsumptionOrderOptions := map[string]bool{
+		"OnPrem":         true,
+		"ECS":            true,
+		"EC2":            true,
+		"CustomIdentity": true,
+	}
+	config.Identity.ConsumptionOrder = getStringListEnum(
+		config.Identity.ConsumptionOrder,
+		IdentityConsumptionOrderOptions,
+		DefaultIdentityConsumptionOrder)
+	CredentialsProviderOptions := map[string]bool{
+		DefaultCustomIdentityCredentialsProvider: true,
+	}
+	for _, customIdentity := range config.Identity.CustomIdentities {
+		customIdentity.CredentialsProvider = getStringEnumMap(customIdentity.CredentialsProvider, CredentialsProviderOptions, DefaultCustomIdentityCredentialsProvider)
+	}
 }
 
 // getStringValue returns the default value if config is empty, else the config value
@@ -114,4 +183,44 @@ func getNumeric64Value(configValue int64, minValue int64, maxValue int64, defaul
 		return defaultValue
 	}
 	return configValue
+}
+
+func getStringEnum(configValue string, possibleValues []string, defaultValue string) string {
+	if stringInList(configValue, possibleValues) {
+		return configValue
+	} else {
+		return defaultValue
+	}
+}
+
+func stringInList(targetString string, stringList []string) bool {
+	for _, candidateString := range stringList {
+		if candidateString == targetString {
+			return true
+		}
+	}
+	return false
+}
+
+// getStringListEnum removes invalid values from a list, if end list is empty, returns default list
+func getStringListEnum(configValue []string, possibleValues map[string]bool, defaultValue []string) []string {
+	var result []string
+
+	for _, val := range configValue {
+		if _, ok := possibleValues[val]; ok {
+			result = append(result, val)
+		}
+	}
+	if len(result) == 0 {
+		return defaultValue
+	}
+	return result
+}
+
+// getStringEnumMap returns default if config value is not in possible values
+func getStringEnumMap(configValue string, possibleValues map[string]bool, defaultValue string) string {
+	if _, ok := possibleValues[configValue]; ok {
+		return configValue
+	}
+	return defaultValue
 }

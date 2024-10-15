@@ -19,9 +19,10 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm"
+	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm/mocks/ssm"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -103,6 +104,7 @@ func TestUpdateAssociationStatus(t *testing.T) {
 	service := AssociationService{
 		ssmSvc:     ssmMock,
 		stopPolicy: &sdkutil.StopPolicy{},
+		context:    context.NewMockDefault(),
 	}
 
 	associationName := "test"

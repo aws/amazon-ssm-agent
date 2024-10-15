@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package executor wraps up the os.Process interface and also provides os-specific process lookup functions
@@ -24,7 +25,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-//TODO add process start time
+// TODO add process start time
 func TestIsProcessExists(t *testing.T) {
 	cmd := exec.Command("cmd", "timeout", "5")
 	err := cmd.Start()

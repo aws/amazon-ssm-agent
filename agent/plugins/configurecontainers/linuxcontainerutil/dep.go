@@ -10,18 +10,19 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
-//
 package linuxcontainerutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 )
 
 var dep dependencies
 
 type dependencies interface {
 	UpdateUtilExeCommandOutput(
+		context context.T,
 		customUpdateExecutionTimeoutInSeconds int,
 		log log.T,
 		cmd string,
@@ -31,5 +32,5 @@ type dependencies interface {
 		stdOut string,
 		stdErr string,
 		usePlatformSpecificCommand bool) (output string, err error)
-	GetInstanceContext(log log.T) (instanceContext *updateutil.InstanceContext, err error)
+	GetInstanceInfo(context context.T) (instanceInfo updateinfo.T, err error)
 }

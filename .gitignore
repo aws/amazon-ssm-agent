@@ -30,3 +30,4 @@ Tools/src/golang.org/
 agent/managedInstances/sharedCredentials/example.ini
 build
 vendor/src/github.com/aws/amazon-ssm-agent
+empty/

@@ -1,24 +1,23 @@
 package outofproc
 
 import (
+	"errors"
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/core/executor"
-
-	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	procmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc/mock"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
-
-	"errors"
-
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -42,7 +41,7 @@ var testStartDateTime = time.Date(2017, 8, 13, 0, 0, 0, 0, time.UTC)
 var testEndDateTime = time.Date(2017, 8, 13, 0, 0, 1, 0, time.UTC)
 var testPid = 100
 
-var logger = log.NewMockLog()
+var logger = logmocks.NewMockLog()
 
 func CreateTestCase() *TestCase {
 	contextMock := context.NewMockDefaultWithContext([]string{"MASTER"})
@@ -104,14 +103,14 @@ func CreateTestCase() *TestCase {
 func TestInitializeNewProcess(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
 	}
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
-		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
+		assert.Equal(t, argv, []string{testDocumentID})
 		return testCase.processMock, nil
 	}
 	exe := &OutOfProcExecuter{
@@ -138,14 +137,14 @@ func TestInitializeNewProcess(t *testing.T) {
 func TestInitializeNewProcessForSession(t *testing.T) {
 	testCase := createTestCaseForStartSession()
 	channelMock := new(channelmock.MockedChannel)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
 	}
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultSessionWorker)
-		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
+		assert.Equal(t, argv, []string{testDocumentID})
 		return testCase.processMock, nil
 	}
 	exe := &OutOfProcExecuter{
@@ -208,7 +207,7 @@ func TestCreateProcessFailed(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
 	channelMock.On("Destroy").Return(nil)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
@@ -216,7 +215,7 @@ func TestCreateProcessFailed(t *testing.T) {
 	var err = errors.New("failed to create process")
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
-		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
+		assert.Equal(t, argv, []string{testDocumentID})
 		return nil, err
 	}
 	exe := &OutOfProcExecuter{
@@ -234,14 +233,14 @@ func TestInitializeProcessUnexpectedExited(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
 	channelMock.On("Destroy").Return(nil)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
 	}
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		assert.Equal(t, name, appconfig.DefaultDocumentWorker)
-		assert.Equal(t, argv, []string{testDocumentID, testInstanceID})
+		assert.Equal(t, argv, []string{testDocumentID})
 		return testCase.processMock, nil
 	}
 	cancel := task.NewChanneledCancelFlag()
@@ -295,7 +294,7 @@ func TestInitializeProcessUnexpectedExited(t *testing.T) {
 func TestInitializeConnectOldOrphan(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, true
@@ -330,7 +329,7 @@ func TestInitializeConnectOldOrphan(t *testing.T) {
 
 //TODO add Run() unittest
 
-//this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
+// this is needed, since after marshal-unmarshalling thru the data channel, the pointer value changed
 func assertValueEqual(t *testing.T, a map[string]*contracts.PluginResult, b map[string]*contracts.PluginResult) {
 	assert.Equal(t, len(a), len(b))
 	for key, val := range a {

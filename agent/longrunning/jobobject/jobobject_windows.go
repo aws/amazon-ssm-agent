@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
@@ -21,6 +22,8 @@ import (
 	"syscall"
 	"unsafe"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 )
 
@@ -38,7 +41,7 @@ type (
 
 // Windows APIs
 var (
-	kernel32                 = syscall.NewLazyDLL("kernel32.dll")
+	kernel32                 = windows.NewLazySystemDLL("kernel32.dll")
 	CreateJobObjectW         = kernel32.NewProc("CreateJobObjectW")
 	AssignProcessToJobObject = kernel32.NewProc("AssignProcessToJobObject")
 	SetInformationJobObject  = kernel32.NewProc("SetInformationJobObject")

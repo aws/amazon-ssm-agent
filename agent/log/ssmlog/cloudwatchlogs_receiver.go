@@ -17,12 +17,17 @@
 package ssmlog
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
+)
+
+const (
+	cloudWatchLogEventLength = int(262144 / 2) // max CW log event bytes - 262144
 )
 
 // CloudWatchCustomReceiver implements seelog.CustomReceiver
@@ -32,21 +37,42 @@ type CloudWatchCustomReceiver struct {
 // ReceiveMessage Enqueues the new message to the queue
 func (logReceiver *CloudWatchCustomReceiver) ReceiveMessage(message string, level seelog.LogLevel, context seelog.LogContextInterface) error {
 
-	// Creating cloudwatchlogs Log Event struct
-	newMessage := &cloudwatchlogs.InputLogEvent{
-		Message:   aws.String(message),
-		Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
-	}
+	var result string
+	count := 0
+	maxIteration := 4
+	for i := 0; i < len(message); i += cloudWatchLogEventLength {
+		count++
+		if count == maxIteration {
+			return fmt.Errorf("exceeded max iterations for sending cloudwatch log event")
+		}
+		if i+cloudWatchLogEventLength > len(message) {
+			result = message[i:]
+		} else {
+			result = message[i : i+cloudWatchLogEventLength]
+		}
+		// Creating cloudwatchlogs Log Event struct
+		newMessage := &cloudwatchlogs.InputLogEvent{
+			Message:   aws.String(result),
+			Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+		}
 
-	// Adding the message to Queue
-	return cloudwatchlogsqueue.Enqueue(newMessage)
+		// Adding the message to Queue
+		err := cloudwatchlogsqueue.Enqueue(newMessage)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // AfterParse extracts the log group and stream from the XML args and sets them in a new log data facade instance
 func (logReceiver *CloudWatchCustomReceiver) AfterParse(initArgs seelog.CustomReceiverInitArgs) error {
-
 	// Creating the facade instance at initialization
-	return cloudwatchlogsqueue.CreateCloudWatchDataInstance(initArgs)
+	if err := cloudwatchlogsqueue.CreateCloudWatchDataInstance(initArgs); err != nil {
+		fmt.Printf("[ERROR] Failed to create cloudwatch log custom receiver. Err: %v\n", err)
+	}
+
+	return nil
 }
 
 // Flush flush the logs in the queue

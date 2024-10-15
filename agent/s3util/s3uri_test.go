@@ -17,6 +17,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/s3util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,6 +31,11 @@ var (
 	sslTests = []s3BucketTest{
 		// {bucket, url, AmazonS3URL{IsValidS3URI, IsPathStyle, Bucket, Key, Region}},
 		{"abc", "https://abc.s3.mock-region.amazonaws.com/", AmazonS3URL{true, false, "abc", "", "mock-region"}},
+		{"abc", "https://abc.s3.mock-region.amazonaws.com.cn/", AmazonS3URL{true, false, "abc", "", "mock-region"}},
+		{"abc", "https://abc.s3.mock-region.c2s.ic.gov/", AmazonS3URL{true, false, "abc", "", "mock-region"}},
+		{"abc", "https://abc.s3.mock-region.sc2s.sgov.gov/", AmazonS3URL{true, false, "abc", "", "mock-region"}},
+		{"abc", "https://abc.s3.mock-region.cloud.adc-e.uk/", AmazonS3URL{true, false, "abc", "", "mock-region"}},
+		{"abc", "https://abc.s3.mock-region.csp.hci.ic.gov/", AmazonS3URL{true, false, "abc", "", "mock-region"}},
 		{"a$b$c", "https://s3.mock-region.amazonaws.com/a%24b%24c", AmazonS3URL{true, true, "a$b$c", "", "mock-region"}},
 		{"a.b.c", "https://s3.mock-region.amazonaws.com/a.b.c", AmazonS3URL{true, true, "a.b.c", "", "mock-region"}},
 		{"a..bc", "https://s3.mock-region.amazonaws.com/a..bc", AmazonS3URL{true, true, "a..bc", "", "mock-region"}},
@@ -59,13 +65,192 @@ var (
 	invalidTests = []s3BucketTest{
 		{"abc", "https://abcd/pqr/xyz.txt", AmazonS3URL{false, false, "", "", ""}},
 	}
+
+	websiteTests = []s3BucketTest{
+		{
+			"mybucket",
+			"http://mybucket.s3-website-us-west-1.amazonaws.com/mykey", // dash-region format
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"http://mybucket.s3-website.us-west-1.amazonaws.com/mykey", // dot-region format
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+	}
+
+	// Dualstack works with both virtual-hosted and path-style URLs
+	dualstackTests = []s3BucketTest{
+		{
+			"mybucket",
+			"https://mybucket.s3.dualstack.us-west-1.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://s3.dualstack.us-west-1.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+	}
+
+	// Transfer acceleration uses global endpoint, so no region in the URL
+	accelerateTests = []s3BucketTest{
+		{
+			"mybucket",
+			"https://mybucket.s3-accelerate.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-east-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://mybucket.s3-accelerate.dualstack.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-east-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://s3-accelerate.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-east-1",
+			},
+		},
+	}
+
+	vpcEndpointTests = []s3BucketTest{
+		{
+			"mybucket",
+			"https://bucket.vpce-05a18c86214d4f28c-6p280e25.s3.us-west-1.vpce.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://mybucket.bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-west-1.vpce.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-0e3580b5f3cb40b34-tr39ydlu.s3.cn-northwest-1.vpce.amazonaws.com.cn/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"cn-northwest-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-gov-west-1.vpce.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-gov-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-iso-east-1.vpce.c2s.ic.gov/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-iso-east-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-isob-east-1.vpce.sc2s.sgov.gov/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-isob-east-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.eu-isoe-west-1.vpce.cloud.adc-e.uk/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"eu-isoe-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-isof-south-1.vpce.csp.hci.ic.gov/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-isof-south-1",
+			},
+		},
+	}
 )
 
 func runTests(t *testing.T, tests []s3BucketTest) {
 	for _, test := range tests {
 		fileURL, err := url.Parse(test.url)
 		assert.Equal(t, err, nil)
-		output := ParseAmazonS3URL(logger, fileURL)
+		output := ParseAmazonS3URL(s3util.MockLog, fileURL)
 		assert.Equal(t, test.output, output, test.url)
 	}
 }
@@ -84,4 +269,20 @@ func TestPathStyleBucketBuild(t *testing.T) {
 
 func TestInValidS3PathStyle(t *testing.T) {
 	runTests(t, invalidTests)
+}
+
+func TestWebsite(t *testing.T) {
+	runTests(t, websiteTests)
+}
+
+func TestDualstack(t *testing.T) {
+	runTests(t, dualstackTests)
+}
+
+func TestAccelerate(t *testing.T) {
+	runTests(t, accelerateTests)
+}
+
+func TestVpcEndpoint(t *testing.T) {
+	runTests(t, vpcEndpointTests)
 }

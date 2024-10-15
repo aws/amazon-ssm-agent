@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build darwin || freebsd || linux || netbsd || openbsd
 // +build darwin freebsd linux netbsd openbsd
 
 package executers
@@ -18,6 +19,7 @@ package executers
 import (
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 	"syscall"
 
@@ -28,6 +30,13 @@ func prepareProcess(command *exec.Cmd) {
 	// make the process the leader of its process group
 	// (otherwise we cannot kill it properly)
 	command.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+}
+
+func quiesce() {
+	if runtime.GOOS != "darwin" {
+		return
+	}
+	syscall.Sync() // workaround for https://github.com/golang/go/issues/33565
 }
 
 func killProcess(process *os.Process, signal *timeoutSignal) error {

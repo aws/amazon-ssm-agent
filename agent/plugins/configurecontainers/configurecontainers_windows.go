@@ -11,20 +11,21 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 package configurecontainers
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurecontainers/windowscontainerutil"
 )
 
-func runInstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
-	windowscontainerutil.RunInstallCommands(log, orchestrationDirectory, out)
+func runInstallCommands(context context.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
+	windowscontainerutil.RunInstallCommands(context, orchestrationDirectory, out)
 }
 
-func runUninstallCommands(log log.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
-	windowscontainerutil.RunUninstallCommands(log, orchestrationDirectory, out)
+func runUninstallCommands(context context.T, pluginInput ConfigureContainerPluginInput, orchestrationDirectory string, out iohandler.IOHandler) {
+	windowscontainerutil.RunUninstallCommands(context, orchestrationDirectory, out)
 }

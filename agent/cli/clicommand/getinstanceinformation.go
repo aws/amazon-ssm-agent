@@ -23,7 +23,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
@@ -77,14 +76,19 @@ func (c *GetInstanceInformationCommand) Execute(subcommands []string, parameters
 		return errors.New(strings.Join(validation, "\n")), ""
 	}
 
+	agentIdentity, err := cliutil.GetAgentIdentity()
+	if err != nil {
+		return err, ""
+	}
+
 	information := make(map[string]string)
-	if region, err := platform.Region(); err != nil {
+	if region, err := agentIdentity.Region(); err != nil {
 		return err, ""
 	} else {
 		information["region"] = region
 	}
 
-	if instanceId, err := platform.InstanceID(); err != nil {
+	if instanceId, err := agentIdentity.InstanceID(); err != nil {
 		return err, ""
 	} else {
 		information["instance-id"] = instanceId

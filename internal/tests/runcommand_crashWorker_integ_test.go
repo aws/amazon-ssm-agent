@@ -16,10 +16,16 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
 	"path"
 	"path/filepath"
 	"runtime/debug"
 	"testing"
+
+	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	"github.com/aws/amazon-ssm-agent/common/identity/identity"
 
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -29,8 +35,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -43,9 +49,10 @@ import (
 
 // CrashWorkerTestSuite defines test suite for sending a command to the agent and handling the worker process crash
 type CrashWorkerTestSuite struct {
+	context context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
-	mdsSdkMock *mdssdkmock.SSMMDSAPI
+	mdsSdkMock *mdssdkmock.SsmmdsAPI
 	log        log.T
 }
 
@@ -58,40 +65,54 @@ func (suite *CrashWorkerTestSuite) SetupTest() {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config)
+	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		log.Debugf("unable to assume identity - %v", err)
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
 
 	// Mock MDS service to remove dependency on external service
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
-	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 
 	suite.mdsSdkMock = mdsSdkMock
 
-	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(context, mdsService)
-	var modules []contracts.ICoreModule
-	modules = append(modules, runcommandService)
+	messageServiceModule := testutils.NewMessageService(suite.context, mdsService)
+	var modules []contracts.ICoreModuleWrapper
+	modules = append(modules, coremodules.NewCoreModuleWrapper(log, messageServiceModule))
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules
 	var cpm *coremanager.CoreManager
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	// Create core ssm agent
 	suite.ssmAgent = &agent.SSMAgent{}
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
 
 func (suite *CrashWorkerTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
+
 	// Close the log only after the all tests are done.
 	suite.log.Close()
 
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := suite.context.Identity().InstanceID()
 	//Empty the current folder
 	currentDirectory := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceId,
@@ -115,29 +136,29 @@ func cleanUpCrashWorkerTest(suite *CrashWorkerTestSuite) {
 	suite.log.Flush()
 }
 
-//TestDocumentWorkerCrash tests the agent processes documents in isolation
-//the test sends a document that's expected to crash and another that's expected to succeed
-//then verify the first document fails when document worker crashes and sends valid results
-//and second document succeeds and sends the valid output
+// TestDocumentWorkerCrash tests the agent processes documents in isolation
+// the test sends a document that's expected to crash and another that's expected to succeed
+// then verify the first document fails when document worker crashes and sends valid results
+// and second document succeeds and sends the valid output
 func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 	//send MDS message that's expected to crash document worker
 	var idOfCrashMessage string
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.CrashWorkerMDSMessage)
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.CrashWorkerMDSMessage)
 		idOfCrashMessage = *messageOutput.Messages[0].MessageId
 		return messageOutput
 	}, nil).Once()
 
 	//send MDS message that's expected to succeed
 	var idOfGoodMessage string
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.EchoMDSMessage)
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		idOfGoodMessage = *messageOutput.Messages[0].MessageId
 		return messageOutput
 	}, nil).Once()
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
@@ -147,7 +168,7 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 
 	// a channel to block test execution untill the agent is done processing the required number of messages
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		messageId := *input.MessageId
 		payload := input.Payload
 		var sendReplyPayload messageContracts.SendReplyPayload
@@ -211,7 +232,7 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCompleted,
 		appconfig.DefaultLocationOfCorrupt}
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := suite.context.Identity().InstanceID()
 	for _, folder := range folders {
 		directoryName := filepath.Join(appconfig.DefaultDataStorePath,
 			instanceId,

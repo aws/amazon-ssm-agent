@@ -11,13 +11,19 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// package channel captures IPC implementation.
+// Package channel captures IPC implementation.
 package channel
 
 import (
+	"errors"
+	"runtime"
+	"runtime/debug"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
@@ -30,39 +36,68 @@ type IChannel interface {
 	SetOption(name string, value interface{}) error
 	Listen(addr string) error
 	Dial(addr string) error
-	IsConnect() bool
+	IsChannelInitialized() bool
+	IsDialSuccessful() bool
+	IsListenSuccessful() bool
 }
+
+var (
+	newNamedPipeChannelRef     = NewNamedPipeChannel
+	isDefaultChannelPresentRef = utils.IsDefaultChannelPresent
+
+	ErrIPCChannelClosed       = errors.New("channel is closed")
+	ErrDialListenUnSuccessful = errors.New("IPC connection is not established")
+)
 
 // GetChannelCreator returns function reference for channel creation based
 // on whether named pipe be created or not
-func GetChannelCreator(log log.T) (channelCreateFn func(log.T) IChannel) {
-	if canUseNamedPipe(log) {
+func GetChannelCreator(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (channelCreateFn func(log.T, identity.IAgentIdentity) IChannel) {
+	if canUseNamedPipe(log, appConfig, identity) {
 		return NewNamedPipeChannel
 	}
 	return NewFileChannel
 }
 
 // canUseNamedPipe checks whether named pipe can be used for IPC or not
-func canUseNamedPipe(log log.T) (useNamedPipe bool) {
-	config, err := appconfig.Config(false)
-	if err == nil && config.Agent.ForceFileIPC {
-		return
+func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (useNamedPipe bool) {
+	// named pipes '.Listen' halts randomly on windows 2012, disabling named pipes on windows and using file channel instead
+	// On few mac2.metal instances, socket creation is getting blocked. Hence, permanently falling back to File based IPC for Darwin.
+	if runtime.GOOS == "windows" || runtime.GOOS == "darwin" {
+		log.Infof("Not using named pipe on %v", runtime.GOOS)
+		return false
 	}
-	namedPipeChannel := NewNamedPipeChannel(log)
-	defer func() {
-		if msg := recover(); msg != nil {
-			log.Error("named pipe check panicked")
-		}
-	}()
-	defer func() {
-		err := namedPipeChannel.Close()
-		if err != nil {
-			log.Errorf("error while closing named pipe channel %v", err)
-		}
-	}()
-	namedPipeChannel.Initialize(utils.Surveyor)
-	if err := namedPipeChannel.Listen(utils.TestAddress); err == nil && !utils.IsDefaultChannelPresent() {
-		useNamedPipe = true
+	if appConfig.Agent.ForceFileIPC {
+		log.Info("Not using named pipe as force file IPC is set")
+		return false
 	}
-	return
+	namedPipeChan := newNamedPipeChannelRef(log, identity)
+	namedPipeCreationChan := make(chan bool, 1)
+	go func() {
+		defer func() {
+			if msg := recover(); msg != nil {
+				log.Error("named pipe creation panicked")
+				log.Errorf("stacktrace:\n%s", debug.Stack())
+			}
+		}()
+		defer func() {
+			if err := namedPipeChan.Close(); err != nil {
+				log.Errorf("error while closing named pipe channel %v", err)
+			}
+		}()
+		namedPipeChan.Initialize(utils.Surveyor)
+		if err := namedPipeChan.Listen(utils.TestAddress); err == nil && !isDefaultChannelPresentRef(identity) {
+			namedPipeCreationChan <- true
+			return
+		}
+		log.Info("falling back to file based IPC as named pipe creation failed")
+		namedPipeCreationChan <- false
+	}()
+
+	select {
+	case creationSuccessFlag := <-namedPipeCreationChan:
+		return creationSuccessFlag
+	case <-time.After(10 * time.Second):
+		log.Info("falling back to file based IPC after timeout")
+		return false
+	}
 }

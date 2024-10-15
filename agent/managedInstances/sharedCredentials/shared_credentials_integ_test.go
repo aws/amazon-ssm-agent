@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build integration
 // +build integration
 
 // package sharedCredentials tests
@@ -21,9 +22,11 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/go-ini/ini"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/ini.v1"
 )
 
 const (
@@ -56,13 +59,15 @@ func TestSharedCredentialsStore(t *testing.T) {
 	// Test
 	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
 
-	err1 := Store(accessKey, accessSecretKey, token, profile)
+	shareFilePath, _ := GetSharedCredsFilePath("")
+	err1 := Store(log.NewMockLog(), accessKey, accessSecretKey, token, shareFilePath, profile, false)
 	assert.Nil(t, err1, "Expect no error saving profile")
 
 	config, err2 := ini.Load(credFilePath)
 	assert.Nil(t, err2, "Expect no error loading file")
 
 	iniProfile := config.Section(profile)
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "")
 
 	assert.Equal(t, accessKey, iniProfile.Key(awsAccessKeyID).Value(), "Expect access key ID to match")
 	assert.Equal(t, accessSecretKey, iniProfile.Key(awsSecretAccessKey).Value(), "Expect secret access key to match")
@@ -78,10 +83,12 @@ func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
 	// Test
 	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
 
-	err1 := Store(accessKey, accessSecretKey, token, "")
+	shareFilePath, _ := GetSharedCredsFilePath("")
+	err1 := Store(log.NewMockLog(), accessKey, accessSecretKey, token, shareFilePath, "", false)
 	assert.Nil(t, err1, "Expect no error saving profile")
 
 	config, err2 := ini.Load(credFilePath)
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "")
 	assert.Nil(t, err2, "Expect no error loading file")
 
 	iniProfile := config.Section(defaultProfile)
@@ -91,14 +98,55 @@ func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
 	assert.Equal(t, token, iniProfile.Key(awsSessionToken).Value(), "Expect session token to match")
 }
 
+func TestSharedCredentialsStore_ParseError_NoForceUpdate_LeavesFileUnchanged(t *testing.T) {
+	// Test setup.  Shared credentials file is corrupt.
+	os.Clearenv()
+	credFilePath := exampleCredFilePath()
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
+	fileutil.WriteAllText(credFilePath, "junk")
+
+	// Test
+	shareFilePath, _ := GetSharedCredsFilePath("")
+	err := Store(log.NewMockLog(), accessKey, accessSecretKey, token, shareFilePath, profile, false)
+	assert.NotNil(t, err, "Expect error when saving profile")
+
+	// Verify that the file is unchanged
+	contents, err := fileutil.ReadAllText(credFilePath)
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "")
+
+	assert.Equal(t, "junk", contents)
+}
+
+func TestSharedCredentialsStore_ParseError_ForceUpdate_OverwritesFile(t *testing.T) {
+	// Test setup.  Shared credentials file is corrupt.
+	os.Clearenv()
+	credFilePath := exampleCredFilePath()
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
+	fileutil.WriteAllText(credFilePath, "junk")
+
+	// Test
+	shareFilePath, _ := GetSharedCredsFilePath("")
+	err := Store(log.NewMockLog(), accessKey, accessSecretKey, token, shareFilePath, profile, true)
+	assert.Nil(t, err, "Expect no error when saving profile")
+
+	// Verify that the shared credentials file has been replaced with a new one
+	config, err := ini.Load(credFilePath)
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "")
+	assert.Nil(t, err, "Expect no error loading file")
+
+	iniProfile := config.Section(profile)
+	assert.Equal(t, accessKey, iniProfile.Key(awsAccessKeyID).Value(), "Expect access key ID to match")
+	assert.Equal(t, accessSecretKey, iniProfile.Key(awsSecretAccessKey).Value(), "Expect secret access key to match")
+	assert.Equal(t, token, iniProfile.Key(awsSessionToken).Value(), "Expect session token to match")
+}
+
 func TestSharedCredentialsFilenameFromUserProfile(t *testing.T) {
 	// Test setup
-	os.Clearenv()
-	os.Setenv("USERPROFILE", "")
+	os.Setenv("USERPROFILE", "hometest")
 	os.Setenv("HOME", "hometest")
 
-	file2, err2 := filename()
+	file2, err2 := GetSharedCredsFilePath("")
 
 	assert.Nil(t, err2, "Expect no error when HOME is set")
-	assert.Equal(t, "hometest/.aws/credentials", file2, "HOME dir does not match")
+	assert.Equal(t, filepath.Join("hometest", ".aws", "credentials"), file2, "HOME dir does not match")
 }

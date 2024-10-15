@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 // Package executor wraps up the os.Process interface and also provides os-specific process lookup functions
@@ -22,14 +23,14 @@ import (
 	"os/exec"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
 )
 
 var logger = log.NewMockLog()
 
-//TODO add process start time
+// TODO add process start time
 func TestIsProcessPsExists(t *testing.T) {
 	cmdString := "sleep"
 	cmd := exec.Command(cmdString, "5")

@@ -17,6 +17,7 @@ package testutils
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	"github.com/aws/amazon-ssm-agent/agent/runcommand"
 	mds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 )
@@ -28,5 +29,8 @@ func NewRuncommandService(context context.T, mdsService mds.Service) *runcommand
 	messageContext := context.With("[" + mdsName + "]")
 	config := context.AppConfig()
 
-	return runcommand.NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, false, []contracts.DocumentType{contracts.SendCommand, contracts.CancelCommand})
+	startWorker := processor.NewWorkerProcessorSpec(messageContext, config.Mds.CommandWorkersLimit, contracts.SendCommand, 0)
+	terminateWorker := processor.NewWorkerProcessorSpec(messageContext, CancelWorkersLimit, contracts.CancelCommand, 0)
+	processor := processor.NewEngineProcessor(messageContext, startWorker, terminateWorker)
+	return runcommand.NewService(messageContext, mdsName, mdsService, processor)
 }
