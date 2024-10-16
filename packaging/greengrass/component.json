@@ -62,7 +62,7 @@
       {
         "Platform": {
           "os": "linux",
-          "architecture": "/aarch64|armv8/"
+          "architecture": "/aarch64|arm/"
         },
         "Lifecycle": {
           "SetEnv": {
