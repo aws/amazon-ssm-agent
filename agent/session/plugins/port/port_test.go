@@ -338,7 +338,7 @@ func (suite *PortTestSuite) TestValidateParametersWhenDefaultDenylistHostNotAllo
 	mockContext := &contextmocks.Mock{}
 	suite.plugin.context = mockContext
 
-	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "169.254.169.250"}}})
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "169.254.169.123", "169.254.169.250", "10.0.0.0/16"}}})
 	mockContext.On("Log").Return(mockLog)
 
 	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "169.254.169.253"}, configuration)
@@ -353,7 +353,8 @@ func (suite *PortTestSuite) TestValidateParametersWhenDefaultDenylistHostNotAllo
 	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 169.254.169.250 is forbidden.")
 	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "169.254.169.123"}, configuration)
 	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 169.254.169.123 is forbidden.")
-
+	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "10.0.15.24"}, configuration)
+	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 10.0.15.24 is forbidden.")
 	mockContext.AssertExpectations(suite.T())
 }
 
@@ -361,10 +362,12 @@ func (suite *PortTestSuite) TestValidateParametersWhenValidHostAndPort() {
 	mockContext := &contextmocks.Mock{}
 	suite.plugin.context = mockContext
 
-	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253"}}})
+	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.169.254", "fd00:ec2::254", "169.254.169.253", "fd00:ec2::253", "10.0.0.0/16"}}})
 	mockContext.On("Log").Return(mockLog)
 
 	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "127.0.0.1"}, configuration)
+	assert.Nil(suite.T(), err)
+	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "10.1.0.4"}, configuration)
 	assert.Nil(suite.T(), err)
 
 	mockContext.AssertExpectations(suite.T())
