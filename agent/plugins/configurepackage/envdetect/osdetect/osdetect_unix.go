@@ -187,6 +187,10 @@ func parseOSreleaseFile(lines []string) (string, string, error) {
 		if strings.Contains(strings.ToLower(name), "leap") {
 			platform = c.PlatformOpensuseLeap
 		}
+	case "chainguard":
+		platform = c.PlatformChainguard
+	case "wolfi":
+		platform = c.PlatformWolfi
 	}
 
 	return platform, platformVersion, nil
@@ -412,7 +416,7 @@ func platformFamilyForPlatform(platform string) (string, error) {
 		return c.PlatformFamilyRhel, nil
 	case c.PlatformFedora:
 		return c.PlatformFamilyFedora, nil
-	case c.PlatformAlpine:
+	case c.PlatformAlpine, c.PlatformChainguard, c.PlatformWolfi:
 		return c.PlatformFamilyAlpine, nil
 	case c.PlatformSuse, c.PlatformOpensuse, c.PlatformOpensuseLeap:
 		return c.PlatformFamilySuse, nil
