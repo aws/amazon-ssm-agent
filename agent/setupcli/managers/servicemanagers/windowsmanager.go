@@ -58,7 +58,7 @@ func (m *windowsManager) StopAgent() error {
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
 			ec := exitError.ExitCode()
-			//NET HELPMSG 3521 : The *** service is not started.
+			// NET HELPMSG 3521 : The *** service is not started.
 			if ec == 2 {
 				return nil
 			}
