@@ -23,10 +23,12 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"chainguard.dev/apko/pkg/apk/apk"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
@@ -66,6 +68,9 @@ var (
 
 	// platforms that can pass application inventory files, as the agent cannot gather the data from the local package manager
 	inventoryApplicationFileSupportedPlatforms = []string{"Bottlerocket"}
+
+	// platforms that have an apk-tools v2 installed db
+	apkToolsInstalledDB = "/lib/apk/db/installed"
 )
 
 func randomString(length int) string {
@@ -174,6 +179,19 @@ func collectPlatformDependentApplicationData(context context.T) (appData []model
 		}
 	}
 
+	if fileExists(apkToolsInstalledDB) {
+		noPackageManagerFound = false
+		var apkToolsAppData []model.ApplicationData
+		if apkToolsAppData, err = getApkToolsApplicationData(platformName); err != nil {
+			log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		} else {
+			log.Infof("Appending application information found using ApkTools v2 Installed DB to application data.")
+			log.Infof("Found %v apk packages", len(apkToolsAppData))
+			appData = append(appData, apkToolsAppData...)
+
+		}
+	}
+
 	log.Infof("Found %v packages in total", len(appData))
 
 	if noPackageManagerFound {
@@ -235,6 +253,39 @@ func getInventoryApplicationFileData(inventoryApplicationFileBytes []byte) (data
 		data = inventory.Content
 	}
 	return
+}
+
+// getApkToolsApplicationData creates ApplicationData from apk-tools
+// v2 installed DB
+func getApkToolsApplicationData(platformName string) (data []model.ApplicationData, err error) {
+	a, err := apk.New()
+	if err != nil {
+		return nil, err
+	}
+	pkgs, err := a.GetInstalled()
+	if err != nil {
+		return nil, err
+	}
+	for _, pkg := range pkgs {
+		var item model.ApplicationData
+		item.Name = pkg.Name
+		item.Version = pkg.Version
+		// Not quite right, TODO upgrade to maintainer
+		item.Publisher = platformName
+		// Not quite right, but might be helpful
+		item.InstalledTime = pkg.BuildTime.Format(time.RFC3339)
+		item.Architecture = pkg.Arch
+		item.URL = pkg.URL
+		item.Summary = pkg.Description
+		// PURLs are lowercased IDs
+		item.PackageId = fmt.Sprintf("pkg:apk/%s/%s@%s?arch=%s&source=%s", strings.ToLower(platformName), pkg.Name, pkg.Version, pkg.Arch, pkg.Origin)
+		data = append(data, item)
+	}
+	// Sort, as otherwise this is in a filesystem tree order
+	sort.Slice(data[:], func(i, j int) bool {
+		return data[i].Name < data[j].Name
+	})
+	return data, nil
 }
 
 // getApplicationData runs a shell command and gets information about all packages/applications

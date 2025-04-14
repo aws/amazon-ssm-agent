@@ -67,6 +67,12 @@ const PlatformBottlerocket = "bottlerocket"
 // PlatformAlpine uses Ohai identifier for alpine platform
 const PlatformAlpine = "alpine"
 
+// PlatformChainguard uses Ohai identifier for chainguard platform
+const PlatformChainguard = "chainguard"
+
+// PlatformWolfi uses Ohai identifier for wolfi platform
+const PlatformWolfi = "wolfi"
+
 // PlatformSuse uses Ohai identifier for suse platform
 const PlatformSuse = "suse"
 
