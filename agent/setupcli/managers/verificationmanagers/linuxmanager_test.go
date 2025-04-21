@@ -58,8 +58,8 @@ func (suite *VerificationManagerLinuxTestSuite) TestVerificationManager_Success(
 	fileExtension := ".deb"
 	binaryPath := filepath.Join(artifactsPath, appconfig.DefaultAgentName+fileExtension)
 	mgrHelper.On("IsCommandAvailable", "gpg").Return(true)
-	mgrHelper.On("RunCommand", "gpg", "--no-default-keyring", "--keyring", keyringFile, "--import", amazonSSMAgentGPGKey).Return("status: accepted sample output", nil).Once()
-	mgrHelper.On("RunCommand", "gpg", "--no-default-keyring", "--keyring", keyringFile, "--verify", signaturePath, binaryPath).Return("Good signature from \"SSM Agent <ssm-agent-signer@amazon.com>\"", nil).Once()
+	mgrHelper.On("RunCommand", "gpg", "--no-tty", "--no-default-keyring", "--keyring", keyringFile, "--import", amazonSSMAgentGPGKey).Return("status: accepted sample output", nil).Once()
+	mgrHelper.On("RunCommand", "gpg", "--no-tty", "--no-default-keyring", "--keyring", keyringFile, "--verify", signaturePath, binaryPath).Return("Good signature from \"SSM Agent <ssm-agent-signer@amazon.com>\"", nil).Once()
 
 	pkgManagerRef := linuxManager{managerHelper: mgrHelper}
 	err := pkgManagerRef.VerifySignature(suite.logMock, signaturePath, artifactsPath, fileExtension)
@@ -85,9 +85,9 @@ func (suite *VerificationManagerLinuxTestSuite) TestVerificationManager_Failure(
 	gpgErr := errors.New("exit status 1")
 	binaryPath := filepath.Join(artifactsPath, appconfig.DefaultAgentName+fileExtension)
 	mgrHelper.On("IsCommandAvailable", "gpg").Return(true)
-	mgrHelper.On("RunCommand", "gpg", "--no-default-keyring", "--keyring", keyringFile, "--import", amazonSSMAgentGPGKey).Return("status: accepted sample output", nil).Once()
+	mgrHelper.On("RunCommand", "gpg", "--no-tty", "--no-default-keyring", "--keyring", keyringFile, "--import", amazonSSMAgentGPGKey).Return("status: accepted sample output", nil).Once()
 	mgrHelper.On("IsTimeoutError", gpgErr).Return(false)
-	mgrHelper.On("RunCommand", "gpg", "--no-default-keyring", "--keyring", keyringFile, "--verify", signaturePath, binaryPath).Return("Bad signature from \"SSM Agent <ssm-agent-signer@amazon.com>\"", gpgErr).Once()
+	mgrHelper.On("RunCommand", "gpg", "--no-tty", "--no-default-keyring", "--keyring", keyringFile, "--verify", signaturePath, binaryPath).Return("Bad signature from \"SSM Agent <ssm-agent-signer@amazon.com>\"", gpgErr).Once()
 
 	pkgManagerRef := linuxManager{managerHelper: mgrHelper}
 	err := pkgManagerRef.VerifySignature(suite.logMock, signaturePath, artifactsPath, fileExtension)
