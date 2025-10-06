@@ -281,11 +281,14 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 		output.MarkAsFailed(errorString)
 		return
 	}
-	defer func() {
-		if closeErr := ipcFile.Close(); closeErr != nil {
-			log.Warnf("error occurred while closing ipcFile, %v", closeErr)
-		}
-	}()
+	// Only defer Close if the file was actually created.
+	if ipcFile != nil {
+		defer func() {
+			if closeErr := ipcFile.Close(); closeErr != nil {
+				log.Warnf("error occurred while closing ipcFile, %v", closeErr)
+			}
+		}()
+	}
 
 	go func() {
 		cancelState := cancelFlag.Wait()
@@ -314,7 +317,40 @@ func (p *ShellPlugin) createIpcFile() (*os.File, error) {
 		return nil, nil
 	}
 	ipcFile, err := os.Create(p.logger.ipcFilePath)
-	return ipcFile, err
+
+	// If file creation fails, check for a "no space left on device" error.
+	if err != nil {
+		// Check underlying error
+		if isDiskFull(err) {
+			p.context.Log().Warn("Disk is full. Session will start without logging to disk.")
+			p.logger.writeToIpcFile = false
+			return nil, nil
+		}
+		// For any other error, fail the session as normal.
+		return nil, err
+	}
+
+	return ipcFile, nil
+}
+
+func isDiskFull(err error) bool {
+	// Check string error message (fallback)
+	if strings.Contains(err.Error(), "no space left on device") || // Unix
+		strings.Contains(err.Error(), "disk is full") || // Windows
+		strings.Contains(err.Error(), "not enough space") {
+		return true
+	}
+
+	// Check syscall.Errno on Unix/Linux/Windows
+	if errno, ok := err.(syscall.Errno); ok {
+		return errno == syscall.ENOSPC // Unix
+	}
+	if pathErr, ok := err.(*os.PathError); ok {
+		if errno, ok := pathErr.Err.(syscall.Errno); ok {
+			return errno == syscall.ENOSPC
+		}
+	}
+	return false
 }
 
 // Executes command in pseudo terminal with pty
