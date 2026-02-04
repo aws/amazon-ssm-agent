@@ -19,6 +19,7 @@ package platform
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -49,6 +50,7 @@ const (
 var (
 	readAllText = fileutil.ReadAllText
 	fileExists  = fileutil.Exists
+	writeFile   = os.WriteFile
 
 	ErrFileNotFound   = errors.New("file not found")
 	ErrFilePermission = errors.New("no sufficient permissions")
@@ -308,4 +310,20 @@ func fullyQualifiedDomainName(log log.T) string {
 
 func isPlatformNanoServer(_ log.T) (bool, error) {
 	return false, nil
+}
+
+// Set the OOM score adjustment for the current process on supported platforms.
+// -1000 makes the process immune to the OOM killer under normal circumstances.
+func SetOOMScoreAdjust(log log.T) {
+	const oomScoreAdj = -1000
+	oomScoreAdjPath := "/proc/self/oom_score_adj"
+
+	if fileExists(oomScoreAdjPath) {
+		err := writeFile(oomScoreAdjPath, []byte(fmt.Sprintf("%d", oomScoreAdj)), 0644)
+		if err != nil {
+			log.Warnf("Failed to set OOM score adjustment: %v. Agent will be vulnerable to OOM killer.", err)
+			return
+	    }
+        log.Debugf("Successfully set OOM score adjustment to %d for SSM agent process", oomScoreAdj)
+    }
 }
