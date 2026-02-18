@@ -25,6 +25,8 @@ import (
 	"strings"
 	"time"
 
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -47,7 +49,10 @@ const (
 	maxNumberOfEventsPerCall = 4
 
 	// Event size - https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/cloudwatch_limits_cwl.html
-	MessageLengthThresholdInBytes = 200 * 1000
+	// Reduced from 200*1000 to account for UTF-8 encoding inflation.
+	// Bytes in range 128-255 can inflate up to 3x when encoded as UTF-8.
+	// With maxNumberOfEventsPerCall=4: (80*1024*3 + 26)*4 = 983,144 < 1,048,576 (CW limit)
+	MessageLengthThresholdInBytes = 80 * 1024
 	// json.Marshal can inflate streamed event message by up to ~6 times the size of the message, depending on message contents.
 	// Threshold is reduced here to 1/6 size to account for this.
 	// https://go.dev/play/p/G3RalE_BUEL
@@ -460,6 +465,14 @@ func (service *CloudWatchLogsService) PutLogEvents(messages []*cloudwatchlogs.In
 			// Adding Error Count to StopPolicy before retrying to ensure the retries stop after Stop Policy error counts exceed
 			service.stopPolicy.AddErrorCount(1)
 			return service.retryPutWithNewSequenceToken(messages, logGroup, logStream)
+		case invalidParameterException:
+			// Check if this is an "Upload too large" error - retry events individually
+			if strings.Contains(err.Error(), "Upload too large") {
+				log.Warnf("PutLogEvents batch too large, retrying events individually")
+				return service.retryEventsIndividually(messages, logGroup, logStream, sequenceToken)
+			}
+			// Other InvalidParameterException errors
+			log.Errorf("Error in PutLogEvents:%v", err.Error())
 		default:
 			// Other 400 Errors, 500 Errors even after retries. Log the error
 			log.Errorf("Error in PutLogEvents:%v", err.Error())
@@ -470,6 +483,57 @@ func (service *CloudWatchLogsService) PutLogEvents(messages []*cloudwatchlogs.In
 
 	nextSequenceToken = response.NextSequenceToken
 	return
+}
+
+// retryEventsIndividually retries uploading events one at a time when the batch is too large.
+// This ensures that even if one event causes a size overflow, the other events are still uploaded.
+func (service *CloudWatchLogsService) retryEventsIndividually(messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error) {
+	log := service.context.Log()
+	nextSequenceToken = sequenceToken
+	uploadedCount := 0
+
+	for i, event := range messages {
+		singleBatch := []*cloudwatchlogs.InputLogEvent{event}
+
+		params := &cloudwatchlogs.PutLogEventsInput{
+			LogEvents:     singleBatch,
+			LogGroupName:  aws.String(logGroup),
+			LogStreamName: aws.String(logStream),
+			SequenceToken: nextSequenceToken,
+		}
+
+		response, putErr := service.cloudWatchLogsClient.PutLogEvents(params)
+		if putErr != nil {
+			log.Warnf("Failed to upload individual event %d/%d: %v", i+1, len(messages), putErr)
+			// If a single event is still too large, log a warning marker event instead
+			if strings.Contains(putErr.Error(), "Upload too large") {
+				log.Warnf("Single event %d/%d exceeds size limit, writing marker event", i+1, len(messages))
+				markerEvent := &cloudwatchlogs.InputLogEvent{
+					Message:   aws.String(fmt.Sprintf("[SESSION_LOG_TRUNCATED] Event %d exceeded CloudWatch size limit and was omitted", i+1)),
+					Timestamp: event.Timestamp,
+				}
+				markerBatch := []*cloudwatchlogs.InputLogEvent{markerEvent}
+				markerParams := &cloudwatchlogs.PutLogEventsInput{
+					LogEvents:     markerBatch,
+					LogGroupName:  aws.String(logGroup),
+					LogStreamName: aws.String(logStream),
+					SequenceToken: nextSequenceToken,
+				}
+				markerResp, markerErr := service.cloudWatchLogsClient.PutLogEvents(markerParams)
+				if markerErr == nil {
+					nextSequenceToken = markerResp.NextSequenceToken
+					uploadedCount++
+				}
+			}
+			continue
+		}
+
+		nextSequenceToken = response.NextSequenceToken
+		uploadedCount++
+	}
+
+	log.Infof("Individual retry: uploaded %d/%d events successfully", uploadedCount, len(messages))
+	return nextSequenceToken, nil
 }
 
 // retryPutWithNewSequenceToken gets a new sequence token and retries pushing messages to cloudwatchlogs

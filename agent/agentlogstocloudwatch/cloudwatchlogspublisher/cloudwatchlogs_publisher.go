@@ -31,6 +31,7 @@ const (
 
 	dataAlreadyAcceptedException   = "DataAlreadyAcceptedException"
 	invalidSequenceTokenException  = "InvalidSequenceTokenException"
+	invalidParameterException      = "InvalidParameterException"
 	resourceAlreadyExistsException = "ResourceAlreadyExistsException"
 	resourceNotFoundException      = "ResourceNotFoundException"
 	defaultPollingInterval         = time.Second
