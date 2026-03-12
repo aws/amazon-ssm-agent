@@ -102,6 +102,9 @@ const (
 	// PlatformFlatcar represents Flatcar
 	PlatformFlatcar = "flatcar"
 
+	// PlatformWindRiver represents Wind River Linux
+	PlatformWindRiver = "wind river"
+
 	// PlatformSuse represents SLES(SUSe)
 	PlatformSuseOS = "sles"
 

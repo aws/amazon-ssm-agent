@@ -1,0 +1,110 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          amazon-ssm-agent
+# Required-Start:    $network $remote_fs
+# Required-Stop:     $network $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Amazon SSM Agent
+# Description:       Amazon SSM Agent for managing EC2 and hybrid instances
+### END INIT INFO
+
+NAME=amazon-ssm-agent
+DAEMON=/usr/bin/amazon-ssm-agent
+PIDFILE=/var/run/${NAME}.pid
+LOGFILE=/var/log/amazon/ssm/${NAME}.log
+
+# Exit if the daemon binary is not installed
+[ -x "$DAEMON" ] || exit 5
+
+start() {
+    if is_running; then
+        echo "$NAME is already running (PID $(cat $PIDFILE))"
+        return 0
+    fi
+
+    echo "Starting $NAME..."
+    mkdir -p "$(dirname $LOGFILE)"
+    nohup $DAEMON >> "$LOGFILE" 2>&1 &
+    echo $! > "$PIDFILE"
+
+    sleep 1
+    if is_running; then
+        echo "$NAME started (PID $(cat $PIDFILE))"
+        return 0
+    else
+        echo "Failed to start $NAME"
+        rm -f "$PIDFILE"
+        return 1
+    fi
+}
+
+stop() {
+    if ! is_running; then
+        echo "$NAME is not running"
+        rm -f "$PIDFILE"
+        return 0
+    fi
+
+    echo "Stopping $NAME..."
+    kill "$(cat $PIDFILE)"
+
+    # Wait up to 10 seconds for graceful shutdown
+    i=0
+    while [ $i -lt 10 ]; do
+        if ! is_running; then
+            echo "$NAME stopped"
+            rm -f "$PIDFILE"
+            return 0
+        fi
+        sleep 1
+        i=$((i + 1))
+    done
+
+    # Force kill if still running
+    echo "Force killing $NAME..."
+    kill -9 "$(cat $PIDFILE)" 2>/dev/null
+    rm -f "$PIDFILE"
+    return 0
+}
+
+restart() {
+    stop
+    sleep 1
+    start
+}
+
+status() {
+    if is_running; then
+        echo "$NAME is running (PID $(cat $PIDFILE))"
+        return 0
+    else
+        echo "$NAME is not running"
+        return 3
+    fi
+}
+
+is_running() {
+    [ -f "$PIDFILE" ] && kill -0 "$(cat $PIDFILE)" 2>/dev/null
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart|force-reload)
+        restart
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|force-reload|status}"
+        exit 2
+        ;;
+esac
+
+exit $?

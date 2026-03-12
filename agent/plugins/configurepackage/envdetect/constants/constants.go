@@ -82,6 +82,9 @@ const PlatformGentoo = "gentoo"
 // PlatformFlatcar uses Ohai identifier for flatcar platform
 const PlatformFlatcar = "flatcar"
 
+// PlatformWindRiver uses identifier for Wind River Linux platform
+const PlatformWindRiver = "wrlinux"
+
 // PlatformArch uses Ohai identifier for arch platform
 const PlatformArch = "arch"
 

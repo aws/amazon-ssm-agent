@@ -30,8 +30,9 @@ var isUsingSystemD map[string]string
 var updateInfoObj T
 
 var possiblyUsingSystemD = map[string]bool{
-	updateconstants.PlatformRaspbian: true,
-	updateconstants.PlatformLinux:    true,
+	updateconstants.PlatformRaspbian:  true,
+	updateconstants.PlatformLinux:     true,
+	updateconstants.PlatformWindRiver: true,
 }
 
 var execCommand = exec.Command
@@ -212,6 +213,10 @@ func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 	} else if strings.Contains(platformName, updateconstants.PlatformFlatcar) {
 		log.Info("Detected platform Flatcar")
 		platformName = updateconstants.PlatformFlatcar
+		downloadPlatformOverride = updateconstants.PlatformLinux
+	} else if strings.Contains(platformName, updateconstants.PlatformWindRiver) {
+		log.Info("Detected platform Wind River Linux")
+		platformName = updateconstants.PlatformWindRiver
 		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformSuseOS) {
 		log.Info("Detected platform SuseOS")

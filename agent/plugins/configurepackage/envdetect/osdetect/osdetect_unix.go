@@ -187,6 +187,8 @@ func parseOSreleaseFile(lines []string) (string, string, error) {
 		if strings.Contains(strings.ToLower(name), "leap") {
 			platform = c.PlatformOpensuseLeap
 		}
+	case "wrlinux":
+		platform = c.PlatformWindRiver
 	}
 
 	return platform, platformVersion, nil
@@ -420,6 +422,8 @@ func platformFamilyForPlatform(platform string) (string, error) {
 		return c.PlatformFamilyGentoo, nil
 	case c.PlatformArch:
 		return c.PlatformFamilyArch, nil
+	case c.PlatformWindRiver:
+		return c.PlatformFamilyRhel, nil
 	case c.PlatformBottlerocket, c.PlatformFlatcar:
 		return "", fmt.Errorf("configure package is not supported on %s", platform)
 	default:
