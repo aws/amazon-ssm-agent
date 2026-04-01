@@ -400,17 +400,17 @@ func Download(context context.T, input DownloadInput) (output DownloadOutput, er
 	var isLocalFile = false
 	isLocalFile, err = fileutil.LocalFileExist(input.SourceURL)
 	if err != nil {
-		err = fmt.Errorf("check for local file exists returned %v", err)
+		log.Infof("check for local file exists returned %v", err)
 		err = nil
 	}
 
 	if isLocalFile {
-		err = fmt.Errorf("source is a local file, skipping download. %v", input.SourceURL)
+		log.Infof("source is a local file, skipping download. %v", input.SourceURL)
 		output.LocalFilePath = input.SourceURL
 		output.IsUpdated = false
 		output.IsHashMatched, err = VerifyHash(log, input, output)
 	} else {
-		err = fmt.Errorf("source file wasn't found locally, will attempt as web download. %v", input.SourceURL)
+		log.Infof("source file wasn't found locally, will attempt as web download. %v", input.SourceURL)
 		// compute the local filename which is hash of url_filename
 		// Generating a hash_filename will also help against attackers
 		// from specifying a directory and filename to overwrite any ami/built-in files.
