@@ -344,7 +344,13 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
 	defer cancel()
 
-	cmdWithFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logger.logFilePath, scriptFlag, loggerCmd)
+	// Invoke script with options before the logfile argument. util-linux >= 2.39 rejects
+	// positional arguments after the logfile (ec96a89, "script: abort if unused arguments
+	// are given", Nov 2022). The old forms "script <file> -c <cmd>" and
+	// "script <file> cmd args" both fail on util-linux >= 2.39 / >= 2.42 respectively.
+	// Using "-c" with the logfile last is valid on all util-linux versions and on BSD script.
+	// See: https://github.com/aws/amazon-ssm-agent/issues/667
+	cmdWithFlag := exec.CommandContext(ctx, startRecordSessionCmd, scriptFlag, loggerCmd, p.logger.logFilePath)
 	cmdWithFlag.Stderr = &flagStderr
 	flagErr := cmdWithFlag.Run()
 	if flagErr != nil {
@@ -352,8 +358,9 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 
 		var noFlagStderr bytes.Buffer
 
-		// some versions of "script" does not take a -c flag when passing in commands.
-		cmdWithoutFlag := exec.CommandContext(ctx, startRecordSessionCmd, p.logger.logFilePath, catCmd, p.logger.ipcFilePath)
+		// Fallback for script implementations that predate -c support.
+		// Arguments are ordered to satisfy util-linux >= 2.39 strict parsing.
+		cmdWithoutFlag := exec.CommandContext(ctx, startRecordSessionCmd, catCmd, p.logger.ipcFilePath, p.logger.logFilePath)
 		cmdWithoutFlag.Stderr = &noFlagStderr
 		noFlagErr := cmdWithoutFlag.Run()
 		if noFlagErr != nil {
