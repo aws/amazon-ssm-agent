@@ -1,6 +1,7 @@
 Latest
 ===============
 - Bump golang.org/x/net from v0.48.0 to v0.53.0
+- Bump go-git to v5.18.0
 - Quit if sysprep failed and log its current state
 - Remove attached legacy cloudwatch plugin packages
 - Upgrade Go version to 1.25.10
