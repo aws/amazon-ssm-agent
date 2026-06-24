@@ -73,7 +73,7 @@ func (l *linuxManager) VerifySignature(log log.T, signaturePath string, artifact
 	}
 
 	log.Debugf("Importing public key: gpg --import %s", amazonSSMAgentGPGKey)
-	output, err := l.managerHelper.RunCommand("gpg", "--no-default-keyring", "--keyring", keyringFile, "--import", amazonSSMAgentGPGKey)
+	output, err := l.managerHelper.RunCommand("gpg", "--no-tty", "--no-default-keyring", "--keyring", keyringFile, "--import", amazonSSMAgentGPGKey)
 	if err != nil {
 		if l.managerHelper.IsTimeoutError(err) {
 			return fmt.Errorf("gpg command timed out")
@@ -82,7 +82,7 @@ func (l *linuxManager) VerifySignature(log log.T, signaturePath string, artifact
 	log.Infof("Successfully imported keyring: %v", output)
 
 	log.Info("Verifying agent signature")
-	output, err = l.managerHelper.RunCommand("gpg", "--no-default-keyring", "--keyring", keyringFile, "--verify", signaturePath, binaryPath)
+	output, err = l.managerHelper.RunCommand("gpg", "--no-tty", "--no-default-keyring", "--keyring", keyringFile, "--verify", signaturePath, binaryPath)
 	if err != nil {
 		if l.managerHelper.IsTimeoutError(err) {
 			return fmt.Errorf("gpg verify: command timed out")

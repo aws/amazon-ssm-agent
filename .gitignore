@@ -1,6 +1,7 @@
 *.iml
 .project
 .DS_Store
+.vscode/
 /bin/
 /pkg/
 /.settings/
