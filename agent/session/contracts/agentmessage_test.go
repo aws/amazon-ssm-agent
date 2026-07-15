@@ -56,8 +56,13 @@ func TestGetInteger(t *testing.T) {
 	assert.Equal(t, int32(256), result)
 	assert.Nil(t, err)
 
-	input = []byte{0x00, 0x00, 0x00, 0x00, 0xFF, 0x00}
+	input = []byte{0x00, 0x00, 0x00, 0x00, 0x01, 0x00}
 	result, err = getInteger(log.NewMockLog(), input, 2)
+	assert.Equal(t, int32(256), result)
+	assert.Nil(t, err)
+
+	input = []byte{0x00, 0x00, 0x00, 0x00, 0xFF, 0x00}
+	result, err = getInteger(log.NewMockLog(), input, 3)
 	assert.Equal(t, int32(0), result)
 	assert.NotNil(t, err)
 }
