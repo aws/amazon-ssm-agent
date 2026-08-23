@@ -319,7 +319,7 @@ func (u *SessionUtil) ChangePassword(username string, password string) (userExis
 func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err error) {
 	var userExists bool
 	if userExists, err = u.doesUserExist(appconfig.DefaultRunAsUserName); err != nil {
-		return fmt.Errorf("Error occured while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
+		return fmt.Errorf("Error occurred while checking if %s user exists, %v", appconfig.DefaultRunAsUserName, err)
 	}
 
 	if userExists {
@@ -330,7 +330,7 @@ func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err e
 			return err
 		}
 		if _, err = u.ChangePassword(appconfig.DefaultRunAsUserName, newPassword); err != nil {
-			return fmt.Errorf("Error occured while changing password for %s, %v", appconfig.DefaultRunAsUserName, err)
+			return fmt.Errorf("Error occurred while changing password for %s, %v", appconfig.DefaultRunAsUserName, err)
 		}
 	}
 
