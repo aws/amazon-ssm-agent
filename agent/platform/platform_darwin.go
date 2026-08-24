@@ -132,3 +132,7 @@ func fullyQualifiedDomainName(_ log.T) string {
 func isPlatformNanoServer(_ log.T) (bool, error) {
 	return false, nil
 }
+
+func SetOOMScoreAdjust(_ log.T) {
+	// No-op on macOS
+}
