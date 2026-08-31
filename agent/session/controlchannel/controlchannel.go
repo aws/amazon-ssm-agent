@@ -15,9 +15,11 @@
 package controlchannel
 
 import (
+	gocontext "context"
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"net"
 	"net/http"
 	"strings"
 	"sync/atomic"
@@ -92,26 +94,15 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	mgsService service.Service, ableToOpenMGSConnection *uint32) error {
 
 	log := context.Log()
-	uid := uuid.New().String()
 
-	log.Infof("Setting up websocket for controlchannel for instance: %s, requestId: %s", controlChannel.ChannelId, uid)
-	tokenValue, err := getControlChannelToken(context, mgsService, controlChannel.ChannelId, uid, ableToOpenMGSConnection)
-	if err != nil {
-		log.Errorf("Failed to get controlchannel token, error: %s", err)
-		return err
-	}
+	log.Infof("Setting up websocket for controlchannel for instance: %s", controlChannel.ChannelId)
 
 	onMessageHandler := func(input []byte) {
 		controlChannelIncomingMessageHandler(context, input, controlChannel.agentMessageIncomingMessageChan)
 	}
 	onErrorHandler := func(err error) {
 		callable := func() (channel interface{}, err error) {
-			requestId := uuid.New().String()
-			tokenValue, err := getControlChannelToken(context, mgsService, controlChannel.ChannelId, requestId, ableToOpenMGSConnection)
-			if err != nil {
-				return controlChannel, err
-			}
-			controlChannel.wsChannel.SetChannelToken(tokenValue)
+			// Token is minted inside Open() after successful dial, so we only call Reconnect here
 			if err := controlChannel.Reconnect(context, ableToOpenMGSConnection); err != nil {
 				return controlChannel, err
 			}
@@ -141,11 +132,14 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 		}
 	}
 
+	// Token is empty here; it will be minted inside Open() after successful websocket dial.
+	// The token param is retained because the shared IWebSocketChannel interface is also
+	// used by DataChannel which consumes the Initialize-time token directly.
 	if err := controlChannel.wsChannel.Initialize(context,
 		controlChannel.ChannelId,
 		mgsConfig.ControlChannel,
 		mgsConfig.RoleSubscribe,
-		tokenValue,
+		"", // token minted in Open() after dial for control channel
 		mgsService.GetRegion(),
 		mgsService.GetV4Signer(),
 		onMessageHandler,
@@ -208,12 +202,36 @@ func (controlChannel *ControlChannel) Close(log log.T) error {
 }
 
 // Open opens a websocket connection and sends the token for service to acknowledge the connection.
+// The control-channel token is minted AFTER the websocket dial succeeds, immediately before
+// the handshake, to avoid token expiry during slow/failing dials (e.g., AZ faults).
 func (controlChannel *ControlChannel) Open(context context.T, ableToOpenMGSConnection *uint32) error {
 	log := context.Log()
+	appCfg := controlChannel.context.AppConfig()
+
+	// Build the dialer with configurable dial timeout via NetDialContext.
+	// A timeout of 0 means no timeout (pre-fix behavior / intentional opt-out).
+	// HandshakeTimeout = dialTimeout + offset (always > dial timeout when enabled),
+	// so the per-AZ connect division under Dialer.Timeout is preserved and the
+	// upgrade gets a guaranteed >= offset floor. When disabled (0), HandshakeTimeout is also 0.
+	dialTimeoutMillis := appCfg.Mgs.ControlChannelDialTimeoutMillis
+	var netDialContext func(ctx gocontext.Context, network, addr string) (net.Conn, error)
+	var handshakeTimeout time.Duration
+	if dialTimeoutMillis > 0 {
+		dialTimeout := time.Duration(dialTimeoutMillis) * time.Millisecond
+		handshakeTimeout = dialTimeout + mgsConfig.ControlChannelHandshakeTimeoutOffset
+		netDialContext = func(ctx gocontext.Context, network, addr string) (net.Conn, error) {
+			d := &net.Dialer{Timeout: dialTimeout}
+			return d.DialContext(ctx, network, addr)
+		}
+	}
+	// When dialTimeoutMillis <= 0: netDialContext = nil, handshakeTimeout = 0 (both unbounded)
+
 	controlChannelDialerInput := &websocket.Dialer{
-		TLSClientConfig: network.GetDefaultTLSConfig(log, controlChannel.context.AppConfig()),
-		Proxy:           http.ProxyFromEnvironment,
-		WriteBufferSize: mgsConfig.ControlChannelWriteBufferSizeLimit,
+		TLSClientConfig:  network.GetDefaultTLSConfig(log, appCfg),
+		Proxy:            http.ProxyFromEnvironment,
+		WriteBufferSize:  mgsConfig.ControlChannelWriteBufferSizeLimit,
+		HandshakeTimeout: handshakeTimeout,
+		NetDialContext:   netDialContext,
 	}
 	if err := controlChannel.wsChannel.Open(log, controlChannelDialerInput); err != nil {
 		if ableToOpenMGSConnection != nil {
@@ -223,7 +241,19 @@ func (controlChannel *ControlChannel) Open(context context.T, ableToOpenMGSConne
 		return fmt.Errorf("failed to connect controlchannel with error: %s", err)
 	}
 
+	// Mint the token AFTER successful dial, immediately before the handshake.
+	// This closes the window where a token minted pre-dial can expire during a slow/failing dial.
 	uid := uuid.New().String()
+	tokenValue, err := getControlChannelToken(context, controlChannel.Service, controlChannel.ChannelId, uid, ableToOpenMGSConnection)
+	if err != nil {
+		log.Errorf("Failed to get controlchannel token after dial, error: %s", err)
+		// Close the just-dialed socket to reap listener/pinger goroutines
+		if closeErr := controlChannel.wsChannel.Close(log); closeErr != nil {
+			log.Warnf("failed to close websocket after token mint failure: %s", closeErr)
+		}
+		return fmt.Errorf("failed to get controlchannel token: %s", err)
+	}
+	controlChannel.wsChannel.SetChannelToken(tokenValue)
 
 	openControlChannelInput := service.OpenControlChannelInput{
 		MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -235,11 +265,30 @@ func (controlChannel *ControlChannel) Open(context context.T, ableToOpenMGSConne
 
 	jsonValue, err := json.Marshal(openControlChannelInput)
 	if err != nil {
+		// Close socket on marshal failure to prevent resource leak
+		if closeErr := controlChannel.wsChannel.Close(log); closeErr != nil {
+			log.Warnf("failed to close websocket after marshal failure: %s", closeErr)
+		}
+		// Reset health state for MDS-fallback parity with dial-failure path
+		if ableToOpenMGSConnection != nil {
+			atomic.StoreUint32(ableToOpenMGSConnection, 0)
+		}
+		ssmconnectionchannel.SetConnectionChannel(context, ssmconnectionchannel.MGSFailed)
 		return fmt.Errorf("error serializing openControlChannelInput: %s", err)
 	}
 
 	if err = controlChannel.SendMessage(log, jsonValue, websocket.TextMessage); err == nil {
 		controlChannel.AuditLogScheduler.SendAuditMessage()
+	} else {
+		// Close socket on send failure to reap listener/pinger goroutines
+		if closeErr := controlChannel.wsChannel.Close(log); closeErr != nil {
+			log.Warnf("failed to close websocket after send failure: %s", closeErr)
+		}
+		// Reset health state for MDS-fallback parity with dial-failure path
+		if ableToOpenMGSConnection != nil {
+			atomic.StoreUint32(ableToOpenMGSConnection, 0)
+		}
+		ssmconnectionchannel.SetConnectionChannel(context, ssmconnectionchannel.MGSFailed)
 	}
 	return err
 }

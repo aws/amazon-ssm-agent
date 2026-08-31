@@ -54,6 +54,15 @@ const (
 	// ControlChannelWriteBufferSizeLimit represents 142000 bytes is the maximum control channel can send in 1 message
 	ControlChannelWriteBufferSizeLimit = 142000
 
+	// ControlChannelHandshakeTimeoutOffset is an offset ADDED ON TOP of the configurable dial
+	// timeout to compute the websocket HandshakeTimeout. The resulting HandshakeTimeout =
+	// dialTimeout + this offset, which ensures HandshakeTimeout is always > dialTimeout so the
+	// per-AZ connect division under net.Dialer.Timeout is preserved. The offset bounds the
+	// TLS/HTTP upgrade phase that occurs after connect, guaranteeing at least this much time
+	// for the upgrade after a worst-case connect. When the dial timeout is disabled (0), the
+	// HandshakeTimeout is also set to 0 (unbounded, pre-fix behavior).
+	ControlChannelHandshakeTimeoutOffset = 5 * time.Second
+
 	// Round trip time constant
 	RTTConstant = 1.0 / 8.0
 	// Round trip time variation constant

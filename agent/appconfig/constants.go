@@ -245,6 +245,11 @@ const (
 	DefaultSessionWorkersLimit    = 1000
 	DefaultSessionWorkersLimitMin = 1
 
+	// Control-channel websocket dial timeout in milliseconds
+	// 0 means Go no-timeout (pre-fix behavior, feature disabled);
+	// negative values are rejected → use default
+	DefaultControlChannelDialTimeoutMillis = 20000
+
 	// PluginNameStandardStream is the name for session manager standard stream plugin aka shell.
 	PluginNameStandardStream = "Standard_Stream"
 

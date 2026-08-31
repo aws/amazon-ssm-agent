@@ -102,10 +102,11 @@ func DefaultConfig() SsmagentConfig {
 		CommandWorkerBufferLimit: DefaultCommandWorkerBufferLimit,
 	}
 	mgs := MgsConfig{
-		SessionWorkersLimit:           DefaultSessionWorkersLimit,
-		StopTimeoutMillis:             DefaultStopTimeoutMillis,
-		SessionWorkerBufferLimit:      DefaultSessionWorkerBufferLimit,
-		DeniedPortForwardingRemoteIPs: DefaultDeniedPortForwardingRemoteIPs,
+		SessionWorkersLimit:             DefaultSessionWorkersLimit,
+		StopTimeoutMillis:               DefaultStopTimeoutMillis,
+		SessionWorkerBufferLimit:        DefaultSessionWorkerBufferLimit,
+		DeniedPortForwardingRemoteIPs:   DefaultDeniedPortForwardingRemoteIPs,
+		ControlChannelDialTimeoutMillis: DefaultControlChannelDialTimeoutMillis,
 	}
 	ssm := SsmCfg{
 		HealthFrequencyMinutes:                DefaultSsmHealthFrequencyMinutes,

@@ -77,6 +77,13 @@ func parser(config *SsmagentConfig) {
 		config.Mgs.SessionWorkerBufferLimit, // we do not restrict max number of worker buffer limit here
 		DefaultSessionWorkerBufferLimit)
 
+	// Control-channel dial timeout: reject negative → default, allow 0 (opt-out), no ceiling
+	if config.Mgs.ControlChannelDialTimeoutMillis < 0 {
+		log.Printf("appconfig: Mgs.ControlChannelDialTimeoutMillis=%d is negative, using default %d",
+			config.Mgs.ControlChannelDialTimeoutMillis, DefaultControlChannelDialTimeoutMillis)
+		config.Mgs.ControlChannelDialTimeoutMillis = DefaultControlChannelDialTimeoutMillis
+	}
+
 	config.Mds.CommandRetryLimit = getNumericValue(
 		config.Mds.CommandRetryLimit,
 		DefaultCommandRetryLimitMin,
