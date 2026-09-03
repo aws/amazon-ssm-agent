@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -223,4 +224,50 @@ func (suite *MessageBusTestSuite) TestStop_Faill() {
 	suite.messageBus.Stop()
 	suite.mockHealthChannel.AssertExpectations(suite.T())
 	suite.mockTerminateChannel.AssertExpectations(suite.T())
+}
+
+// PrepareShutdownRequest must be an accepted survey topic -- core sends it from the SCM
+// preshutdown handler. Before this topic existed SendSurveyMessage rejected anything other than
+// health/terminate, so this asserts the allowlist was actually widened.
+func (suite *MessageBusTestSuite) TestSendSurveyMessage_PrepareShutdownTopicAccepted() {
+	prepareChannel := &channelmocks.IChannel{}
+	prepareChannel.On("IsChannelInitialized").Return(true)
+	prepareChannel.On("Send", mock.Anything).Return(nil)
+	// One reply, then the survey window closes -- this is how SendSurveyMessage terminates.
+	result, _ := message.CreatePrepareShutdownResult(workerName, workerType, pid, 2)
+	resultString, _ := json.Marshal(result)
+	prepareChannel.On("Recv").Return(resultString, nil).Once()
+	prepareChannel.On("Recv").Return(nil, errors.New("survey deadline elapsed"))
+	suite.messageBus.surveyChannels[message.PrepareShutdownRequest] = prepareChannel
+
+	results, err := suite.messageBus.SendSurveyMessage(message.CreatePrepareShutdownRequest())
+
+	suite.Assertions.NoError(err, "prepare-shutdown must be an accepted survey topic")
+	suite.Assertions.Len(results, 1, "worker acknowledgement must be collected")
+	suite.Assertions.Equal(message.PrepareShutdownResult, results[0].Topic)
+}
+
+// An unsupported topic must still be rejected, so widening the allowlist did not open it up.
+func (suite *MessageBusTestSuite) TestSendSurveyMessage_UnknownTopicStillRejected() {
+	_, err := suite.messageBus.SendSurveyMessage(&message.Message{Topic: message.TopicType("NopeRequest")})
+	suite.Assertions.Error(err, "unknown topics must remain unsupported")
+}
+
+// The preshutdown survey runs on the SCM goroutine inside a window as short as 10s.
+// createMessageChannelWithRetry sleeps 5s after each of three attempts, so rebuilding the channel
+// here could block ~15s and get the process killed -- and a fresh surveyor has nobody dialed in to
+// answer anyway. An uninitialized preshutdown channel must fail fast instead.
+func (suite *MessageBusTestSuite) TestSendSurveyMessage_PrepareShutdownUninitializedFailsFast() {
+	prepareChannel := &channelmocks.IChannel{}
+	prepareChannel.On("IsChannelInitialized").Return(false)
+	suite.messageBus.surveyChannels[message.PrepareShutdownRequest] = prepareChannel
+
+	start := time.Now()
+	_, err := suite.messageBus.SendSurveyMessage(message.CreatePrepareShutdownRequest())
+
+	suite.Assertions.Error(err)
+	suite.Assertions.Less(time.Since(start), time.Second,
+		"must not sleep through channel-creation retries during shutdown")
+	prepareChannel.AssertNotCalled(suite.T(), "Initialize", mock.Anything)
+	prepareChannel.AssertNotCalled(suite.T(), "Listen", mock.Anything)
 }

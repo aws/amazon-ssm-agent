@@ -57,6 +57,11 @@ const (
 	GetWorkerHealthResult  TopicType = "GetWorkerHealthResult"
 	TerminateWorkerRequest TopicType = "TerminateWorkerRequest"
 	TerminateWorkerResult  TopicType = "TerminateWorkerResult"
+	// PrepareShutdownRequest tells a worker to make in-flight work reboot-safe WITHOUT
+	// terminating -- unlike TerminateWorkerRequest, which means "exit now". Sent from the SCM
+	// preshutdown handler, so preparation is ordered ahead of any process being killed.
+	PrepareShutdownRequest TopicType = "PrepareShutdownRequest"
+	PrepareShutdownResult  TopicType = "PrepareShutdownResult"
 )
 
 // CreateHealthRequest creates an instance of health request message
@@ -90,6 +95,50 @@ func CreateHealthResult(workerName string, workerType WorkerType, pid int) (*Mes
 	}
 
 	return message, nil
+}
+
+// PrepareShutdownResultPayload reports what a worker made reboot-safe. DocumentsWithheld is for
+// core-side logging only.
+type PrepareShutdownResultPayload struct {
+	SchemaVersion     int
+	Name              string
+	WorkerType        WorkerType
+	Pid               int
+	DocumentsWithheld int
+}
+
+// CreatePrepareShutdownRequest creates an instance of prepare-shutdown request message.
+func CreatePrepareShutdownRequest() *Message {
+	return &Message{
+		SchemaVersion: SchemaVersion,
+		Topic:         PrepareShutdownRequest,
+	}
+}
+
+// CreatePrepareShutdownResult creates an instance of prepare-shutdown result message.
+func CreatePrepareShutdownResult(
+	workerName string,
+	workerType WorkerType,
+	pid int,
+	documentsWithheld int) (*Message, error) {
+
+	payload := PrepareShutdownResultPayload{
+		SchemaVersion:     SchemaVersion,
+		Name:              workerName,
+		WorkerType:        workerType,
+		Pid:               pid,
+		DocumentsWithheld: documentsWithheld,
+	}
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Message{
+		SchemaVersion: payload.SchemaVersion,
+		Topic:         PrepareShutdownResult,
+		Payload:       payloadBytes,
+	}, nil
 }
 
 // CreateTerminateWorkerRequest creates an instance of terminate worker request message

@@ -186,3 +186,48 @@ func createStandardSSMAgentWorkers() map[string]*model.WorkerConfig {
 func (suite *LongRunningProviderTestSuite) TestNewWorkerContainer() {
 	assert.NotNil(suite.T(), NewWorkerContainer(suite.context, suite.messageBus))
 }
+
+// The SCM preshutdown window can be as short as 10s, and PrepareShutdown runs on the goroutine the
+// SCM is blocked on. A wedged survey must not hold it past prepareShutdownTimeout.
+func (suite *LongRunningProviderTestSuite) TestPrepareShutdown_BoundedWhenSurveyHangs() {
+	release := make(chan struct{})
+	defer close(release)
+	suite.messageBus.On("SendSurveyMessage", mock.Anything).Run(func(args mock.Arguments) {
+		<-release
+	}).Return([]*message.Message(nil), nil)
+
+	start := time.Now()
+	suite.container.PrepareShutdown()
+	elapsed := time.Since(start)
+
+	assert.GreaterOrEqual(suite.T(), elapsed, prepareShutdownTimeout,
+		"must actually wait for the survey before giving up")
+	assert.Less(suite.T(), elapsed, prepareShutdownTimeout+3*time.Second,
+		"a hung survey must not block the SCM goroutine past the timeout")
+	assert.Less(suite.T(), prepareShutdownTimeout, 10*time.Second,
+		"the bound must fit inside the Server 2019+ preshutdown window")
+}
+
+// The healthy path must return as soon as the survey does, not sit on the timeout.
+func (suite *LongRunningProviderTestSuite) TestPrepareShutdown_ReturnsPromptlyOnAck() {
+	result, _ := message.CreatePrepareShutdownResult(model.SSMAgentWorkerName, message.LongRunning, 1, 2)
+	suite.messageBus.On("SendSurveyMessage", mock.Anything).Return([]*message.Message{result}, nil)
+
+	start := time.Now()
+	suite.container.PrepareShutdown()
+
+	assert.Less(suite.T(), time.Since(start), prepareShutdownTimeout,
+		"an acknowledged survey must not wait out the timeout")
+	suite.messageBus.AssertExpectations(suite.T())
+}
+
+// A survey error is best-effort: log and continue immediately so shutdown is not delayed.
+func (suite *LongRunningProviderTestSuite) TestPrepareShutdown_ReturnsPromptlyOnSurveyError() {
+	suite.messageBus.On("SendSurveyMessage", mock.Anything).Return([]*message.Message(nil), errors.New("channel not initialized"))
+
+	start := time.Now()
+	suite.container.PrepareShutdown()
+
+	assert.Less(suite.T(), time.Since(start), prepareShutdownTimeout,
+		"a failed survey must not wait out the timeout")
+}

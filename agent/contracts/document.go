@@ -124,6 +124,25 @@ func (c *DocumentState) IsAssociation() bool {
 	return c.DocumentType == Association
 }
 
+// PatchDocumentNames are the SSM documents that drive patching and therefore
+// carry dedicated reboot-resumption handling.
+var PatchDocumentNames = []string{
+	"AWS-RunPatchBaseline",
+	"AWS-InstallWindowsUpdates",
+	"AWS-RunPatchBaselineAssociation",
+	"AWS-RunPatchBaselineWithHooks",
+}
+
+// IsPatchDocument reports whether the given document name is a patch document.
+func IsPatchDocument(documentName string) bool {
+	for _, name := range PatchDocumentNames {
+		if documentName == name {
+			return true
+		}
+	}
+	return false
+}
+
 // CancelCommandInfo represents information relevant to a cancel-command that agent receives
 // TODO  This might be revisited when Agent-cli is written to list previously executed commands
 type CancelCommandInfo struct {

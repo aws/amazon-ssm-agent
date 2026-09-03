@@ -17,6 +17,11 @@ func (_m *IContainer) Monitor() {
 	_m.Called()
 }
 
+// PrepareShutdown provides a mock function with given fields:
+func (_m *IContainer) PrepareShutdown() {
+	_m.Called()
+}
+
 // Start provides a mock function with given fields:
 func (_m *IContainer) Start() {
 	_m.Called()

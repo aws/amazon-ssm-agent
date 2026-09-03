@@ -33,6 +33,7 @@ import (
 
 type CoreAgent interface {
 	Start(statusChan *agentcontracts.StatusComm) error
+	PrepareShutdown()
 	Stop()
 }
 
@@ -109,6 +110,15 @@ func (agent *SSMCoreAgent) Start(statusChan *agentcontracts.StatusComm) error {
 
 	statusChan.DoneChan <- struct{}{}
 	return nil
+}
+
+// PrepareShutdown tells the workers to make in-flight work reboot-safe while they are still
+// running. Unlike Stop it tears nothing down. Called from the platform pre-shutdown notification.
+func (agent *SSMCoreAgent) PrepareShutdown() {
+	log := agent.context.Log()
+	log.Info("Preparing for machine shutdown: asking workers to make in-flight work reboot-safe")
+	agent.container.PrepareShutdown()
+	log.Flush()
 }
 
 // Stop the core manager

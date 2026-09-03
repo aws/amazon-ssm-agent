@@ -53,6 +53,7 @@ func NewMessageBus(context context.ICoreAgentContext) *MessageBus {
 	channelCreator := channel.GetChannelCreator(log, *context.AppConfig(), identity)
 	channels[message.GetWorkerHealthRequest] = channelCreator(log, identity)
 	channels[message.TerminateWorkerRequest] = channelCreator(log, identity)
+	channels[message.PrepareShutdownRequest] = channelCreator(log, identity)
 
 	return &MessageBus{
 		context:        context.With("[MessageBus]"),
@@ -75,6 +76,11 @@ func (bus *MessageBus) Start() error {
 	if err := bus.createMessageChannelWithRetry(message.TerminateWorkerRequest); err != nil {
 		return fmt.Errorf("failed to start termination channel: %s", err)
 	}
+	// Established at startup rather than on demand: the preshutdown survey runs while the machine
+	// is going down, which is the worst moment to be creating a channel.
+	if err := bus.createMessageChannelWithRetry(message.PrepareShutdownRequest); err != nil {
+		return fmt.Errorf("failed to start preshutdown channel: %s", err)
+	}
 
 	return nil
 }
@@ -90,11 +96,22 @@ func (bus *MessageBus) SendSurveyMessage(survey *message.Message) ([]*message.Me
 	}()
 
 	logger.Debugf("Start survey %s", survey.Topic)
-	if survey.Topic != message.GetWorkerHealthRequest && survey.Topic != message.TerminateWorkerRequest {
+	if survey.Topic != message.GetWorkerHealthRequest &&
+		survey.Topic != message.TerminateWorkerRequest &&
+		survey.Topic != message.PrepareShutdownRequest {
 		return []*message.Message{}, fmt.Errorf("unsupported topic: %s", survey.Topic)
 	}
 
 	if surveyChannel, ok := bus.surveyChannels[survey.Topic]; !ok || !surveyChannel.IsChannelInitialized() {
+		// The preshutdown survey runs on the SCM service-control goroutine inside a window that is
+		// only 10s on Server 2019+, and createMessageChannelWithRetry sleeps 5s after each of its
+		// three attempts -- up to 15s, which would blow the window and get the process killed. A
+		// freshly listened surveyor has no workers dialed in to answer within the 1s survey time
+		// either, so the retry cannot succeed at what it costs. Fail fast; Start() is what
+		// establishes this channel.
+		if survey.Topic == message.PrepareShutdownRequest {
+			return []*message.Message{}, fmt.Errorf("preshutdown channel is not initialized, skipping survey rather than rebuilding it during shutdown")
+		}
 		if err := bus.createMessageChannelWithRetry(survey.Topic); err != nil {
 			return []*message.Message{}, err
 		}
@@ -147,6 +164,8 @@ func (bus *MessageBus) createMessageChannelWithRetry(topic message.TopicType) er
 		address = message.GetWorkerHealthChannel
 	case message.TerminateWorkerRequest:
 		address = message.TerminationWorkerChannel
+	case message.PrepareShutdownRequest:
+		address = message.PrepareShutdownChannel
 	default:
 		return fmt.Errorf("unknown topic type: %s", topic)
 	}

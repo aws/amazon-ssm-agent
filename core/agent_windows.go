@@ -219,9 +219,23 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	contextLog.Info("Notifying windows service manager for agent subsystem start")
 
 	// update service status to Running
-	const acceptCmds = svc.AcceptStop | svc.AcceptShutdown
+	//
+	// AcceptPreShutdown gets SERVICE_CONTROL_PRESHUTDOWN, which the SCM blocks on instead of racing
+	// the short WaitToKillServiceTimeout -- that block is what holds the OS open long enough to make
+	// in-flight patch documents reboot-safe. AcceptShutdown covers paths that skip preshutdown.
+	//
+	// We inherit the OS default for dwPreshutdownTimeout rather than configuring it. That default is
+	// version-dependent: Windows Server 2016 and older allow 180s, while 2019 and newer cut it to
+	// 10s. Preparation must therefore fit inside 10s, and it does by construction rather than by
+	// assumption: the survey deadline is 1s, PrepareShutdown abandons the survey after
+	// prepareShutdownTimeout (5s), and the preshutdown path refuses to rebuild a dead channel instead
+	// of retrying for 15s. That bound is why we do not call
+	// ChangeServiceConfig2(SERVICE_CONFIG_PRESHUTDOWN_INFO) to widen the window, so the agent never
+	// rewrites its own service configuration.
+	const acceptCmds = svc.AcceptStop | svc.AcceptShutdown | svc.AcceptPreShutdown
 	s <- svc.Status{State: svc.Running, Accepts: acceptCmds}
 	contextLog.Info("Windows service manager notified that agent service has started")
+
 	var (
 		incomingServiceReq         svc.ChangeRequest
 		incomingServiceReqChan     = make(chan svc.ChangeRequest, 1)
@@ -263,7 +277,23 @@ loop:
 			statusChannels.TerminationChan <- struct{}{}
 			contextLog.Info("Service received stop ChangeRequest")
 			break loop
+		// PreShutdown and Shutdown are ALTERNATIVES: accepting SERVICE_ACCEPT_PRESHUTDOWN means the
+		// SCM sends PRESHUTDOWN *instead of* SHUTDOWN on an orderly shutdown. Both prepare and both
+		// break the loop, so preparation runs exactly once either way.
+		case svc.PreShutdown:
+			// The SCM waits here, so every agent process is still alive. Use that window to make
+			// in-flight patch documents reboot-safe: a servicing reboot that kills a patch mid-run
+			// otherwise surfaces as a terminal Failed while patching is still progressing. This
+			// blocks the service-control goroutine, so PrepareShutdown is internally bounded (see
+			// prepareShutdownTimeout) -- a worker that never answers cannot stall the shutdown.
+			agent.PrepareShutdown()
+			statusChannels.TerminationChan <- struct{}{}
+			contextLog.Info("Service received preshutdown ChangeRequest")
+			break loop
 		case svc.Shutdown:
+			// Only when preshutdown was not delivered (e.g. an abrupt shutdown). The SCM waits just
+			// WaitToKillServiceTimeout here, so preparation is best-effort.
+			agent.PrepareShutdown()
 			statusChannels.TerminationChan <- struct{}{}
 			contextLog.Info("Service received shutdown ChangeRequest")
 			break loop

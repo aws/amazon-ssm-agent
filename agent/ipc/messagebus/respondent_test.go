@@ -33,12 +33,13 @@ import (
 
 type MessageBusTestSuite struct {
 	suite.Suite
-	mockLog              log.T
-	mockHealthChannel    *channelmocks.IChannel
-	mockTerminateChannel *channelmocks.IChannel
-	mockContext          *contextmocks.Mock
-	messageBus           *MessageBus
-	appConfig            appconfig.SsmagentConfig
+	mockLog                log.T
+	mockHealthChannel      *channelmocks.IChannel
+	mockTerminateChannel   *channelmocks.IChannel
+	mockPreShutdownChannel *channelmocks.IChannel
+	mockContext            *contextmocks.Mock
+	messageBus             *MessageBus
+	appConfig              appconfig.SsmagentConfig
 }
 
 func (suite *MessageBusTestSuite) SetupTest() {
@@ -52,6 +53,7 @@ func (suite *MessageBusTestSuite) SetupTest() {
 
 	suite.mockHealthChannel = &channelmocks.IChannel{}
 	suite.mockTerminateChannel = &channelmocks.IChannel{}
+	suite.mockPreShutdownChannel = &channelmocks.IChannel{}
 	channels := make(map[message.TopicType]channel.IChannel)
 	channels[message.GetWorkerHealthRequest] = suite.mockHealthChannel
 	channels[message.TerminateWorkerRequest] = suite.mockTerminateChannel
@@ -60,6 +62,7 @@ func (suite *MessageBusTestSuite) SetupTest() {
 		context:                     suite.mockContext,
 		healthChannel:               suite.mockHealthChannel,
 		terminationChannel:          suite.mockTerminateChannel,
+		preShutdownChannel:          suite.mockPreShutdownChannel,
 		terminationRequestChannel:   make(chan bool, 1),
 		terminationChannelConnected: make(chan bool, 1),
 		sleepFunc:                   func(time.Duration) {},
@@ -227,4 +230,73 @@ func (suite *MessageBusTestSuite) TestProcessTerminationRequest_SuccessfulConnec
 	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationRequestChan())
 
 	suite.mockTerminateChannel.AssertExpectations(suite.T())
+}
+
+// Prepare-shutdown is handled on its OWN channel and must NOT terminate the worker: it has to stay
+// alive so it can make in-flight work reboot-safe, which is the entire point of core asking during
+// the SCM preshutdown window.
+func (suite *MessageBusTestSuite) TestProcessPrepareShutdownRequest_PreparesAndAcknowledges() {
+	prepared := 0
+	RegisterShutdownPreparer(func(log.T) int {
+		prepared++
+		return 3
+	})
+	defer RegisterShutdownPreparer(func(log.T) int { return 0 })
+
+	suite.mockPreShutdownChannel.On("IsDialSuccessful").Return(true).Once()
+	suite.mockPreShutdownChannel.On("IsChannelInitialized").Return(true).Once()
+	suite.mockPreShutdownChannel.On("Close").Return(nil).Once()
+
+	request := message.CreatePrepareShutdownRequest()
+	requestString, _ := jsonutil.Marshal(request)
+	suite.mockPreShutdownChannel.On("Recv").Return([]byte(requestString), nil).Once()
+	// Acknowledgement goes out on the prepare-shutdown channel, not the termination channel.
+	suite.mockPreShutdownChannel.On("Send", mock.Anything).Return(nil).Once()
+	// Then drive the loop to exit via receive errors -- the request itself must not end it.
+	suite.mockPreShutdownChannel.On("Recv").Return(nil, fmt.Errorf("failed to receive message on channel")).Times(maxRecvErrCount)
+
+	suite.messageBus.ProcessPrepareShutdownRequest()
+	suite.mockPreShutdownChannel.AssertExpectations(suite.T())
+
+	suite.Assertions.Equal(1, prepared, "prepare-shutdown must invoke the registered preparer")
+	// Crucially: nothing was pushed to the termination request channel.
+	suite.Assertions.Equal(0, len(suite.messageBus.GetTerminationRequestChan()),
+		"prepare-shutdown must never terminate the worker")
+}
+
+// A worker with no preparer registered must still handle the request without panicking.
+func (suite *MessageBusTestSuite) TestProcessPrepareShutdownRequest_NoPreparerRegistered() {
+	suite.mockPreShutdownChannel.On("IsDialSuccessful").Return(true).Once()
+	suite.mockPreShutdownChannel.On("IsChannelInitialized").Return(true).Once()
+	suite.mockPreShutdownChannel.On("Close").Return(nil).Once()
+
+	request := message.CreatePrepareShutdownRequest()
+	requestString, _ := jsonutil.Marshal(request)
+	suite.mockPreShutdownChannel.On("Recv").Return([]byte(requestString), nil).Once()
+	suite.mockPreShutdownChannel.On("Send", mock.Anything).Return(nil).Once()
+	suite.mockPreShutdownChannel.On("Recv").Return(nil, fmt.Errorf("failed to receive message on channel")).Times(maxRecvErrCount)
+
+	suite.Assertions.NotPanics(func() { suite.messageBus.ProcessPrepareShutdownRequest() })
+}
+
+// A lost acknowledgement must not break anything: preparation already happened, so only the
+// DocumentsWithheld telemetry is lost, never correctness.
+func (suite *MessageBusTestSuite) TestProcessPrepareShutdownRequest_SendFailureStillPrepares() {
+	prepared := 0
+	RegisterShutdownPreparer(func(log.T) int { prepared++; return 1 })
+	defer RegisterShutdownPreparer(func(log.T) int { return 0 })
+
+	suite.mockPreShutdownChannel.On("IsDialSuccessful").Return(true).Once()
+	suite.mockPreShutdownChannel.On("IsChannelInitialized").Return(true).Once()
+	suite.mockPreShutdownChannel.On("Close").Return(nil).Once()
+
+	request := message.CreatePrepareShutdownRequest()
+	requestString, _ := jsonutil.Marshal(request)
+	suite.mockPreShutdownChannel.On("Recv").Return([]byte(requestString), nil).Once()
+	suite.mockPreShutdownChannel.On("Send", mock.Anything).Return(fmt.Errorf("send failed")).Once()
+	suite.mockPreShutdownChannel.On("Recv").Return(nil, fmt.Errorf("failed to receive message on channel")).Times(maxRecvErrCount)
+
+	suite.messageBus.ProcessPrepareShutdownRequest()
+
+	suite.Assertions.Equal(1, prepared, "preparation must happen even when the ack cannot be sent")
 }

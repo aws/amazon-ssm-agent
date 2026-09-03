@@ -38,14 +38,6 @@ const (
 	defaultOrphanProcessTimeout = 172800 * time.Second
 )
 
-// Patch document for dedicated reboot processing
-var patchDocumentNames = []string{
-	"AWS-RunPatchBaseline",
-	"AWS-InstallWindowsUpdates",
-	"AWS-RunPatchBaselineAssociation",
-	"AWS-RunPatchBaselineWithHooks",
-}
-
 type OutOfProcExecuter struct {
 	basicexecuter.BasicExecuter
 	docState   *contracts.DocumentState
@@ -59,6 +51,20 @@ var channelCreator = func(log log.T, identity identity.IAgentIdentity, mode file
 }
 
 var processFinder = findProcess
+
+// workerExecutables are the only binaries a document's ProcInfo can legitimately name. Matching on
+// an "ssm-" prefix instead would also accept the agent worker, letting the agent adopt its own
+// parent as the document worker.
+var workerExecutables = []string{"ssm-document-worker", "ssm-session-worker"}
+
+func isWorkerExecutable(name string) bool {
+	for _, worker := range workerExecutables {
+		if name == worker || name == worker+".exe" {
+			return true
+		}
+	}
+	return false
+}
 
 func findProcess(log log.T, procinfo contracts.OSProcInfo, processExecutor executor.IExecutor) bool {
 	if procinfo.Pid == 0 {
@@ -84,11 +90,11 @@ func findProcess(log log.T, procinfo contracts.OSProcInfo, processExecutor execu
 	for _, p := range processes {
 		if p.Pid == procinfo.Pid {
 			name := strings.ToLower(filepath.Base(p.Executable))
-			if !strings.HasPrefix(name, "ssm-") {
-				log.Warnf("PID %d belongs to %q, not an SSM worker; treating as not found", procinfo.Pid, name)
+			if !isWorkerExecutable(name) {
+				log.Warnf("PID %d belongs to %q, not a document/session worker; treating as not found", procinfo.Pid, name)
 				return false
 			}
-			log.Debugf("PID %d confirmed as SSM worker %q", procinfo.Pid, name)
+			log.Debugf("PID %d confirmed as worker %q", procinfo.Pid, name)
 			return true
 		}
 	}
@@ -153,7 +159,7 @@ func (e *OutOfProcExecuter) Run(
 				close(resChan)
 			}()
 
-			e.messaging(log, ipc, resChan, cancelFlag, stopTimer)
+			e.messaging(log, ipc, resChan, cancelFlag, stopTimer, store)
 		}(docStore)
 
 		return resChan
@@ -163,12 +169,20 @@ func (e *OutOfProcExecuter) Run(
 // Executer spins up an ipc transmission worker, it creates a Data processing backend and hands off the backend to the ipc worker
 // ipc worker and data backend act as 2 threads exchange raw json messages, and messaging protocol happened in data backend, data backend is self-contained and exit when command finishes accordingly
 // Executer however does hold a timer to the worker to forcefully termniate both of them
-func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
+func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool, docStore executer.DocumentStore) {
 	// backup current time in case outofproc execution failed and cannot correctly return PluginResult
 	backupStartTime := time.Now()
 
 	// handoff reply functionalities to data backend.
 	backend := messaging.NewExecuterBackend(log, resChan, e.docState, cancelFlag)
+	// The save below happens only after messaging returns, which a reboot can prevent; the
+	// shutdown path needs its state on disk first.
+	backend.BindDocumentStore(func(state contracts.DocumentState) {
+		docStore.Save(state)
+	})
+	// Covers every exit, including the ones that never deliver a terminal result: the withheld
+	// reboot-interrupted failure, a messaging error, and a panic.
+	defer backend.Release()
 
 	// handoff the data backend to messaging worker
 	if err := messaging.Messaging(log, ipc, backend, stopTimer); err != nil {
@@ -224,13 +238,7 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 	// Due to non-agent scheduled additional reboots during Windows update process caused by automated process
 	// recently added by Microsoft, we are allowing Patch Documents to continue from any reboot as the
 	// patch documents are state safe with dedicated state tracking and this allow for correct patch visibility
-	isPatchDocument := false
-	for _, name := range patchDocumentNames {
-		if e.docState.DocumentInformation.DocumentName == name {
-			isPatchDocument = true
-			break
-		}
-	}
+	isPatchDocument := contracts.IsPatchDocument(e.docState.DocumentInformation.DocumentName)
 
 	// this fix is added to delete channels which were not deleted in previous execution
 	if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
@@ -257,6 +265,30 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 			go timeoutOrCancel(stopTimer, defaultOrphanProcessTimeout, e.cancelFlag)
 		} else if isPatchDocument && e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusInProgress {
 			log.TelemetryWarnf("Continue patch execution from presumed reboot")
+			// A worker whose terminal result was never consumed may have left a Failed here, whether
+			// killed mid-write or exited cleanly with no reader left. The channel is a directory that
+			// survives the reboot and is drained on reopen, so reusing it would replay that Failed as
+			// a real failure. Recreate it clean.
+			ipc.Destroy()
+			var staleChannelSurvived bool
+			if ipc, err, staleChannelSurvived = channelCreator(log, e.ctx.Identity(), filewatcherbasedipc.ModeMaster, documentID); err != nil {
+				log.TelemetryErrorf("failed to recreate ipc channel for patch resume: %v", err)
+				return
+			}
+			// Destroy only logs when os.RemoveAll fails, which it can on Windows while a handle is
+			// still open, so the creator still reporting the channel as found is the only signal the
+			// removal did not take. Fail rather than run a worker against a channel that may replay
+			// the stale result, leaving that worker with no reader holding the patch lock.
+			if staleChannelSurvived {
+				// Run discards ipc once err is set, so close the wrapper we just opened or its
+				// watch goroutine and fsnotify handle leak for the life of the agent worker. Close
+				// rather than Destroy: the removal already failed, and releasing our handle is what
+				// may let a later attempt's removal succeed.
+				ipc.Close()
+				err = fmt.Errorf("ipc channel for document %v still present after destroy, refusing to resume patch execution against a stale channel", documentID)
+				log.TelemetryErrorf("%v", err)
+				return
+			}
 			err = e.startNewWorkerProcess(stopTimer, documentID, ipc)
 		} else {
 			log.TelemetryWarnf("process: %v not found, treat as exited", procInfo.Pid)

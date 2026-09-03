@@ -43,11 +43,17 @@ type WorkerContainer struct {
 type IContainer interface {
 	Start()
 	Monitor()
+	PrepareShutdown()
 	Stop(reboot.StopType)
 }
 
 var getPpid = os.Getppid
 var sleep = time.Sleep
+
+// prepareShutdownTimeout bounds how long PrepareShutdown will block the SCM preshutdown window.
+// Comfortably above the 1s survey deadline a healthy channel needs, and well below the 10s the SCM
+// allows on Server 2019+, leaving room for the agent to report StopPending afterwards.
+const prepareShutdownTimeout = 5 * time.Second
 
 // NewWorkerContainer returns worker container
 func NewWorkerContainer(
@@ -133,6 +139,48 @@ func (container *WorkerContainer) Monitor() {
 
 			container.workerProvider.Monitor(configs, pingResults)
 		}
+	}
+}
+
+// PrepareShutdown tells the workers to make in-flight work reboot-safe. It stops nothing -- the
+// workers must still be running. The survey returns after a fixed window regardless, so the
+// acknowledgement is reporting only; correctness never depends on it arriving.
+//
+// The caller is the SCM service-control goroutine inside the preshutdown window, which is as short
+// as 10s on Server 2019+, so this must not block indefinitely. SendSurveyMessage is bounded in the
+// healthy case by the 1s survey deadline, but it is a synchronous IPC call: prepareShutdownTimeout
+// caps the wait so a wedged channel delays the OS shutdown by a bounded amount instead of letting
+// the SCM kill the process mid-write. The survey goroutine is abandoned on timeout, which is safe --
+// the process is going down.
+func (container *WorkerContainer) PrepareShutdown() {
+	logger := container.context.Log()
+
+	done := make(chan []*message.Message, 1)
+	go func() {
+		defer func() {
+			if msg := recover(); msg != nil {
+				logger.Errorf("prepare-shutdown survey panic: %v", msg)
+				close(done)
+			}
+		}()
+
+		results, err := container.messageBus.SendSurveyMessage(message.CreatePrepareShutdownRequest())
+		if err != nil {
+			// Best-effort: a worker that never acknowledges falls back to reporting the failure.
+			logger.Errorf("failed to broadcast core prepare-shutdown signal %s", err)
+			close(done)
+			return
+		}
+		done <- results
+	}()
+
+	select {
+	case results := <-done:
+		for _, result := range results {
+			logger.Infof("Received worker prepare-shutdown result, %+v", result)
+		}
+	case <-time.After(prepareShutdownTimeout):
+		logger.Errorf("prepare-shutdown survey did not return within %v, continuing shutdown", prepareShutdownTimeout)
 	}
 }
 

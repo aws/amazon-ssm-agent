@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremodules"
+	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	"github.com/aws/amazon-ssm-agent/agent/ipc/messagebus"
@@ -98,8 +99,14 @@ func start(log log.T, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, er
 	messageBusClient = messagebus.NewMessageBus(context)
 
 	ssmAgent = agent.NewSSMAgent(context, healthModule, hibernateState)
+
+	// Make in-flight patch documents reboot-safe on core's machine-shutdown notification, so a
+	// patch cut short by an OS-initiated reboot resumes instead of reporting a false failure.
+	messagebus.RegisterShutdownPreparer(messaging.PrepareForShutdown)
+
 	go messageBusClient.ProcessTerminationRequest()
 	go messageBusClient.ProcessHealthRequest()
+	go messageBusClient.ProcessPrepareShutdownRequest()
 
 	// Initialize the startup module during agent start, before agent can potentially enter hibernation mode
 	if !context.AppConfig().Agent.ContainerMode {

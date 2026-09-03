@@ -14,6 +14,11 @@ func (_m *IMessageBus) ProcessHealthRequest() {
 	_m.Called()
 }
 
+// ProcessPrepareShutdownRequest provides a mock function with given fields:
+func (_m *IMessageBus) ProcessPrepareShutdownRequest() {
+	_m.Called()
+}
+
 // ProcessTerminationRequest provides a mock function with given fields:
 func (_m *IMessageBus) ProcessTerminationRequest() {
 	_m.Called()

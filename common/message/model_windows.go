@@ -22,4 +22,7 @@ const (
 	DefaultCoreAgentChannel  = "Amazon\\SSM\\InstanceData\\"
 	GetWorkerHealthChannel   = DefaultIPCPrefix + DefaultCoreAgentChannel + "health"
 	TerminationWorkerChannel = DefaultIPCPrefix + DefaultCoreAgentChannel + "termination"
+	// Its OWN address, not the termination channel: two surveyors on one channel contend for the
+	// same reply stream, so the acknowledgement could never be read back.
+	PrepareShutdownChannel = DefaultIPCPrefix + DefaultCoreAgentChannel + "preshutdown"
 )

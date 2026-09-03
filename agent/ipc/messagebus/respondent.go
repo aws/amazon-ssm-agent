@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	_ "go.nanomsg.org/mangos/v3/transport/ipc"
@@ -33,10 +34,22 @@ const (
 	maxRecvErrCount  = 5
 )
 
+// shutdownPreparer makes in-flight work reboot-safe, returning how many documents it prepared. A
+// registered hook so this IPC layer does not depend on the framework above it; no-op by default.
+var shutdownPreparer = func(log.T) int { return 0 }
+
+// RegisterShutdownPreparer installs the hook invoked when core signals a machine shutdown.
+func RegisterShutdownPreparer(preparer func(log.T) int) {
+	if preparer != nil {
+		shutdownPreparer = preparer
+	}
+}
+
 // IMessageBus is the interface for process the core agent broadcast request
 type IMessageBus interface {
 	ProcessHealthRequest()
 	ProcessTerminationRequest()
+	ProcessPrepareShutdownRequest()
 	GetTerminationRequestChan() chan bool
 	GetTerminationChannelConnectedChan() chan bool
 }
@@ -47,6 +60,7 @@ type MessageBus struct {
 	context                     context.T
 	healthChannel               channel.IChannel
 	terminationChannel          channel.IChannel
+	preShutdownChannel          channel.IChannel
 	terminationRequestChannel   chan bool
 	terminationChannelConnected chan bool
 	sleepFunc                   func(time.Duration)
@@ -61,6 +75,7 @@ func NewMessageBus(context context.T) *MessageBus {
 		context:                     context,
 		healthChannel:               channelCreator(log, identity),
 		terminationChannel:          channelCreator(log, identity),
+		preShutdownChannel:          channelCreator(log, identity),
 		terminationRequestChannel:   make(chan bool, 1),
 		terminationChannelConnected: make(chan bool, 1),
 		sleepFunc:                   time.Sleep,
@@ -141,6 +156,82 @@ func (bus *MessageBus) ProcessHealthRequest() {
 			}
 		} else {
 			log.Warnf("Received invalid message on health channel, %s", request.Topic)
+		}
+	}
+}
+
+// ProcessPrepareShutdownRequest handles machine-shutdown notifications. Unlike
+// ProcessTerminationRequest it NEVER exits the worker, which must stay alive to make in-flight work
+// reboot-safe. Listens on its own channel: sharing the termination channel would put two surveyors
+// on one reply stream, so the acknowledgement could never be read back.
+func (bus *MessageBus) ProcessPrepareShutdownRequest() {
+	log := bus.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Process prepare-shutdown request panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+	var err error
+	var msg []byte
+
+	defer func() {
+		if bus.preShutdownChannel.IsChannelInitialized() {
+			if err = bus.preShutdownChannel.Close(); err != nil {
+				log.Errorf("failed to close prepare-shutdown channel: %v", err)
+			}
+		}
+	}()
+
+	for !bus.preShutdownChannel.IsDialSuccessful() {
+		if err = bus.dialToCoreAgentChannel(message.PrepareShutdownRequest, message.PrepareShutdownChannel); err != nil {
+			log.Errorf("failed to listen to prepare-shutdown channel: %s", err.Error())
+			bus.sleepFunc(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
+		}
+	}
+
+	log.Infof("Start to listen to Core Agent prepare-shutdown channel")
+	errRecvCount := 0
+
+	for {
+		var request *message.Message
+		if msg, err = bus.preShutdownChannel.Recv(); err != nil {
+			errRecvCount++
+			log.Errorf("failed to receive from prepare-shutdown channel: %s", err.Error())
+			if errRecvCount >= maxRecvErrCount {
+				log.Errorf("failed to receive from prepare-shutdown channel %v times. Stopping listener", errRecvCount)
+				return
+			}
+			bus.sleepFunc(recvErrSleepTime)
+			continue
+		}
+
+		errRecvCount = 0
+		if err = json.Unmarshal(msg, &request); err != nil {
+			log.Errorf("failed to unmarshal message: %s", err.Error())
+			continue
+		}
+
+		if request.Topic != message.PrepareShutdownRequest {
+			log.Warnf("Received invalid message on prepare-shutdown channel, %s", request.Topic)
+			continue
+		}
+
+		log.Infof("Received prepare-shutdown signal from core agent, making in-flight work reboot-safe")
+		withheld := shutdownPreparer(log)
+
+		var result *message.Message
+		if result, err = message.CreatePrepareShutdownResult(
+			appconfig.SSMAgentWorkerName,
+			message.LongRunning,
+			os.Getpid(),
+			withheld); err != nil {
+			log.Errorf("failed to create prepare-shutdown response: %s", err.Error())
+			continue
+		}
+		if err = bus.preShutdownChannel.Send(result); err != nil {
+			// Preparation already happened, so a lost ack costs only telemetry.
+			log.Errorf("failed to send prepare-shutdown response: %s", err.Error())
 		}
 	}
 }
@@ -259,6 +350,17 @@ func (bus *MessageBus) dialToCoreAgentChannel(topic message.TopicType, address s
 		}
 		if err = bus.terminationChannel.Dial(address); err != nil {
 			_ = bus.terminationChannel.Close()
+			return fmt.Errorf("can't dial on respondent socket: %s", err.Error())
+		}
+
+		return nil
+	case message.PrepareShutdownRequest:
+		if err = bus.preShutdownChannel.Initialize("respondent"); err != nil {
+			_ = bus.preShutdownChannel.Close()
+			return fmt.Errorf("can't get new respondent socket: %s", err.Error())
+		}
+		if err = bus.preShutdownChannel.Dial(address); err != nil {
+			_ = bus.preShutdownChannel.Close()
 			return fmt.Errorf("can't dial on respondent socket: %s", err.Error())
 		}
 
