@@ -1,6 +1,6 @@
 module github.com/aws/amazon-ssm-agent
 
-go 1.25
+go 1.26
 
 replace github.com/aws/aws-sdk-go => ./extra/aws-sdk-go
 
@@ -32,7 +32,7 @@ require (
 	github.com/xtaci/smux v1.5.15
 	github.com/yusufpapurcu/wmi v1.2.4
 	go.nanomsg.org/mangos/v3 v3.3.0
-	golang.org/x/crypto v0.55.0
+	golang.org/x/crypto v0.56.0
 	golang.org/x/net v0.57.0
 	golang.org/x/oauth2 v0.28.0
 	golang.org/x/sync v0.21.0
