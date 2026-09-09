@@ -311,6 +311,29 @@ func TestOpenControlChannel_OpenControlChannelError(t *testing.T) {
 }
 
 func TestOpenControlChannel_CreateControlChannelError(t *testing.T) {
+	// The token is minted inside Open() after a successful websocket dial, so the
+	// dial has to succeed for the mint to be reached. Upgrade the connection and
+	// then just drain it, as the retry-count test below does.
+	httpTempHandler := func(hw http.ResponseWriter, request *http.Request) {
+		httpConn, err := wsUpgrader.Upgrade(hw, request, nil)
+		if err != nil {
+			http.Error(hw, fmt.Sprintf("no upgrade: %v", err), http.StatusGatewayTimeout)
+			panic("Connection should be successful. Should not enter here.")
+		}
+		for {
+			_, _, err = httpConn.ReadMessage()
+			if err != nil {
+				return
+			}
+		}
+	}
+
+	// launch local HTTP Server
+	srv := httptest.NewServer(http.HandlerFunc(httpTempHandler))
+	defer srv.Close()
+	u, _ := url.Parse(srv.URL)
+	u.Scheme = "ws"
+
 	controlChannel := getControlChannel()
 	messageChan := make(chan mgsContracts.AgentMessage)
 	mockEventLog.On("SendAuditMessage")
@@ -327,7 +350,16 @@ func TestOpenControlChannel_CreateControlChannelError(t *testing.T) {
 	controlChannel.Initialize(mockContext, mockService, instanceId, messageChan)
 	var err error
 	err = controlChannel.SetWebSocket(mockContext, mockService, &ableToOpenMGSConnection)
+	assert.Nil(t, err, "should not throw error during websocket creation")
+
+	// Set local server URL
+	controlChannel.wsChannel.SetUrl(u.String())
+
+	// The dial succeeds and the token mint then fails, so Open carries the error.
+	err = controlChannel.Open(mockContext, &ableToOpenMGSConnection)
+
 	defer controlChannel.Close(mockLog)
+	assert.NotNil(t, err, "should throw error when the token mint fails")
 	assert.Contains(t, err.Error(), "throw error")
 	time.Sleep(2 * time.Second)
 	completedGRNumber := runtime.NumGoroutine()
@@ -438,7 +470,11 @@ func TestOpenControlChannel_OpenControlChannelError_RetryCount(t *testing.T) {
 	createControlChannelOutput := service.CreateControlChannelOutput{TokenValue: &token}
 
 	mockService = &serviceMock.Service{}
-	mockService.On("CreateControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(&createControlChannelOutput, nil).Times(4)
+	// The token is minted inside Open() only after a successful dial. This test's
+	// handler never upgrades, so the dial always fails and the mint is never
+	// reached: permit the call without requiring it, and assert below that it
+	// really does not happen.
+	mockService.On("CreateControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string")).Return(&createControlChannelOutput, nil).Maybe()
 	mockService.On("GetRegion").Return(region)
 	mockService.On("GetV4Signer").Return(signer)
 
@@ -485,5 +521,8 @@ func TestOpenControlChannel_OpenControlChannelError_RetryCount(t *testing.T) {
 	// tests run in parallel at times hence adding some buffer
 	assert.True(t, initialGRNumber+5 >= completedGRNumber)
 	assert.Equal(t, 4, counter)
+	// Minting post-dial means a dial that never succeeds must never mint a token,
+	// so no short-lived token is burned on a connection that cannot be opened.
+	mockService.AssertNotCalled(t, "CreateControlChannel", mock.Anything, mock.Anything, mock.AnythingOfType("string"))
 	mockService.AssertExpectations(t)
 }
