@@ -1,5 +1,17 @@
 Latest
 ===============
+- Bump github.com/gorilla/websocket from v1.4.2 to v1.5.3
+- Bump golang.org/x/crypto from v0.53.0 to v0.56.0
+- Bump golang.org/x/net from v0.56.0 to v0.57.0
+- Bump golang.org/x/sys from v0.46.0 to v0.47.0
+- Upgrade GoLang version from 1.25 to 1.26
+- Mint control-channel token after dial to fix AZ-fault token expiry
+- Resume patch documents interrupted by an external shutdown
+- Use systemctl for systemd in aws: configureDocker on Amazon Linux
+- Update greengrass component version to 1.3.5
+
+3.3.5226.0
+===============
 - Add bounds check for HeaderLength in AgentMessage Deserialize
 - Bump github.com/go-git/go-git/v5 to v5.19.2
 - Bump golang.org/x/sync to v0.21.0
