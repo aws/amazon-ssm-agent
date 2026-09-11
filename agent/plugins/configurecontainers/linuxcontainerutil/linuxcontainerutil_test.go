@@ -335,8 +335,8 @@ func TestAmazonLinuxPlatformInstallCommandPartialFailure(t *testing.T) {
 
 				// Service start fails
 				containerMock.On("UpdateUtilExeCommandOutput",
-					mock.Anything, mock.Anything, "service",
-					[]string{"docker", "start"}, mock.Anything,
+					mock.Anything, mock.Anything, "systemctl",
+					[]string{"start", "docker"}, mock.Anything,
 					mock.Anything, mock.Anything, mock.Anything,
 					mock.Anything, mock.Anything).Return("", fmt.Errorf("docker service start failed"))
 

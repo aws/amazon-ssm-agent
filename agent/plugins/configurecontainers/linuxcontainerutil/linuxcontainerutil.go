@@ -78,15 +78,15 @@ func runAmazonLinuxPlatformInstallCommands(context context.T, log log.T, orchest
 	log.Debug("yum update: ", output)
 
 	out.AppendInfo("Starting docker service")
-	command = "service"
-	parameters = []string{"docker", "start"}
+	command = "systemctl"
+	parameters = []string{"start", "docker"}
 	output, err = dep.UpdateUtilExeCommandOutput(context, 120, log, command, parameters, "", "", "", "", false)
 	if err != nil {
-		log.Error("Error running service docker start: ", err)
-		out.MarkAsFailed(fmt.Errorf("Error running ervice docker start: %v", err))
+		log.Error("Error running systemctl docker start: ", err)
+		out.MarkAsFailed(fmt.Errorf("Error running systemctl docker start: %v", err))
 		return
 	}
-	log.Debug("Service docker start: ", output)
+	log.Debug("systemctl docker start: ", output)
 
 	out.AppendInfo("Installation complete")
 	out.MarkAsSucceeded()
