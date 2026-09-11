@@ -481,16 +481,6 @@ func TestMessaging_ReleasesPatchDocFromShutdownRegistryOnError(t *testing.T) {
 		"messaging must drop the patch document from the shutdown registry before returning")
 }
 
-// allowTelemetryLogging registers the telemetry expectations the shared context log mock omits.
-// NewMockLogWithContext sets up Infof/Debugf but not TelemetryWarnf/TelemetryErrorf, and the patch
-// resume path logs through both, so without this the mock panics on an unexpected call.
-func allowTelemetryLogging(t *testing.T, testCase *TestCase) {
-	logMock, ok := testCase.context.Log().(*logmocks.Mock)
-	assert.True(t, ok, "context mock is expected to carry a mock logger")
-	logMock.On("TelemetryWarnf", mock.AnythingOfType("string"), mock.Anything).Return()
-	logMock.On("TelemetryErrorf", mock.AnythingOfType("string"), mock.Anything).Return()
-}
-
 // createPatchResumeTestCase builds the state initialize() sees when a patch document is resumed
 // after a reboot: the previous worker's channel is still on disk and the document is InProgress.
 func createPatchResumeTestCase() *TestCase {
@@ -504,7 +494,6 @@ func createPatchResumeTestCase() *TestCase {
 // was called would still pass if the stale channel were handed to the worker, which is the defect.
 func TestInitializePatchResume_DestroysStaleChannelAndUsesNewOne(t *testing.T) {
 	testCase := createPatchResumeTestCase()
-	allowTelemetryLogging(t, testCase)
 	staleChannel := new(channelmock.MockedChannel)
 	staleChannel.On("Destroy").Return(nil)
 	freshChannel := new(channelmock.MockedChannel)
@@ -555,7 +544,6 @@ func TestInitializePatchResume_DestroysStaleChannelAndUsesNewOne(t *testing.T) {
 // error and must not launch a worker.
 func TestInitializePatchResume_RecreateFailsReturnsErrorAndStartsNoWorker(t *testing.T) {
 	testCase := createPatchResumeTestCase()
-	allowTelemetryLogging(t, testCase)
 	staleChannel := new(channelmock.MockedChannel)
 	staleChannel.On("Destroy").Return(nil)
 	createErr := errors.New("failed to create channel directory")
@@ -596,7 +584,6 @@ func TestInitializePatchResume_RecreateFailsReturnsErrorAndStartsNoWorker(t *tes
 // path, which must neither destroy nor recreate the channel.
 func TestInitializeNonPatchDocument_DoesNotRecreateChannel(t *testing.T) {
 	testCase := CreateTestCase()
-	allowTelemetryLogging(t, testCase)
 	testCase.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusInProgress
 	channelMock := new(channelmock.MockedChannel)
 
@@ -636,7 +623,6 @@ func TestInitializeNonPatchDocument_DoesNotRecreateChannel(t *testing.T) {
 // through the queue-backed fake channel so the stale datagram is real rather than mocked away.
 func TestInitializePatchResume_DoesNotReplayStaleTerminalDatagram(t *testing.T) {
 	testCase := createPatchResumeTestCase()
-	allowTelemetryLogging(t, testCase)
 	// the fake channel's registry is package-global and keyed by document id, so use an id no other
 	// test in this file shares; otherwise a sibling test's leftovers can mask a replay
 	staleReplayDocumentID := "test-doc-stale-replay"
@@ -691,7 +677,6 @@ func TestInitializePatchResume_DoesNotReplayStaleTerminalDatagram(t *testing.T) 
 // channel as found is the only detection available; running a worker against it is the defect.
 func TestInitializePatchResume_StaleChannelSurvivesDestroyFailsResume(t *testing.T) {
 	testCase := createPatchResumeTestCase()
-	allowTelemetryLogging(t, testCase)
 	staleChannel := new(channelmock.MockedChannel)
 	staleChannel.On("Destroy").Return(nil)
 	survivingChannel := new(channelmock.MockedChannel)

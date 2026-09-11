@@ -83,7 +83,12 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
+	log.On("TelemetryWarn", mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("TelemetryWarnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("TelemetryError", mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("TelemetryErrorf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Closed").Return(false)
+	log.On("WithContext", mock.Anything).Return(log)
 	log.On("WithTelemetryNamespace", mock.Anything).Return(log)
 	log.On("Log", mock.Anything).Return()
 	return log
