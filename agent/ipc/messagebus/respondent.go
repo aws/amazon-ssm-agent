@@ -34,12 +34,13 @@ const (
 	maxRecvErrCount  = 5
 )
 
-// shutdownPreparer makes in-flight work reboot-safe, returning how many documents it prepared. A
-// registered hook so this IPC layer does not depend on the framework above it; no-op by default.
-var shutdownPreparer = func(log.T) int { return 0 }
+// shutdownPreparer records that a machine shutdown is underway so in-flight work can treat its own
+// interruption as a reboot rather than a failure. A registered hook so this IPC layer does not
+// depend on the framework above it; no-op by default.
+var shutdownPreparer = func(log.T) {}
 
 // RegisterShutdownPreparer installs the hook invoked when core signals a machine shutdown.
-func RegisterShutdownPreparer(preparer func(log.T) int) {
+func RegisterShutdownPreparer(preparer func(log.T)) {
 	if preparer != nil {
 		shutdownPreparer = preparer
 	}
@@ -218,14 +219,13 @@ func (bus *MessageBus) ProcessPrepareShutdownRequest() {
 		}
 
 		log.Infof("Received prepare-shutdown signal from core agent, making in-flight work reboot-safe")
-		withheld := shutdownPreparer(log)
+		shutdownPreparer(log)
 
 		var result *message.Message
 		if result, err = message.CreatePrepareShutdownResult(
 			appconfig.SSMAgentWorkerName,
 			message.LongRunning,
-			os.Getpid(),
-			withheld); err != nil {
+			os.Getpid()); err != nil {
 			log.Errorf("failed to create prepare-shutdown response: %s", err.Error())
 			continue
 		}

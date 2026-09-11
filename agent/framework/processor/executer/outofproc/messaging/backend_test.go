@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
+	agentlog "github.com/aws/amazon-ssm-agent/agent/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	taskmocks "github.com/aws/amazon-ssm-agent/agent/mocks/task"
@@ -293,5 +294,243 @@ func assertValueEqual(t *testing.T, a map[string]*contracts.PluginResult, b map[
 	assert.Equal(t, len(a), len(b))
 	for key, val := range a {
 		assert.Equal(t, *val, *b[key])
+	}
+}
+
+// --- reboot-interrupted patch failures -------------------------------------------------------
+
+// stubShutdownChecker pins the shutdown predicate so a gate test does not depend on the
+// process-global latch. The latch itself, and the wiring from it to this predicate, are covered by
+// shutdownstate_test.go and TestExecuterBackend_Process_WithholdViaRealShutdownSignal.
+func stubShutdownChecker(t *testing.T, shuttingDown bool) {
+	t.Helper()
+	original := shutdownChecker
+	shutdownChecker = func(agentlog.T) bool { return shuttingDown }
+	t.Cleanup(func() { shutdownChecker = original })
+}
+
+// newPatchBackend builds a backend for a patch document whose only plugin has already failed, which
+// is the state the worker leaves behind when a shutdown cuts the step short.
+func newPatchBackend(t *testing.T) (*ExecuterBackend, chan contracts.DocumentResult, chan int) {
+	t.Helper()
+	docState := contracts.DocumentState{
+		DocumentInformation: contracts.DocumentInfo{
+			DocumentID:      testDocumentID,
+			DocumentName:    "AWS-RunPatchBaseline",
+			MessageID:       testMessageID,
+			AssociationID:   testAssociationID,
+			DocumentVersion: testDocumentVersion,
+			DocumentStatus:  contracts.ResultStatusInProgress,
+		},
+		DocumentType: "SendCommand",
+		InstancePluginsInformation: []contracts.PluginState{{
+			Name: "aws:runPatchBaseline",
+			Id:   "patch",
+			Result: contracts.PluginResult{
+				PluginID: "patch",
+				Status:   contracts.ResultStatusFailed,
+				Code:     1,
+				Error:    "interrupted",
+			},
+		}},
+	}
+	outputChan := make(chan contracts.DocumentResult, 10)
+	stopChan := make(chan int, 1)
+	return &ExecuterBackend{
+		cancelFlag: taskmocks.NewMockDefault(),
+		output:     outputChan,
+		stopChan:   stopChan,
+		docState:   &docState,
+		log:        logger,
+	}, outputChan, stopChan
+}
+
+// completeDatagram builds a terminal datagram carrying the given document status.
+func completeDatagram(t *testing.T, status contracts.ResultStatus) string {
+	t.Helper()
+	result := contracts.PluginResult{PluginID: "patch", Status: status, Code: 1}
+	datagram, err := CreateDatagram(MessageTypeComplete, contracts.DocumentResult{
+		Status:        status,
+		PluginResults: map[string]*contracts.PluginResult{"patch": &result},
+		LastPlugin:    "",
+	})
+	assert.NoError(t, err)
+	return datagram
+}
+
+// The failure must not reach the reply channel. That send is the irreversible step -- once the
+// service has the Failed, resuming the document cannot take it back -- so asserting on the channel
+// is what actually pins the behavior, not the docState rewind.
+func TestExecuterBackend_Process_WithholdsRebootInterruptedPatchFailure(t *testing.T) {
+	stubShutdownChecker(t, true)
+	backend, outputChan, stopChan := newPatchBackend(t)
+
+	assert.NoError(t, backend.Process(completeDatagram(t, contracts.ResultStatusFailed)))
+
+	assert.Empty(t, outputChan, "a reboot-interrupted patch failure must not be reported upstream")
+	assert.Equal(t, contracts.ResultStatusInProgress, backend.docState.DocumentInformation.DocumentStatus)
+	// Messaging still has to be torn down, and by the same signal a reported result uses, so the
+	// Executer sees a clean exit rather than an error it would turn back into a failure.
+	assert.Equal(t, stopTypeTerminate, <-stopChan)
+}
+
+// The plugin result is what makes the resume real: runpluginutil replays an already-Failed plugin
+// instead of re-running it, so a withhold that left the result Failed would re-report on the very
+// next pass.
+func TestExecuterBackend_Process_WithheldFailureLeavesPluginResumable(t *testing.T) {
+	stubShutdownChecker(t, true)
+	backend, _, stopChan := newPatchBackend(t)
+
+	assert.NoError(t, backend.Process(completeDatagram(t, contracts.ResultStatusFailed)))
+	<-stopChan
+
+	result := backend.docState.InstancePluginsInformation[0].Result
+	assert.Equal(t, contracts.ResultStatusInProgress, result.Status, "the resume must re-run the step")
+	assert.Equal(t, 0, result.Code)
+	assert.Equal(t, "", result.Error)
+}
+
+// Exercises the real latch rather than the stub, so the wiring from the preshutdown notification
+// through to the gate is covered end to end.
+func TestExecuterBackend_Process_WithholdViaRealShutdownSignal(t *testing.T) {
+	resetShutdownState(t)
+	backend, outputChan, stopChan := newPatchBackend(t)
+
+	PrepareForShutdown(logger)
+	assert.NoError(t, backend.Process(completeDatagram(t, contracts.ResultStatusFailed)))
+
+	assert.Empty(t, outputChan)
+	assert.Equal(t, stopTypeTerminate, <-stopChan)
+}
+
+// Without a shutdown the failure is genuine and must be reported. This is the assertion that fails
+// if the gate is ever widened to withhold unconditionally.
+func TestExecuterBackend_Process_ReportsPatchFailureWithoutShutdown(t *testing.T) {
+	stubShutdownChecker(t, false)
+	backend, outputChan, stopChan := newPatchBackend(t)
+
+	assert.NoError(t, backend.Process(completeDatagram(t, contracts.ResultStatusFailed)))
+
+	res := <-outputChan
+	assert.Equal(t, contracts.ResultStatusFailed, res.Status)
+	assert.Equal(t, contracts.ResultStatusFailed, backend.docState.DocumentInformation.DocumentStatus)
+	assert.Equal(t, stopTypeTerminate, <-stopChan)
+}
+
+// Only patch documents get reboot-resumption. Every other document type reports normally, even
+// mid-shutdown: they have no resume path, so withholding would just lose the result.
+func TestExecuterBackend_Process_ReportsNonPatchFailureDuringShutdown(t *testing.T) {
+	stubShutdownChecker(t, true)
+	backend, outputChan, stopChan := newPatchBackend(t)
+	backend.docState.DocumentInformation.DocumentName = "AWS-RunPowerShellScript"
+
+	assert.NoError(t, backend.Process(completeDatagram(t, contracts.ResultStatusFailed)))
+
+	res := <-outputChan
+	assert.Equal(t, contracts.ResultStatusFailed, res.Status)
+	assert.Equal(t, stopTypeTerminate, <-stopChan)
+}
+
+// A patch document that finished during the shutdown window still reports: the gate is about a
+// failure the reboot caused, not about suppressing results while a shutdown is pending.
+func TestExecuterBackend_Process_ReportsSuccessDuringShutdown(t *testing.T) {
+	stubShutdownChecker(t, true)
+	backend, outputChan, stopChan := newPatchBackend(t)
+
+	assert.NoError(t, backend.Process(completeDatagram(t, contracts.ResultStatusSuccess)))
+
+	res := <-outputChan
+	assert.Equal(t, contracts.ResultStatusSuccess, res.Status)
+	assert.Equal(t, stopTypeTerminate, <-stopChan)
+}
+
+// Failed is the only plugin status to rewind. TimedOut means the step outlived its own timeout and
+// Cancelled means someone stopped it deliberately -- re-running either would override a decision the
+// reboot did not make, and the resume skips both anyway.
+func TestRewindToInProgress_OnlyRewritesFailedPlugins(t *testing.T) {
+	docState := &contracts.DocumentState{
+		DocumentInformation: contracts.DocumentInfo{DocumentStatus: contracts.ResultStatusFailed},
+		InstancePluginsInformation: []contracts.PluginState{
+			{Id: "failed", Result: contracts.PluginResult{Status: contracts.ResultStatusFailed, Code: 1, Error: "boom"}},
+			{Id: "timedout", Result: contracts.PluginResult{Status: contracts.ResultStatusTimedOut, Code: 2}},
+			{Id: "cancelled", Result: contracts.PluginResult{Status: contracts.ResultStatusCancelled}},
+			{Id: "succeeded", Result: contracts.PluginResult{Status: contracts.ResultStatusSuccess}},
+		},
+	}
+
+	rewindToInProgress(docState)
+
+	assert.Equal(t, contracts.ResultStatusInProgress, docState.DocumentInformation.DocumentStatus)
+	assert.Equal(t, contracts.ResultStatusInProgress, docState.InstancePluginsInformation[0].Result.Status)
+	assert.Equal(t, 0, docState.InstancePluginsInformation[0].Result.Code)
+	assert.Equal(t, "", docState.InstancePluginsInformation[0].Result.Error)
+	assert.Equal(t, contracts.ResultStatusTimedOut, docState.InstancePluginsInformation[1].Result.Status)
+	assert.Equal(t, 2, docState.InstancePluginsInformation[1].Result.Code)
+	assert.Equal(t, contracts.ResultStatusCancelled, docState.InstancePluginsInformation[2].Result.Status)
+	assert.Equal(t, contracts.ResultStatusSuccess, docState.InstancePluginsInformation[3].Result.Status)
+}
+
+// Only the step the reboot cut short is rewound. An earlier Failed step reported its result upstream
+// when it finished, so re-running it would redo work the service has already published -- which is
+// reachable on AWS-RunPatchBaselineWithHooks, where several steps run on the same platform.
+func TestRewindToInProgress_RewindsOnlyTheLatestFailedPlugin(t *testing.T) {
+	docState := &contracts.DocumentState{
+		DocumentInformation: contracts.DocumentInfo{DocumentStatus: contracts.ResultStatusFailed},
+		InstancePluginsInformation: []contracts.PluginState{
+			{Id: "earlierFailure", Result: contracts.PluginResult{Status: contracts.ResultStatusFailed, Code: 1, Error: "hook failed"}},
+			{Id: "succeeded", Result: contracts.PluginResult{Status: contracts.ResultStatusSuccess}},
+			{Id: "cutShortByReboot", Result: contracts.PluginResult{Status: contracts.ResultStatusFailed, Code: 1, Error: "interrupted"}},
+		},
+	}
+
+	rewindToInProgress(docState)
+
+	assert.Equal(t, contracts.ResultStatusInProgress, docState.InstancePluginsInformation[2].Result.Status,
+		"the step the reboot interrupted must be re-run")
+	assert.Equal(t, 0, docState.InstancePluginsInformation[2].Result.Code)
+	assert.Equal(t, "", docState.InstancePluginsInformation[2].Result.Error)
+	assert.Equal(t, contracts.ResultStatusFailed, docState.InstancePluginsInformation[0].Result.Status,
+		"an earlier failure was already reported upstream and must not be re-run")
+	assert.Equal(t, 1, docState.InstancePluginsInformation[0].Result.Code)
+	assert.Equal(t, "hook failed", docState.InstancePluginsInformation[0].Result.Error)
+	assert.Equal(t, contracts.ResultStatusSuccess, docState.InstancePluginsInformation[1].Result.Status)
+}
+
+// The Executer's error path calls this when the shutdown killed the worker before it could report
+// anything, which is the other place a false failure is manufactured.
+func TestRewindPatchDocumentForReboot(t *testing.T) {
+	tests := []struct {
+		name         string
+		documentName string
+		shuttingDown bool
+		expected     bool
+	}{
+		{"patch document during shutdown", "AWS-RunPatchBaseline", true, true},
+		{"patch document with no shutdown", "AWS-RunPatchBaseline", false, false},
+		{"non-patch document during shutdown", "AWS-RunPowerShellScript", true, false},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			stubShutdownChecker(t, test.shuttingDown)
+			docState := &contracts.DocumentState{
+				DocumentInformation: contracts.DocumentInfo{
+					DocumentID:     testDocumentID,
+					DocumentName:   test.documentName,
+					DocumentStatus: contracts.ResultStatusInProgress,
+				},
+				InstancePluginsInformation: []contracts.PluginState{
+					{Id: "patch", Result: contracts.PluginResult{Status: contracts.ResultStatusFailed, Code: 1}},
+				},
+			}
+
+			assert.Equal(t, test.expected, RewindPatchDocumentForReboot(logger, docState))
+
+			if test.expected {
+				assert.Equal(t, contracts.ResultStatusInProgress, docState.InstancePluginsInformation[0].Result.Status)
+			} else {
+				assert.Equal(t, contracts.ResultStatusFailed, docState.InstancePluginsInformation[0].Result.Status,
+					"a declined gate must leave the document alone")
+			}
+		})
 	}
 }

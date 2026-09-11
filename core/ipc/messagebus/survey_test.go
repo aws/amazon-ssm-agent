@@ -234,7 +234,7 @@ func (suite *MessageBusTestSuite) TestSendSurveyMessage_PrepareShutdownTopicAcce
 	prepareChannel.On("IsChannelInitialized").Return(true)
 	prepareChannel.On("Send", mock.Anything).Return(nil)
 	// One reply, then the survey window closes -- this is how SendSurveyMessage terminates.
-	result, _ := message.CreatePrepareShutdownResult(workerName, workerType, pid, 2)
+	result, _ := message.CreatePrepareShutdownResult(workerName, workerType, pid)
 	resultString, _ := json.Marshal(result)
 	prepareChannel.On("Recv").Return(resultString, nil).Once()
 	prepareChannel.On("Recv").Return(nil, errors.New("survey deadline elapsed"))

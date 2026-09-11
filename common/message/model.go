@@ -97,14 +97,14 @@ func CreateHealthResult(workerName string, workerType WorkerType, pid int) (*Mes
 	return message, nil
 }
 
-// PrepareShutdownResultPayload reports what a worker made reboot-safe. DocumentsWithheld is for
-// core-side logging only.
+// PrepareShutdownResultPayload acknowledges that a worker received the shutdown notification and
+// prepared. It carries no per-document detail: preparation is a flag the worker's own document
+// paths read as they finish, so there is nothing to count at the moment it is acknowledged.
 type PrepareShutdownResultPayload struct {
-	SchemaVersion     int
-	Name              string
-	WorkerType        WorkerType
-	Pid               int
-	DocumentsWithheld int
+	SchemaVersion int
+	Name          string
+	WorkerType    WorkerType
+	Pid           int
 }
 
 // CreatePrepareShutdownRequest creates an instance of prepare-shutdown request message.
@@ -119,15 +119,13 @@ func CreatePrepareShutdownRequest() *Message {
 func CreatePrepareShutdownResult(
 	workerName string,
 	workerType WorkerType,
-	pid int,
-	documentsWithheld int) (*Message, error) {
+	pid int) (*Message, error) {
 
 	payload := PrepareShutdownResultPayload{
-		SchemaVersion:     SchemaVersion,
-		Name:              workerName,
-		WorkerType:        workerType,
-		Pid:               pid,
-		DocumentsWithheld: documentsWithheld,
+		SchemaVersion: SchemaVersion,
+		Name:          workerName,
+		WorkerType:    workerType,
+		Pid:           pid,
 	}
 	payloadBytes, err := json.Marshal(payload)
 	if err != nil {

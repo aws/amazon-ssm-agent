@@ -210,7 +210,7 @@ func (suite *LongRunningProviderTestSuite) TestPrepareShutdown_BoundedWhenSurvey
 
 // The healthy path must return as soon as the survey does, not sit on the timeout.
 func (suite *LongRunningProviderTestSuite) TestPrepareShutdown_ReturnsPromptlyOnAck() {
-	result, _ := message.CreatePrepareShutdownResult(model.SSMAgentWorkerName, message.LongRunning, 1, 2)
+	result, _ := message.CreatePrepareShutdownResult(model.SSMAgentWorkerName, message.LongRunning, 1)
 	suite.messageBus.On("SendSurveyMessage", mock.Anything).Return([]*message.Message{result}, nil)
 
 	start := time.Now()

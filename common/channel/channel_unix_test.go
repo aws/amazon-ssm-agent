@@ -151,20 +151,12 @@ func (suite *IChannelTestSuite) TestIPCSelection_OSCheck() {
 }
 
 func (suite *IChannelTestSuite) TestIPCSelection_CloseError() {
-	// Create a wait group to synchronize the operations
-	var wg sync.WaitGroup
-	wg.Add(1)
-
 	channelMock := &mocks.IChannel{}
 	expectedError := fmt.Errorf("failed to close pipe")
 
-	// Modify the Close mock to signal when it's been called
 	channelMock.On("Initialize", mock.Anything).Return(nil)
 	channelMock.On("Listen", mock.Anything).Return(fmt.Errorf("listen error"))
-	channelMock.On("Close").Run(func(args mock.Arguments) {
-		// Signal that Close has been called
-		defer wg.Done()
-	}).Return(expectedError)
+	channelMock.On("Close").Return(expectedError)
 
 	newNamedPipeChannelRef = func(_ log.T, _ identity.IAgentIdentity) IChannel {
 		return channelMock
@@ -173,14 +165,37 @@ func (suite *IChannelTestSuite) TestIPCSelection_CloseError() {
 		return false
 	}
 
+	mockLog := suite.log.(*logmocks.Mock)
+	// canUseNamedPipe returns as soon as its goroutine reports the fallback, which happens before the
+	// deferred Close and therefore before the Errorf under test. Waiting on Close is not enough
+	// either -- the Errorf runs after Close returns -- so wait for the log call itself.
+	//
+	// The signal has to hang off the expectation NewMockLog already registered: testify matches the
+	// first expectation whose arguments fit, and that catch-all Errorf always fits, so a more
+	// specific one added here would never be selected.
+	closeErrorLogged := make(chan struct{})
+	var once sync.Once
+	for _, expectedCall := range mockLog.ExpectedCalls {
+		if expectedCall.Method != "Errorf" {
+			continue
+		}
+		expectedCall.Run(func(args mock.Arguments) {
+			if format, ok := args.Get(0).(string); ok && format == closeErrorLogFormat {
+				once.Do(func() { close(closeErrorLogged) })
+			}
+		})
+	}
+
 	suite.appconfig.Agent.ForceFileIPC = false
 	output := canUseNamedPipe(suite.log, suite.appconfig, suite.identity)
 
-	// Wait for the Close operation to complete
-	wg.Wait()
+	select {
+	case <-closeErrorLogged:
+	case <-time.After(5 * time.Second):
+		suite.FailNow("timed out waiting for the named pipe close failure to be logged")
+	}
 
 	assert.False(suite.T(), output)
-	mockLog := suite.log.(*logmocks.Mock)
-	mockLog.AssertCalled(suite.T(), "Errorf", "error while closing named pipe channel %v", []interface{}{expectedError})
+	mockLog.AssertCalled(suite.T(), "Errorf", closeErrorLogFormat, []interface{}{expectedError})
 	mockLog.AssertCalled(suite.T(), "Info", []interface{}{"falling back to file based IPC as named pipe creation failed"})
 }

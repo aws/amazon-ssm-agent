@@ -237,11 +237,10 @@ func (suite *MessageBusTestSuite) TestProcessTerminationRequest_SuccessfulConnec
 // the SCM preshutdown window.
 func (suite *MessageBusTestSuite) TestProcessPrepareShutdownRequest_PreparesAndAcknowledges() {
 	prepared := 0
-	RegisterShutdownPreparer(func(log.T) int {
+	RegisterShutdownPreparer(func(log.T) {
 		prepared++
-		return 3
 	})
-	defer RegisterShutdownPreparer(func(log.T) int { return 0 })
+	defer RegisterShutdownPreparer(func(log.T) {})
 
 	suite.mockPreShutdownChannel.On("IsDialSuccessful").Return(true).Once()
 	suite.mockPreShutdownChannel.On("IsChannelInitialized").Return(true).Once()
@@ -279,12 +278,12 @@ func (suite *MessageBusTestSuite) TestProcessPrepareShutdownRequest_NoPreparerRe
 	suite.Assertions.NotPanics(func() { suite.messageBus.ProcessPrepareShutdownRequest() })
 }
 
-// A lost acknowledgement must not break anything: preparation already happened, so only the
-// DocumentsWithheld telemetry is lost, never correctness.
+// A lost acknowledgement must not break anything: preparation already happened, so only core's
+// telemetry is lost, never correctness.
 func (suite *MessageBusTestSuite) TestProcessPrepareShutdownRequest_SendFailureStillPrepares() {
 	prepared := 0
-	RegisterShutdownPreparer(func(log.T) int { prepared++; return 1 })
-	defer RegisterShutdownPreparer(func(log.T) int { return 0 })
+	RegisterShutdownPreparer(func(log.T) { prepared++ })
+	defer RegisterShutdownPreparer(func(log.T) {})
 
 	suite.mockPreShutdownChannel.On("IsDialSuccessful").Return(true).Once()
 	suite.mockPreShutdownChannel.On("IsChannelInitialized").Return(true).Once()

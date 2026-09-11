@@ -450,21 +450,21 @@ func TestProcessFinder_PidRunning_AgentWorker_ReturnsFalse(t *testing.T) {
 	assert.False(t, result)
 }
 
-// A patch document must not stay in the shutdown registry once messaging returns. The paths that
-// leak are the ones that never deliver a terminal result -- here, a messaging error -- so this
-// exercises messaging() itself rather than calling Release directly, which would still pass if the
-// deferred call were dropped.
-func TestMessaging_ReleasesPatchDocFromShutdownRegistryOnError(t *testing.T) {
-	testCase := CreateTestCase()
-	testCase.docState.DocumentInformation.DocumentName = "AWS-RunPatchBaseline"
-	testCase.docStore.On("Save", mock.Anything).Return()
+// runMessagingWithIPCFailure drives messaging() into its error path with no result ever delivered --
+// the shape of a run whose worker died before reporting, which is what a machine shutdown produces.
+// A failing Send is used because it is the one exit Messaging takes deterministically: a timeout
+// races the inbound channel for the select, and only some of those orderings set the error.
+// Returns whatever the Executer put on the reply channel.
+func runMessagingWithIPCFailure(t *testing.T, testCase *TestCase) []contracts.DocumentResult {
+	t.Helper()
 
-	// Closing the inbound channel makes Messaging return without a terminal result.
-	recvChan := make(chan string)
-	close(recvChan)
 	channelMock := new(channelmock.MockedChannel)
 	channelMock.On("GetPath").Return("test-path")
-	channelMock.On("GetMessage").Return(recvChan)
+	channelMock.On("GetMessage").Return(make(chan string))
+	// The backend's opening plugin-config datagram is what reaches Send, so this fails on the first
+	// send and Messaging returns with the error set, before any result exists.
+	channelMock.On("Send", mock.Anything).Return(errors.New("ipc channel gone"))
+	channelMock.On("Destroy").Return(nil)
 
 	exe := &OutOfProcExecuter{
 		ctx:        testCase.context,
@@ -473,16 +473,77 @@ func TestMessaging_ReleasesPatchDocFromShutdownRegistryOnError(t *testing.T) {
 	}
 	resChan := make(chan contracts.DocumentResult, len(testCase.docState.InstancePluginsInformation)+1)
 
-	exe.messaging(logger, channelMock, resChan, exe.cancelFlag, make(chan bool, 1), testCase.docStore)
+	exe.messaging(logger, channelMock, resChan, exe.cancelFlag, make(chan bool, 1))
+	close(resChan)
 
-	// PrepareForShutdown reports how many in-flight patch documents it prepared. A leaked
-	// registration would let it mutate and re-persist a document that is no longer running.
-	assert.Equal(t, 0, messaging.PrepareForShutdown(logger),
-		"messaging must drop the patch document from the shutdown registry before returning")
+	var results []contracts.DocumentResult
+	for res := range resChan {
+		results = append(results, res)
+	}
+	return results
+}
+
+// The Executer's error path is the second place a false failure is manufactured: when the shutdown
+// kills the worker before it can report, the agent synthesizes the Failed itself. Asserting on the
+// reply channel rather than on the rewind is what makes this meaningful -- the defect is the report
+// going upstream, and it is irreversible once sent.
+func TestMessaging_ShutdownInterruptedPatchDocument_ReportsNothingAndStaysResumable(t *testing.T) {
+	testCase := CreateTestCase()
+	testCase.docState.DocumentInformation.DocumentName = "AWS-RunPatchBaseline"
+
+	rewindCalled := false
+	defer swapRewindForReboot(func(log.T, *contracts.DocumentState) bool {
+		rewindCalled = true
+		return true
+	})()
+
+	results := runMessagingWithIPCFailure(t, testCase)
+
+	assert.True(t, rewindCalled, "the error path must consult the shutdown gate before synthesizing a failure")
+	assert.Empty(t, results, "an interrupted patch document must not report a result upstream")
+	assert.NotEqual(t, contracts.ResultStatusFailed, testCase.docState.DocumentInformation.DocumentStatus,
+		"the document must be left resumable, not stamped Failed")
+}
+
+// The gate must not swallow genuine failures. Same error path, gate declining, so this fails if the
+// early return is ever taken unconditionally.
+func TestMessaging_NoShutdown_StillReportsSynthesizedFailure(t *testing.T) {
+	testCase := CreateTestCase()
+	testCase.docState.DocumentInformation.DocumentName = "AWS-RunPatchBaseline"
+
+	defer swapRewindForReboot(func(log.T, *contracts.DocumentState) bool { return false })()
+
+	results := runMessagingWithIPCFailure(t, testCase)
+
+	assert.Len(t, results, 1, "without a shutdown the interrupted document must still be reported")
+	assert.Equal(t, contracts.ResultStatusFailed, results[0].Status)
+	assert.Equal(t, contracts.ResultStatusFailed, testCase.docState.DocumentInformation.DocumentStatus)
+}
+
+// swapRewindForReboot installs a stub gate and returns the restore func. The real predicate reads
+// process-global shutdown state with no reset, so it is exercised in the messaging package instead.
+func swapRewindForReboot(stub func(log.T, *contracts.DocumentState) bool) func() {
+	original := rewindPatchDocumentForReboot
+	rewindPatchDocumentForReboot = stub
+	return func() { rewindPatchDocumentForReboot = original }
 }
 
 // createPatchResumeTestCase builds the state initialize() sees when a patch document is resumed
 // after a reboot: the previous worker's channel is still on disk and the document is InProgress.
+// stubChannelRemover pins the channel removal and reports the document ids it was asked to remove.
+// Restored on cleanup so a stub cannot leak into a test that expects the real removal.
+func stubChannelRemover(t *testing.T, removeErr error) *[]string {
+	t.Helper()
+	var removed []string
+	original := channelRemover
+	channelRemover = func(_ identity.IAgentIdentity, channelName string) error {
+		removed = append(removed, channelName)
+		return removeErr
+	}
+	t.Cleanup(func() { channelRemover = original })
+	return &removed
+}
+
 func createPatchResumeTestCase() *TestCase {
 	testCase := CreateTestCase()
 	testCase.docState.DocumentInformation.DocumentName = "AWS-RunPatchBaseline"
@@ -490,12 +551,14 @@ func createPatchResumeTestCase() *TestCase {
 	return testCase
 }
 
-// The worker must be launched on the fresh channel, not the stale one: asserting only that Destroy
-// was called would still pass if the stale channel were handed to the worker, which is the defect.
+// The worker must be launched on the fresh channel, not the stale one: asserting only that the stale
+// channel was removed would still pass if it were handed to the worker, which is the defect.
 func TestInitializePatchResume_DestroysStaleChannelAndUsesNewOne(t *testing.T) {
 	testCase := createPatchResumeTestCase()
+	removed := stubChannelRemover(t, nil)
 	staleChannel := new(channelmock.MockedChannel)
-	staleChannel.On("Destroy").Return(nil)
+	// Closed, not destroyed: the removal is channelRemover's job because it reports failure.
+	staleChannel.On("Close").Return(nil)
 	freshChannel := new(channelmock.MockedChannel)
 
 	createCount := 0
@@ -532,11 +595,12 @@ func TestInitializePatchResume_DestroysStaleChannelAndUsesNewOne(t *testing.T) {
 	ipc, err := exe.initialize(stopTimer)
 
 	assert.NoError(t, err)
-	assert.Equal(t, 2, createCount, "the channel must be recreated after being destroyed")
+	assert.Equal(t, 2, createCount, "the channel must be recreated after being removed")
+	assert.Equal(t, []string{testDocumentID}, *removed, "the stale channel directory must be removed")
 	assert.Same(t, freshChannel, ipc, "the resumed run must use the recreated channel")
 	assert.NotSame(t, staleChannel, ipc, "the resumed run must not reuse the stale channel")
 	staleChannel.AssertExpectations(t)
-	freshChannel.AssertNotCalled(t, "Destroy")
+	freshChannel.AssertNotCalled(t, "Close")
 	assert.Equal(t, testPid, exe.docState.DocumentInformation.ProcInfo.Pid, "the new worker's pid must be recorded")
 }
 
@@ -544,8 +608,9 @@ func TestInitializePatchResume_DestroysStaleChannelAndUsesNewOne(t *testing.T) {
 // error and must not launch a worker.
 func TestInitializePatchResume_RecreateFailsReturnsErrorAndStartsNoWorker(t *testing.T) {
 	testCase := createPatchResumeTestCase()
+	stubChannelRemover(t, nil)
 	staleChannel := new(channelmock.MockedChannel)
-	staleChannel.On("Destroy").Return(nil)
+	staleChannel.On("Close").Return(nil)
 	createErr := errors.New("failed to create channel directory")
 
 	createCount := 0
@@ -581,9 +646,10 @@ func TestInitializePatchResume_RecreateFailsReturnsErrorAndStartsNoWorker(t *tes
 }
 
 // Negative control on the branch scoping: a non-patch document whose worker is gone takes the zombie
-// path, which must neither destroy nor recreate the channel.
+// path, which must neither remove nor recreate the channel.
 func TestInitializeNonPatchDocument_DoesNotRecreateChannel(t *testing.T) {
 	testCase := CreateTestCase()
+	removed := stubChannelRemover(t, nil)
 	testCase.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusInProgress
 	channelMock := new(channelmock.MockedChannel)
 
@@ -613,9 +679,11 @@ func TestInitializeNonPatchDocument_DoesNotRecreateChannel(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 1, createCount, "the non-patch path must not recreate the channel")
+	assert.Empty(t, *removed, "the non-patch path must not remove the channel")
 	assert.Same(t, channelMock, ipc)
 	assert.False(t, isCreateCalled)
 	channelMock.AssertNotCalled(t, "Destroy")
+	channelMock.AssertNotCalled(t, "Close")
 }
 
 // A terminal result left unread in the channel is replayed if that channel is reused, and the
@@ -643,6 +711,13 @@ func TestInitializePatchResume_DoesNotReplayStaleTerminalDatagram(t *testing.T) 
 		isFound := channelmock.IsExists(documentID)
 		return channelmock.NewFakeChannel(logger, mode, documentID), nil, isFound
 	}
+	// mirrors RemoveFileWatcherChannel: drops the channel and everything queued in it
+	originalRemover := channelRemover
+	channelRemover = func(_ identity.IAgentIdentity, channelName string) error {
+		channelmock.RemoveChannel(channelName)
+		return nil
+	}
+	defer func() { channelRemover = originalRemover }()
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 		return testCase.processMock, nil
 	}
@@ -673,16 +748,15 @@ func TestInitializePatchResume_DoesNotReplayStaleTerminalDatagram(t *testing.T) 
 	}
 }
 
-// Destroy() returns nothing and only logs when the removal fails, so the creator still reporting the
-// channel as found is the only detection available; running a worker against it is the defect.
-func TestInitializePatchResume_StaleChannelSurvivesDestroyFailsResume(t *testing.T) {
+// The removal can genuinely fail -- os.RemoveAll on Windows while a handle is still open. The resume
+// proceeds regardless: a run that may be cut short by the leftover result is a better outcome than a
+// patch run that is stranded, and stranding it is what refusing to resume would do.
+func TestInitializePatchResume_ProceedsWhenChannelRemovalFails(t *testing.T) {
 	testCase := createPatchResumeTestCase()
+	removed := stubChannelRemover(t, errors.New("access is denied"))
 	staleChannel := new(channelmock.MockedChannel)
-	staleChannel.On("Destroy").Return(nil)
-	survivingChannel := new(channelmock.MockedChannel)
-	// Run discards the channel once initialize errors, so this one must be closed here or its watch
-	// goroutine and fsnotify handle leak.
-	survivingChannel.On("Close").Return(nil)
+	staleChannel.On("Close").Return(nil)
+	reopenedChannel := new(channelmock.MockedChannel)
 
 	createCount := 0
 	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
@@ -690,12 +764,11 @@ func TestInitializePatchResume_StaleChannelSurvivesDestroyFailsResume(t *testing
 		if createCount == 1 {
 			return staleChannel, nil, true
 		}
-		// Destroy did not remove the directory, so the recreate rediscovered it
-		return survivingChannel, nil, true
+		// the removal failed, so the directory is still there and the recreate rediscovers it
+		return reopenedChannel, nil, true
 	}
-	isCreateCalled := false
 	processCreator = func(name string, argv []string) (proc.OSProcess, error) {
-		isCreateCalled = true
+		assert.Equal(t, appconfig.DefaultDocumentWorker, name)
 		return testCase.processMock, nil
 	}
 	processFinder = func(log log.T, procinfo contracts.OSProcInfo, executor executor.IExecutor) bool {
@@ -707,14 +780,17 @@ func TestInitializePatchResume_StaleChannelSurvivesDestroyFailsResume(t *testing
 		cancelFlag: task.NewChanneledCancelFlag(),
 	}
 	stopTimer := make(chan bool, 1)
+	testCase.processMock.On("Wait").Return(nil)
+	testCase.processMock.On("Pid").Return(testPid)
+	testCase.processMock.On("StartTime").Return(testStartDateTime)
 
-	_, err := exe.initialize(stopTimer)
+	ipc, err := exe.initialize(stopTimer)
 
-	assert.Error(t, err, "a channel that survived Destroy must fail the resume, not be reused")
-	assert.Contains(t, err.Error(), "still present after destroy")
+	assert.NoError(t, err, "a removal failure must not strand the patch resume")
+	assert.Equal(t, []string{testDocumentID}, *removed, "the removal must have been attempted")
 	assert.Equal(t, 2, createCount)
-	assert.False(t, isCreateCalled, "no worker may be launched against a channel that may replay a stale result")
+	assert.Same(t, reopenedChannel, ipc)
+	assert.Equal(t, testPid, exe.docState.DocumentInformation.ProcInfo.Pid, "the worker must still be launched")
 	staleChannel.AssertExpectations(t)
-	survivingChannel.AssertExpectations(t)
-	survivingChannel.AssertNotCalled(t, "Destroy")
+	staleChannel.AssertNotCalled(t, "Destroy")
 }

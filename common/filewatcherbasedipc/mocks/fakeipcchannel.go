@@ -195,6 +195,14 @@ func (f *FakeChannel) GetPath() string {
 	return f.name
 }
 
+// RemoveChannel drops the channel's queues from the registry, standing in for the removal of the
+// on-disk channel directory that RemoveFileWatcherChannel performs.
+func RemoveChannel(name string) {
+	queueMapMu.Lock()
+	defer queueMapMu.Unlock()
+	delete(queueMap, name)
+}
+
 func IsExists(name string) bool {
 	queueMapMu.RLock()
 	defer queueMapMu.RUnlock()

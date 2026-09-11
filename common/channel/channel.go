@@ -41,6 +41,10 @@ type IChannel interface {
 	IsListenSuccessful() bool
 }
 
+// closeErrorLogFormat is logged when the probe channel fails to close. Named rather than inline so
+// the test that waits for this log call cannot drift from the call itself.
+const closeErrorLogFormat = "error while closing named pipe channel %v"
+
 var (
 	newNamedPipeChannelRef     = NewNamedPipeChannel
 	isDefaultChannelPresentRef = utils.IsDefaultChannelPresent
@@ -81,7 +85,7 @@ func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity ide
 		}()
 		defer func() {
 			if err := namedPipeChan.Close(); err != nil {
-				log.Errorf("error while closing named pipe channel %v", err)
+				log.Errorf(closeErrorLogFormat, err)
 			}
 		}()
 		namedPipeChan.Initialize(utils.Surveyor)
