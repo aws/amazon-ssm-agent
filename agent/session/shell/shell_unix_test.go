@@ -514,6 +514,41 @@ func (suite *ShellTestSuite) TestProcessStreamMessage() {
 	assert.Equal(suite.T(), "testPayload", string(stdinFileContent))
 }
 
+// TestGenerateLogData verifies that generateLogData invokes script(1) with the correct
+// argument order for util-linux >= 2.39. Prior to the fix, the logfile was passed as
+// the first positional argument ("script <file> -c <cmd>"), which util-linux >= 2.39
+// rejects with "unexpected number of arguments". The correct form is
+// "script -q -c <cmd> <file>".
+//
+// This test requires the `script` binary to be present on the system (util-linux or BSD).
+func (suite *ShellTestSuite) TestGenerateLogData() {
+	ipcFile, err := os.CreateTemp("", "ipc-*.log")
+	assert.Nil(suite.T(), err)
+	defer os.Remove(ipcFile.Name())
+
+	logFile, err := os.CreateTemp("", "transcript-*.log")
+	assert.Nil(suite.T(), err)
+	logFile.Close()
+	defer os.Remove(logFile.Name())
+
+	testContent := "hello from generateLogData test"
+	_, err = ipcFile.WriteString(testContent)
+	assert.Nil(suite.T(), err)
+	ipcFile.Close()
+
+	suite.plugin.logger = logger{
+		ipcFilePath: ipcFile.Name(),
+		logFilePath: logFile.Name(),
+	}
+
+	err = suite.plugin.generateLogData(suite.mockLog, contracts.Configuration{})
+	assert.Nil(suite.T(), err, "generateLogData should succeed; check that script(1) is installed and util-linux argument order is correct")
+
+	transcript, err := os.ReadFile(logFile.Name())
+	assert.Nil(suite.T(), err)
+	assert.Contains(suite.T(), string(transcript), testContent, "transcript file should contain the ipc file content")
+}
+
 // getAgentMessage constructs and returns AgentMessage with given sequenceNumber, messageType & payload
 func getAgentMessage(payloadType uint32, payload []byte) *mgsContracts.AgentMessage {
 	messageUUID, _ := uuid.Parse(messageId)
