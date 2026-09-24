@@ -1,6 +1,9 @@
 [Unit]
-Description=amazon-ssm-agent
-After=network-online.target
+Description=Amazon SSM Agent
+Documentation=https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html
+Wants=network-online.target
+After=network-online.target nss-lookup.target cloud-init.target
+ConditionFileIsExecutable=/usr/bin/amazon-ssm-agent
 
 [Service]
 Type=simple
