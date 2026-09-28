@@ -1,0 +1,664 @@
+/*
+ * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://aws.amazon.com/apache2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+package software.amazon.smithy.aws.go.codegen;
+
+import static software.amazon.smithy.go.codegen.integration.HttpProtocolGeneratorUtils.isShapeWithResponseBindings;
+import static software.amazon.smithy.aws.go.codegen.AwsProtocolUtils.handleDecodeError;
+import static software.amazon.smithy.aws.go.codegen.AwsProtocolUtils.initializeJsonDecoder;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import software.amazon.smithy.codegen.core.CodegenException;
+import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.go.codegen.GoStackStepMiddlewareGenerator;
+import software.amazon.smithy.go.codegen.GoValueAccessUtils;
+import software.amazon.smithy.go.codegen.GoWriter;
+import software.amazon.smithy.go.codegen.SmithyGoDependency;
+import software.amazon.smithy.go.codegen.Synthetic;
+import software.amazon.smithy.go.codegen.integration.HttpBindingProtocolGenerator;
+import software.amazon.smithy.go.codegen.integration.ProtocolGenerator;
+import software.amazon.smithy.go.codegen.integration.ProtocolUtils;
+import software.amazon.smithy.model.Model;
+import software.amazon.smithy.model.knowledge.EventStreamInfo;
+import software.amazon.smithy.model.knowledge.HttpBinding;
+import software.amazon.smithy.model.knowledge.HttpBinding.Location;
+import software.amazon.smithy.model.knowledge.HttpBindingIndex;
+import software.amazon.smithy.model.shapes.MemberShape;
+import software.amazon.smithy.model.shapes.OperationShape;
+import software.amazon.smithy.model.shapes.ServiceShape;
+import software.amazon.smithy.model.shapes.Shape;
+import software.amazon.smithy.model.shapes.ShapeId;
+import software.amazon.smithy.model.shapes.ShapeType;
+import software.amazon.smithy.model.shapes.StructureShape;
+import software.amazon.smithy.model.shapes.UnionShape;
+import software.amazon.smithy.model.traits.EnumTrait;
+import software.amazon.smithy.model.traits.ErrorTrait;
+import software.amazon.smithy.model.traits.EventHeaderTrait;
+import software.amazon.smithy.model.traits.EventPayloadTrait;
+import software.amazon.smithy.model.traits.MediaTypeTrait;
+import software.amazon.smithy.model.traits.StreamingTrait;
+import software.amazon.smithy.model.traits.TimestampFormatTrait;
+import software.amazon.smithy.model.traits.XmlNamespaceTrait;
+import software.amazon.smithy.go.codegen.endpoints.EndpointResolutionGenerator;
+import software.amazon.smithy.go.codegen.endpoints.FnGenerator;
+
+/**
+ * Handles general components across the AWS JSON protocols that have HTTP
+ * bindings.
+ * It handles reading and writing from document bodies, including generating any
+ * functions needed for performing serde.
+ *
+ * @see <a href="https://smithy.io/2.0/spec/http-bindings.html">Smithy HTTP
+ *      protocol bindings.</a>
+ */
+abstract class RestJsonProtocolGenerator extends HttpBindingProtocolGenerator {
+    private final Set<ShapeId> generatedDocumentBodyShapeSerializers = new HashSet<>();
+    private final Set<ShapeId> generatedEventMessageSerializers = new HashSet<>();
+    private final Set<ShapeId> generatedDocumentBodyShapeDeserializers = new HashSet<>();
+    private final Set<ShapeId> generatedEventMessageDeserializers = new HashSet<>();
+
+    /**
+     * Creates a AWS JSON RPC protocol generator.
+     */
+    RestJsonProtocolGenerator() {
+        super(true);
+    }
+
+    @Override
+    protected TimestampFormatTrait.Format getDocumentTimestampFormat() {
+        return TimestampFormatTrait.Format.EPOCH_SECONDS;
+    }
+
+    @Override
+    protected void generateOperationDocumentSerializer(
+            GenerationContext context,
+            OperationShape operation) {
+        Model model = context.getModel();
+        HttpBindingIndex bindingIndex = HttpBindingIndex.of(model);
+        Set<MemberShape> documentBindings = bindingIndex.getRequestBindings(operation, HttpBinding.Location.DOCUMENT)
+                .stream()
+                .map(HttpBinding::getMember)
+                .collect(Collectors.toSet());
+
+        if (documentBindings.size() == 0) {
+            return;
+        }
+
+        Shape inputShape = ProtocolUtils.expectInput(model, operation);
+        inputShape.accept(JsonShapeSerVisitor.builder()
+                .context(context)
+                .memberFilter(documentBindings::contains)
+                .supportJsonName(true)
+                .build());
+    }
+
+
+    @Override
+    public void generateEndpointResolution(GenerationContext context) {
+        var generator = new EndpointResolutionGenerator(new AwsFnProvider());
+        generator.generate(context);
+    }
+
+    @Override
+    protected void writeMiddlewarePayloadAsDocumentSerializerDelegator(
+            GenerationContext context,
+            MemberShape memberShape,
+            String operand) {
+        GoWriter writer = context.getWriter().get();
+        Model model = context.getModel();
+        Shape payloadShape = model.expectShape(memberShape.getTarget());
+
+        String functionName;
+        if (payloadShape.hasTrait(Synthetic.class)) {
+            functionName = ProtocolGenerator.getDocumentSerializerFunctionName(
+                    payloadShape, context.getService(), context.getProtocolName());
+        } else {
+            functionName = ProtocolGenerator.getDocumentSerializerFunctionName(
+                    payloadShape, context.getService(), context.getProtocolName());
+        }
+
+        writeSetPayloadShapeHeader(writer, payloadShape);
+
+        GoValueAccessUtils.writeIfNonZeroValueMember(context.getModel(), context.getSymbolProvider(), writer,
+                memberShape, operand, (s) -> {
+                    writer.addUseImports(SmithyGoDependency.SMITHY_JSON);
+                    writer.addUseImports(SmithyGoDependency.BYTES);
+                    writer.write("""
+                            jsonEncoder := smithyjson.NewEncoder()
+                            if err := $L($L, jsonEncoder.Value); err != nil {
+                                return out, metadata, &smithy.SerializationError{Err: err}
+                            }
+                            payload := bytes.NewReader(jsonEncoder.Bytes())""", functionName, s);
+                    writeSetStream(writer, "payload");
+                    if (payloadShape.getType() == ShapeType.STRUCTURE) {
+                        writer.openBlock("} else {", "", () -> {
+                            writer.write("""
+                                    jsonEncoder := smithyjson.NewEncoder()
+                                    jsonEncoder.Value.Object().Close()
+                                    payload := bytes.NewReader(jsonEncoder.Bytes())""");
+                            writeSetStream(writer, "payload");
+                        });
+                    }
+                });
+    }
+
+    /**
+     * Retruns the MediaType for the payload shape derived from the MediaTypeTrait,
+     * shape type, or document content type.
+     *
+     * @param payloadShape shape bound to the payload.
+     * @return string for media type.
+     */
+    private String getPayloadShapeMediaType(Shape payloadShape) {
+        Optional<MediaTypeTrait> mediaTypeTrait = payloadShape.getTrait(MediaTypeTrait.class);
+
+        if (mediaTypeTrait.isPresent()) {
+            return mediaTypeTrait.get().getValue();
+        }
+
+        if (payloadShape.isBlobShape()) {
+            return "application/octet-stream";
+        }
+
+        if (payloadShape.isStringShape()) {
+            return "text/plain";
+        }
+
+        return getDocumentContentType();
+    }
+
+    @Override
+    protected void writeMiddlewareDocumentSerializerDelegator(
+            GenerationContext context,
+            OperationShape operation,
+            GoStackStepMiddlewareGenerator generator) {
+        GoWriter writer = context.getWriter().get();
+        writer.addUseImports(SmithyGoDependency.SMITHY);
+        writer.addUseImports(SmithyGoDependency.SMITHY_JSON);
+
+        writer.write("restEncoder.SetHeader(\"Content-Type\").String($S)", getDocumentContentType());
+        writer.write("");
+
+        Shape inputShape = ProtocolUtils.expectInput(context.getModel(), operation);
+        String functionName = ProtocolGenerator.getDocumentSerializerFunctionName(inputShape, context.getService(),
+                getProtocolName());
+
+        writer.addUseImports(SmithyGoDependency.SMITHY_JSON);
+        writer.write("jsonEncoder := smithyjson.NewEncoder()");
+        writer.openBlock("if err := $L(input, jsonEncoder.Value); err != nil {", "}", functionName, () -> {
+            writer.write("return out, metadata, &smithy.SerializationError{Err: err}");
+        });
+        writer.write("");
+
+        writer.addUseImports(SmithyGoDependency.BYTES);
+        writer.openBlock("if request, err = request.SetStream(bytes.NewReader(jsonEncoder.Bytes())); err != nil {", "}",
+                () -> {
+                    writer.write("return out, metadata, &smithy.SerializationError{Err: err}");
+                });
+    }
+
+    @Override
+    protected void generateDocumentBodyShapeSerializers(GenerationContext context, Set<Shape> shapes) {
+        JsonShapeSerVisitor visitor = JsonShapeSerVisitor.builder()
+                .context(context)
+                .supportJsonName(true)
+                .build();
+        shapes.forEach(shape -> {
+            if (generatedDocumentBodyShapeSerializers.contains(shape.toShapeId())) {
+                return;
+            }
+            shape.accept(visitor);
+            generatedDocumentBodyShapeSerializers.add(shape.toShapeId());
+        });
+    }
+
+    @Override
+    protected void writeMiddlewareDocumentDeserializerDelegator(
+            GenerationContext context,
+            OperationShape operation,
+            GoStackStepMiddlewareGenerator generator) {
+        Model model = context.getModel();
+        GoWriter writer = context.getWriter().get();
+        Shape targetShape = ProtocolUtils.expectOutput(model, operation);
+        String operand = "output";
+
+        boolean isShapeWithPayloadBinding = isShapeWithResponseBindings(model, operation, HttpBinding.Location.PAYLOAD);
+        if (isShapeWithPayloadBinding) {
+            // since payload trait can only be applied to a single member in a output shape
+            MemberShape memberShape = HttpBindingIndex.of(model)
+                    .getResponseBindings(operation, HttpBinding.Location.PAYLOAD).stream()
+                    .findFirst()
+                    .orElseThrow(() -> new CodegenException("Expected payload binding member"))
+                    .getMember();
+
+            Shape payloadShape = model.expectShape(memberShape.getTarget());
+
+            // if target shape is of type String or type Blob, then delegate deserializers
+            // for explicit payload shapes
+            if (payloadShape.isStringShape() || payloadShape.isBlobShape()) {
+                writeMiddlewarePayloadBindingDeserializerDelegator(writer, context.getService(), targetShape,
+                        payloadShape);
+                return;
+            }
+            // for other payload target types we should deserialize using the appropriate
+            // document deserializer
+            targetShape = payloadShape;
+            operand += "." + context.getSymbolProvider().toMemberName(memberShape);
+        }
+
+        writer.addUseImports(SmithyGoDependency.SMITHY_IO);
+        writer.write("var buff [1024]byte");
+        writer.write("ringBuffer := smithyio.NewRingBuffer(buff[:])");
+        writer.write("");
+
+        writer.addUseImports(SmithyGoDependency.IO);
+        writer.write("body := io.TeeReader(response.Body, ringBuffer)");
+        writer.write("");
+
+        writer.addUseImports(SmithyGoDependency.JSON);
+        writer.write("decoder := json.NewDecoder(body)");
+        writer.write("decoder.UseNumber()");
+        AwsProtocolUtils.decodeJsonIntoInterface(writer, "out, metadata, ");
+        writer.write("");
+
+        writeMiddlewareDocumentBindingDeserializerDelegator(context, writer, targetShape, operand);
+    }
+
+    // Writes middleware that delegates to deserializers for shapes that have
+    // explicit payload.
+    private void writeMiddlewarePayloadBindingDeserializerDelegator(
+            GoWriter writer, ServiceShape service, Shape outputShape, Shape payloadShape) {
+        String deserFuncName = ProtocolGenerator.getDocumentDeserializerFunctionName(outputShape, service,
+                getProtocolName());
+
+        String contentLengthParam = "";
+        if (!payloadShape.hasTrait(StreamingTrait.class)) {
+            contentLengthParam = "response.ContentLength";
+        }
+
+        writer.write("err = $L(output, response.Body, $L)", deserFuncName, contentLengthParam);
+        writer.openBlock("if err != nil {", "}", () -> {
+            writer.addUseImports(SmithyGoDependency.SMITHY);
+            writer.write(String.format("return out, metadata, &smithy.DeserializationError{Err:%s}",
+                    "fmt.Errorf(\"failed to deserialize response payload, %w\", err)"));
+        });
+    }
+
+    // Write middleware that delegates to deserializers for shapes that have
+    // implicit payload and deserializer
+    private void writeMiddlewareDocumentBindingDeserializerDelegator(
+            GenerationContext context,
+            GoWriter writer,
+            Shape shape,
+            String operand) {
+        String functionName = ProtocolGenerator.getDocumentDeserializerFunctionName(
+                shape, context.getService(), context.getProtocolName());
+
+        writer.write("err = $L(&$L, shape)", functionName, operand);
+        writer.openBlock("if err != nil {", "}", () -> {
+            writer.addUseImports(SmithyGoDependency.BYTES);
+            writer.addUseImports(SmithyGoDependency.SMITHY);
+            writer.write("var snapshot bytes.Buffer");
+            writer.write("io.Copy(&snapshot, ringBuffer)");
+            writer.openBlock("return out, metadata, &smithy.DeserializationError {", "}", () -> {
+                writer.write("Err: fmt.Errorf(\"failed to decode response body with invalid JSON, %w\", err),");
+                writer.write("Snapshot: snapshot.Bytes(),");
+            });
+        });
+    }
+
+    @Override
+    protected void generateOperationDocumentDeserializer(
+            GenerationContext context,
+            OperationShape operation) {
+        Model model = context.getModel();
+        HttpBindingIndex bindingIndex = HttpBindingIndex.of(model);
+        Set<MemberShape> documentBindings = bindingIndex.getResponseBindings(operation, HttpBinding.Location.DOCUMENT)
+                .stream()
+                .map(HttpBinding::getMember)
+                .collect(Collectors.toSet());
+
+        Shape outputShape = ProtocolUtils.expectOutput(model, operation);
+        GoWriter writer = context.getWriter().get();
+
+        if (documentBindings.size() != 0) {
+            outputShape.accept(JsonShapeDeserVisitor.builder()
+                    .context(context)
+                    .memberFilter(documentBindings::contains)
+                    .supportJsonName(true)
+                    .build());
+        }
+
+        Set<MemberShape> payloadBindings = bindingIndex.getResponseBindings(operation, HttpBinding.Location.PAYLOAD)
+                .stream()
+                .map(HttpBinding::getMember)
+                .collect(Collectors.toSet());
+
+        if (payloadBindings.size() == 0) {
+            return;
+        }
+
+        writePayloadBindingDeserializer(context, outputShape, payloadBindings::contains);
+        writer.write("");
+    }
+
+    @Override
+    protected void writeErrorMessageCodeDeserializer(GenerationContext context) {
+        GoWriter writer = context.getWriter().get();
+        // The error code could be in the headers, even though for this protocol it should be in the body.
+        writer.write("headerCode := response.Header.Get(\"X-Amzn-ErrorType\")");
+        writer.write("if len(headerCode) != 0 { errorCode = restjson.SanitizeErrorCode(headerCode) }");
+        writer.write("");
+
+        initializeJsonDecoder(writer, "errorBody");
+        writer.addUseImports(AwsGoDependency.AWS_REST_JSON_PROTOCOL);
+        // This will check various body locations for the error code and error message
+        writer.write("jsonCode, message, err := restjson.GetErrorInfo(decoder)");
+        handleDecodeError(writer);
+
+        writer.addUseImports(SmithyGoDependency.IO);
+        // Reset the body in case it needs to be used for anything else.
+        writer.write("errorBody.Seek(0, io.SeekStart)");
+
+        // Only set the values if something was found so that we keep the default values.
+        // The header version of the error wins out over either of the body fields.
+        writer.write("if len(headerCode) == 0 && len(jsonCode) != 0 { errorCode = restjson.SanitizeErrorCode(jsonCode) }");
+        writer.write("if len(message) != 0 { errorMessage = message }");
+        writer.write("");
+    }
+
+    @Override
+    protected void deserializeError(GenerationContext context, StructureShape shape) {
+        GoWriter writer = context.getWriter().get();
+        Symbol symbol = context.getSymbolProvider().toSymbol(shape);
+        ServiceShape service = context.getService();
+
+        writer.write("output := &$T{}", symbol);
+        writer.insertTrailingNewline();
+
+        // TODO: filter on error document body contains
+        if (isShapeWithResponseBindings(context.getModel(), shape, Location.DOCUMENT)) {
+            String documentDeserFunctionName = ProtocolGenerator.getDocumentDeserializerFunctionName(
+                    shape, service, getProtocolName());
+            initializeJsonDecoder(writer, "errorBody");
+            AwsProtocolUtils.decodeJsonIntoInterface(writer, "");
+            writer.write("err := $L(&output, shape)", documentDeserFunctionName);
+            writer.write("");
+            handleDecodeError(writer);
+            writer.write("errorBody.Seek(0, io.SeekStart)");
+            writer.write("");
+        }
+
+        if (isShapeWithRestResponseBindings(context.getModel(), shape)) {
+            String bindingDeserFunctionName = ProtocolGenerator.getOperationHttpBindingsDeserFunctionName(
+                    shape, service, getProtocolName());
+            writer.openBlock("if err := $L(output, response); err != nil {", "}", bindingDeserFunctionName, () -> {
+                writer.addUseImports(SmithyGoDependency.SMITHY);
+                writer.write(String.format("return &smithy.DeserializationError{Err: %s}",
+                        "fmt.Errorf(\"failed to decode response error with invalid HTTP bindings, %w\", err)"));
+            });
+            writer.write("");
+        }
+
+        writer.write("return output");
+    }
+
+    @Override
+    protected void generateDocumentBodyShapeDeserializers(GenerationContext context, Set<Shape> shapes) {
+        JsonShapeDeserVisitor visitor = JsonShapeDeserVisitor.builder()
+                .context(context)
+                .supportJsonName(true)
+                .build();
+        shapes.forEach(shape -> {
+            if (generatedDocumentBodyShapeDeserializers.contains(shape.toShapeId())) {
+                return;
+            }
+            shape.accept(visitor);
+            generatedDocumentBodyShapeDeserializers.add(shape.toShapeId());
+        });
+    }
+
+    // Generate deserializers for shapes with payload binding
+    private void writePayloadBindingDeserializer(
+            GenerationContext context,
+            Shape shape,
+            Predicate<MemberShape> filterMemberShapes) {
+        var writer = context.getWriter().get();
+        var symbolProvider = context.getSymbolProvider();
+        var shapeSymbol = symbolProvider.toSymbol(shape);
+        var funcName = ProtocolGenerator.getDocumentDeserializerFunctionName(shape, context.getService(),
+                getProtocolName());
+
+        for (var memberShape : new TreeSet<>(shape.members())) {
+            if (!filterMemberShapes.test(memberShape)) {
+                continue;
+            }
+
+            var memberName = symbolProvider.toMemberName(memberShape);
+            var targetShape = context.getModel().expectShape(memberShape.getTarget());
+            if (targetShape.isStringShape() || targetShape.isBlobShape()) {
+
+                String contentLengthParam = "";
+                if (!targetShape.hasTrait(StreamingTrait.class)) {
+                    contentLengthParam = "contentLength int64";
+                }
+
+                writer.openBlock("func $L(v $P, body io.ReadCloser, $L) error {", "}",
+                        funcName, shapeSymbol, contentLengthParam, () -> {
+                            writer.openBlock("if v == nil {", "}", () -> {
+                                writer.write("return fmt.Errorf(\"unsupported deserialization of nil %T\", v)");
+                            });
+                            writer.write("");
+
+                            if (!targetShape.hasTrait(StreamingTrait.class)) {
+                                writer.addUseImports(SmithyGoDependency.BYTES);
+                                writer.write("var buf bytes.Buffer");
+                                writer.openBlock("if contentLength > 0 {", "", () -> {
+                                    writer.write("buf.Grow(int(contentLength))");
+                                    writer.openBlock("} else {", "}", () -> {
+                                        writer.write("buf.Grow(512)");
+                                    });
+                                });
+                                writer.write("_, err := buf.ReadFrom(body)");
+                                writer.write("if err != nil { return err }");
+                                writer.openBlock("if buf.Len() > 0 {", "}", () -> {
+                                    if (targetShape.isBlobShape()) {
+                                        writer.write("v.$L = buf.Bytes()", memberName);
+                                    } else { // string
+                                        writer.addUseImports(SmithyGoDependency.SMITHY_PTR);
+                                        if (targetShape.hasTrait(EnumTrait.class)) {
+                                            writer.write("v.$L = $T(buf.Bytes())", memberName,
+                                                    symbolProvider.toSymbol(targetShape));
+                                        } else {
+                                            writer.write("v.$L = ptr.String(buf.String())", memberName);
+                                        }
+                                    }
+                                });
+                            } else {
+                                writer.write("v.$L = body", memberName);
+                            }
+
+                            writer.write("return nil");
+                        });
+            } else {
+                shape.accept(JsonShapeDeserVisitor.builder()
+                        .context(context)
+                        .memberFilter(filterMemberShapes)
+                        .supportJsonName(true)
+                        .build());
+            }
+        }
+    }
+
+    @Override
+    public void generateSharedDeserializerComponents(GenerationContext context) {
+        super.generateSharedDeserializerComponents(context);
+    }
+
+    @Override
+    public void generateProtocolTests(GenerationContext context) {
+        AwsProtocolUtils.generateHttpProtocolTests(context);
+    }
+
+    @Override
+    public void generateProtocolDocumentMarshalerUnmarshalDocument(GenerationContext context) {
+        JsonProtocolDocumentUtils.generateProtocolDocumentMarshalerUnmarshalDocument(context);
+    }
+
+    @Override
+    public void generateProtocolDocumentMarshalerMarshalDocument(GenerationContext context) {
+        JsonProtocolDocumentUtils.generateProtocolDocumentMarshalerMarshalDocument(context);
+    }
+
+    @Override
+    public void generateProtocolDocumentUnmarshalerUnmarshalDocument(GenerationContext context) {
+        JsonProtocolDocumentUtils.generateProtocolDocumentUnmarshalerUnmarshalDocument(context);
+    }
+
+    @Override
+    public void generateProtocolDocumentUnmarshalerMarshalDocument(GenerationContext context) {
+        JsonProtocolDocumentUtils.generateProtocolDocumentUnmarshalerMarshalDocument(context);
+    }
+
+    @Override
+    public void generateEventStreamComponents(GenerationContext context) {
+        AwsEventStreamUtils.generateEventStreamComponents(context);
+    }
+
+    @Override
+    protected void writeOperationSerializerMiddlewareEventStreamSetup(GenerationContext context, EventStreamInfo info) {
+        AwsEventStreamUtils.writeOperationSerializerMiddlewareEventStreamSetup(context, info, "restEncoder");
+    }
+
+    @Override
+    protected void generateEventStreamSerializers(
+            GenerationContext context,
+            UnionShape eventUnion,
+            Set<EventStreamInfo> eventStreamInfos) {
+        Model model = context.getModel();
+
+        AwsEventStreamUtils.generateEventStreamSerializer(context, eventUnion);
+        var memberShapes = eventUnion.members().stream()
+                .filter(ms -> ms.getMemberTrait(model, ErrorTrait.class).isEmpty())
+                .collect(Collectors.toCollection(TreeSet::new));
+
+        final var eventDocumentShapes = new TreeSet<Shape>();
+        for (MemberShape member : memberShapes) {
+            var targetShape = model.expectShape(member.getTarget());
+            if (generatedEventMessageSerializers.contains(targetShape.toShapeId())) {
+                continue;
+            }
+
+            AwsEventStreamUtils.generateEventMessageSerializer(context, targetShape, (ctx, payloadTarget, operand) -> {
+                var functionName = ProtocolGenerator.getDocumentSerializerFunctionName(payloadTarget,
+                        ctx.getService(), ctx.getProtocolName());
+                AwsProtocolUtils.writeJsonEventMessageSerializerDelegator(ctx, functionName, operand,
+                        getDocumentContentType());
+            });
+
+            generatedEventMessageSerializers.add(targetShape.toShapeId());
+
+            var hasBindings = targetShape.members().stream()
+                    .filter(ms -> ms.getTrait(EventHeaderTrait.class).isPresent()
+                            || ms.getTrait(EventPayloadTrait.class).isPresent())
+                    .findAny();
+            if (hasBindings.isPresent()) {
+                var payload = targetShape.members().stream()
+                        .filter(ms -> ms.getTrait(EventPayloadTrait.class).isPresent())
+                        .map(ms -> model.expectShape(ms.getTarget()))
+                        .filter(ProtocolUtils::requiresDocumentSerdeFunction)
+                        .findAny();
+                payload.ifPresent(eventDocumentShapes::add);
+                continue;
+            }
+            eventDocumentShapes.add(targetShape);
+        }
+
+        eventDocumentShapes.addAll(ProtocolUtils.resolveRequiredDocumentShapeSerde(model, eventDocumentShapes));
+        generateDocumentBodyShapeSerializers(context, eventDocumentShapes);
+    }
+
+    @Override
+    protected void generateEventStreamDeserializers(
+            GenerationContext context,
+            UnionShape eventUnion,
+            Set<EventStreamInfo> eventStreamInfos) {
+        var model = context.getModel();
+
+        AwsEventStreamUtils.generateEventStreamDeserializer(context, eventUnion);
+        AwsEventStreamUtils.generateEventStreamExceptionDeserializer(context, eventUnion,
+                AwsProtocolUtils::writeJsonEventStreamUnknownExceptionDeserializer);
+
+        final var eventDocumentShapes = new TreeSet<Shape>();
+
+        for (MemberShape shape : eventUnion.members()) {
+            var targetShape = model.expectShape(shape.getTarget());
+            if (generatedEventMessageDeserializers.contains(targetShape.toShapeId())) {
+                continue;
+            }
+            generatedEventMessageDeserializers.add(targetShape.toShapeId());
+            if (shape.getMemberTrait(model, ErrorTrait.class).isPresent()) {
+                AwsEventStreamUtils.generateEventMessageExceptionDeserializer(context, targetShape,
+                        (ctx, payloadTarget) -> {
+                            AwsProtocolUtils.initializeJsonEventMessageDeserializer(ctx);
+                            var functionName = ProtocolGenerator.getDocumentDeserializerFunctionName(
+                                    payloadTarget, ctx.getService(), getProtocolName());
+                            var ctxWriter = ctx.getWriter().get();
+                            ctxWriter.write("v := &$T{}", ctx.getSymbolProvider().toSymbol(payloadTarget))
+                                    .openBlock("if err := $L(&v, shape); err != nil {", "}", functionName,
+                                            () -> handleDecodeError(ctxWriter))
+                                    .write("return v");
+                        });
+
+                eventDocumentShapes.add(targetShape);
+            } else {
+                AwsEventStreamUtils.generateEventMessageDeserializer(context, targetShape,
+                        (ctx, payloadTarget, operand) -> {
+                            AwsProtocolUtils.initializeJsonEventMessageDeserializer(ctx);
+                            var functionName = ProtocolGenerator.getDocumentDeserializerFunctionName(
+                                    payloadTarget, ctx.getService(), ctx.getProtocolName());
+                            var ctxWriter = ctx.getWriter().get();
+                            ctxWriter.openBlock("if err := $L(&$L, shape); err != nil {", "}", functionName, operand,
+                                    () -> handleDecodeError(ctxWriter))
+                                    .write("return nil");
+                        });
+
+                var hasBindings = targetShape.members().stream()
+                        .filter(ms -> ms.getTrait(EventHeaderTrait.class).isPresent()
+                                || ms.getTrait(EventPayloadTrait.class).isPresent())
+                        .findAny();
+                if (hasBindings.isPresent()) {
+                    var payload = targetShape.members().stream()
+                            .filter(ms -> ms.getTrait(EventPayloadTrait.class).isPresent())
+                            .map(ms -> model.expectShape(ms.getTarget()))
+                            .filter(ProtocolUtils::requiresDocumentSerdeFunction)
+                            .findAny();
+                    payload.ifPresent(eventDocumentShapes::add);
+                    continue;
+                }
+                eventDocumentShapes.add(targetShape);
+            }
+        }
+
+        eventDocumentShapes.addAll(ProtocolUtils.resolveRequiredDocumentShapeSerde(model, eventDocumentShapes));
+        generateDocumentBodyShapeDeserializers(context, eventDocumentShapes);
+    }
+}

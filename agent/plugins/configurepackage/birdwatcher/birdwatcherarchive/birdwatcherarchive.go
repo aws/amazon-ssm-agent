@@ -16,6 +16,7 @@
 package birdwatcherarchive
 
 import (
+	cont "context"
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
@@ -23,7 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 type PackageArchive struct {
@@ -112,7 +113,7 @@ func (ba *PackageArchive) DownloadArchiveInfo(tracer trace.Tracer, packageName s
 
 	if ba.localManifests[key].manifestString == "" {
 		trace.AppendDebugf("Cannot find manifest with key: %v in localManifests, downloading from remote.", key)
-		resp, err := ba.facadeClient.GetManifest(
+		resp, err := ba.facadeClient.GetManifest(cont.TODO(),
 			&ssm.GetManifestInput{
 				PackageName:    &packageName,
 				PackageVersion: &version,

@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
 	"github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
 )
@@ -45,7 +45,7 @@ func TestFacade(t *testing.T) {
 	assert.NoError(t, err, "Unexpected Error in Dequeueing From Queue")
 	assert.Len(t, messages, 0, "No Messages should be present")
 
-	message := &cloudwatchlogs.InputLogEvent{}
+	message := &types.InputLogEvent{}
 
 	Enqueue(message)
 
@@ -65,7 +65,7 @@ func TestFacade(t *testing.T) {
 	assert.NotNil(t, messages, "Messages should be present")
 
 	s := strings.Repeat("A", batchByteSizeMax/2)
-	message = &cloudwatchlogs.InputLogEvent{
+	message = &types.InputLogEvent{
 		Message: &s,
 	}
 	Enqueue(message)
@@ -94,7 +94,7 @@ func TestParallelAccessOfQueue(t *testing.T) {
 	once = new(sync.Once)
 	CreateCloudWatchDataInstance(initArgs)
 
-	message := &cloudwatchlogs.InputLogEvent{}
+	message := &types.InputLogEvent{}
 
 	var counter atomic.Int32
 
@@ -165,7 +165,7 @@ func TestOverflow(t *testing.T) {
 	once = new(sync.Once)
 	CreateCloudWatchDataInstance(initArgs)
 
-	message := &cloudwatchlogs.InputLogEvent{}
+	message := &types.InputLogEvent{}
 
 	for i := int64(0); i < (queueLimit + int64(100)); i++ {
 		Enqueue(message)
@@ -247,7 +247,7 @@ func TestEnqueue_ReturnsError_WhenNotActive(t *testing.T) {
 		DestroyCloudWatchDataInstance()
 	}
 
-	err := Enqueue(&cloudwatchlogs.InputLogEvent{})
+	err := Enqueue(&types.InputLogEvent{})
 	assert.Error(t, err)
 }
 

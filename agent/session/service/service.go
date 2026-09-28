@@ -16,6 +16,9 @@ package service
 
 import (
 	"bytes"
+	cont "context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -27,13 +30,15 @@ import (
 	"path"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/common/identity"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
-	"github.com/aws/aws-sdk-go/aws"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 )
 
 const (
@@ -72,8 +77,7 @@ func NewService(context context.T, mgsConfig appconfig.MgsConfig, connectionTime
 		region = &fetchedRegion
 	}
 
-	log.Debug("Getting credentials for v4 signatures.")
-	v4Signer := v4.NewSigner(identity.Credentials())
+	v4Signer := v4.NewSigner()
 
 	// capture Transport so we can use it to cancel requests
 	tr := network.GetDefaultTransport(log, context.AppConfig())
@@ -84,21 +88,28 @@ func NewService(context context.T, mgsConfig appconfig.MgsConfig, connectionTime
 
 	return &MessageGatewayService{
 		context: context,
-		region:  aws.StringValue(region),
+		region:  *region,
 		tr:      tr,
 		signer:  v4Signer,
 	}
 }
 
 // makeRestcall triggers rest api call.
-var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 	httpRequest, err := http.NewRequest(methodType, url, bytes.NewBuffer(request))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request: %s", err)
 	}
+	ctx := cont.TODO()
+	creds, err := identity.CredentialsProvider().Retrieve(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve credentials: %s", err)
+	}
 
 	httpRequest.Header.Set("Content-Type", "application/json")
-	_, err = signer.Sign(httpRequest, bytes.NewReader(request), mgsconfig.ServiceName, region, time.Now())
+	payloadhash := sha256.Sum256(request)
+	hash := hex.EncodeToString(payloadhash[:])
+	err = signer.SignHTTP(ctx, creds, httpRequest, hash, mgsconfig.ServiceName, region, time.Now())
 	if err != nil {
 		return nil, fmt.Errorf("failed to sign the request: %s", err)
 	}
@@ -138,6 +149,11 @@ func getMGSBaseUrl(context context.T, channelType string, channelId string, regi
 		return "", fmt.Errorf("failed to get host name with error: %s", err)
 	}
 
+	// GetMgsEndpoint returns a scheme-less hostname; prepend the https scheme
+	// (consistent with the mgsinteractor, datachannel and websocketchannel
+	// callers) so url.Parse yields a valid absolute URL. Without this the
+	// resulting request has an empty scheme and the http client rejects it
+	// with "unsupported protocol scheme".
 	mgsUrl, err := url.Parse(mgsconfig.HttpsPrefix + hostName)
 	if err != nil {
 		return "", fmt.Errorf("failed to parse the url with error: %s", err)
@@ -176,7 +192,7 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 		return nil, errors.New("unable to marshal the createControlChannelInput")
 	}
 
-	resp, err := makeRestcall(log, mgsService.context.AppConfig(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(log, mgsService.context.AppConfig(), mgsService.context.Identity(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
 	if err != nil {
 		return nil, fmt.Errorf("createControlChannel request failed: %s", err)
 	}
@@ -208,7 +224,7 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 		return nil, errors.New("unable to marshal the createDataChannelInput")
 	}
 
-	resp, err := makeRestcall(log, mgsService.context.AppConfig(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(log, mgsService.context.AppConfig(), mgsService.context.Identity(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
 	if err != nil {
 		return nil, fmt.Errorf("createDataChannel request failed: %s", err)
 	}

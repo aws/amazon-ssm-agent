@@ -17,25 +17,50 @@
 package startup
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/startup/serialport"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 )
 
 // IsAllowed returns true if the current environment allows startup processor.
 func (p *Processor) IsAllowed() bool {
+	log := p.context.Log()
 	// TODO: Check if is EC2 identity type instead of calling imds, first confirm if onprem on ec2 should be allowed
 	// check if metadata is reachable which indicates the instance is in EC2.
 	// maximum retry is 10 to ensure the failure/error is not caused by arbitrary reason.
-	ec2MetadataService := ec2metadata.New(session.New(aws.NewConfig().WithMaxRetries(10)))
-	if metadata, err := ec2MetadataService.GetMetadata(""); err != nil || metadata == "" {
+	// IMDS ignores RetryMaxAttempts and only honors a Retryer func, so bound
+	// retries via WithRetryer instead of WithRetryMaxAttempts.
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRetryer(func() aws.Retryer {
+		return retry.NewStandard(func(o *retry.StandardOptions) {
+			o.MaxAttempts = 10
+		})
+	}))
+	if err != nil {
+		// LoadDefaultConfig can fail for reasons unrelated to EC2 detection
+		// (e.g. unreadable shared config/credentials files). Rather than
+		// treating this as "not in EC2", log the error and fall back to a
+		// minimal config so we can still probe the metadata service.
+		log.Warnf("failed to load default AWS config, falling back to minimal config: %v", err)
+		cfg = aws.Config{
+			RetryMaxAttempts: 10,
+		}
+	}
+
+	client := imds.NewFromConfig(cfg)
+	out, err := client.GetMetadata(context.TODO(), &imds.GetMetadataInput{Path: ""})
+	if err != nil {
 		return false
 	}
+	// The GetMetadata output Content is an io.ReadCloser that must be closed to
+	// avoid leaking the underlying HTTP response body.
+	defer out.Content.Close()
 
 	return true
 }
@@ -47,14 +72,14 @@ func (p *Processor) ExecuteTasks() (err error) {
 
 	platformName := ""
 	if n, err := platform.PlatformName(log); err == nil {
-		platformName = *aws.String(n)
+		platformName = n
 	} else {
 		log.Warn(err)
 	}
 
 	platformVersion := ""
 	if v, err := platform.PlatformVersion(log); err == nil {
-		platformVersion = *aws.String(v)
+		platformVersion = v
 	} else {
 		log.Warn(err)
 	}

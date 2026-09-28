@@ -173,6 +173,8 @@ func (suite *ShellTestSuite) TestExecuteWithCWLogStreamingEnabled() {
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
 	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, mock.Anything).Return()
+	suite.mockCWL.On("SetCloudWatchMessage", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return()
 
 	stdout, stdin, _ := os.Pipe()
 	defer stdin.Close()

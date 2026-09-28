@@ -20,15 +20,15 @@ import (
 	"reflect"
 
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
 )
 
 // ConvertToSSMInventoryItem converts given InventoryItem to []map[string]*string
-func ConvertToSSMInventoryItem(item model.Item) (inventoryItem *ssm.InventoryItem, err error) {
+func ConvertToSSMInventoryItem(item model.Item) (inventoryItem *types.InventoryItem, err error) {
 
 	var a []interface{}
-	var c map[string]*string
-	var content = []map[string]*string{}
+	var c map[string]string
+	var content = []map[string]string{}
 	var dataB []byte
 
 	dataType := reflect.ValueOf(item.Content)
@@ -61,7 +61,7 @@ func ConvertToSSMInventoryItem(item model.Item) (inventoryItem *ssm.InventoryIte
 		return
 	}
 
-	inventoryItem = &ssm.InventoryItem{
+	inventoryItem = &types.InventoryItem{
 		CaptureTime:   &item.CaptureTime,
 		TypeName:      &item.Name,
 		SchemaVersion: &item.SchemaVersion,
@@ -72,15 +72,15 @@ func ConvertToSSMInventoryItem(item model.Item) (inventoryItem *ssm.InventoryIte
 }
 
 // ConvertToMap converts given object to map[string]*string
-func ConvertToMap(input interface{}) (res map[string]*string) {
+func ConvertToMap(input interface{}) (res map[string]string) {
 	var m map[string]interface{}
 	b, _ := json.Marshal(input)
 	json.Unmarshal(b, &m)
 
-	res = make(map[string]*string)
+	res = make(map[string]string)
 	for k, v := range m {
 		asString := toString(v)
-		res[k] = &asString
+		res[k] = asString
 	}
 	return res
 }

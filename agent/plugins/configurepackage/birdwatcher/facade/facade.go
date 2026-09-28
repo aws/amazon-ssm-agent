@@ -16,14 +16,18 @@
 package facade
 
 import (
+	cont "context"
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	retry "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/retryer"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/retryer"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-	"github.com/aws/aws-sdk-go/aws/client"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
 const (
@@ -32,34 +36,37 @@ const (
 
 func NewBirdwatcherFacade(context context.T) BirdwatcherFacade {
 	awsConfig := sdkutil.AwsConfig(context, "ssm")
-	// overriding the retry strategy
-	retryer := retry.BirdwatcherRetryer{
-		DefaultRetryer: client.DefaultRetryer{
-			NumMaxRetries: maxRetries,
-		},
+	awsConfig.Retryer = func() aws.Retryer {
+		return &retryer.BirdwatcherRetryer{
+			Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+				so.MaxAttempts = maxRetries + 1
+			}),
+		}
 	}
 
-	cfg := request.WithRetryer(awsConfig, retryer)
-
-	// overrides ssm client config from appconfig if applicable
+	// Override endpoint if configured
 	appCfg := context.AppConfig()
 	if appCfg.Ssm.Endpoint != "" {
-		cfg.Endpoint = &appCfg.Ssm.Endpoint
+		awsConfig.BaseEndpoint = aws.String(sdkutil.NormalizeEndpointScheme(appCfg.Ssm.Endpoint))
 	}
 
 	if appCfg.Agent.Region != "" {
-		cfg.Region = &appCfg.Agent.Region
-	}
-	facadeClientSession := session.New(cfg)
-
-	// Define a request handler with current agentName and version
-	SSMAgentVersionUserAgentHandler := request.NamedHandler{
-		Name: "ssm.SSMAgentVersionUserAgentHandler",
-		Fn:   request.MakeAddToUserAgentHandler(context.AppConfig().Agent.Name, version.Version),
+		awsConfig.Region = appCfg.Agent.Region
 	}
 
-	// Add the handler to each request to the BirdwatcherStationService
-	facadeClientSession.Handlers.Build.PushBackNamed(SSMAgentVersionUserAgentHandler)
-
-	return ssm.New(facadeClientSession)
+	// Create SSM client with user agent handler in APIOptions
+	return ssm.NewFromConfig(awsConfig, func(o *ssm.Options) {
+		o.APIOptions = append(o.APIOptions, func(stack *middleware.Stack) error {
+			return stack.Build.Add(
+				middleware.BuildMiddlewareFunc("SSMAgentVersionUserAgent",
+					func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+						req := in.Request.(*smithyhttp.Request)
+						userAgent := fmt.Sprintf("%s/%s", context.AppConfig().Agent.Name, version.Version)
+						req.Header.Add("User-Agent", userAgent)
+						return next.HandleBuild(ctx, in)
+					}),
+				middleware.After,
+			)
+		})
+	})
 }

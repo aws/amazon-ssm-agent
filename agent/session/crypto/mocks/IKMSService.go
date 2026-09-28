@@ -21,11 +21,11 @@ type IKMSService struct {
 }
 
 // Decrypt provides a mock function with given fields: cipherTextBlob, encryptionContext
-func (_m *IKMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string, keyId string) ([]byte, error) {
+func (_m *IKMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]string, keyId string) ([]byte, error) {
 	ret := _m.Called(cipherTextBlob, encryptionContext, keyId)
 
 	var r0 []byte
-	if rf, ok := ret.Get(0).(func([]byte, map[string]*string, string) []byte); ok {
+	if rf, ok := ret.Get(0).(func([]byte, map[string]string, string) []byte); ok {
 		r0 = rf(cipherTextBlob, encryptionContext, keyId)
 	} else {
 		if ret.Get(0) != nil {
@@ -34,7 +34,7 @@ func (_m *IKMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[stri
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func([]byte, map[string]*string, string) error); ok {
+	if rf, ok := ret.Get(1).(func([]byte, map[string]string, string) error); ok {
 		r1 = rf(cipherTextBlob, encryptionContext, keyId)
 	} else {
 		r1 = ret.Error(1)

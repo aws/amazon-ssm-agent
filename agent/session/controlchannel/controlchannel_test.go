@@ -34,8 +34,7 @@ import (
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
 	eventlogMock "github.com/aws/amazon-ssm-agent/agent/session/telemetry/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -55,7 +54,7 @@ var (
 	instanceId                          = "i-1234"
 	token                               = "token"
 	region                              = "us-east-1"
-	signer                              = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
+	signer                              = v4.NewSigner()
 )
 
 func TestInitialize(t *testing.T) {

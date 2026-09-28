@@ -15,17 +15,22 @@
 package s3util
 
 import (
+	cont "context"
+	"errors"
 	"os"
+
+	"github.com/aws/smithy-go"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	s3manager "github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	s3types "github.com/aws/aws-sdk-go-v2/service/s3/types"
+
 	"github.com/cenkalti/backoff/v4"
 )
 
@@ -49,6 +54,7 @@ type IAmazonS3Util interface {
 
 type AmazonS3Util struct {
 	myUploader *s3manager.Uploader
+	s3Client   *s3.Client
 }
 
 func shouldRetryS3Upload(err error) bool {
@@ -57,9 +63,12 @@ func shouldRetryS3Upload(err error) bool {
 		return false
 	}
 
-	if awsErr, ok := err.(awserr.Error); ok {
-		code := awsErr.Code()
-		if _, ok := awsErr.(s3manager.MultiUploadFailure); ok {
+	var apiErr smithy.APIError
+	var multiUploadFailure s3manager.MultiUploadFailure
+
+	if errors.As(err, &apiErr) {
+		code := apiErr.ErrorCode()
+		if errors.As(err, &multiUploadFailure) {
 			return true
 		} else if code == "ChecksumValidationError" || code == "InvalidChecksum" || code == "ReadRequestBody" || code == "BodyHashError" || code == "SerializationError" || code == "ReadError" || code == "ResponseTimeout" || code == "InternalError" || code == "SlowDown" {
 			return true
@@ -73,13 +82,15 @@ func shouldRetryS3Upload(err error) bool {
 
 func NewAmazonS3Util(context context.T, bucketName string) (res *AmazonS3Util, err error) {
 	log := context.Log()
-	sess, err := GetS3CrossRegionCapableSession(context, bucketName)
-	if err == nil {
-		res = &AmazonS3Util{
-			myUploader: s3manager.NewUploader(sess),
-		}
-	} else {
+	cfg, err := GetS3CrossRegionCapableSession(context, bucketName)
+	if err != nil {
 		log.Errorf("failed to create AmazonS3Util: %v", err)
+		return nil, err
+	}
+	client := s3.NewFromConfig(*cfg)
+	res = &AmazonS3Util{
+		myUploader: s3manager.NewUploader(client),
+		s3Client:   client,
 	}
 	return
 }
@@ -94,20 +105,20 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 	defer file.Close()
 
 	log.Infof("Uploading %v to s3://%v/%v", filePath, bucketName, objectKey)
-	params := &s3manager.UploadInput{
+	params := &s3.PutObjectInput{
 		Bucket:      aws.String(bucketName),
 		Key:         aws.String(objectKey),
 		Body:        file,
 		ContentType: aws.String("text/plain"),
-		ACL:         aws.String("bucket-owner-full-control"),
+		ACL:         s3types.ObjectCannedACLBucketOwnerFullControl,
 	}
 
 	if bucketEncrypted, sseAlgortihm, encryptionKey := getSSEAlgorithm(log, u, bucketName); bucketEncrypted == true {
 		switch sseAlgortihm {
-		case s3.ServerSideEncryptionAes256:
-			params.ServerSideEncryption = aws.String(sseAlgortihm)
-		case s3.ServerSideEncryptionAwsKms:
-			params.ServerSideEncryption = aws.String(sseAlgortihm)
+		case string(s3types.ServerSideEncryptionAes256):
+			params.ServerSideEncryption = s3types.ServerSideEncryptionAes256
+		case string(s3types.ServerSideEncryptionAwsKms):
+			params.ServerSideEncryption = s3types.ServerSideEncryptionAwsKms
 			if encryptionKey != "" {
 				params.SSEKMSKeyId = aws.String(encryptionKey)
 			}
@@ -122,7 +133,7 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 
 	var result *s3manager.UploadOutput
 	_ = backoffRetry(func() error {
-		result, err = u.myUploader.Upload(params)
+		result, err = u.myUploader.Upload(cont.TODO(), params)
 		if shouldRetryS3Upload(err) {
 			log.Warnf("Failed uploading %v to s3://%v/%v err:%v - retrying", filePath, bucketName, objectKey, err)
 			return err
@@ -145,15 +156,15 @@ func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) (bool, er
 		Bucket: aws.String(bucketName),
 	}
 
-	output, err := u.myUploader.S3.GetBucketEncryption(input)
+	output, err := u.s3Client.GetBucketEncryption(cont.TODO(), input)
 	if err != nil {
 		log.Errorf("Encountered an error while calling S3 API GetBucketEncryption %s", err)
 		return false, err
 	}
 
-	bucketEncryption := *output.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm
+	bucketEncryption := output.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault.SSEAlgorithm
 
-	if bucketEncryption == s3.ServerSideEncryptionAwsKms || bucketEncryption == s3.ServerSideEncryptionAes256 {
+	if bucketEncryption == s3types.ServerSideEncryptionAwsKms || bucketEncryption == s3types.ServerSideEncryptionAes256 {
 		return true, nil
 	}
 
@@ -172,28 +183,28 @@ func getSSEAlgorithm(log log.T, u *AmazonS3Util, bucketName string) (bucketEncry
 		Bucket: aws.String(bucketName),
 	}
 
-	output, err := u.myUploader.S3.GetBucketEncryption(input)
+	output, err := u.s3Client.GetBucketEncryption(cont.TODO(), input)
 	if err != nil {
 		log.Infof("Bucket is not encrypted")
 		return false, "", ""
 	}
 
 	bucketEncryption := *output.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault
-	switch bucketEncryptionType := *bucketEncryption.SSEAlgorithm; bucketEncryptionType {
+	switch bucketEncryptionType := bucketEncryption.SSEAlgorithm; bucketEncryptionType {
 
-	case s3.ServerSideEncryptionAwsKms:
+	case s3types.ServerSideEncryptionAwsKms:
 		// If bucket is KMS encrypted
 		log.Infof("Bucket %v has been encrypted with KMS", bucketName)
 		if bucketEncryption.KMSMasterKeyID != nil {
-			return true, s3.ServerSideEncryptionAwsKms, *bucketEncryption.KMSMasterKeyID
+			return true, string(s3types.ServerSideEncryptionAwsKms), *bucketEncryption.KMSMasterKeyID
 		} else {
-			return true, s3.ServerSideEncryptionAwsKms, ""
+			return true, string(s3types.ServerSideEncryptionAwsKms), ""
 		}
 
-	case s3.ServerSideEncryptionAes256:
+	case s3types.ServerSideEncryptionAes256:
 		// If bucket is Aes256 encrypted
 		log.Infof("Bucket %v has been encrypted with AES256", bucketName)
-		return true, s3.ServerSideEncryptionAes256, ""
+		return true, string(s3types.ServerSideEncryptionAes256), ""
 	default:
 		log.Infof("Bucket is not encrypted")
 		return false, "", ""

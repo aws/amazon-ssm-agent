@@ -18,19 +18,20 @@ package diagnostics
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/diagnosticsutil"
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/network"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 )
 
 const (
@@ -68,23 +69,30 @@ func (metadataCheckQuery) getRegionAndInstanceId(resChan chan stringStringErrorT
 	config := appconfig.DefaultConfig()
 
 	tr := network.GetDefaultTransport(log, config)
-	awsConfig := &aws.Config{
+	awsConfig := aws.Config{
+		// IMDS ignores RetryMaxAttempts; it only honors a Retryer func from the
+		// config. Set the max attempts via a Retryer so retries are bounded.
+		Retryer: func() aws.Retryer {
+			return retry.NewStandard(func(o *retry.StandardOptions) {
+				o.MaxAttempts = 2
+			})
+		},
 		HTTPClient: &http.Client{
 			Transport: tr,
 		},
 	}
 
-	awsConfig = awsConfig.WithMaxRetries(2)
-	awsConfig = awsConfig.WithEC2MetadataDisableTimeoutOverride(false)
-
-	sess, _ := session.NewSession(awsConfig)
-	client := ec2metadata.New(sess)
+	client := imds.NewFromConfig(awsConfig, func(options *imds.Options) {
+		options.DisableDefaultTimeout = true
+	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	instanceId, err := client.GetMetadataWithContext(ctx, "instance-id")
+	getMDInput := &imds.GetMetadataInput{Path: "instance-id"}
+	getMDOutput, err := client.GetMetadata(ctx, getMDInput)
 	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok && aerr.Code() == request.CanceledErrorCode {
+		var reqCanceledErr *aws.RequestCanceledError
+		if errors.As(err, &reqCanceledErr) {
 			resChan <- stringStringErrorTuple{
 				"",
 				"",
@@ -101,11 +109,26 @@ func (metadataCheckQuery) getRegionAndInstanceId(resChan chan stringStringErrorT
 		return
 	}
 
+	rc := getMDOutput.Content
+	defer rc.Close()
+	bytes, err := io.ReadAll(rc)
+	if err != nil {
+		resChan <- stringStringErrorTuple{
+			"",
+			"",
+			fmt.Errorf(metadataCheckStrInstanceIdFailure, err),
+		}
+		return
+	}
+	instanceId := string(bytes)
+
 	ctx2, cancel2 := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel2()
-	region, err := client.RegionWithContext(ctx2)
+	getRegionInput := &imds.GetRegionInput{}
+	region, err := client.GetRegion(ctx2, getRegionInput)
 	if err != nil {
-		if aerr, ok := err.(awserr.Error); ok && aerr.Code() == request.CanceledErrorCode {
+		var reqCanceledErr *aws.RequestCanceledError
+		if errors.As(err, &reqCanceledErr) {
 			resChan <- stringStringErrorTuple{
 				"",
 				"",
@@ -123,7 +146,7 @@ func (metadataCheckQuery) getRegionAndInstanceId(resChan chan stringStringErrorT
 
 	resChan <- stringStringErrorTuple{
 		instanceId,
-		region,
+		region.Region,
 		nil,
 	}
 }

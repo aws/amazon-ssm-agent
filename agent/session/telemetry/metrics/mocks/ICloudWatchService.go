@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	cloudwatch "github.com/aws/aws-sdk-go/service/cloudwatch"
+	cwtypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -14,15 +14,15 @@ type ICloudWatchService struct {
 }
 
 // GenerateBasicTelemetryMetrics provides a mock function with given fields: metricName, value, version
-func (_m *ICloudWatchService) GenerateBasicTelemetryMetrics(metricName string, value float64, version string) *cloudwatch.MetricDatum {
+func (_m *ICloudWatchService) GenerateBasicTelemetryMetrics(metricName string, value float64, version string) *cwtypes.MetricDatum {
 	ret := _m.Called(metricName, value, version)
 
-	var r0 *cloudwatch.MetricDatum
-	if rf, ok := ret.Get(0).(func(string, float64, string) *cloudwatch.MetricDatum); ok {
+	var r0 *cwtypes.MetricDatum
+	if rf, ok := ret.Get(0).(func(string, float64, string) *cwtypes.MetricDatum); ok {
 		r0 = rf(metricName, value, version)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*cloudwatch.MetricDatum)
+			r0 = ret.Get(0).(*cwtypes.MetricDatum)
 		}
 	}
 
@@ -30,15 +30,15 @@ func (_m *ICloudWatchService) GenerateBasicTelemetryMetrics(metricName string, v
 }
 
 // GenerateUpdateMetrics provides a mock function with given fields: metricName, value, sourceVersion, targetVersion
-func (_m *ICloudWatchService) GenerateUpdateMetrics(metricName string, value float64, sourceVersion string, targetVersion string) *cloudwatch.MetricDatum {
+func (_m *ICloudWatchService) GenerateUpdateMetrics(metricName string, value float64, sourceVersion string, targetVersion string) *cwtypes.MetricDatum {
 	ret := _m.Called(metricName, value, sourceVersion, targetVersion)
 
-	var r0 *cloudwatch.MetricDatum
-	if rf, ok := ret.Get(0).(func(string, float64, string, string) *cloudwatch.MetricDatum); ok {
+	var r0 *cwtypes.MetricDatum
+	if rf, ok := ret.Get(0).(func(string, float64, string, string) *cwtypes.MetricDatum); ok {
 		r0 = rf(metricName, value, sourceVersion, targetVersion)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*cloudwatch.MetricDatum)
+			r0 = ret.Get(0).(*cwtypes.MetricDatum)
 		}
 	}
 
@@ -46,11 +46,11 @@ func (_m *ICloudWatchService) GenerateUpdateMetrics(metricName string, value flo
 }
 
 // PutMetrics provides a mock function with given fields: metricData
-func (_m *ICloudWatchService) PutMetrics(metricData []*cloudwatch.MetricDatum) error {
+func (_m *ICloudWatchService) PutMetrics(metricData []*cwtypes.MetricDatum) error {
 	ret := _m.Called(metricData)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func([]*cloudwatch.MetricDatum) error); ok {
+	if rf, ok := ret.Get(0).(func([]*cwtypes.MetricDatum) error); ok {
 		r0 = rf(metricData)
 	} else {
 		r0 = ret.Error(0)

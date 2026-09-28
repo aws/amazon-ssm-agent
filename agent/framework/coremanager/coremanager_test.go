@@ -90,8 +90,8 @@ func (suite *CoreManagerTestSuite) TestCoreManager_Start_Update() {
 	suite.rebootMock.On("GetChannel").Return(ch)
 
 	wg := new(sync.WaitGroup)
+	wg.Add(1)
 	go func(wgc *sync.WaitGroup) {
-		wgc.Add(1)
 		defer wgc.Done()
 		suite.coreManager.Start()
 		// coremanager start launch a new go routine in stopModules function, sleep one second to wait the routine launched
@@ -114,8 +114,8 @@ func (suite *CoreManagerTestSuite) TestCoreManager_Start_Reboot() {
 	suite.rebootMock.On("GetChannel").Return(ch)
 
 	wg := new(sync.WaitGroup)
+	wg.Add(1)
 	go func(wgc *sync.WaitGroup) {
-		wgc.Add(1)
 		defer wgc.Done()
 		suite.coreManager.Start()
 		time.Sleep(100 * time.Millisecond)

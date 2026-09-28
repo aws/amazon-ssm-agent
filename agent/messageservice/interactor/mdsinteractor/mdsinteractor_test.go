@@ -21,17 +21,17 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler"
 	"github.com/aws/amazon-ssm-agent/agent/messageservice/messagehandler/mocks"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -86,7 +86,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_Initialize() {
 	contextMock := suite.contextMock
 	incomingChan := make(chan contracts.DocumentState)
 	mdsServiceMock := suite.mdsMock
-	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&mdsService.GetMessagesOutput{}, nil)
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
 
 	mdsInteractor := suite.mdsInteractor
@@ -107,7 +107,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_InitializeHandlesNilAbleT
 	contextMock := suite.contextMock
 	incomingChan := make(chan contracts.DocumentState)
 	mdsServiceMock := suite.mdsMock
-	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&mdsService.GetMessagesOutput{}, nil)
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
 
 	mdsInteractor := suite.mdsInteractor
@@ -128,7 +128,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_PicksUpMGSStatusUpdate() 
 	contextMock := suite.contextMock
 	incomingChan := make(chan contracts.DocumentState)
 	mdsServiceMock := suite.mdsMock
-	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&mdsService.GetMessagesOutput{}, nil)
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
 
 	mdsInteractor := suite.mdsInteractor
@@ -149,7 +149,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_PicksUpMGSStatusUpdate() 
 func (suite *MDSInteractorTestSuite) TestMDSInteractor_MDSSwitcher() {
 	contextMock := suite.contextMock
 	mdsServiceMock := suite.mdsMock
-	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&mdsService.GetMessagesOutput{}, nil)
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
 	var ableToOpenMGSConnection uint32
 	tempMdsInteractor := &MDSInteractor{
@@ -256,7 +256,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_MDSSwitcher() {
 func (suite *MDSInteractorTestSuite) TestMDSInteractor_MDSSwitcher_Windows2012() {
 	contextMock := suite.contextMock
 	mdsServiceMock := suite.mdsMock
-	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&ssmmds.GetMessagesOutput{}, nil)
+	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&mdsService.GetMessagesOutput{}, nil)
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{})
 	var ableToOpenMGSConnection uint32
 	tempMdsInteractor := &MDSInteractor{
@@ -436,8 +436,8 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_sendFailedReplies() {
 	timeLayout := "2006-01-02T15-04-05"
 	reply := fmt.Sprintf("%v_%v", now.Format(timeLayout), now.Add(time.Minute*10).Format(timeLayout))
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{reply})
-	mdsServiceMock.On("GetFailedReply", contextMock.Log(), reply).Return(&ssmmds.SendReplyInput{}, nil)
-	mdsServiceMock.On("SendReplyWithInput", contextMock.Log(), &ssmmds.SendReplyInput{}).Return(nil)
+	mdsServiceMock.On("GetFailedReply", contextMock.Log(), reply).Return(&mdsService.SendReplyInput{}, nil)
+	mdsServiceMock.On("SendReplyWithInput", contextMock.Log(), &mdsService.SendReplyInput{}).Return(nil)
 	mdsServiceMock.On("DeleteFailedReply", contextMock.Log(), reply).Return()
 
 	suite.mdsInteractor.sendFailedReplies()
@@ -467,8 +467,8 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_sendFailedRepliesWithExpi
 	expiredDate := "2006-01-02T15-04-05"
 	reply := fmt.Sprintf("%v_%v", expiredDate, expiredDate)
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{reply})
-	mdsServiceMock.On("GetFailedReply", contextMock.Log(), reply).Return(&ssmmds.SendReplyInput{}, nil)
-	mdsServiceMock.On("SendReplyWithInput", contextMock.Log(), &ssmmds.SendReplyInput{}).Return(nil)
+	mdsServiceMock.On("GetFailedReply", contextMock.Log(), reply).Return(&mdsService.SendReplyInput{}, nil)
+	mdsServiceMock.On("SendReplyWithInput", contextMock.Log(), &mdsService.SendReplyInput{}).Return(nil)
 	mdsServiceMock.On("DeleteFailedReply", contextMock.Log(), reply).Return()
 
 	suite.mdsInteractor.sendFailedReplies()
@@ -486,8 +486,8 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_sendFailedRepliesWithSend
 	timeLayout := "2006-01-02T15-04-05"
 	reply := fmt.Sprintf("%v_%v", now.Format(timeLayout), now.Add(time.Hour*3).Format(timeLayout))
 	mdsServiceMock.On("LoadFailedReplies", contextMock.Log()).Return([]string{reply})
-	mdsServiceMock.On("GetFailedReply", contextMock.Log(), reply).Return(&ssmmds.SendReplyInput{}, nil)
-	mdsServiceMock.On("SendReplyWithInput", contextMock.Log(), &ssmmds.SendReplyInput{}).Return(fmt.Errorf("some error"))
+	mdsServiceMock.On("GetFailedReply", contextMock.Log(), reply).Return(&mdsService.SendReplyInput{}, nil)
+	mdsServiceMock.On("SendReplyWithInput", contextMock.Log(), &mdsService.SendReplyInput{}).Return(fmt.Errorf("some error"))
 	mdsServiceMock.On("DeleteFailedReply", contextMock.Log(), reply).Return()
 
 	suite.mdsInteractor.sendFailedReplies()
@@ -498,7 +498,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_sendFailedRepliesWithSend
 }
 
 func (suite *MDSInteractorTestSuite) TestMDSInteractor_processMessageWithInvalidMessage() {
-	message := ssmmds.Message{
+	message := mdsService.Message{
 		CreatedDate: &testEmptyMessage,
 		Destination: &testEmptyMessage,
 		MessageId:   &testEmptyMessage,
@@ -512,7 +512,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_processMessageWithInvalid
 
 func (suite *MDSInteractorTestSuite) TestMDSInteractor_processMessageWithInvalidCommandTopic() {
 	var topic = "invalid"
-	message := ssmmds.Message{
+	message := mdsService.Message{
 		CreatedDate: &testCreatedDate,
 		Destination: &testDestination,
 		MessageId:   &testMessageId,
@@ -536,9 +536,9 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_pollOnceWithGetMessagesRe
 	contextMock := suite.contextMock
 	mdsServiceMock := suite.mdsMock
 
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          make([]*ssmmds.Message, 1),
+		Messages:          make([]*mdsService.Message, 1),
 		MessagesRequestId: &testMessageId,
 	}
 	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&getMessageOutput, fmt.Errorf("test"))
@@ -580,9 +580,9 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_pollOnceWithZeroMessage()
 	contextMock := suite.contextMock
 	mdsServiceMock := suite.mdsMock
 
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          make([]*ssmmds.Message, 0),
+		Messages:          make([]*mdsService.Message, 0),
 		MessagesRequestId: &testMessageId,
 	}
 	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
@@ -597,7 +597,7 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_pollOnceWithZeroMessage()
 
 func (suite *MDSInteractorTestSuite) TestMDSInteractor_processMessageWithSendCommandTopicPrefixAndInvalidPayload() {
 	var payload = "#invalid_json#"
-	message := ssmmds.Message{
+	message := mdsService.Message{
 		CreatedDate: &testCreatedDate,
 		Destination: &testDestination,
 		MessageId:   &testMessageId,
@@ -629,9 +629,9 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_pollOnceMultipleMessages(
 	message1 := getCancelCommandMessage()
 	message2 := getSendCommandMessage()
 	message3 := getCancelCommandMessage()
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          []*ssmmds.Message{&message1, &message2, &message3},
+		Messages:          []*mdsService.Message{&message1, &message2, &message3},
 		MessagesRequestId: &testMessageId,
 	}
 	mdsServiceMock.On("GetMessages", contextMock.Log(), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
@@ -674,9 +674,9 @@ func (suite *MDSInteractorTestSuite) TestMDSInteractor_pollOnce() {
 	contextMock := suite.contextMock
 	mdsServiceMock := suite.mdsMock
 	message := getCancelCommandMessage()
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          []*ssmmds.Message{&message},
+		Messages:          []*mdsService.Message{&message},
 		MessagesRequestId: &testMessageId,
 	}
 	messageHandlerMock := &mocks.IMessageHandler{}
@@ -724,7 +724,7 @@ func setupTestScheduledJob() (*scheduler.Job, *int) {
 	return scheduledJob, &called
 }
 
-func getSendCommandMessage() ssmmds.Message {
+func getSendCommandMessage() mdsService.Message {
 	var sendCommandPayload = `{
 	    "Parameters": null,
 	    "DocumentContent": {
@@ -739,9 +739,9 @@ func getSendCommandMessage() ssmmds.Message {
 	    "OutputS3KeyPrefix": "",
 	    "OutputS3BucketName": "",
 	    "CloudWatchOutputEnabled": "false"
-    }`
+   }`
 
-	message := ssmmds.Message{
+	message := mdsService.Message{
 		CreatedDate: &testCreatedDate,
 		Destination: &testDestination,
 		MessageId:   &testMessageId,
@@ -751,9 +751,9 @@ func getSendCommandMessage() ssmmds.Message {
 	return message
 }
 
-func getCancelCommandMessage() ssmmds.Message {
+func getCancelCommandMessage() mdsService.Message {
 	var cancelCommandPayload = "{\"CancelMessageId\": \"be8d9d4b-da53-4d2f-a96b-60aec17739af\"}"
-	message := ssmmds.Message{
+	message := mdsService.Message{
 		CreatedDate: &testCreatedDate,
 		Destination: &testDestination,
 		MessageId:   &testMessageId,

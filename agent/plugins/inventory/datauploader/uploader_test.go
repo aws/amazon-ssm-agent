@@ -15,14 +15,17 @@
 package datauploader
 
 import (
+	cont "context"
 	"encoding/json"
 	"errors"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/mocks/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -81,7 +84,7 @@ func ApplicationInventoryItem() (items []model.Item) {
 func TestConvertToSsmInventoryItems(t *testing.T) {
 
 	var items []model.Item
-	var inventoryItems []*ssm.InventoryItem
+	var inventoryItems []*types.InventoryItem
 	var err error
 
 	u := MockInventoryUploader()
@@ -109,7 +112,7 @@ func TestConvertToSsmInventoryItems(t *testing.T) {
 func TestConvertExcludedAndEmptyToSsmInventoryItems(t *testing.T) {
 
 	var items []model.Item
-	var inventoryItems []*ssm.InventoryItem
+	var inventoryItems []*types.InventoryItem
 	var err error
 
 	u := MockInventoryUploader()
@@ -131,7 +134,7 @@ func TestConvertExcludedAndEmptyToSsmInventoryItems(t *testing.T) {
 
 func TestGetDirtySsmInventoryItems_empty(t *testing.T) {
 	var items []model.Item
-	var dirtyInventoryItems []*ssm.InventoryItem
+	var dirtyInventoryItems []*types.InventoryItem
 	var err error
 
 	u := MockInventoryUploader()
@@ -145,7 +148,7 @@ func TestGetDirtySsmInventoryItems_empty(t *testing.T) {
 
 func TestGetDirtySsmInventoryItems_dirtyItemFound(t *testing.T) {
 	var items []model.Item
-	var dirtyInventoryItems []*ssm.InventoryItem
+	var dirtyInventoryItems []*types.InventoryItem
 	var err error
 
 	u := MockInventoryUploader()
@@ -168,8 +171,8 @@ func NewMockSSMCaller() *MockSSMCaller {
 	return service
 }
 
-func (m *MockSSMCaller) PutInventory(input *ssm.PutInventoryInput) (output *ssm.PutInventoryOutput, err error) {
-	args := m.Called(input)
+func (m *MockSSMCaller) PutInventory(ctx cont.Context, input *ssm.PutInventoryInput, optFns ...func(*ssm.Options)) (output *ssm.PutInventoryOutput, err error) {
+	args := m.Called(ctx, input)
 	return args.Get(0).(*ssm.PutInventoryOutput), args.Error(1)
 }
 
@@ -192,7 +195,7 @@ func TestSendDataToSSM(t *testing.T) {
 func testSendData(t *testing.T, putInventorySucceeds bool) {
 
 	var items []model.Item
-	var inventoryItems []*ssm.InventoryItem
+	var inventoryItems []*types.InventoryItem
 
 	//setting up inventory.Item
 	item := ApplicationInventoryItem()[0]
@@ -207,10 +210,10 @@ func testSendData(t *testing.T, putInventorySucceeds bool) {
 	mockSSM := NewMockSSMCaller()
 	output := &ssm.PutInventoryOutput{}
 	if putInventorySucceeds {
-		mockSSM.On("PutInventory", mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, nil)
+		mockSSM.On("PutInventory", mock.Anything, mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, nil)
 	} else {
 		err := errors.New("some error")
-		mockSSM.On("PutInventory", mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, err)
+		mockSSM.On("PutInventory", mock.Anything, mock.AnythingOfType("*ssm.PutInventoryInput")).Return(output, err)
 	}
 
 	mockOptimizer := datauploader.NewMockDefault()

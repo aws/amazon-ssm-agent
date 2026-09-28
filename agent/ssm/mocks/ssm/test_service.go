@@ -17,7 +17,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -42,7 +43,7 @@ func (m *Mock) ListAssociations(log log.T, instanceID string) (response *ssm.Lis
 
 // ListInstanceAssociations mocks the ListInstanceAssociations function.
 func (m *Mock) ListInstanceAssociations(log log.T, instanceID string, nextToken *string) (response *ssm.ListInstanceAssociationsOutput, err error) {
-	args := m.Called(log, instanceID)
+	args := m.Called(log, instanceID, nextToken)
 	return args.Get(0).(*ssm.ListInstanceAssociationsOutput), args.Error(1)
 }
 
@@ -51,7 +52,7 @@ func (m *Mock) UpdateAssociationStatus(
 	log log.T,
 	instanceID string,
 	name string,
-	associationStatus *ssm.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
+	associationStatus *ssmtypes.AssociationStatus) (response *ssm.UpdateAssociationStatusOutput, err error) {
 	args := m.Called(log, instanceID, name, associationStatus)
 	return args.Get(0).(*ssm.UpdateAssociationStatusOutput), args.Error(1)
 }
@@ -61,7 +62,7 @@ func (m *Mock) UpdateInstanceAssociationStatus(
 	log log.T,
 	associationID string,
 	instanceID string,
-	executionResult *ssm.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
+	executionResult *ssmtypes.InstanceAssociationExecutionResult) (response *ssm.UpdateInstanceAssociationStatusOutput, err error) {
 	args := m.Called(log, associationID, instanceID, executionResult)
 	return args.Get(0).(*ssm.UpdateInstanceAssociationStatusOutput), args.Error(1)
 }
@@ -70,12 +71,12 @@ func (m *Mock) UpdateInstanceAssociationStatus(
 func (m *Mock) SendCommand(log log.T,
 	documentName string,
 	instanceIDs []string,
-	parameters map[string][]*string,
-	timeoutSeconds *int64,
+	parameters map[string][]string,
+	timeoutSeconds *int32,
 	outputS3BucketName *string,
 	outputS3KeyPrefix *string) (response *ssm.SendCommandOutput, err error) {
 
-	args := m.Called(documentName, instanceIDs, parameters, timeoutSeconds, outputS3BucketName, outputS3KeyPrefix)
+	args := m.Called(log, documentName, instanceIDs, parameters, timeoutSeconds, outputS3BucketName, outputS3KeyPrefix)
 	return args.Get(0).(*ssm.SendCommandOutput), args.Error(1)
 }
 
@@ -154,7 +155,7 @@ func (m *Mock) PutComplianceItems(
 	instanceId string,
 	complianceType string,
 	itemContentHash string,
-	items []*ssm.ComplianceItemEntry) (response *ssm.PutComplianceItemsOutput, err error) {
+	items []ssmtypes.ComplianceItemEntry) (response *ssm.PutComplianceItemsOutput, err error) {
 
 	args := m.Called(log, executionTime, executionType, executionId, instanceId, complianceType, itemContentHash, items)
 	return args.Get(0).(*ssm.PutComplianceItemsOutput), args.Error(1)

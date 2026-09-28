@@ -16,50 +16,67 @@ package ssmclient
 
 import (
 	"context"
+	"fmt"
+
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 var (
-	loadAppConfig     = appconfig.Config
-	utilAWSConfig     = util.AwsConfig
-	sessionNewSession = session.NewSession
+	loadAppConfig             = appconfig.Config
+	utilAWSConfig             = util.AwsConfig
+	utilAWSConfigWithEndpoint = util.AwsConfigWithEndpoint
 )
 
 // ISSMClient defines the functions needed for role providers send health pings to Systems Manager
 type ISSMClient interface {
-	UpdateInstanceInformationWithContext(ctx context.Context, input *ssm.UpdateInstanceInformationInput, opts ...request.Option) (*ssm.UpdateInstanceInformationOutput, error)
+	UpdateInstanceInformation(ctx context.Context, input *ssm.UpdateInstanceInformationInput, opts ...func(*ssm.Options)) (*ssm.UpdateInstanceInformationOutput, error)
 }
 
 // Initializer is a function that initializes and returns an ISSMClient
-type Initializer func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ISSMClient
+type Initializer func(log log.T, credentialsProvider aws.CredentialsProvider, region, defaultEndpoint string) ISSMClient
 
 // NewV4ServiceWithCreds creates a ssm.SSM that is configured to sign requests to the SSM API with the given credentials
-func NewV4ServiceWithCreds(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ISSMClient {
+func NewV4ServiceWithCreds(log log.T, credentialsProvider aws.CredentialsProvider, region, defaultEndpoint string) ISSMClient {
 	// read latest from AppConfig file
-	config, err := loadAppConfig(true)
+	appConfig, err := loadAppConfig(true)
 	if err != nil {
 		log.Warnf("Error while loading app config. Err: %v", err)
 	}
-	awsConfig := utilAWSConfig(log, config, "ssm", region)
 
-	awsConfig.Region = &region
-	awsConfig.Credentials = credentials
-	if config.Ssm.Endpoint != "" {
-		awsConfig.Endpoint = &config.Ssm.Endpoint
+	var endpoint *string
+	if appConfig.Ssm.Endpoint != "" {
+		// Normalize the scheme so scheme-less appconfig overrides (e.g. VPC
+		// endpoint hostnames) satisfy SDK v2's URI validation, which requires
+		// a scheme on BaseEndpoint values.
+		normalized := sdkutil.NormalizeEndpointScheme(appConfig.Ssm.Endpoint)
+		endpoint = &normalized
 	} else if defaultEndpoint != "" {
-		awsConfig.Endpoint = &defaultEndpoint
+		endpoint = &defaultEndpoint
 	}
 
-	// Create a session to share service client Config and handlers with
-	ssmSess, _ := session.NewSession(awsConfig)
-	ssmSess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(config.Agent.Name, config.Agent.Version))
+	awsConfig := utilAWSConfigWithEndpoint(log, appConfig, "ssm", region, endpoint)
+	awsConfig.Region = region
+	awsConfig.Credentials = credentialsProvider
+	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Build.Add(
+			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx context.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+				req := in.Request.(*smithyhttp.Request)
+				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
+				req.Header.Add("User-Agent", userAgent)
+				return next.HandleBuild(ctx, in)
+			}),
+			middleware.After,
+		)
+	})
 
-	return ssm.New(ssmSess)
+	return ssm.NewFromConfig(awsConfig)
 }

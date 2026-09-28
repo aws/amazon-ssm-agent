@@ -15,61 +15,108 @@
 package rsaauth
 
 import (
+	cont "context"
+	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/iirprovider"
-	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
 // NewRsaClient creates a new SSM client instance that signs requests using a private key
 func NewRsaClient(log log.T, appConfig *appconfig.SsmagentConfig, serverId, region, encodedPrivateKey string) authtokenrequest.IClient {
 	awsConfig := deps.AwsConfig(log, *appConfig, "ssm", region)
 
-	awsConfig.Credentials = deps.NewStaticCredentials(serverId, encodedPrivateKey, "")
+	awsConfig.Credentials = aws.NewCredentialsCache(deps.NewStaticCredentialsProvider(serverId, encodedPrivateKey, ""))
 
 	if appConfig.Ssm.Endpoint != "" {
-		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+		ep := sdkutil.NormalizeEndpointScheme(appConfig.Ssm.Endpoint)
+		awsConfig.BaseEndpoint = &ep
 	}
 
-	// Create a session to share service client config and handlers with
-	ssmSess, _ := deps.NewSession(awsConfig)
-	ssmSess.Handlers.Build.PushBack(deps.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Build.Add(
+			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+				req := in.Request.(*smithyhttp.Request)
+				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
+				req.Header.Add("User-Agent", userAgent)
+				return next.HandleBuild(ctx, in)
+			}),
+			middleware.After,
+		)
+	})
 
-	ssmSdk := deps.NewSsmSdk(ssmSess)
+	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
+		// Remove original signing and add our RSA signer
+		_, _ = stack.Finalize.Remove("Signing")
+		return stack.Finalize.Add(
+			middleware.FinalizeMiddlewareFunc("RSASigner", func(ctx cont.Context, in middleware.FinalizeInput, next middleware.FinalizeHandler) (middleware.FinalizeOutput, middleware.Metadata, error) {
+				smithyReq := in.Request.(*smithyhttp.Request)
+
+				if err := SignRsa(smithyReq, awsConfig, "ssm"); err != nil {
+					return middleware.FinalizeOutput{}, middleware.Metadata{}, err
+				}
+
+				return next.HandleFinalize(ctx, in)
+			}),
+			middleware.After,
+		)
+	})
+
+	ssmSdk := deps.NewSsmSdk(awsConfig)
 
 	// use Beagle's RSA signer override
 	// whenever we update sdk, we need to make sure it's using Beagle's RSA signing protocol
-	ssmSdk.Handlers.Sign.Clear()
-	ssmSdk.Handlers.Sign.PushBack(SignRsa)
 	return deps.NewAuthTokenClient(ssmSdk)
 }
 
 // NewIirRsaClient creates a new ssm client that signs requests with both instance identity credentials and private key
 func NewIirRsaClient(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 	awsConfig := deps.AwsConfig(log, *appConfig, "ssm", region)
-	awsConfig.Credentials = deps.NewCredentials(&iirprovider.IIRRoleProvider{
+	awsConfig.Credentials = aws.NewCredentialsCache(&iirprovider.IIRRoleProvider{
 		Config:     appConfig,
 		Log:        log,
 		IMDSClient: imdsClient,
 	})
 
 	if appConfig.Ssm.Endpoint != "" {
-		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+		ep := sdkutil.NormalizeEndpointScheme(appConfig.Ssm.Endpoint)
+		awsConfig.BaseEndpoint = &ep
 	}
 
-	// Create a session to share service client config and handlers with
-	ssmSess, _ := deps.NewSession(awsConfig)
-	ssmSess.Handlers.Build.PushBackNamed(request.NamedHandler{
-		Name: "AddUserAgent",
-		Fn:   deps.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version),
+	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Build.Add(
+			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+				req := in.Request.(*smithyhttp.Request)
+				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
+				req.Header.Add("User-Agent", userAgent)
+				return next.HandleBuild(ctx, in)
+			}),
+			middleware.After,
+		)
 	})
 
-	ssmSdk := deps.NewSsmSdk(ssmSess)
-	ssmSdk.Handlers.Sign.PushBackNamed(request.NamedHandler{
-		Name: "SignIirRsa",
-		Fn:   MakeSignRsaHandler(encodedPrivateKey),
+	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Finalize.Add(
+			middleware.FinalizeMiddlewareFunc("SignIirRsa", func(ctx cont.Context, in middleware.FinalizeInput, next middleware.FinalizeHandler) (middleware.FinalizeOutput, middleware.Metadata, error) {
+				// Apply RSA signing logic here
+				smithyReq := in.Request.(*smithyhttp.Request)
+				if err := MakeSignRsaHandler(encodedPrivateKey)(smithyReq); err != nil {
+					return middleware.FinalizeOutput{}, middleware.Metadata{}, err
+				}
+
+				return next.HandleFinalize(ctx, in)
+			}),
+			middleware.After,
+		)
 	})
+
+	ssmSdk := deps.NewSsmSdk(awsConfig)
 
 	return deps.NewAuthTokenClient(ssmSdk)
 }

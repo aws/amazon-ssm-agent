@@ -196,7 +196,6 @@ func (p *PortPlugin) execute(
 	defer func() {
 		p.stop()
 	}()
-
 	if err = p.initializeParameters(config); err != nil {
 		log.Error(err)
 		output.SetExitCode(appconfig.ErrorExitCode)

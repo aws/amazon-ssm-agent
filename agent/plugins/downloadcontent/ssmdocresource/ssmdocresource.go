@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 // S3Resource is a struct for the remote resource of type git

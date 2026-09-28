@@ -15,6 +15,7 @@
 package datauploader
 
 import (
+	cont "context"
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/json"
@@ -24,13 +25,15 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
 )
 
 const (
@@ -42,13 +45,13 @@ const (
 
 // T represents contracts for SSM Inventory data uploader
 type T interface {
-	SendDataToSSM(items []*ssm.InventoryItem) (err error)
-	ConvertToSsmInventoryItems(items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error)
-	GetDirtySsmInventoryItems(items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error)
+	SendDataToSSM(items []*types.InventoryItem) (err error)
+	ConvertToSsmInventoryItems(items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*types.InventoryItem, err error)
+	GetDirtySsmInventoryItems(items []model.Item) (dirtyInventoryItems []*types.InventoryItem, err error)
 }
 
 type SSMCaller interface {
-	PutInventory(input *ssm.PutInventoryInput) (output *ssm.PutInventoryOutput, err error)
+	PutInventory(ctx cont.Context, input *ssm.PutInventoryInput, optFns ...func(*ssm.Options)) (output *ssm.PutInventoryOutput, err error)
 }
 
 // InventoryUploader implements functionality to upload data to SSM Inventory.
@@ -73,16 +76,26 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	cfg := sdkutil.AwsConfig(c, "ssm")
 
 	if appCfg.Ssm.Endpoint != "" {
-		cfg.Endpoint = &appCfg.Ssm.Endpoint
+		ep := sdkutil.NormalizeEndpointScheme(appCfg.Ssm.Endpoint)
+		cfg.BaseEndpoint = &ep
 	}
 
 	if appCfg.Agent.Region != "" {
-		cfg.Region = &appCfg.Agent.Region
+		cfg.Region = appCfg.Agent.Region
 	}
-	sess := session.New(cfg)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appCfg.Agent.Name, appCfg.Agent.Version))
+	cfg.APIOptions = append(cfg.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Build.Add(
+			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+				req := in.Request.(*smithyhttp.Request)
+				userAgent := fmt.Sprintf("%s/%s", appCfg.Agent.Name, appCfg.Agent.Version)
+				req.Header.Add("User-Agent", userAgent)
+				return next.HandleBuild(ctx, in)
+			}),
+			middleware.After,
+		)
+	})
 
-	uploader.ssm = ssm.New(sess)
+	uploader.ssm = ssm.NewFromConfig(cfg)
 
 	if uploader.optimizer, err = NewOptimizerImpl(context); err != nil {
 		log.Errorf("Unable to load optimizer for inventory uploader because - %v", err.Error())
@@ -93,7 +106,7 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 }
 
 // SendDataToSSM uploads given inventory items to SSM
-func (u *InventoryUploader) SendDataToSSM(items []*ssm.InventoryItem) (err error) {
+func (u *InventoryUploader) SendDataToSSM(items []*types.InventoryItem) (err error) {
 	log := u.context.Log()
 	log.Debugf("Uploading following inventory data to SSM - %v", items)
 
@@ -108,9 +121,17 @@ func (u *InventoryUploader) SendDataToSSM(items []*ssm.InventoryItem) (err error
 	}
 
 	//setting up input for PutInventory API call
+	// Dereference pointer items for API input
+	inventoryItems := make([]types.InventoryItem, len(items))
+	for i, item := range items {
+		if item != nil {
+			inventoryItems[i] = *item
+		}
+	}
+
 	params := &ssm.PutInventoryInput{
 		InstanceId: &instanceID,
-		Items:      items,
+		Items:      inventoryItems,
 	}
 	var resp *ssm.PutInventoryOutput
 
@@ -118,7 +139,7 @@ func (u *InventoryUploader) SendDataToSSM(items []*ssm.InventoryItem) (err error
 	time.Sleep(time.Duration(getRandomBackOffTime(u.context, instanceID)) * time.Second)
 	log.Debugf("Calling PutInventory API with parameters - %v", params)
 	if u.ssm != nil {
-		resp, err = u.ssm.PutInventory(params)
+		resp, err = u.ssm.PutInventory(cont.TODO(), params)
 
 		if err != nil {
 			log.Errorf("the following error occured while calling PutInventory API: %v", err)
@@ -146,7 +167,7 @@ func getRandomBackOffTime(context context.T, instanceID string) (sleepTime int) 
 	return sleepTime
 }
 
-func (u *InventoryUploader) updateContentHash(items []*ssm.InventoryItem) {
+func (u *InventoryUploader) updateContentHash(items []*types.InventoryItem) {
 	log := u.context.Log()
 	log.Debugf("Updating cache")
 	for _, item := range items {
@@ -167,7 +188,7 @@ func calculateCheckSum(data []byte) (checkSum string) {
 // which contains only contentHash for those inventory types where the dataset hasn't changed from previous collection. The other array is non-optimized array
 // which contains both contentHash & content. This is done to avoid iterating over the inventory data twice. It throws error when it encounters error during
 // conversion process.
-func (u *InventoryUploader) ConvertToSsmInventoryItems(items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error) {
+func (u *InventoryUploader) ConvertToSsmInventoryItems(items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*types.InventoryItem, err error) {
 
 	log := u.context.Log()
 
@@ -180,7 +201,7 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(items []model.Item) (opti
 	for _, item := range items {
 
 		var dataB []byte
-		var optimizedItem, nonOptimizedItem *ssm.InventoryItem
+		var optimizedItem, nonOptimizedItem *types.InventoryItem
 
 		newHash := ""
 		oldHash := ""
@@ -218,7 +239,7 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(items []model.Item) (opti
 			log.Debugf("Inventory data for %v is same as before - we can just send content hash", itemName)
 
 			//set the inventory item accordingly
-			optimizedItem = &ssm.InventoryItem{
+			optimizedItem = &types.InventoryItem{
 				CaptureTime:   &item.CaptureTime,
 				TypeName:      &itemName,
 				SchemaVersion: &item.SchemaVersion,
@@ -241,7 +262,7 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(items []model.Item) (opti
 }
 
 // GetDirtySsmInventoryItems get the inventory item data for items that have changes since last successful report to SSM.
-func (u InventoryUploader) GetDirtySsmInventoryItems(items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error) {
+func (u InventoryUploader) GetDirtySsmInventoryItems(items []model.Item) (dirtyInventoryItems []*types.InventoryItem, err error) {
 	log := u.context.Log()
 
 	//NOTE: There can be multiple inventory type data.
@@ -250,7 +271,7 @@ func (u InventoryUploader) GetDirtySsmInventoryItems(items []model.Item) (dirtyI
 	//iterating over multiple inventory data types.
 	for _, item := range items {
 		var dataB []byte
-		var rawItem *ssm.InventoryItem
+		var rawItem *types.InventoryItem
 
 		newHash := ""
 		oldHash := ""

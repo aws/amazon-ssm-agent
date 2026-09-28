@@ -43,7 +43,7 @@ func TestNonceTestSuite(t *testing.T) {
 // Test initialization of nonce
 func (suite *NonceTestSuite) TestInitializeNonce() {
 
-	var nonce NonceGenerator
+	nonce := &NonceGenerator{}
 	err := nonce.InitializeNonce()
 
 	assert.Nil(suite.T(), err)

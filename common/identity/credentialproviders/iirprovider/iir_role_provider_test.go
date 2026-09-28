@@ -15,15 +15,19 @@
 package iirprovider
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	iirprovidermocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/iirprovider/mocks"
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -47,17 +51,15 @@ func TestRetrieve_ReturnsCredentials(t *testing.T) {
 		Code:            "Success",
 	}
 
-	expectedResult := credentials.Value{
-		AccessKeyID:     respCreds.AccessKeyID,
-		SecretAccessKey: respCreds.SecretAccessKey,
-		SessionToken:    respCreds.Token,
-		ProviderName:    ProviderName,
-	}
+	mdInput := imds.GetMetadataInput{Path: iirCredentialsPath}
 
 	respJSONBytes, _ := json.Marshal(respCreds)
 
+	readCloser := io.NopCloser(strings.NewReader(string(respJSONBytes)))
+	mdOutput := imds.GetMetadataOutput{Content: readCloser}
+
 	mockIMDSClient := &iirprovidermocks.IEC2MdsSdkClient{}
-	mockIMDSClient.On("GetMetadata", iirCredentialsPath).Return(string(respJSONBytes), nil)
+	mockIMDSClient.On("GetMetadata", mock.Anything, &mdInput).Return(&mdOutput, nil)
 
 	roleProvider := &IIRRoleProvider{
 		IMDSClient: mockIMDSClient,
@@ -65,7 +67,16 @@ func TestRetrieve_ReturnsCredentials(t *testing.T) {
 		Log:        logger,
 	}
 
-	result, err := roleProvider.Retrieve()
+	result, err := roleProvider.Retrieve(context.TODO())
+
+	expectedResult := aws.Credentials{
+		AccessKeyID:     respCreds.AccessKeyID,
+		SecretAccessKey: respCreds.SecretAccessKey,
+		SessionToken:    respCreds.Token,
+		Source:          ProviderName,
+		CanExpire:       true,
+		Expires:         result.Expires,
+	}
 
 	assert.NotNil(t, result)
 	assert.Nil(t, err)
@@ -77,7 +88,7 @@ func TestEmptyCredentials_StructureValidation(t *testing.T) {
 	emptyCredentials := EmptyCredentials()
 
 	// Verify provider name is set correctly
-	assert.Equal(t, ProviderName, emptyCredentials.ProviderName, "Provider name should match")
+	assert.Equal(t, ProviderName, emptyCredentials.Source, "Provider name should match")
 
 	// Verify other credential fields are empty
 	assert.Empty(t, emptyCredentials.AccessKeyID, "AccessKeyID should be empty")
@@ -92,7 +103,13 @@ func TestRetrieve_IMDSClientFailure(t *testing.T) {
 
 	// Mock IMDS client to return an error
 	mockIMDSClient := &iirprovidermocks.IEC2MdsSdkClient{}
-	mockIMDSClient.On("GetMetadata", iirCredentialsPath).Return("", fmt.Errorf("IMDS retrieval failed"))
+
+	mdInput := imds.GetMetadataInput{Path: iirCredentialsPath}
+
+	readCloser := io.NopCloser(strings.NewReader(string("")))
+	mdOutput := imds.GetMetadataOutput{Content: readCloser}
+
+	mockIMDSClient.On("GetMetadata", mock.Anything, &mdInput).Return(&mdOutput, fmt.Errorf("IMDS retrieval failed"))
 
 	roleProvider := &IIRRoleProvider{
 		IMDSClient: mockIMDSClient,
@@ -101,11 +118,11 @@ func TestRetrieve_IMDSClientFailure(t *testing.T) {
 	}
 
 	// Execute
-	result, err := roleProvider.Retrieve()
+	result, err := roleProvider.Retrieve(context.TODO())
 
 	// Assertions
 	assert.Error(t, err)
-	assert.Equal(t, credentials.Value{ProviderName: ProviderName}, result)
+	assert.Equal(t, aws.Credentials{Source: ProviderName}, result)
 
 	// Verify log error was called
 	logger.AssertCalled(t, "Errorf", mock.AnythingOfType("string"), mock.Anything)
@@ -119,8 +136,13 @@ func TestRetrieve_JSONDecodingFailure(t *testing.T) {
 	// Invalid JSON response
 	invalidJSONResponse := `{invalid json}`
 
+	mdInput := imds.GetMetadataInput{Path: iirCredentialsPath}
+
+	readCloser := io.NopCloser(strings.NewReader(invalidJSONResponse))
+	mdOutput := imds.GetMetadataOutput{Content: readCloser}
+
 	mockIMDSClient := &iirprovidermocks.IEC2MdsSdkClient{}
-	mockIMDSClient.On("GetMetadata", iirCredentialsPath).Return(invalidJSONResponse, nil)
+	mockIMDSClient.On("GetMetadata", mock.Anything, &mdInput).Return(&mdOutput, nil)
 
 	roleProvider := &IIRRoleProvider{
 		IMDSClient: mockIMDSClient,
@@ -129,11 +151,11 @@ func TestRetrieve_JSONDecodingFailure(t *testing.T) {
 	}
 
 	// Execute
-	result, err := roleProvider.Retrieve()
+	result, err := roleProvider.Retrieve(context.TODO())
 
 	// Assertions
 	assert.Error(t, err)
-	assert.Equal(t, credentials.Value{ProviderName: ProviderName}, result)
+	assert.Equal(t, aws.Credentials{Source: ProviderName}, result)
 
 	// Verify log error was called
 	logger.AssertCalled(t, "Errorf", mock.AnythingOfType("string"), mock.Anything)
@@ -155,8 +177,13 @@ func TestRetrieve_ExpiryWindowCalculation(t *testing.T) {
 
 	respJSONBytes, _ := json.Marshal(respCreds)
 
+	mdInput := imds.GetMetadataInput{Path: iirCredentialsPath}
+
+	readCloser := io.NopCloser(strings.NewReader(string(respJSONBytes)))
+	mdOutput := imds.GetMetadataOutput{Content: readCloser}
+
 	mockIMDSClient := &iirprovidermocks.IEC2MdsSdkClient{}
-	mockIMDSClient.On("GetMetadata", iirCredentialsPath).Return(string(respJSONBytes), nil)
+	mockIMDSClient.On("GetMetadata", mock.Anything, &mdInput).Return(&mdOutput, nil)
 
 	roleProvider := &IIRRoleProvider{
 		IMDSClient: mockIMDSClient,
@@ -165,7 +192,7 @@ func TestRetrieve_ExpiryWindowCalculation(t *testing.T) {
 	}
 
 	// Execute
-	result, err := roleProvider.Retrieve()
+	result, err := roleProvider.Retrieve(context.TODO())
 
 	// Assertions
 	assert.NoError(t, err)
@@ -188,8 +215,13 @@ func TestRetrieve_UnsuccessfulResponseCode(t *testing.T) {
 
 	respJSONBytes, _ := json.Marshal(respCreds)
 
+	mdInput := imds.GetMetadataInput{Path: iirCredentialsPath}
+
+	readCloser := io.NopCloser(strings.NewReader(string(respJSONBytes)))
+	mdOutput := imds.GetMetadataOutput{Content: readCloser}
+
 	mockIMDSClient := &iirprovidermocks.IEC2MdsSdkClient{}
-	mockIMDSClient.On("GetMetadata", iirCredentialsPath).Return(string(respJSONBytes), nil)
+	mockIMDSClient.On("GetMetadata", mock.Anything, &mdInput).Return(&mdOutput, nil)
 
 	roleProvider := &IIRRoleProvider{
 		IMDSClient: mockIMDSClient,
@@ -198,11 +230,11 @@ func TestRetrieve_UnsuccessfulResponseCode(t *testing.T) {
 	}
 
 	// Execute
-	result, err := roleProvider.Retrieve()
+	result, err := roleProvider.Retrieve(context.TODO())
 
 	// Assertions
 	assert.Error(t, err)
-	assert.Equal(t, credentials.Value{ProviderName: ProviderName}, result)
+	assert.Equal(t, aws.Credentials{Source: ProviderName}, result)
 	assert.Contains(t, err.Error(), "invalid")
 }
 
@@ -213,5 +245,5 @@ func TestEmptyCredentials_Immutability(t *testing.T) {
 	modifiedCredentials.AccessKeyID = "SomeKey"
 
 	assert.NotEqual(t, originalCredentials, modifiedCredentials, "Original credentials should remain unchanged")
-	assert.Equal(t, ProviderName, originalCredentials.ProviderName, "Original provider name should be preserved")
+	assert.Equal(t, ProviderName, originalCredentials.Source, "Original provider name should be preserved")
 }

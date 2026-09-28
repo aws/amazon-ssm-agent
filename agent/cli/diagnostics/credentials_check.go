@@ -15,14 +15,16 @@ package diagnostics
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/cli/diagnosticsutil"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/sts"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 )
 
 const (
@@ -67,7 +69,7 @@ func (q credentialsCheckQuery) Execute() diagnosticsutil.DiagnosticOutput {
 		}
 	}
 
-	awsSession, err := diagnosticsutil.GetAwsSession(agentIdentity, "sts")
+	awsConfig, err := diagnosticsutil.GetAwsConfig(agentIdentity, "sts")
 	if err != nil {
 		return diagnosticsutil.DiagnosticOutput{
 			Check:  q.GetName(),
@@ -76,25 +78,29 @@ func (q credentialsCheckQuery) Execute() diagnosticsutil.DiagnosticOutput {
 		}
 	}
 
-	client := sts.New(awsSession)
-	client.Endpoint = "https://" + agentIdentity.GetServiceEndpoint("sts")
-
+	client := sts.NewFromConfig(*awsConfig)
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	callerResp, err := client.GetCallerIdentityWithContext(ctx, &sts.GetCallerIdentityInput{})
+	callerResp, err := client.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 	if err != nil {
-		awsErr, isAwsError := err.(awserr.Error)
-		if isAwsError && awsErr.Code() == request.CanceledErrorCode {
+		var reqCanceledErr *aws.RequestCanceledError
+		if errors.As(err, &reqCanceledErr) {
 			return diagnosticsutil.DiagnosticOutput{
 				Check:  q.GetName(),
 				Status: diagnosticsutil.DiagnosticsStatusFailed,
 				Note:   credentialsCheckStrSTSTimeout,
 			}
-		} else if isAwsError && awsErr.Code() == "EC2RoleRequestError" {
+		}
+		// Use sdkutil.GetAwsErrorCode so v2 error shapes without
+		// smithy.APIError (e.g. the bare "no EC2 IMDS role found" fmt.Errorf
+		// returned by aws-sdk-go-v2 ec2rolecreds when the instance profile is
+		// detached) still resolve to EC2RoleRequestError and surface the
+		// specific diagnostic message instead of a generic STS failure.
+		if errCode := sdkutil.GetAwsErrorCode(err); errCode == "EC2RoleRequestError" {
 			return diagnosticsutil.DiagnosticOutput{
 				Check:  q.GetName(),
 				Status: diagnosticsutil.DiagnosticsStatusFailed,
-				Note:   fmt.Sprintf(credentialsCheckStrEC2RoleError, awsErr.Message()),
+				Note:   fmt.Sprintf(credentialsCheckStrEC2RoleError, err),
 			}
 		}
 
@@ -105,7 +111,8 @@ func (q credentialsCheckQuery) Execute() diagnosticsutil.DiagnosticOutput {
 		}
 	}
 
-	expireDate, err := agentIdentity.Credentials().ExpiresAt()
+	creds, err := agentIdentity.CredentialsProvider().Retrieve(ctx)
+	expireDate := creds.Expires
 	if err != nil {
 		return diagnosticsutil.DiagnosticOutput{
 			Check:  q.GetName(),

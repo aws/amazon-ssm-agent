@@ -25,7 +25,7 @@ import (
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

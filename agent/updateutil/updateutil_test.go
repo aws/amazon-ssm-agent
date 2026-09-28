@@ -756,6 +756,17 @@ func TestIsIdentityRuntimeConfigSupported(t *testing.T) {
 }
 
 func TestUtility_setShareCredsEnvironment_SetsCommandAWSEnvironmentVariables_WhenIdentitySharesCredentials(t *testing.T) {
+	// Make the test hermetic: setCommandEnvironmentVariables only appends these
+	// vars when they are absent from the OS environment. Some environments (e.g.
+	// the credential sandbox) pre-set AWS_SHARED_CREDENTIALS_FILE/AWS_PROFILE,
+	// which would otherwise suppress the append and fail the assertions.
+	for _, key := range []string{"AWS_SHARED_CREDENTIALS_FILE", "AWS_PROFILE"} {
+		if orig, ok := os.LookupEnv(key); ok {
+			os.Unsetenv(key)
+			defer os.Setenv(key, orig)
+		}
+	}
+
 	ctx := new(context.Mock)
 	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
 	ctx.On("Identity").Return(agentIdentity)
@@ -938,7 +949,7 @@ func TestResolveAgentReleaseBucketURL(t *testing.T) {
 			if tc.name == "China Region" || tc.name == "unavailable Region" {
 				agentIdentityMock.On("GetServiceEndpoint", "s3").Return("")
 			} else {
-				agentIdentityMock.On("GetServiceEndpoint", "s3").Return(fmt.Sprintf("s3.%v.amazonaws.com", tc.region))
+				agentIdentityMock.On("GetServiceEndpoint", "s3").Return(fmt.Sprintf("https://s3.%v.amazonaws.com", tc.region))
 			}
 			actualURL := ResolveAgentReleaseBucketURL(tc.region, agentIdentityMock)
 			assert.Equal(t, tc.expectedURL, actualURL, "Resolved URL does not match expected")

@@ -16,12 +16,13 @@ package onprem
 import (
 	"sync"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 const (
@@ -34,7 +35,7 @@ type Identity struct {
 	Log                    log.T
 	Config                 *appconfig.SsmagentConfig
 	registrationInfo       registration.IOnpremRegistrationInfo
-	credentials            *credentials.Credentials
+	credentials            aws.Credentials
 	credentialsProvider    credentialproviders.IRemoteProvider
 	shareFile              string
 	shouldShareCredentials bool

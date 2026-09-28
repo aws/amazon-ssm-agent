@@ -21,8 +21,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
 	"github.com/cihub/seelog"
 )
 
@@ -51,7 +51,7 @@ func (logReceiver *CloudWatchCustomReceiver) ReceiveMessage(message string, leve
 			result = message[i : i+cloudWatchLogEventLength]
 		}
 		// Creating cloudwatchlogs Log Event struct
-		newMessage := &cloudwatchlogs.InputLogEvent{
+		newMessage := &types.InputLogEvent{
 			Message:   aws.String(result),
 			Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
 		}

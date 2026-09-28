@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -151,7 +151,7 @@ var curSampleData string
 func TestParseOutput(t *testing.T) {
 	mockContext := context.NewMockDefault()
 	for i, sampleData := range sampleDataUnix {
-		var identityDocument ec2metadata.EC2InstanceIdentityDocument
+		var identityDocument imds.InstanceIdentityDocument
 		json.Unmarshal([]byte(sampleData), &identityDocument)
 		parsedItems := parseInstanceIdentityDocumentOutput(mockContext, identityDocument)
 		for j := 0; j < len(parsedItems); j++ {
@@ -172,14 +172,14 @@ func mockIsNotOnPremInstanceType(identity.IAgentIdentity) bool {
 	return false
 }
 
-func mockQueryIdentityDocument() (ec2metadata.EC2InstanceIdentityDocument, error) {
-	var identityDocument ec2metadata.EC2InstanceIdentityDocument
+func mockQueryIdentityDocument() (imds.InstanceIdentityDocument, error) {
+	var identityDocument imds.InstanceIdentityDocument
 	json.Unmarshal([]byte(curSampleData), &identityDocument)
 	return identityDocument, nil
 }
 
-func mockQueryIdentityDocumentWithError() (ec2metadata.EC2InstanceIdentityDocument, error) {
-	var result ec2metadata.EC2InstanceIdentityDocument
+func mockQueryIdentityDocumentWithError() (imds.InstanceIdentityDocument, error) {
+	var result imds.InstanceIdentityDocument
 	return result, fmt.Errorf("Random Error")
 }
 

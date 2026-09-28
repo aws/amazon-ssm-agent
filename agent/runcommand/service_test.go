@@ -32,10 +32,9 @@ import (
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -54,7 +53,7 @@ var loggers = log.NewMockLog()
 type TestCaseProcessMessage struct {
 	ContextMock *contextmocks.Mock
 
-	Message ssmmds.Message
+	Message mdsService.Message
 
 	MdsMock *runcommandmock.MockedMDS
 
@@ -76,7 +75,7 @@ func TestProcessMessageWithSendCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	loadDocStateFromSendCommand = func(context context.T,
-		msg *ssmmds.Message,
+		msg *mdsService.Message,
 		messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 		return &fakeDocState, nil
 	}
@@ -106,7 +105,7 @@ func TestProcessMessageWithCancelCommandTopicPrefix(t *testing.T) {
 	// set the expectations
 	tc.MdsMock.On("AcknowledgeMessage", mock.Anything, *tc.Message.MessageId).Return(nil)
 	tc.ProcessMock.On("Cancel", fakeCancelDocState).Return(processor.ErrorCode(""))
-	loadDocStateFromCancelCommand = func(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
+	loadDocStateFromCancelCommand = func(context context.T, msg *mdsService.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 		return &fakeCancelDocState, nil
 	}
 
@@ -148,7 +147,7 @@ func TestProcessMessageWithInvalidMessage(t *testing.T) {
 	svc, tc := prepareTestProcessMessage(testTopicSend)
 
 	// exclude some fields from message
-	tc.Message = ssmmds.Message{
+	tc.Message = mdsService.Message{
 		CreatedDate: &testEmptyMessage,
 		Destination: &testEmptyMessage,
 		MessageId:   &testEmptyMessage,
@@ -170,7 +169,7 @@ func prepareTestProcessMessage(testTopic string) (svc RunCommandService, testCas
 	contextMock := contextmocks.NewMockDefault()
 
 	// create dummy message that would be passed processMessage
-	message := ssmmds.Message{
+	message := mdsService.Message{
 		CreatedDate: &testCreatedDate,
 		Destination: &testDestination,
 		MessageId:   &testMessageId,
@@ -232,7 +231,7 @@ var sampleMessageFiles = []string{
 
 type TestCaseSendCommand struct {
 	// Msg stores a parsed MDS message as received from GetMessages.
-	Msg ssmmds.Message
+	Msg mdsService.Message
 
 	// DocState stores parsed Document State
 	DocState contracts.DocumentState
@@ -406,22 +405,27 @@ func getPluginConfigurationsFromMainStep(mainSteps []*contracts.InstancePluginCo
 	return
 }
 
-func createMDSMessage(commandID string, payload string, topic string, instanceID string) ssmmds.Message {
+func createMDSMessage(commandID string, payload string, topic string, instanceID string) mdsService.Message {
 	messageCreatedDate := time.Date(2015, 7, 9, 23, 22, 39, 19000000, time.UTC)
 
 	c := sha256.New()
 	c.Write([]byte(payload))
 	payloadDigest := string(c.Sum(nil))
 
-	return ssmmds.Message{
-		CreatedDate:   aws.String(times.ToIso8601UTC(messageCreatedDate)),
-		Destination:   aws.String(instanceID),
-		MessageId:     aws.String("aws.ssm." + commandID + "." + instanceID),
-		Payload:       aws.String(payload),
-		PayloadDigest: aws.String(payloadDigest),
-		Topic:         aws.String(topic),
+	return mdsService.Message{
+		CreatedDate:   stringPtr(times.ToIso8601UTC(messageCreatedDate)),
+		Destination:   stringPtr(instanceID),
+		MessageId:     stringPtr("aws.ssm." + commandID + "." + instanceID),
+		Payload:       stringPtr(payload),
+		PayloadDigest: stringPtr(payloadDigest),
+		Topic:         stringPtr(topic),
 	}
 }
+
+func stringPtr(s string) *string {
+	return &s
+}
+
 func GenerateCancelDocState(t *testing.T, testCase TestCaseCancelCommand) (docState *contracts.DocumentState) {
 	context := contextmocks.NewMockDefault()
 	cancelMessagePayload := messageContracts.CancelPayload{

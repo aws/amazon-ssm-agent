@@ -26,15 +26,14 @@ import (
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/assert"
 )
 
 // stubSdkService is the stub for sdkService
 type stubSdkService struct{}
 
-func (s *stubSdkService) GetMessages(log log.T, instanceID string) (messages *ssmmds.GetMessagesOutput, err error) {
-	return &ssmmds.GetMessagesOutput{}, nil
+func (s *stubSdkService) GetMessages(log log.T, instanceID string) (messages *messageService.GetMessagesOutput, err error) {
+	return &messageService.GetMessagesOutput{}, nil
 }
 
 func (s *stubSdkService) AcknowledgeMessage(log log.T, messageID string) error {
@@ -61,15 +60,15 @@ func (s *stubSdkService) LoadFailedReplies(log log.T) []string {
 
 func (s *stubSdkService) DeleteFailedReply(log log.T, replyId string) {}
 
-func (s *stubSdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) error {
+func (s *stubSdkService) PersistFailedReply(log log.T, sendReply messageService.SendReplyInput) error {
 	return nil
 }
 
-func (s *stubSdkService) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
+func (s *stubSdkService) GetFailedReply(log log.T, replyId string) (*messageService.SendReplyInput, error) {
 	return nil, nil
 }
 
-func (s *stubSdkService) SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) error {
+func (s *stubSdkService) SendReplyWithInput(log log.T, sendReply *messageService.SendReplyInput) error {
 	return nil
 }
 

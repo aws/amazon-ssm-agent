@@ -61,7 +61,7 @@ func (s *SsmParameterService) getParameters(
 	if len(parametersOutput.InvalidParameters) > 0 {
 		invalidParameters := []string{}
 		for _, p := range parametersOutput.InvalidParameters {
-			invalidParameters = append(invalidParameters, *p)
+			invalidParameters = append(invalidParameters, p)
 		}
 		return nil, errors.New("The following parameter(s) cannot be resolved: " + strings.Join(invalidParameters, ","))
 	}
@@ -71,7 +71,7 @@ func (s *SsmParameterService) getParameters(
 		param := parametersOutput.Parameters[i]
 		resolvedParametersMap[ref2NameMapper[*param.Name]] = SsmParameterInfo{
 			Name:  *param.Name,
-			Type:  *param.Type,
+			Type:  string(param.Type),
 			Value: *param.Value,
 		}
 	}

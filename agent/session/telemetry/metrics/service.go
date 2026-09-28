@@ -16,15 +16,19 @@
 package metrics
 
 import (
+	cont "context"
 	"errors"
+	"fmt"
+
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/client"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	cwtypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 )
 
 const (
@@ -35,16 +39,16 @@ const (
 
 // ICloudWatchService is the interface to create and push cloud watch metrics
 type ICloudWatchService interface {
-	GenerateUpdateMetrics(metricName string, value float64, sourceVersion string, targetVersion string) *cloudwatch.MetricDatum
-	GenerateBasicTelemetryMetrics(metricName string, value float64, version string) *cloudwatch.MetricDatum
-	PutMetrics(metricData []*cloudwatch.MetricDatum) error
+	GenerateUpdateMetrics(metricName string, value float64, sourceVersion string, targetVersion string) *cwtypes.MetricDatum
+	GenerateBasicTelemetryMetrics(metricName string, value float64, version string) *cwtypes.MetricDatum
+	PutMetrics(metricData []*cwtypes.MetricDatum) error
 	IsCloudWatchEnabled() bool
 }
 
 // CloudWatchService encapsulates the client and stop policy as a wrapper to call the CloudWatch API
 type CloudWatchService struct {
 	context           context.T
-	service           *cloudwatch.CloudWatch
+	service           *cloudwatch.Client
 	stopPolicy        *sdkutil.StopPolicy
 	namespace         string
 	instanceId        string
@@ -79,12 +83,12 @@ func (c *CloudWatchService) IsCloudWatchEnabled() bool {
 }
 
 // GenerateUpdateMetrics generate metrics with instance id, TargetVersion and SourceVersion as the dimension
-func (c *CloudWatchService) GenerateUpdateMetrics(metricName string, value float64, sourceVersion string, targetVersion string) *cloudwatch.MetricDatum {
-	return &cloudwatch.MetricDatum{
+func (c *CloudWatchService) GenerateUpdateMetrics(metricName string, value float64, sourceVersion string, targetVersion string) *cwtypes.MetricDatum {
+	return &cwtypes.MetricDatum{
 		MetricName: aws.String(metricName),
-		Unit:       aws.String("Count"),
+		Unit:       cwtypes.StandardUnitCount,
 		Value:      aws.Float64(value),
-		Dimensions: []*cloudwatch.Dimension{
+		Dimensions: []cwtypes.Dimension{
 			{
 				Name:  aws.String("InstanceId"),
 				Value: aws.String(c.instanceId),
@@ -102,12 +106,12 @@ func (c *CloudWatchService) GenerateUpdateMetrics(metricName string, value float
 }
 
 // GenerateBasicTelemetryMetrics generate metrics with instance id and AgentVersion as the dimension
-func (c *CloudWatchService) GenerateBasicTelemetryMetrics(metricName string, value float64, version string) *cloudwatch.MetricDatum {
-	return &cloudwatch.MetricDatum{
+func (c *CloudWatchService) GenerateBasicTelemetryMetrics(metricName string, value float64, version string) *cwtypes.MetricDatum {
+	return &cwtypes.MetricDatum{
 		MetricName: aws.String(metricName),
-		Unit:       aws.String("Count"),
+		Unit:       cwtypes.StandardUnitCount,
 		Value:      aws.Float64(value),
-		Dimensions: []*cloudwatch.Dimension{
+		Dimensions: []cwtypes.Dimension{
 			{
 				Name:  aws.String("InstanceId"),
 				Value: aws.String(c.instanceId),
@@ -121,7 +125,7 @@ func (c *CloudWatchService) GenerateBasicTelemetryMetrics(metricName string, val
 }
 
 // PutMetrics publishes the metrics to CloudWatch
-func (c *CloudWatchService) PutMetrics(metricData []*cloudwatch.MetricDatum) error {
+func (c *CloudWatchService) PutMetrics(metricData []*cwtypes.MetricDatum) error {
 	log := c.context.Log()
 	if !c.cloudWatchEnabled {
 		return errors.New("agent telemetry cloudwatch metrics disabled")
@@ -133,12 +137,19 @@ func (c *CloudWatchService) PutMetrics(metricData []*cloudwatch.MetricDatum) err
 		c.stopPolicy.ResetErrorCount()
 	}
 
-	putRequest, output := c.service.PutMetricDataRequest(&cloudwatch.PutMetricDataInput{
-		MetricData: metricData,
+	metricDataItems := make([]cwtypes.MetricDatum, len(metricData))
+	for i, item := range metricData {
+		if item != nil {
+			metricDataItems[i] = *item
+		}
+	}
+
+	output, err := c.service.PutMetricData(cont.TODO(), &cloudwatch.PutMetricDataInput{
+		MetricData: metricDataItems,
 		Namespace:  &c.namespace,
 	})
 
-	if err := putRequest.Send(); err != nil {
+	if err != nil {
 		sdkutil.HandleAwsError(log, err, c.stopPolicy)
 
 		return err
@@ -154,16 +165,27 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 }
 
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
-func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.CloudWatch {
+func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.Client {
 	config := sdkutil.AwsConfig(c.context, "monitoring")
 
-	config = request.WithRetryer(config, client.DefaultRetryer{
-		NumMaxRetries: maxRetries,
-	})
+	config.Retryer = func() aws.Retryer {
+		return retry.NewStandard(func(so *retry.StandardOptions) {
+			so.MaxAttempts = maxRetries + 1
+		})
+	}
 
 	appConfig := c.context.AppConfig()
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	config.APIOptions = append(config.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Build.Add(
+			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+				req := in.Request.(*smithyhttp.Request)
+				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
+				req.Header.Add("User-Agent", userAgent)
+				return next.HandleBuild(ctx, in)
+			}),
+			middleware.After,
+		)
+	})
 
-	return cloudwatch.New(sess)
+	return cloudwatch.NewFromConfig(config)
 }

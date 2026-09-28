@@ -16,18 +16,21 @@ package sdkutil
 
 import (
 	"net/http"
+	"strings"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
-	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 // AwsConfig returns the default aws.Config object with the appropriate
 // credentials.
-func AwsConfig(context context.T, service string) (awsConfig *aws.Config) {
+func AwsConfig(context context.T, service string) (awsConfig aws.Config) {
 	region, _ := context.Identity().Region()
 	endpoint := context.Identity().GetServiceEndpoint(service)
 	return AwsConfigForEndpoint(context, endpoint, region)
@@ -35,31 +38,60 @@ func AwsConfig(context context.T, service string) (awsConfig *aws.Config) {
 
 // AwsConfigForRegion returns the default aws.Config object with the appropriate
 // credentials and endpoint.
-func AwsConfigForRegion(context context.T, service, region string) (awsConfig *aws.Config) {
+func AwsConfigForRegion(context context.T, service, region string) (awsConfig aws.Config) {
 	endpointHelper := endpoint.NewEndpointHelper(context.Log(), context.AppConfig())
 	return AwsConfigForEndpoint(context, endpointHelper.GetServiceEndpoint(service, region), region)
 }
 
-// AwsConfigForEndpoint returns the default aws.Config object with the appropriate
-// credentials and endpoint.
-func AwsConfigForEndpoint(context context.T, endpoint, region string) (awsConfig *aws.Config) {
-	// create default config
-	return &aws.Config{
-		Retryer:    newRetryer(),
-		SleepDelay: sleepDelay,
-		Region:     aws.String(region),
-		Endpoint:   aws.String(endpoint),
-		HTTPClient: &http.Client{
-			Transport: network.GetDefaultTransport(context.Log(), context.AppConfig()),
-		},
-		Credentials: context.Identity().Credentials(),
+// NormalizeEndpointScheme ensures the endpoint has an https:// scheme prefix,
+// which SDK v2's URI validator requires on BaseEndpoint values.
+func NormalizeEndpointScheme(endpoint string) string {
+	if endpoint != "" && !strings.HasPrefix(endpoint, "http://") && !strings.HasPrefix(endpoint, "https://") {
+		endpoint = "https://" + endpoint
 	}
+	return endpoint
 }
 
-var newRetryer = func() aws.RequestRetryer {
-	r := retryer.SsmRetryer{}
-	r.NumMaxRetries = 3
-	return r
+// AwsConfigForEndpoint returns the default aws.Config object with the appropriate
+// credentials and endpoint.
+func AwsConfigForEndpoint(context context.T, endpoint, region string) (awsConfig aws.Config) {
+	endpoint = NormalizeEndpointScheme(endpoint)
+
+	conf := aws.Config{
+		Region:  region,
+		Retryer: newRetryer,
+		HTTPClient: &http.Client{
+			Transport:     network.GetDefaultTransport(context.Log(), context.AppConfig()),
+			CheckRedirect: network.DisableHTTPDowngrade,
+			Timeout:       60 * time.Second,
+		},
+		Credentials: context.Identity().CredentialsProvider(),
+	}
+
+	// Only set BaseEndpoint when an endpoint is provided; an empty string would
+	// override SDK default endpoint resolution with an invalid endpoint.
+	if endpoint != "" {
+		conf.BaseEndpoint = &endpoint
+	}
+
+	return conf
+}
+
+// sharedRetryer is the single SsmRetryer instance handed out by newRetryer.
+// aws-sdk-go v2 accepts a func() aws.Retryer factory, but retry.Standard's
+// token-bucket rate limiter and quota accounting are per-instance, so a
+// fresh retryer per client would give each service call its own 500-token
+// bucket. retry.Standard is safe to share across concurrent operations
+// (internal state uses atomic accounting), so aliasing a single instance
+// here keeps the quota shared across all SDK clients.
+var sharedRetryer aws.Retryer = &retryer.SsmRetryer{
+	Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+		so.MaxAttempts = 4
+	}),
+}
+
+var newRetryer = func() aws.Retryer {
+	return sharedRetryer
 }
 
 var sleepDelay = func(d time.Duration) {

@@ -92,7 +92,7 @@ func TestGetServiceEndPoint(t *testing.T) {
 		for region, serviceDomain := range regionServiceDomainMap {
 			assert.Equal(t, "", e.endpointCacheLookup(service, region))
 
-			expectedEndpoint := service + "." + region + "." + serviceDomain
+			expectedEndpoint := "https://" + service + "." + region + "." + serviceDomain
 			endpoint := e.GetServiceEndpoint(service, region)
 
 			assert.Equal(t, expectedEndpoint, endpoint)
@@ -118,7 +118,7 @@ func TestGetServiceEndpoint_ServiceDomainConfigSet(t *testing.T) {
 		for region, _ := range regionServiceDomainMap {
 			assert.Equal(t, "", e.endpointCacheLookup(service, region))
 
-			expectedEndpoint := service + "." + region + "." + serviceDomain
+			expectedEndpoint := "https://" + service + "." + region + "." + serviceDomain
 			endpoint := e.GetServiceEndpoint(service, region)
 
 			assert.Equal(t, expectedEndpoint, endpoint)
@@ -142,8 +142,8 @@ func TestGetServiceEndpoint_RegionNotInPrefixMap(t *testing.T) {
 	for _, service := range testServices {
 		for region, _ := range regionServiceDomainMap {
 			assert.Equal(t, "", e.endpointCacheLookup(service, region))
-			assert.Equal(t, service+"."+region+"."+defaultServiceDomain, e.GetServiceEndpoint(service, region))
-			assert.Equal(t, service+"."+region+"."+defaultServiceDomain, e.endpointCacheLookup(service, region))
+			assert.Equal(t, "https://"+service+"."+region+"."+defaultServiceDomain, e.GetServiceEndpoint(service, region))
+			assert.Equal(t, "https://"+service+"."+region+"."+defaultServiceDomain, e.endpointCacheLookup(service, region))
 		}
 	}
 }
@@ -262,15 +262,15 @@ func TestGetServiceEndpoint_DualStack_AWS(t *testing.T) {
 
 	// Test SSM service
 	endpoint := helper.GetServiceEndpoint("ssm", "us-west-2")
-	assert.Equal(t, "ssm.us-west-2.api.aws", endpoint)
+	assert.Equal(t, "https://ssm.us-west-2.api.aws", endpoint)
 
 	// Test S3 service (special case)
 	endpoint = helper.GetServiceEndpoint("s3", "us-west-2")
-	assert.Equal(t, "s3.dualstack.us-west-2.amazonaws.com", endpoint)
+	assert.Equal(t, "https://s3.dualstack.us-west-2.amazonaws.com", endpoint)
 
 	// Test EC2 service
 	endpoint = helper.GetServiceEndpoint("ec2", "us-east-1")
-	assert.Equal(t, "ec2.us-east-1.api.aws", endpoint)
+	assert.Equal(t, "https://ec2.us-east-1.api.aws", endpoint)
 }
 
 func TestGetServiceEndpoint_DualStack_China(t *testing.T) {
@@ -285,11 +285,11 @@ func TestGetServiceEndpoint_DualStack_China(t *testing.T) {
 
 	// Test SSM service in China
 	endpoint := helper.GetServiceEndpoint("ssm", "cn-north-1")
-	assert.Equal(t, "ssm.cn-north-1.api.amazonwebservices.com.cn", endpoint)
+	assert.Equal(t, "https://ssm.cn-north-1.api.amazonwebservices.com.cn", endpoint)
 
 	// Test S3 service in China (uses same domain as regular endpoints)
 	endpoint = helper.GetServiceEndpoint("s3", "cn-north-1")
-	assert.Equal(t, "s3.dualstack.cn-north-1.amazonaws.com.cn", endpoint)
+	assert.Equal(t, "https://s3.dualstack.cn-north-1.amazonaws.com.cn", endpoint)
 }
 
 func TestGetServiceEndpoint_DualStack_GovCloud(t *testing.T) {
@@ -304,11 +304,11 @@ func TestGetServiceEndpoint_DualStack_GovCloud(t *testing.T) {
 
 	// Test SSM service in GovCloud (uses same domain as standard AWS)
 	endpoint := helper.GetServiceEndpoint("ssm", "us-gov-west-1")
-	assert.Equal(t, "ssm.us-gov-west-1.api.aws", endpoint)
+	assert.Equal(t, "https://ssm.us-gov-west-1.api.aws", endpoint)
 
 	// Test S3 service in GovCloud
 	endpoint = helper.GetServiceEndpoint("s3", "us-gov-west-1")
-	assert.Equal(t, "s3.dualstack.us-gov-west-1.amazonaws.com", endpoint)
+	assert.Equal(t, "https://s3.dualstack.us-gov-west-1.amazonaws.com", endpoint)
 }
 
 func TestGetServiceEndpoint_DualStack_ISO(t *testing.T) {
@@ -323,11 +323,11 @@ func TestGetServiceEndpoint_DualStack_ISO(t *testing.T) {
 
 	// Test SSM service in ISO partition
 	endpoint := helper.GetServiceEndpoint("ssm", "us-iso-east-1")
-	assert.Equal(t, "ssm.us-iso-east-1.api.aws.ic.gov", endpoint)
+	assert.Equal(t, "https://ssm.us-iso-east-1.api.aws.ic.gov", endpoint)
 
 	// Test S3 service in ISO partition (uses same domain as regular endpoints)
 	endpoint = helper.GetServiceEndpoint("s3", "us-iso-east-1")
-	assert.Equal(t, "s3.dualstack.us-iso-east-1.c2s.ic.gov", endpoint)
+	assert.Equal(t, "https://s3.dualstack.us-iso-east-1.c2s.ic.gov", endpoint)
 }
 
 func TestGetServiceEndpoint_Standard_Fallback(t *testing.T) {
@@ -342,8 +342,8 @@ func TestGetServiceEndpoint_Standard_Fallback(t *testing.T) {
 
 	// Test that standard endpoints still work
 	endpoint := helper.GetServiceEndpoint("ssm", "us-west-2")
-	assert.Equal(t, "ssm.us-west-2.amazonaws.com", endpoint)
+	assert.Equal(t, "https://ssm.us-west-2.amazonaws.com", endpoint)
 
 	endpoint = helper.GetServiceEndpoint("s3", "us-west-2")
-	assert.Equal(t, "s3.us-west-2.amazonaws.com", endpoint)
+	assert.Equal(t, "https://s3.us-west-2.amazonaws.com", endpoint)
 }

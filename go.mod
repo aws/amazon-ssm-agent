@@ -2,7 +2,9 @@ module github.com/aws/amazon-ssm-agent
 
 go 1.26
 
-replace github.com/aws/aws-sdk-go => ./extra/aws-sdk-go
+replace github.com/aws/aws-sdk-go-v2 => ./extra/aws-sdk-go-v2
+
+replace github.com/aws/aws-sdk-go-v2/service/ssm => ./extra/aws-sdk-go-v2/service/ssm
 
 replace github.com/nightlyone/lockfile => ./extra/lockfile
 
@@ -11,7 +13,6 @@ godebug containermaxprocs=0 // disable consideration of cgroup limits
 require (
 	github.com/Jeffail/gabs v1.0.0
 	github.com/Workiva/go-datastructures v1.0.53
-	github.com/aws/aws-sdk-go v1.55.5
 	github.com/carlescere/scheduler v0.0.0-20150615230211-9b78eac89dfb
 	github.com/cenkalti/backoff/v4 v4.0.2
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575
@@ -41,11 +42,36 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 )
 
-require github.com/ProtonMail/go-crypto v1.4.1
+require (
+	github.com/ProtonMail/go-crypto v1.4.1
+	github.com/aws/aws-sdk-go-v2 v1.41.5
+	github.com/aws/aws-sdk-go-v2/config v1.31.7
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.11
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.7
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.5
+	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.51.1
+	github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs v1.65.0
+	github.com/aws/aws-sdk-go-v2/service/kms v1.45.6
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.3
+	github.com/aws/aws-sdk-go-v2/service/ssm v1.60.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.38.3
+	github.com/aws/smithy-go v1.24.2
+)
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.8 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.21 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.21 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.22 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.13 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.21 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.21 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.29.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.3 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/cyphar/filepath-securejoin v0.6.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -56,7 +82,6 @@ require (
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/kevinburke/ssh_config v1.6.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/pjbgf/sha1cd v0.6.0 // indirect

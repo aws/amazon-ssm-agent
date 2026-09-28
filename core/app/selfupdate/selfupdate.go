@@ -402,7 +402,7 @@ func (u *SelfUpdate) generateDownloadUpdaterURL(log log.T, region string, fileNa
 	var urlFormat string
 
 	if dynamicS3Endpoint := u.context.Identity().GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
-		urlFormat = "https://" + dynamicS3Endpoint + UrlPath
+		urlFormat = dynamicS3Endpoint + UrlPath
 	} else {
 		// could not retrieve the default s3 endpoint, generate endpoint from region information
 		urlFormat = CommonUrlPath
@@ -419,7 +419,7 @@ func (u *SelfUpdate) generateDownloadUpdaterURL(log log.T, region string, fileNa
 func (u *SelfUpdate) generateDownloadManifestURL(log log.T, region string) (manifestUrl string) {
 
 	if dynamicS3Endpoint := u.context.Identity().GetServiceEndpoint("s3"); dynamicS3Endpoint != "" {
-		manifestUrl = "https://" + dynamicS3Endpoint + ManifestPath
+		manifestUrl = dynamicS3Endpoint + ManifestPath
 	} else {
 		// could not retrieve the default s3 endpoint, generate endpoint from region information
 		manifestUrl = CommonManifestURL

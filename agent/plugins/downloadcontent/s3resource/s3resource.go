@@ -226,7 +226,12 @@ func (s3 *S3Resource) getS3BucketURLString() (Url *url.URL, err error) {
 		return nil, err
 	}
 
-	bucketURL := "https://" + endpoint + "/" + s3.s3Object.Bucket
+	var bucketURL string
+	if strings.HasPrefix(endpoint, "http://") || strings.HasPrefix(endpoint, "https://") {
+		bucketURL = endpoint + "/" + s3.s3Object.Bucket
+	} else {
+		bucketURL = "https://" + endpoint + "/" + s3.s3Object.Bucket
+	}
 	return url.Parse(bucketURL)
 }
 

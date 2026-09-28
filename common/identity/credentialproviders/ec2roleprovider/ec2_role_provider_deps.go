@@ -16,13 +16,15 @@ package ec2roleprovider
 
 import (
 	"context"
+	"sync"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
+	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
 )
 
 const (
@@ -34,10 +36,10 @@ const (
 )
 
 var (
-	iprEmptyCredential                                 = credentials.Value{ProviderName: ec2rolecreds.ProviderName}
+	iprEmptyCredential                                 = aws.Credentials{Source: "EC2RoleProvider"}
 	newV4ServiceWithCreds        ssmclient.Initializer = ssmclient.NewV4ServiceWithCreds
 	timeNowFunc                                        = time.Now
-	newCredentials                                     = credentials.NewCredentials
+	newCredentials                                     = ec2rolecreds.New
 	exceptionsForDefaultHostMgmt                       = map[string]struct{}{
 		"AccessDeniedException":        {},
 		"EC2RoleRequestError":          {},
@@ -46,11 +48,64 @@ var (
 )
 
 type IInnerProvider interface {
-	credentials.Provider
-	credentials.Expirer
-	Retrieve() (credentials.Value, error)
-	RetrieveWithContext(ctx context.Context) (credentials.Value, error)
-	SetExpiration(expiration time.Time, window time.Duration)
+	aws.CredentialsProvider
+	Retrieve(ctx context.Context) (aws.Credentials, error)
+	ExpiresAt() time.Time
+	IsExpired() bool
+}
+
+// cachedInnerProvider adapts an aws.CredentialsProvider — typically the
+// aws.CredentialsCache wrapper around a network-fetching provider — to the
+// IInnerProvider interface. Callers of EC2InnerProviders' fields expect the
+// ExpiresAt / IsExpired methods, but aws.CredentialsCache doesn't expose them
+// (its expiry state is internal). The current EC2RoleProvider only ever calls
+// Retrieve on inner providers that are typed as CredentialsCache — the
+// ExpiresAt / IsExpired paths are exercised only by SharedCredentialsProvider
+// — so this adapter fulfils the interface with sensible defaults: IsExpired
+// defers to the cache's own logic by treating cached creds as valid, and
+// ExpiresAt returns the last observed Expires from the most recent Retrieve.
+type cachedInnerProvider struct {
+	cache        *aws.CredentialsCache
+	lastRetrieve time.Time
+	lastCreds    aws.Credentials
+	mu           sync.Mutex
+}
+
+// NewCachedInnerProvider wraps an aws.CredentialsProvider in a cache-backed
+// IInnerProvider. See cachedInnerProvider for the rationale.
+func NewCachedInnerProvider(inner aws.CredentialsProvider) IInnerProvider {
+	return newCachedInnerProvider(inner)
+}
+
+func newCachedInnerProvider(inner aws.CredentialsProvider) *cachedInnerProvider {
+	return &cachedInnerProvider{cache: aws.NewCredentialsCache(inner)}
+}
+
+func (c *cachedInnerProvider) Retrieve(ctx context.Context) (aws.Credentials, error) {
+	creds, err := c.cache.Retrieve(ctx)
+	if err != nil {
+		return creds, err
+	}
+	c.mu.Lock()
+	c.lastCreds = creds
+	c.lastRetrieve = time.Now()
+	c.mu.Unlock()
+	return creds, nil
+}
+
+func (c *cachedInnerProvider) ExpiresAt() time.Time {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.lastCreds.Expires
+}
+
+func (c *cachedInnerProvider) IsExpired() bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if !c.lastCreds.CanExpire {
+		return false
+	}
+	return time.Now().After(c.lastCreds.Expires)
 }
 
 type EC2InnerProviders struct {
@@ -60,13 +115,12 @@ type EC2InnerProviders struct {
 }
 
 type IEC2RoleProvider interface {
-	credentials.Expirer
+	aws.CredentialsProvider
 	credentialproviders.IRemoteProvider
 	GetInnerProvider() IInnerProvider
-	Retrieve() (credentials.Value, error)
+	Retrieve(ctx context.Context) (aws.Credentials, error)
 	ShareFile() string
 	ShareProfile() string
 	SharesCredentials() bool
-	RetrieveWithContext(ctx context.Context) (credentials.Value, error)
-	RemoteRetrieve(ctx context.Context) (credentials.Value, error)
+	RemoteRetrieve(ctx context.Context) (aws.Credentials, error)
 }

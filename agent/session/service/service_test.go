@@ -19,22 +19,22 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/identity"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
 var (
-	signer = &v4.Signer{
-		Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
+	signer     = &v4.Signer{} // Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")
 	tlsConfig  = &tls.Config{}
 	region     = "us-east-1"
 	instanceId = "i-12345678"
@@ -69,7 +69,7 @@ func TestCreateControlChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateControlChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -94,7 +94,7 @@ func TestCreateDataChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpoint = func(context context.T, region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateDataChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -112,17 +112,18 @@ func TestGetBaseUrl(t *testing.T) {
 		return mgsHost
 	}
 
-	// data channel url test
+	// data channel url test - must carry the https scheme, otherwise the http
+	// client rejects the request with "unsupported protocol scheme".
 	dataChannelUrlResult, err := getMGSBaseUrl(contextmocks.NewMockDefault(), mgsConfig.DataChannel, sessionId, region)
 
-	expectedDataChannelUrl := "https://" + mgsHost + "/v1/data-channel/" + sessionId
+	expectedDataChannelUrl := mgsConfig.HttpsPrefix + mgsHost + "/v1/data-channel/" + sessionId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedDataChannelUrl, dataChannelUrlResult)
 
-	// control channel url test
+	// control channel url test - must carry the https scheme.
 	controlChannelUrlResult, err := getMGSBaseUrl(contextmocks.NewMockDefault(), mgsConfig.ControlChannel, instanceId, region)
 
-	expectedControlChannelUrl := "https://" + mgsHost + "/v1/control-channel/" + instanceId
+	expectedControlChannelUrl := mgsConfig.HttpsPrefix + mgsHost + "/v1/control-channel/" + instanceId
 	assert.Nil(t, err)
 	assert.Equal(t, expectedControlChannelUrl, controlChannelUrlResult)
 }

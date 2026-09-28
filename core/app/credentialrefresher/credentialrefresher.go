@@ -18,6 +18,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
+	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
+
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+
 	"io"
 	"math/rand"
 	"os"
@@ -44,9 +52,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	agentctx "github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/executor"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/cihub/seelog"
 )
@@ -65,7 +71,7 @@ var (
 	storeSharedCredentials = sharedCredentials.Store
 	purgeSharedCredentials = sharedCredentials.Purge
 	backoffRetry           = backoff.Retry
-	newSharedCredentials   = credentials.NewSharedCredentials
+	newSharedCredentials   = NewSharedCredentials
 
 	fileExists                                         = fileutil.Exists
 	getFileNames                                       = fileutil.GetFileNames
@@ -102,8 +108,9 @@ type credentialsRefresher struct {
 	stopCredentialRefresherChan  chan struct{}
 	isCredentialRefresherRunning bool
 
-	getCurrentTimeFunc func() time.Time
-	timeAfterFunc      func(time.Duration) <-chan time.Time
+	getCurrentTimeFunc       func() time.Time
+	newSharedCredentialsFunc func(sharedCredsFile string, sharedProfile string, ctx context.Context) (aws.CredentialsProvider, error)
+	timeAfterFunc            func(time.Duration) <-chan time.Time
 
 	// Track if we've already logged credential failure to serial port
 	hasLoggedCredentialFailure sync.Once
@@ -213,12 +220,12 @@ func (c *credentialsRefresher) sendCredentialsReadyMessage() {
 }
 
 // retrieveCredsWithRetry will never exit unless it receives a message on stopChan or is able to successfully call Retrieve
-func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (credentials.Value, bool) {
+func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (aws.Credentials, bool) {
 	retryCount := 0
 	identityGetDurationMap, ok := identityGetDurationMaps[c.agentIdentity.IdentityType()]
 	if !ok {
 		c.log.Errorf("Unexpected identity retrieved: %v. Stopping credential refresher.", c.agentIdentity.IdentityType())
-		return credentials.Value{}, true
+		return aws.Credentials{}, true
 	}
 
 	// Log credential failure to serial port only once
@@ -250,24 +257,30 @@ func (c *credentialsRefresher) retrieveCredsWithRetry(ctx context.Context) (cred
 			sleepDuration = getDefaultBackoffRetryJitterSleepDuration(retryCount)
 		}
 
-		// override sleep duration for aws errors
-		var awsErr awserr.Error
-		if isAwsErr := errors.As(err, &awsErr); isAwsErr {
+		// override sleep duration for aws errors. Route the error-code lookup
+		// through sdkutil.GetAwsErrorCode instead of extracting smithy.APIError
+		// directly — that way v2 error shapes that don't implement
+		// smithy.APIError (e.g. the "no EC2 IMDS role found" fmt.Errorf from
+		// ec2rolecreds when the instance profile is detached) still resolve to
+		// a v1-compatible error code (EC2RoleRequestError) via GetAwsErrorCode's
+		// fallback branches, keeping the backoff selection consistent with
+		// pre-v2 behavior.
+		if errCode := sdkutil.GetAwsErrorCode(err); errCode != "" {
 			// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
-			if awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == ErrCodeAccessDeniedException {
-				if sleepDurationFunc, ok := identityGetDurationMap[awsErr.Code()]; ok {
+			if errCode == ErrCodeMachineFingerprintDoesNotMatch || errCode == ErrCodeAccessDeniedException {
+				if sleepDurationFunc, ok := identityGetDurationMap[errCode]; ok {
 					sleepDuration = sleepDurationFunc(retryCount)
 				}
 			} else {
 				if sleepDurationFunc, ok := identityGetDurationMap[ErrAllOtherAWSErrors]; ok {
 					sleepDuration = sleepDurationFunc(retryCount)
 				}
-				var awsRequestFailure awserr.RequestFailure
+				var awsRequestFailure *awshttp.ResponseError
 				if isRequestFailure := errors.As(err, &awsRequestFailure); isRequestFailure {
 					logMessage = fmt.Sprintf("Status code %v returned from AWS API. RequestId: %s Message: %s",
-						awsRequestFailure.StatusCode(),
-						awsRequestFailure.RequestID(),
-						awsRequestFailure.Message())
+						awsRequestFailure.HTTPStatusCode(),
+						awsRequestFailure.ServiceRequestID(),
+						awsRequestFailure.Error())
 					// this will log as debug when the credential refresher retries exceeds 3
 					c.minLog(seelog.ErrorLvl, logMessage, retryCount)
 				}
@@ -311,6 +324,42 @@ func (c *credentialsRefresher) minLog(defaultLevel int, logMessage string, retry
 	}
 }
 
+func NewSharedCredentials(sharedCredsFile string, sharedProfile string, ctx context.Context) (aws.CredentialsProvider, error) {
+	// Normalize an empty profile to "default" to match the write side.
+	// agent/managedInstances/sharedCredentials.Store maps "" -> "default"
+	// before creating the [default] section in the shared credentials file,
+	// but LoadSharedConfigProfile treats "" as a literal section name and
+	// would return SharedConfigProfileNotExistError even when [default]
+	// exists.
+	if sharedProfile == "" {
+		sharedProfile = "default"
+	}
+
+	// Parse the shared credentials file directly, without going through
+	// LoadDefaultConfig. LoadDefaultConfig — even when constrained via
+	// WithSharedCredentialsFiles — still consults environment variables and
+	// EC2 IMDS in front of / behind the shared file, which would let a
+	// caller-supplied AWS_ACCESS_KEY_ID override the share file or a missing
+	// share file resolve to IMDS-role credentials. LoadSharedConfigProfile
+	// parses only the credentials/config files, so neither happens.
+	sc, err := awsconfig.LoadSharedConfigProfile(ctx, sharedProfile, func(o *awsconfig.LoadSharedConfigOptions) {
+		o.CredentialsFiles = []string{sharedCredsFile}
+		// Also disable ~/.aws/config processing to prevent
+		// credential_process/SSO/AssumeRole from executing under the agent's
+		// privilege (root/SYSTEM).
+		o.ConfigFiles = []string{}
+	})
+	if err != nil {
+		return nil, fmt.Errorf("load shared credentials for profile %q from %q: %w", sharedProfile, sharedCredsFile, err)
+	}
+	if sc.Credentials.AccessKeyID == "" || sc.Credentials.SecretAccessKey == "" {
+		return nil, fmt.Errorf("no credentials found in %q for profile %q", sharedCredsFile, sharedProfile)
+	}
+	// Return a static provider bound to the on-disk credentials. The refresher
+	// re-parses the file on each cycle, so no long-lived staleness.
+	return credentials.StaticCredentialsProvider{Value: sc.Credentials}, nil
+}
+
 func (c *credentialsRefresher) credentialRefresherRoutine() {
 	var err error
 	defer func() {
@@ -330,8 +379,17 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 		if c.identityRuntimeConfig.ShareFile == "" && c.identityRuntimeConfig.CredentialSource == credentialSourceEC2 {
 			c.sendCredentialsReadyMessage()
 		} else {
-			localCredsProvider := newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile)
-			if _, err := localCredsProvider.Get(); err != nil {
+			var localCredsConfigProvider aws.CredentialsProvider
+			var credErr error
+			if c.newSharedCredentialsFunc != nil {
+				localCredsConfigProvider, credErr = c.newSharedCredentialsFunc(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile, context.TODO())
+			} else {
+				localCredsConfigProvider, credErr = newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile, context.TODO())
+			}
+			if credErr != nil || localCredsConfigProvider == nil {
+				c.log.Warnf("Failed to load shared credentials provider: %v", credErr)
+				c.identityRuntimeConfig.CredentialsExpiresAt = time.Time{}
+			} else if _, err := localCredsConfigProvider.Retrieve(context.TODO()); err != nil {
 				c.log.Warnf("Credentials are not available when they should be: %v", err)
 				// set expiration and retrieved to beginning of time if shared credentials are not available to force credential refresh
 				c.identityRuntimeConfig.CredentialsExpiresAt = time.Time{}

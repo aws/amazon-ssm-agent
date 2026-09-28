@@ -20,6 +20,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
@@ -30,8 +32,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 const (
@@ -136,7 +138,7 @@ func (s *AssociationService) ListInstanceAssociations(log log.T, instanceID stri
 		for {
 			for _, assoc := range response.Associations {
 				rawData := &model.InstanceAssociation{}
-				rawData.Association = assoc
+				rawData.Association = &assoc
 				rawData.CreateDate = time.Now().UTC()
 
 				results = append(results, rawData)
@@ -185,14 +187,14 @@ func (s *AssociationService) ListAssociations(log log.T, instanceID string) ([]*
 		}
 
 		rawData := &model.InstanceAssociation{}
-		rawData.Association = &ssm.InstanceAssociationSummary{
+		rawData.Association = &types.InstanceAssociationSummary{
 			AssociationId:   assoc.Name,
 			DocumentVersion: aws.String(""),
 			Name:            assoc.Name,
 			InstanceId:      aws.String(instanceID),
 			Checksum:        aws.String(""),
 			Parameters:      parameterResponse.AssociationDescription.Parameters,
-			DetailedStatus:  parameterResponse.AssociationDescription.Status.Name,
+			DetailedStatus:  aws.String(string(parameterResponse.AssociationDescription.Status.Name)),
 		}
 
 		rawData.CreateDate = time.Now().UTC()
@@ -230,7 +232,7 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 			log.Error(err)
 		}
 
-		executionResult := ssm.InstanceAssociationExecutionResult{
+		executionResult := types.InstanceAssociationExecutionResult{
 			Status:           aws.String(status),
 			ErrorCode:        aws.String(errorCode),
 			ExecutionDate:    aws.Time(date),
@@ -238,8 +240,8 @@ func (s *AssociationService) UpdateInstanceAssociationStatus(
 		}
 
 		if outputUrl != NoOutputUrl {
-			s3OutputUrl := ssm.S3OutputUrl{OutputUrl: aws.String(outputUrl)}
-			executionResult.OutputUrl = &ssm.InstanceAssociationOutputUrl{S3OutputUrl: &s3OutputUrl}
+			s3OutputUrl := types.S3OutputUrl{OutputUrl: aws.String(outputUrl)}
+			executionResult.OutputUrl = &types.InstanceAssociationOutputUrl{S3OutputUrl: &s3OutputUrl}
 		}
 
 		var executionResultContent string
@@ -339,8 +341,8 @@ func (s *AssociationService) UpdateAssociationStatus(
 	}
 
 	currentTime := time.Now().UTC()
-	associationStatus := ssm.AssociationStatus{
-		Name:           aws.String(status),
+	associationStatus := types.AssociationStatus{
+		Name:           types.AssociationStatusName(status),
 		Message:        aws.String(executionSummary),
 		Date:           &currentTime,
 		AdditionalInfo: &agentInfoContent,

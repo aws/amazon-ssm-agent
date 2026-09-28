@@ -27,7 +27,8 @@ import (
 	cache_mock "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -100,7 +101,7 @@ func TestGetResourceVersion(t *testing.T) {
 func TestSetAndGetResources(t *testing.T) {
 	manifest := birdwatcher.Manifest{}
 	packageName := "packagename"
-	docDescription := createDefaultDocumentDescription(packageName, "hash", ssm.DocumentStatusActive)
+	docDescription := createDefaultDocumentDescription(packageName, "hash", types.DocumentStatusActive)
 	packageArchive := PackageArchive{
 		documentDesc: &docDescription,
 		docVersion:   "abc",
@@ -124,9 +125,9 @@ func TestGetFileDownloadLocation(t *testing.T) {
 	url := "https://s3.test.com/birdwatcher/package/test.zip"
 	noturl := "https://s3.test.com/birdwatcher/package/nottest.zip"
 	hash := "abcdefghijklmnopqrstuvwxyz"
-	hashtype := "sha256"
+	hashtype := types.AttachmentHashTypeSha256
 	manifest := "manifest"
-	documentActive := ssm.DocumentStatusActive
+	documentActive := types.DocumentStatusActive
 	documentDescription := createDefaultDocumentDescription(packagename, "hash", documentActive)
 	memcache := createMemCache("hash", manifest)
 	docVersion := "2"
@@ -136,7 +137,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 		isError      bool
 		file         *archive.File
 		facadeClient facade.FacadeStub
-		attachments  []*ssm.AttachmentContent
+		attachments  []types.AttachmentContent
 		err          string
 	}{
 		{
@@ -147,11 +148,11 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				birdwatcher.FileInfo{},
 			},
 			facade.FacadeStub{},
-			[]*ssm.AttachmentContent{
+			[]types.AttachmentContent{
 				{
 					Name:     &filename,
 					Url:      &url,
-					HashType: &hashtype,
+					HashType: hashtype,
 					Hash:     &hash,
 				},
 			},
@@ -165,23 +166,23 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				birdwatcher.FileInfo{},
 			},
 			facade.FacadeStub{},
-			[]*ssm.AttachmentContent{
+			[]types.AttachmentContent{
 				{
 					Name:     &filename2,
 					Url:      &noturl,
-					HashType: &hashtype,
+					HashType: hashtype,
 					Hash:     &hash,
 				},
 				{
 					Name:     &filename2,
 					Url:      &noturl,
-					HashType: &hashtype,
+					HashType: hashtype,
 					Hash:     &hash,
 				},
 				{
 					Name:     &filename,
 					Url:      &url,
-					HashType: &hashtype,
+					HashType: hashtype,
 					Hash:     &hash,
 				},
 			},
@@ -197,26 +198,26 @@ func TestGetFileDownloadLocation(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &manifest,
-					Status:          &documentActive,
+					Status:          documentActive,
 					Name:            &packagename,
 					DocumentVersion: &docVersion,
-					AttachmentsContent: []*ssm.AttachmentContent{
+					AttachmentsContent: []types.AttachmentContent{
 						{
 							Name:     &filename2,
 							Url:      &noturl,
-							HashType: &hashtype,
+							HashType: hashtype,
 							Hash:     &hash,
 						},
 						{
 							Name:     &filename2,
 							Url:      &noturl,
-							HashType: &hashtype,
+							HashType: hashtype,
 							Hash:     &hash,
 						},
 						{
 							Name:     &filename,
 							Url:      &url,
-							HashType: &hashtype,
+							HashType: hashtype,
 							Hash:     &hash,
 						},
 					},
@@ -230,7 +231,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 			true,
 			nil,
 			facade.FacadeStub{},
-			[]*ssm.AttachmentContent{},
+			[]types.AttachmentContent{},
 			"Could not obtain the file from manifest",
 		},
 		{
@@ -265,7 +266,7 @@ func TestGetFileDownloadLocation(t *testing.T) {
 				birdwatcher.FileInfo{},
 			},
 			facade.FacadeStub{},
-			[]*ssm.AttachmentContent{},
+			[]types.AttachmentContent{},
 			"Install attachments for package does not exist",
 		},
 	}
@@ -296,15 +297,15 @@ func TestDownloadArchiveInfo(t *testing.T) {
 	docVersion := "1"
 	emptystring := ""
 	latestVersion := "latest"
-	documentActive := ssm.DocumentStatusActive
-	documentInactive := ssm.DocumentStatusCreating
+	documentActive := types.DocumentStatusActive
+	documentInactive := types.DocumentStatusCreating
 	myPrettyHash := "myPrettyHash"
 	data := []struct {
 		name                string
 		version             string
 		isError             bool
 		facadeClient        facade.FacadeStub
-		documentDescription ssm.DocumentDescription
+		documentDescription types.DocumentDescription
 		manifestCache       packageservice.ManifestCache
 	}{
 		{
@@ -340,7 +341,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &manifest,
-					Status:          &documentActive,
+					Status:          documentActive,
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -356,7 +357,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         nil,
-					Status:          &documentActive,
+					Status:          documentActive,
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -372,7 +373,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &emptystring,
-					Status:          &documentActive,
+					Status:          documentActive,
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -388,7 +389,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &emptystring,
-					Status:          &documentInactive,
+					Status:          documentInactive,
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -412,7 +413,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &manifest,
-					Status:          &documentInactive,
+					Status:          documentInactive,
 					VersionName:     &versionName,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -428,7 +429,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &manifest,
-					Status:          &documentInactive,
+					Status:          documentInactive,
 					VersionName:     nil,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -444,7 +445,7 @@ func TestDownloadArchiveInfo(t *testing.T) {
 			facade.FacadeStub{
 				GetDocumentOutput: &ssm.GetDocumentOutput{
 					Content:         &manifest,
-					Status:          &documentActive,
+					Status:          documentActive,
 					VersionName:     nil,
 					DocumentVersion: &docVersion,
 					Name:            &packageName,
@@ -473,19 +474,19 @@ func TestDownloadArchiveInfo(t *testing.T) {
 }
 
 // helpers
-func createDefaultDocumentDescription(packageName string, hash string, docStatus string) ssm.DocumentDescription {
+func createDefaultDocumentDescription(packageName string, hash string, docStatus types.DocumentStatus) types.DocumentDescription {
 	docVersion := "2"
 	versionName := "version-name"
 	latest := "3"
 	defaultVersion := "1"
-	return ssm.DocumentDescription{
+	return types.DocumentDescription{
 		Name:            &packageName,
 		DocumentVersion: &docVersion,
 		VersionName:     &versionName,
 		LatestVersion:   &latest,
 		DefaultVersion:  &defaultVersion,
 		Hash:            &hash,
-		Status:          &docStatus,
+		Status:          docStatus,
 	}
 
 }

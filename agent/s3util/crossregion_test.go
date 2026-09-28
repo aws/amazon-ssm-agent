@@ -15,28 +15,22 @@ package s3util
 
 import (
 	"fmt"
-	"io"
-	"io/ioutil"
-	"net/http"
-	"net/url"
-	"strings"
-	"testing"
-	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/client/metadata"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/endpoints"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go-v2/aws"
+
+	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strings"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -191,12 +185,13 @@ func TestGetBucketRegion_AllUrlsFail_ReturnsEmptyString(t *testing.T) {
 func TestGetS3CrossRegionCapableSession_regionFromHead_noConfigOverrides(t *testing.T) {
 	setBucketRegionFromSignedHeadBucketRequest("")
 	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1")
-	sess, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
-	assert.NotNil(t, sess)
-	assert.Equal(t, *sess.Config.Region, "eu-west-1")
-	assert.Nil(t, sess.Config.Endpoint)
-	assert.NotNil(t, sess.Config.HTTPClient.Transport)
-	_, correctType := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
+	config, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
+	assert.NotNil(t, config)
+	assert.Equal(t, "eu-west-1", config.Region)
+	assert.Nil(t, config.BaseEndpoint)
+	httpClient := config.HTTPClient.(*http.Client)
+	assert.NotNil(t, httpClient.Transport)
+	_, correctType := httpClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
 	assert.True(t, correctType)
 	assert.Nil(t, err)
 }
@@ -212,12 +207,14 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_noConfigOverrides(t *te
 	contextMock.On("AppConfig").Return(appconfig.DefaultConfig())
 
 	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
-	assert.NotNil(t, sess)
-	assert.Equal(t, "cn-north-1", *sess.Config.Region)
-	assert.Nil(t, sess.Config.Endpoint)
-	assert.NotNil(t, sess.Config.HTTPClient.Transport)
-	_, correctType := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
+	config, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
+	assert.NotNil(t, config)
+	assert.Equal(t, "cn-north-1", config.Region)
+	assert.Nil(t, config.BaseEndpoint)
+	httpClient := config.HTTPClient.(*http.Client)
+	assert.NotNil(t, httpClient)
+	assert.NotNil(t, httpClient.Transport)
+	_, correctType := httpClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
 	assert.True(t, correctType)
 	assert.Nil(t, err)
 }
@@ -236,12 +233,13 @@ func TestGetS3CrossRegionCapableSession_regionFromHead_withConfigOverrides(t *te
 	contextMock.On("AppConfig").Return(appConfig)
 
 	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1")
-	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
-	assert.NotNil(t, sess)
-	assert.Equal(t, "eu-west-1", *sess.Config.Region)
-	assert.Equal(t, "https://custom.endpoint.com", *sess.Config.Endpoint)
-	assert.NotNil(t, sess.Config.HTTPClient.Transport)
-	_, correctType := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
+	config, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
+	assert.NotNil(t, config)
+	assert.Equal(t, "eu-west-1", config.Region)
+	assert.Equal(t, "https://custom.endpoint.com", *config.BaseEndpoint)
+	httpClient := config.HTTPClient.(*http.Client)
+	assert.NotNil(t, httpClient.Transport)
+	_, correctType := httpClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
 	assert.True(t, correctType)
 	assert.Nil(t, err)
 }
@@ -260,12 +258,13 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_withConfigOverrides(t *
 	contextMock.On("AppConfig").Return(appConfig)
 
 	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
-	assert.NotNil(t, sess)
-	assert.Equal(t, "cn-north-1", *sess.Config.Region)
-	assert.Equal(t, "https://custom.endpoint.com.cn", *sess.Config.Endpoint)
-	assert.NotNil(t, sess.Config.HTTPClient.Transport)
-	_, correctType := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
+	config, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
+	assert.NotNil(t, config)
+	assert.Equal(t, "cn-north-1", config.Region)
+	assert.Equal(t, "https://custom.endpoint.com.cn", *config.BaseEndpoint)
+	httpClient := config.HTTPClient.(*http.Client)
+	assert.NotNil(t, httpClient.Transport)
+	_, correctType := httpClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
 	assert.True(t, correctType)
 	assert.Nil(t, err)
 }
@@ -273,11 +272,10 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_withConfigOverrides(t *
 func setupMocksForGetS3CrossRegionCapableSession(instanceRegion, bucketName, headBucketResponse string) {
 	setBucketRegionFromSignedHeadBucketRequest("")
 	setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse)
-	makeAwsConfig = func(context context.T, service, region string) *aws.Config {
-		result := aws.NewConfig()
-		result.Region = aws.String(region)
-		result.Credentials = credentials.NewCredentials(&mockCredentialsProvider{})
-		return result
+	makeAwsConfig = func(context context.T, service, region string) aws.Config {
+		return aws.Config{
+			Region: region,
+		}
 	}
 }
 
@@ -305,534 +303,6 @@ func setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse 
 		provider.On("Head", "https://"+bucketName+"."+s3FallbackEndpoint).Return(resp, err)
 		return provider
 	}
-}
-
-func TestRedirect_RedirectResponse_RetryWithCorrectRegion(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	appConfig := appconfig.DefaultConfig()
-	identityMock := &identityMocks.IAgentIdentity{}
-	identityMock.On("Region").Return("cn-northwest-1", nil)
-
-	contextMock := new(contextmocks.Mock)
-	contextMock.On("Identity").Return(identityMock)
-	contextMock.On("Log").Return(logmocks.NewMockLog())
-	contextMock.On("AppConfig").Return(appConfig)
-
-	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
-	assert.Nil(t, err)
-
-	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
-	assert.True(t, transTypeOk)
-
-	delegate := newMockTransport()
-	trans.delegate = delegate
-
-	svc := s3.New(sess)
-	input := &s3.HeadBucketInput{
-		Bucket: aws.String("bucket-1"),
-	}
-
-	// First attempt goes to the instance's home region.  S3 returns a 301 PermanentRedirect
-	// response with header indicating the correct region for the bucket.
-	req1Url := "https://bucket-1.s3.cn-northwest-1.amazonaws.com.cn/"
-	resp1Header := http.Header{}
-	resp1Header.Add(bucketRegionHeader, "cn-north-1")
-	resp1 := &http.Response{
-		Status:     "PermanentRedirect",
-		StatusCode: 301,
-		Header:     resp1Header,
-		Body:       ioutil.NopCloser(strings.NewReader("body contents")),
-	}
-
-	// The retry goes to the correct endpoint for the bucket, which is cn-north-1.
-	req2Url := "https://bucket-1.s3.cn-north-1.amazonaws.com.cn/"
-	resp2Header := http.Header{}
-	resp2 := &http.Response{
-		Status:     "Success",
-		StatusCode: 200,
-		Header:     resp2Header,
-		Body:       ioutil.NopCloser(strings.NewReader("")),
-	}
-	delegate.AddResponse(req1Url, resp1)
-	delegate.AddResponse(req2Url, resp2)
-
-	_, err = svc.HeadBucket(input)
-
-	assert.Nil(t, err)
-	assert.Equal(t, 2, len(delegate.requestURLsReceived))
-	assert.Equal(t, "https://bucket-1.s3.cn-northwest-1.amazonaws.com.cn/", delegate.requestURLsReceived[0])
-	assert.Equal(t, "https://bucket-1.s3.cn-north-1.amazonaws.com.cn/", delegate.requestURLsReceived[1])
-
-	// Cleanup
-	getBucketRegionMap().Remove("bucket-1")
-}
-
-func TestRedirect_BadSigningRegionResponse_RetryWithCorrectRegion(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
-	assert.Nil(t, err)
-
-	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
-	assert.True(t, transTypeOk)
-
-	delegate := newMockTransport()
-	trans.delegate = delegate
-
-	svc := s3.New(sess)
-	input := &s3.HeadBucketInput{
-		Bucket: aws.String("bucket-1"),
-	}
-
-	// For the first attempt, the client is initialized for us-east-1.
-	// However, DNS is able to resolve the virtual hosted bucket URL
-	// to the correct regional endpoint in eu-west-1.  The eu-west-1
-	// endpoint returns an HTTP 400 "wrong signing region" error, with
-	// the bucket region set in the response body.
-	req1Url := "https://bucket-1.s3.amazonaws.com/"
-	resp1Header := http.Header{}
-	resp1Body := makeAuthorizationHeaderMalformedErrorResponse("us-east-1", "eu-west-1")
-	resp1 := &http.Response{
-		Status:     "",
-		StatusCode: 400,
-		Header:     resp1Header,
-		Body:       ioutil.NopCloser(strings.NewReader(resp1Body)),
-	}
-
-	// The retry should have the correct regional endpoint in the request URL
-	req2Url := "https://bucket-1.s3.eu-west-1.amazonaws.com/"
-	resp2Header := http.Header{}
-	resp2 := &http.Response{
-		Status:     "Success",
-		StatusCode: 200,
-		Header:     resp2Header,
-		Body:       ioutil.NopCloser(strings.NewReader("")),
-	}
-	delegate.AddResponse(req1Url, resp1)
-	delegate.AddResponse(req2Url, resp2)
-
-	_, err = svc.HeadBucket(input)
-
-	assert.Nil(t, err)
-	assert.Equal(t, 2, len(delegate.requestURLsReceived))
-	assert.Equal(t, "https://bucket-1.s3.amazonaws.com/", delegate.requestURLsReceived[0])
-	assert.Equal(t, "https://bucket-1.s3.eu-west-1.amazonaws.com/", delegate.requestURLsReceived[1])
-
-	// Cleanup
-	getBucketRegionMap().Remove("bucket-1")
-}
-
-func TestRedirect_CachedBucketRegion_FirstRequestGoesToCorrectRegion(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	// The correct region for the bucket is already cached.  The first
-	// attempt should go to the correct region.
-	getBucketRegionMap().Put("bucket-1", "cn-north-1")
-
-	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "")
-	sess, err := GetS3CrossRegionCapableSession(contextmocks.NewMockDefault(), "bucket-1")
-	assert.Nil(t, err)
-
-	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
-	assert.True(t, transTypeOk)
-
-	delegate := newMockTransport()
-	trans.delegate = delegate
-
-	svc := s3.New(sess)
-	input := &s3.GetBucketLocationInput{
-		Bucket: aws.String("bucket-1"),
-	}
-
-	// The first attempt goes to the correct endpoint for the bucket, which is cn-north-1.
-	reqUrl := "https://s3.cn-north-1.amazonaws.com.cn/bucket-1?location="
-	respHeader := http.Header{}
-	resp := &http.Response{
-		Status:     "Success",
-		StatusCode: 200,
-		Header:     respHeader,
-		Body:       ioutil.NopCloser(strings.NewReader(makeGetBucketLocationResponseBodyText("cn-north-1"))),
-	}
-	delegate.AddResponse(reqUrl, resp)
-
-	output, err := svc.GetBucketLocation(input)
-
-	assert.Nil(t, err)
-	assert.Equal(t, "cn-north-1", *output.LocationConstraint)
-	assert.Equal(t, 1, len(delegate.requestURLsReceived))
-	assert.Equal(t, "https://s3.cn-north-1.amazonaws.com.cn/bucket-1?location=", delegate.requestURLsReceived[0])
-
-	// Cleanup
-	getBucketRegionMap().Remove("bucket-1")
-}
-
-type handlerTestCaseData struct {
-	bucketName string
-	op         *request.Operation
-	input      interface{}
-	output     interface{}
-}
-
-var handlerTestCases = []handlerTestCaseData{
-	{
-		bucketName: "bucket-1",
-		op: &request.Operation{
-			Name:       "PutObject",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		},
-		input: &s3.PutObjectInput{
-			Body:   strings.NewReader("body contents"),
-			Key:    aws.String("a/b"),
-			Bucket: aws.String("bucket-1"),
-		},
-		output: &s3.PutObjectOutput{},
-	},
-	{
-		bucketName: "bucket-1",
-		op: &request.Operation{
-			Name:       "CreateMultipartUpload",
-			HTTPMethod: "POST",
-			HTTPPath:   "/{Bucket}/{Key+}?uploads",
-		},
-		input: &s3.CreateMultipartUploadInput{
-			Bucket:      aws.String("bucket-1"),
-			Key:         aws.String("a/b"),
-			ContentType: aws.String("text/plain"),
-			ACL:         aws.String("bucket-owner-full-control"),
-		},
-		output: &s3.CreateMultipartUploadOutput{},
-	},
-	{
-		bucketName: "bucket-1",
-		op: &request.Operation{
-			Name:       "UploadPart",
-			HTTPMethod: "PUT",
-			HTTPPath:   "/{Bucket}/{Key+}",
-		},
-		input: &s3.UploadPartInput{
-			Bucket:     aws.String("bucket-1"),
-			Key:        aws.String("a/b"),
-			Body:       strings.NewReader("body contents"),
-			UploadId:   aws.String("1324"),
-			PartNumber: aws.Int64(1),
-		},
-		output: &s3.UploadPartOutput{},
-	},
-}
-
-func TestHandlerAllCases(t *testing.T) {
-	for _, d := range handlerTestCases {
-		validationHandlerTestCase(t, d.bucketName, "cn-northwest-1", "cn-north-1", d.op, d.input, d.output)
-		validationHandlerTestCase(t, d.bucketName, "us-east-1", "us-west-1", d.op, d.input, d.output)
-		validationHandlerTestCase(t, d.bucketName, "us-gov-east-1", "us-gov-west-1", d.op, d.input, d.output)
-
-		retryHandlerTestCase(t, d.bucketName, "cn-northwest-1", "cn-north-1", d.op, d.input, d.output)
-		retryHandlerTestCase(t, d.bucketName, "us-east-1", "us-west-1", d.op, d.input, d.output)
-		retryHandlerTestCase(t, d.bucketName, "us-gov-east-1", "us-gov-west-1", d.op, d.input, d.output)
-	}
-}
-
-func validationHandlerTestCase(t *testing.T, bucketName, oldRegion, newRegion string,
-	op *request.Operation, input, output interface{}) {
-
-	// The request initially targets the old region
-	retryer := retryer.SsmRetryer{}
-	retryer.NumMaxRetries = 3
-	config := &aws.Config{
-		Retryer: retryer,
-		SleepDelay: func(d time.Duration) {
-			time.Sleep(d)
-		},
-		Region: &oldRegion,
-	}
-
-	// The correct region for the bucket has been discovered by s3BucketRegionHeaderCapturingTransport
-	getBucketRegionMap().Put(bucketName, newRegion)
-
-	sess := session.New(config)
-	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler(logmocks.NewMockLog()))
-	svc := s3.New(sess)
-
-	request := svc.NewRequest(op, input, output)
-	assert.Equal(t, oldRegion, *request.Config.Region)
-
-	request.Build()
-
-	var newRegionS3EndpointHostname string
-	if strings.HasPrefix(newRegion, "cn-") {
-		newRegionS3EndpointHostname = "s3." + newRegion + ".amazonaws.com.cn"
-	} else {
-		newRegionS3EndpointHostname = "s3." + newRegion + ".amazonaws.com"
-	}
-
-	assert.Equal(t, newRegion, *request.Config.Region)
-	assert.Equal(t, "https://"+newRegionS3EndpointHostname, request.ClientInfo.Endpoint)
-	assert.Equal(t, newRegion, request.ClientInfo.SigningRegion)
-	assert.Equal(t, bucketName+"."+newRegionS3EndpointHostname, request.HTTPRequest.URL.Host)
-
-	// Cleanup
-	getBucketRegionMap().Remove(bucketName)
-}
-
-func retryHandlerTestCase(t *testing.T, bucketName, oldRegion, newRegion string,
-	op *request.Operation, input, output interface{}) {
-
-	// The request initially targets the old region
-	retryer := retryer.SsmRetryer{}
-	retryer.NumMaxRetries = 3
-	config := &aws.Config{
-		Retryer: retryer,
-		SleepDelay: func(d time.Duration) {
-			time.Sleep(d)
-		},
-		Region: &oldRegion,
-	}
-
-	sess := session.New(config)
-	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(logmocks.NewMockLog()))
-	svc := s3.New(sess)
-
-	request := svc.NewRequest(op, input, output)
-	assert.Equal(t, oldRegion, *request.Config.Region)
-
-	request.Build()
-
-	// Simulate sending the request.  S3 returns a 301, and the Transport
-	// captures the bucket region from the response headers.
-	getBucketRegionMap().Put(bucketName, newRegion)
-	request.HTTPResponse = &http.Response{
-		StatusCode: 301,
-	}
-
-	// Invoke the handler
-	request.Handlers.Retry.Run(request)
-
-	var newRegionS3EndpointHostname string
-	if strings.HasPrefix(newRegion, "cn-") {
-		newRegionS3EndpointHostname = "s3." + newRegion + ".amazonaws.com.cn"
-	} else {
-		newRegionS3EndpointHostname = "s3." + newRegion + ".amazonaws.com"
-	}
-
-	assert.Equal(t, newRegion, *request.Config.Region)
-	assert.Equal(t, "https://"+newRegionS3EndpointHostname, request.ClientInfo.Endpoint)
-	assert.Equal(t, newRegion, request.ClientInfo.SigningRegion)
-	assert.Equal(t, bucketName+"."+newRegionS3EndpointHostname, request.HTTPRequest.URL.Host)
-
-	// Cleanup
-	getBucketRegionMap().Remove(bucketName)
-}
-
-func TestValidateHandler_EndpointLookupFailure_NoChangeToRequest(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	// bucket-1 somehow got mapped to an unknown region
-	getBucketRegionMap().Put("bucket-1", "unknown-region-1")
-	config := &aws.Config{
-		Region: aws.String("us-east-1"),
-
-		// This simulates an endpoint lookup failure
-		EndpointResolver: mockEndpointResolver{
-			endpoints.ResolvedEndpoint{},
-			fmt.Errorf("ERROR"),
-		},
-	}
-
-	op := &request.Operation{
-		Name:       "PutObject",
-		HTTPMethod: "PUT",
-		HTTPPath:   "/{Bucket}/{Key+}",
-	}
-	input := &s3.PutObjectInput{
-		Body:   strings.NewReader("body contents"),
-		Key:    aws.String("a/b"),
-		Bucket: aws.String("bucket-1"),
-	}
-	output := &s3.PutObjectOutput{}
-
-	sess := session.New(config)
-	svc := s3.New(sess)
-	request := svc.NewRequest(op, input, output)
-
-	handler := makeS3RegionCorrectingValidateHandler(logmocks.NewMockLog())
-	handler.Fn(request)
-
-	assert.Equal(t, "us-east-1", *request.Config.Region)
-
-	// Cleanup
-	getBucketRegionMap().Remove("bucket-1")
-}
-
-func TestRetryHandler_EndpointLookupFailure_NoChangeToRequest(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	// bucket-1 somehow got mapped to an unknown region
-	getBucketRegionMap().Put("bucket-1", "unknown-region-1")
-	config := &aws.Config{
-		Region: aws.String("us-east-1"),
-
-		// This simulates an endpoint lookup failure
-		EndpointResolver: mockEndpointResolver{
-			endpoints.ResolvedEndpoint{},
-			fmt.Errorf("ERROR"),
-		},
-	}
-
-	op := &request.Operation{
-		Name:       "PutObject",
-		HTTPMethod: "PUT",
-		HTTPPath:   "/{Bucket}/{Key+}",
-	}
-	input := &s3.PutObjectInput{
-		Body:   strings.NewReader("body contents"),
-		Key:    aws.String("a/b"),
-		Bucket: aws.String("bucket-1"),
-	}
-	output := &s3.PutObjectOutput{}
-
-	sess := session.New(config)
-	svc := s3.New(sess)
-	request := svc.NewRequest(op, input, output)
-	request.HTTPResponse = &http.Response{
-		StatusCode: 301,
-	}
-
-	handler := makeS3RegionCorrectingRetryHandler(logmocks.NewMockLog())
-	handler.Fn(request)
-
-	assert.Equal(t, "us-east-1", *request.Config.Region)
-
-	// Cleanup
-	getBucketRegionMap().Remove("bucket-1")
-}
-
-func TestFixupRequest_NoHttpRequestUrl_NoCustomEndpoint_SetsRegionAndEndpoint(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	request := &request.Request{
-		Config: aws.Config{
-			Region: aws.String("us-east-1"),
-		},
-		ClientInfo:  metadata.ClientInfo{},
-		HTTPRequest: &http.Request{},
-	}
-	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
-	assert.Equal(t, "eu-west-1", *request.Config.Region)
-	assert.Nil(t, request.Config.Endpoint)
-	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.ClientInfo.Endpoint)
-}
-
-func TestFixupRequest_NoHttpRequestUrl_CustomEndpoint_SetsRegionAndEndpoint(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	request := &request.Request{
-		Config: aws.Config{
-			Region:   aws.String("us-east-1"),
-			Endpoint: aws.String("https://my-custom-endpoint.com"),
-		},
-		ClientInfo:  metadata.ClientInfo{},
-		HTTPRequest: &http.Request{},
-	}
-	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
-	assert.Equal(t, "eu-west-1", *request.Config.Region)
-	assert.Equal(t, "https://my-custom-endpoint.com", *request.Config.Endpoint)
-	assert.Equal(t, "https://my-custom-endpoint.com", request.ClientInfo.Endpoint)
-}
-
-func TestFixupRequest_HttpRequestUrl_NoCustomEndpoint_SetsRegionAndHttpRequestUrl(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	request := &request.Request{
-		Config: aws.Config{
-			Region:           aws.String("us-east-1"),
-			EndpointResolver: endpoints.DefaultResolver(),
-		},
-		ClientInfo: metadata.ClientInfo{
-			Endpoint: "http://s3.amazonaws.com",
-		},
-		HTTPRequest: &http.Request{
-			URL: &url.URL{
-				Scheme: "https",
-				Host:   "s3.amazonaws.com",
-			},
-		},
-	}
-	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
-	assert.Equal(t, "eu-west-1", *request.Config.Region)
-	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.HTTPRequest.URL.String())
-	assert.Nil(t, request.Config.Endpoint)
-	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.ClientInfo.Endpoint)
-}
-
-func TestFixupRequest_HttpRequestUrlPresent_RespectsCustomEndpoint(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	request := &request.Request{
-		Config: aws.Config{
-			Region:           aws.String("us-east-1"),
-			Endpoint:         aws.String("https://my-custom-endpoint.com"),
-			EndpointResolver: endpoints.DefaultResolver(),
-		},
-		ClientInfo: metadata.ClientInfo{
-			Endpoint: "https://my-custom-endpoint.com",
-		},
-		HTTPRequest: &http.Request{
-			URL: &url.URL{
-				Scheme: "https",
-				Host:   "s3.amazonaws.com",
-			},
-		},
-	}
-	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
-	assert.Equal(t, "eu-west-1", *request.Config.Region)
-	assert.Equal(t, "https://my-custom-endpoint.com", request.HTTPRequest.URL.String())
-	assert.Equal(t, "https://my-custom-endpoint.com", *request.Config.Endpoint)
-	assert.Equal(t, "https://my-custom-endpoint.com", request.ClientInfo.Endpoint)
-}
-
-func TestFixupRequest_HttpRequestUrlPresent_VirtualHostedUrlWithKey(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	request := &request.Request{
-		Config: aws.Config{
-			Region:           aws.String("us-east-1"),
-			EndpointResolver: endpoints.DefaultResolver(),
-		},
-		ClientInfo: metadata.ClientInfo{
-			Endpoint: "https://s3.amazonaws.com",
-		},
-		HTTPRequest: &http.Request{
-			URL: &url.URL{
-				Scheme: "https",
-				Host:   "bucket-1.s3.amazonaws.com",
-				Path:   "/key",
-			},
-		},
-	}
-	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
-	assert.Equal(t, "eu-west-1", *request.Config.Region)
-	assert.Equal(t, "https://bucket-1.s3.eu-west-1.amazonaws.com/key", request.HTTPRequest.URL.String())
-	assert.Nil(t, request.Config.Endpoint)
-	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.ClientInfo.Endpoint)
-}
-
-func TestFixupRequest_HttpRequestUrlPresent_PathStyleUrlWithKey(t *testing.T) {
-	setBucketRegionFromSignedHeadBucketRequest("")
-	request := &request.Request{
-		Config: aws.Config{
-			Region:           aws.String("us-east-1"),
-			EndpointResolver: endpoints.DefaultResolver(),
-		},
-		ClientInfo: metadata.ClientInfo{
-			Endpoint: "https://s3.amazonaws.com",
-		},
-		HTTPRequest: &http.Request{
-			URL: &url.URL{
-				Scheme: "https",
-				Host:   "s3.amazonaws.com",
-				Path:   "/bucket-1/key",
-			},
-		},
-	}
-	fixupRequest(logmocks.NewMockLog(), request, "eu-west-1")
-	assert.Equal(t, "eu-west-1", *request.Config.Region)
-	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com/bucket-1/key", request.HTTPRequest.URL.String())
-	assert.Nil(t, request.Config.Endpoint)
-	assert.Equal(t, "https://s3.eu-west-1.amazonaws.com", request.ClientInfo.Endpoint)
 }
 
 func TestNewS3BucketRegionHeaderCapturingTransport(t *testing.T) {
@@ -1053,29 +523,18 @@ type mockCredentialsProvider struct {
 }
 
 // Returns fake credentials.
-func (c *mockCredentialsProvider) Retrieve() (credentials.Value, error) {
-	return credentials.Value{
+func (c *mockCredentialsProvider) Retrieve() (aws.Credentials, error) {
+	return aws.Credentials{
 		AccessKeyID:     "FAKEACCESSKEY",
 		SecretAccessKey: "FAKESECRETKEY",
 		SessionToken:    "FAKESESSIONTOKEN",
-		ProviderName:    "mockCredentialsProvider",
+		Source:          "mockCredentialsProvider",
 	}, nil
 }
 
 // Always returns false to indicate the credentials are still valid.
 func (c *mockCredentialsProvider) IsExpired() bool {
 	return false
-}
-
-// A Resolver implementation that returns a hard-coded endpoint
-type mockEndpointResolver struct {
-	resolvedEndpoint endpoints.ResolvedEndpoint
-	err              error
-}
-
-// Returns the hard-coded endpoint lookup response
-func (r mockEndpointResolver) EndpointFor(service, region string, opts ...func(*endpoints.Options)) (endpoints.ResolvedEndpoint, error) {
-	return r.resolvedEndpoint, r.err
 }
 
 func makeGetBucketLocationResponseBodyText(region string) string {

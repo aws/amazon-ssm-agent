@@ -252,7 +252,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 
 	if role != "" {
 		authRegisterService := authregister.NewClient(log, region, nil)
-		managedInstanceID, err = authRegisterService.RegisterManagedInstanceWithContext(
+		managedInstanceID, err = authRegisterService.RegisterManagedInstance(
 			context.Background(),
 			publicKey,
 			keyType,
@@ -263,6 +263,9 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 		)
 	} else {
 		service := anonauth.NewClient(log, region)
+		if service == nil {
+			return managedInstanceID, fmt.Errorf("failed to create anonymous auth client for region %v", region)
+		}
 		managedInstanceID, err = service.RegisterManagedInstance(
 			activationCode,
 			activationID,

@@ -28,5 +28,9 @@ func TestCreateCloudwatchService(t *testing.T) {
 
 	assert.NotNil(t, service)
 	assert.NotNil(t, service.service)
-	assert.Equal(t, "https://monitoring.us-east-1.amazonaws.com", service.service.Endpoint)
+
+	// Test that the service was configured with correct region
+	// (endpoint is derived from region in v2)
+	cfg := service.service.Options()
+	assert.Equal(t, "https://monitoring.us-east-1.amazonaws.com", *cfg.BaseEndpoint)
 }

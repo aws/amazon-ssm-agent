@@ -374,8 +374,8 @@ func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
 	}
 	// Start a new wg to avoid go panic.
 	wg := new(sync.WaitGroup)
+	wg.Add(1)
 	go func(wgc *sync.WaitGroup) {
-		wgc.Add(1)
 		defer wgc.Done()
 		suite.healthCheck.ModuleStop()
 	}(wg)
@@ -390,8 +390,8 @@ func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
 func (suite *HealthCheckTestSuite) TestModuleStopWithoutHealthJob() {
 	// Start a new wg to avoid go panic
 	wg := new(sync.WaitGroup)
+	wg.Add(1)
 	go func(wgc *sync.WaitGroup) {
-		wgc.Add(1)
 		defer wgc.Done()
 		rst := suite.healthCheck.ModuleStop()
 		assert.Nil(suite.T(), rst, "result from ModuleStop should be nil")

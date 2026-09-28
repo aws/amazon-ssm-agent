@@ -48,7 +48,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/ansiprocessing"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+	cloudwatchlogstypes "github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
 )
 
 // Plugin is the type for the plugin.
@@ -107,7 +107,7 @@ func NewPlugin(context context.T, name string) (*ShellPlugin, error) {
 func (p *ShellPlugin) validate(config agentContracts.Configuration) error {
 	log := p.context.Log()
 	if config.CloudWatchLogGroup != "" {
-		var logGroup *cloudwatchlogs.LogGroup
+		var logGroup *cloudwatchlogstypes.LogGroup
 		var logGroupExists bool
 		if logGroupExists, logGroup = p.logger.cwl.IsLogGroupPresent(config.CloudWatchLogGroup); !logGroupExists {
 			log.Warnf("The CloudWatch log group specified in session preferences either does not exist or unable to validate its existence. " +

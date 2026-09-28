@@ -15,29 +15,35 @@
 package retryer
 
 import (
+	"errors"
 	"math"
 	"math/rand"
 	"strings"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/client"
-	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/smithy-go"
 )
 
 type SsmRetryer struct {
-	client.DefaultRetryer
+	*retry.Standard
 }
 
-// RetryRules returns the delay duration before retrying this request again
-func (s SsmRetryer) RetryRules(r *request.Request) time.Duration {
+// RetryDelay returns the delay duration before retrying this request again
+func (s SsmRetryer) RetryDelay(attempt int, err error) (time.Duration, error) {
 	// Handle GetMessages Client.Timeout error
-	if r.Operation.Name == "GetMessages" && r.Error != nil && strings.Contains(r.Error.Error(), "Client.Timeout") {
+	var oe *smithy.OperationError
+	if errors.As(err, &oe) && oe.OperationName == "GetMessages" && strings.Contains(err.Error(), "Client.Timeout") {
 		// expected error. we will retry with a short 100 ms delay
-		return time.Duration(100 * time.Millisecond)
+		return time.Duration(100 * time.Millisecond), nil
 	}
 
 	// retry after a > 1 sec timeout, increasing exponentially with each retry
-	rand.Seed(time.Now().UnixNano())
-	delay := int(math.Pow(2, float64(r.RetryCount))) * (rand.Intn(500) + 1000)
-	return time.Duration(delay) * time.Millisecond
+	delay := int(math.Pow(2, float64(attempt))) * (rand.Intn(500) + 1000)
+	// Cap at 20s to prevent excessive delays (v1's DefaultRetryer had a built-in cap)
+	const maxDelayMs = 20000
+	if delay > maxDelayMs {
+		delay = maxDelayMs
+	}
+	return time.Duration(delay) * time.Millisecond, nil
 }

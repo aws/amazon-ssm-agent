@@ -14,9 +14,10 @@
 package onprem
 
 import (
+	"context"
 	"sync"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -60,21 +61,21 @@ func (*Identity) ServiceDomain() (string, error) {
 // initShareCreds initializes credentials using shared credentials provider that reads credentials from shared location
 func (i *Identity) initShareCreds() {
 	shareCredsProvider := sharedprovider.NewCredentialsProvider(i.Log)
-	i.credentials = credentials.NewCredentials(shareCredsProvider)
+	i.credentials, _ = shareCredsProvider.Retrieve(context.TODO())
 }
 
 // initNonShareCreds initializes credentials provider and credentials that do not share credentials via aws credentials file
 func (i *Identity) initNonShareCreds() {
 	i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, true)
-	i.credentials = credentials.NewCredentials(i.credentialsProvider)
+	i.credentials, _ = i.credentialsProvider.Retrieve(context.TODO())
 }
 
-// Credentials returns the managed instance credentials
-func (i *Identity) Credentials() *credentials.Credentials {
+// CredentialProvider returns the initialized credentials provider
+func (i *Identity) CredentialsProvider() aws.CredentialsProvider {
 	i.credsInitMutex.Lock()
 	defer i.credsInitMutex.Unlock()
 
-	if i.credentials == nil {
+	if !i.credentials.HasKeys() {
 		if i.shouldShareCredentials {
 			i.initShareCreds()
 		} else {
@@ -82,7 +83,11 @@ func (i *Identity) Credentials() *credentials.Credentials {
 		}
 	}
 
-	return i.credentials
+	if i.credentialsProvider == nil {
+		i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, i.shouldShareCredentials)
+	}
+
+	return i.credentialsProvider
 }
 
 // CredentialProvider returns the initialized credentials provider
@@ -129,7 +134,7 @@ func NewOnPremIdentity(log log.T, config *appconfig.SsmagentConfig) *Identity {
 		Config:                 config,
 		registrationInfo:       registrationInfo,
 		credentialsProvider:    nil,
-		credentials:            nil,
+		credentials:            aws.Credentials{},
 		shareFile:              shareFile,
 		shouldShareCredentials: shouldShareCredentials,
 		credsInitMutex:         sync.Mutex{},

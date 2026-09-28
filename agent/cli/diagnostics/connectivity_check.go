@@ -285,6 +285,11 @@ func (q connectivityCheckQuery) Execute() diagnosticsutil.DiagnosticOutput {
 		address = agentIdentity.GetServiceEndpoint(q.service)
 	}
 
+	// Strip scheme prefix for TCP dialing — GetServiceEndpoint now returns
+	// scheme-prefixed URLs (https://...) but dial expects bare host
+	address = strings.TrimPrefix(address, "https://")
+	address = strings.TrimPrefix(address, "http://")
+
 	proxyMap := proxyconfig.GetProxyConfig()
 	if isProxyDefined(proxyMap) {
 		// must introduce custom timeout logic as proxy dial does not support timeout

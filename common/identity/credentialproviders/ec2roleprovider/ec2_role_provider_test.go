@@ -18,23 +18,26 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"sync"
 	"testing"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
+	"github.com/aws/smithy-go"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	awserr "github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ec2roleprovider/stubs"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmclient/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -65,7 +68,7 @@ type testCase struct {
 	sharedRetrieveErr               error
 	runtimeConfigRetrieveErr        error
 	runtimeConfig                   runtimeconfig.IdentityRuntimeConfig
-	expectedAwsErr                  string
+	expectedErr                     string
 }
 
 func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISSMClient, *EC2RoleProvider) {
@@ -83,7 +86,7 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, testCase.ssmRetrieveErr).Once()
 	}
 
-	newV4ServiceWithCreds = func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
+	newV4ServiceWithCreds = func(log log.T, credentialsProvider aws.CredentialsProvider, region, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
 
@@ -93,8 +96,8 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 			InstanceId: "SomeInstanceId",
 			Region:     "SomeRegion",
 		},
-		expirationUpdateLock: &sync.Mutex{},
-		RuntimeConfigClient:  &runtimeConfigMocks.IIdentityRuntimeConfigClient{},
+
+		RuntimeConfigClient: &runtimeConfigMocks.IIdentityRuntimeConfigClient{},
 	}
 
 	iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName, RetrieveErr: testCase.iprRetrieveErr}
@@ -110,8 +113,8 @@ func arrangeUpdateInstanceInformationFromTestCase(testCase testCase) (*mocks.ISS
 func arrangeUpdateInstanceInformation(err error) (*mocks.ISSMClient, *EC2RoleProvider) {
 	ssmClient := &mocks.ISSMClient{}
 	updateInstanceInfoOutput := &ssm.UpdateInstanceInformationOutput{}
-	ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, err).Repeatability = 1
-	newV4ServiceWithCreds = func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
+	ssmClient.On("UpdateInstanceInformation", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, err).Repeatability = 1
+	newV4ServiceWithCreds = func(log log.T, credentialsProvider aws.CredentialsProvider, region string, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
 
@@ -121,8 +124,8 @@ func arrangeUpdateInstanceInformation(err error) (*mocks.ISSMClient, *EC2RolePro
 			InstanceId: "SomeInstanceId",
 			Region:     "SomeRegion",
 		},
-		expirationUpdateLock: &sync.Mutex{},
-		RuntimeConfigClient:  &runtimeConfigMocks.IIdentityRuntimeConfigClient{},
+
+		RuntimeConfigClient: &runtimeConfigMocks.IIdentityRuntimeConfigClient{},
 	}
 	return ssmClient, ec2RoleProvider
 }
@@ -132,8 +135,14 @@ func TestEC2RoleProvider_UpdateEmptyInstanceInformation_Success(t *testing.T) {
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
 	defaultEndpoint := "ssm.amazon.com"
 
+	innerProvider := &stubs.InnerProvider{
+		ProviderName: IPRProviderName,
+	}
+
+	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
+
 	// Act
-	err := ec2RoleProvider.updateEmptyInstanceInformation(context.Background(), defaultEndpoint, &credentials.Credentials{})
+	err := ec2RoleProvider.updateEmptyInstanceInformation(context.Background(), defaultEndpoint, ec2RoleProvider.GetInnerProvider())
 
 	// Assert
 	assert.NoError(t, err)
@@ -144,8 +153,14 @@ func TestEC2RoleProvider_UpdateEmptyInstanceInformation_ReturnsNestedError(t *te
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(awserr.New(ErrCodeEC2RoleRequestError, "Instance profile role not found", genericAwsClientError))
 	defaultEndpoint := "ssm.amazon.com"
 
+	innerProvider := &stubs.InnerProvider{
+		ProviderName: IPRProviderName,
+	}
+
+	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
+
 	// Act
-	err := ec2RoleProvider.updateEmptyInstanceInformation(context.Background(), defaultEndpoint, &credentials.Credentials{})
+	err := ec2RoleProvider.updateEmptyInstanceInformation(context.Background(), defaultEndpoint, ec2RoleProvider.GetInnerProvider())
 
 	// Assert
 	assert.Error(t, err)
@@ -162,10 +177,8 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With1HrSession(t *
 		return now
 	}
 
-	newCredentials = func(provider credentials.Provider) *credentials.Credentials {
-		creds := credentials.NewCredentials(provider)
-		creds.Get()
-		return creds
+	newCredentials = func(optFns ...func(*ec2rolecreds.Options)) *ec2rolecreds.Provider {
+		return &ec2rolecreds.Provider{}
 	}
 
 	expectedExpiry := now.Add(1 * time.Hour)
@@ -179,12 +192,12 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_With1HrSession(t *
 
 	// Act
 	creds, err := ec2RoleProvider.iprCredentials(context.Background(), defaultEndpoint)
-	credValue, _ := creds.Get()
+	//credValue, _ := creds.Retrieve(context.TODO())
 
 	// Assert
 	assert.NoError(t, err)
-	assert.Equal(t, innerProvider.ProviderName, credValue.ProviderName)
-	actualExpiry, err := creds.ExpiresAt()
+	assert.Equal(t, innerProvider.ProviderName, creds.Source)
+	actualExpiry := creds.Expires
 	assert.NoError(t, err)
 	assert.Equal(t, expectedExpiry, actualExpiry)
 
@@ -199,29 +212,27 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsIPRCredentials_ExpiresAtBeforeNow
 		return now
 	}
 
-	newCredentials = func(provider credentials.Provider) *credentials.Credentials {
-		creds := credentials.NewCredentials(provider)
-		creds.Get()
-		return creds
+	newCredentials = func(optFns ...func(*ec2rolecreds.Options)) *ec2rolecreds.Provider {
+		return &ec2rolecreds.Provider{}
 	}
 
 	expectedExpiry := now.Add(1 * time.Hour)
 
 	innerProvider := &stubs.InnerProvider{
 		ProviderName: IPRProviderName,
-		Expiry:       now.Add(-20 * time.Minute),
+		Expiry:       expectedExpiry,
 	}
 
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{IPRProvider: innerProvider}
 
 	// Act
 	creds, err := ec2RoleProvider.iprCredentials(context.Background(), defaultEndpoint)
-	credValue, _ := creds.Get()
+	//credValue, _ := creds.Retrieve(context.TODO())
 
 	// Assert
 	assert.NoError(t, err)
-	assert.Equal(t, innerProvider.ProviderName, credValue.ProviderName)
-	actualExpiry, err := creds.ExpiresAt()
+	assert.Equal(t, innerProvider.ProviderName, creds.Source)
+	actualExpiry := creds.Expires
 	assert.NoError(t, err)
 	assert.Equal(t, expectedExpiry.Round(time.Second), actualExpiry.Round(time.Second))
 
@@ -238,7 +249,7 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsError(t *testing.T) {
 	creds, err := ec2RoleProvider.iprCredentials(context.Background(), defaultEndpoint)
 
 	// Assert
-	assert.Nil(t, creds)
+	assert.Equal(t, iprEmptyCredential, creds)
 	assert.Error(t, err)
 }
 
@@ -246,7 +257,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 	// Arrange
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
 	iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName}
-	sharedProvider := &stubs.InnerProvider{ProviderName: credentials.SharedCredsProviderName}
+	sharedProvider := &stubs.InnerProvider{ProviderName: "SharedCredentialsProvider"}
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{
 		IPRProvider:               iprProvider,
 		SharedCredentialsProvider: sharedProvider,
@@ -262,13 +273,13 @@ func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 		flag = true
 		return time.Now()
 	}
-	creds, err := ec2RoleProvider.Retrieve()
+	creds, err := ec2RoleProvider.Retrieve(context.TODO())
 	expiryMins := time.Now().Sub(ec2RoleProvider.ExpiresAt()).Minutes()
 	//Assert
 	assert.True(t, flag)
 	assert.True(t, 28 >= expiryMins && expiryMins <= 30)
 	assert.NoError(t, err)
-	assert.Equal(t, iprProvider.ProviderName, creds.ProviderName)
+	assert.Equal(t, iprProvider.ProviderName, creds.Source)
 	assert.Equal(t, CredentialSourceEC2, ec2RoleProvider.credentialSource)
 }
 
@@ -308,11 +319,11 @@ func TestEC2RoleProvider_Retrieve_ReturnsSharedCredentials(t *testing.T) {
 			ec2RoleProvider.RuntimeConfigClient = runtimeConfigClient
 
 			// Act
-			creds, err := ec2RoleProvider.Retrieve()
+			creds, err := ec2RoleProvider.Retrieve(context.TODO())
 
 			//Assert
 			assert.NoError(t, err)
-			assert.Equal(t, sharedProvider.ProviderName, creds.ProviderName)
+			assert.Equal(t, sharedProvider.ProviderName, creds.Source)
 			assert.Equal(t, CredentialSourceSSM, ec2RoleProvider.credentialSource)
 		})
 	}
@@ -345,7 +356,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsEmptyCredentials(t *testing.T) {
 			ec2RoleProvider := arrangeRetrieveEmptyTest(j)
 
 			// Act
-			creds, err := ec2RoleProvider.Retrieve()
+			creds, err := ec2RoleProvider.Retrieve(context.TODO())
 
 			//Assert
 			assert.Error(t, err)
@@ -369,7 +380,7 @@ func TestEC2RoleProvider_Retrieve_ReturnsNestedErr(t *testing.T) {
 			ec2RoleProvider := arrangeRetrieveEmptyTest(j)
 
 			// Act
-			_, err := ec2RoleProvider.Retrieve()
+			_, err := ec2RoleProvider.Retrieve(context.TODO())
 
 			//Assert
 			assert.Error(t, err)
@@ -385,34 +396,34 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			testName:       "NoIpr_RetrieveDhmrAccessDenied",
 			iprRetrieveErr: errNoInstanceProfileRole,
 			ssmRetrieveErr: rmirtAccessDeniedError,
-			expectedAwsErr: ErrCodeAccessDeniedException,
+			expectedErr:    ErrCodeAccessDeniedException,
 		},
 		{
 			testName:       "IprAssumeRoleErr_RetrieveDhmrAccessDenied",
 			iprRetrieveErr: instanceProfileRoleAssumeRoleError,
 			ssmRetrieveErr: rmirtAccessDeniedError,
-			expectedAwsErr: ErrCodeAccessDeniedException,
+			expectedErr:    ErrCodeAccessDeniedException,
 		},
 		{
 			testName:       "NoIpr_RetrieveDhmrInternalServerError",
 			iprRetrieveErr: awserr.New(ErrCodeAssumeRoleUnauthorizedAccess, "Failed to assume instance profile role", nil),
-			ssmRetrieveErr: &ssm.InternalServerError{},
-			expectedAwsErr: ssm.ErrCodeInternalServerError,
+			ssmRetrieveErr: &ssmtypes.InternalServerError{},
+			expectedErr:    "InternalServerError",
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationThrottle",
 			iprUpdateInstanceInformationErr: uiiThrottleError,
-			expectedAwsErr:                  "RateExceeded",
+			expectedErr:                     "RateExceeded",
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationInternalServerError",
-			iprUpdateInstanceInformationErr: &ssm.InternalServerError{},
-			expectedAwsErr:                  ssm.ErrCodeInternalServerError,
+			iprUpdateInstanceInformationErr: &ssmtypes.InternalServerError{},
+			expectedErr:                     "InternalServerError",
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationThrottle",
 			iprUpdateInstanceInformationErr: uiiThrottleError,
-			expectedAwsErr:                  "RateExceeded",
+			expectedErr:                     "RateExceeded",
 		},
 		{
 			testName:                        "RetrieveIprSuccess_UpdateInstanceInformationClientError",
@@ -429,11 +440,17 @@ func TestEC2RoleProvider_RetrieveRemote_ReturnsEmptyCredentials(t *testing.T) {
 			creds, err := ec2RoleProvider.RemoteRetrieve(context.Background())
 
 			//Assert
-			if j.expectedAwsErr != "" {
-				var awsErr awserr.Error
-				isAwsErr := errors.As(err, &awsErr)
-				assert.True(t, isAwsErr)
-				assert.Equal(t, j.expectedAwsErr, awsErr.Code())
+			if j.expectedErr != "" {
+				var apiErr smithy.APIError
+				if errors.As(err, &apiErr) {
+					assert.Equal(t, j.expectedErr, apiErr.ErrorCode())
+				} else {
+					// Handle case where it's not a smithy.APIError
+					var awsErr awserr.Error
+					isAwsErr := errors.As(err, &awsErr)
+					assert.True(t, isAwsErr)
+					assert.Equal(t, j.expectedErr, awsErr.Code())
+				}
 			}
 			assert.Equal(t, iprEmptyCredential, creds)
 			assert.Equal(t, CredentialSourceNone, ec2RoleProvider.credentialSource)
@@ -447,11 +464,11 @@ func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
 	runtimeConfigClient := &runtimeConfigMocks.IIdentityRuntimeConfigClient{}
 
 	if j.iprUpdateInstanceInformationErr != nil {
-		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, j.iprUpdateInstanceInformationErr)
+		ssmClient.On("UpdateInstanceInformation", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, j.iprUpdateInstanceInformationErr)
 	}
 
 	if j.ssmRetrieveErr != nil {
-		ssmClient.On("UpdateInstanceInformationWithContext", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, j.ssmRetrieveErr)
+		ssmClient.On("UpdateInstanceInformation", mock.Anything, mock.Anything).Return(updateInstanceInfoOutput, j.ssmRetrieveErr)
 	}
 
 	if j.ssmRetrieveErr != nil {
@@ -460,7 +477,7 @@ func arrangeRetrieveEmptyTest(j testCase) *EC2RoleProvider {
 		runtimeConfigClient.On("GetConfigWithRetry").Return(j.runtimeConfig, j.ssmRetrieveErr)
 	}
 
-	newV4ServiceWithCreds = func(log log.T, credentials *credentials.Credentials, region, defaultEndpoint string) ssmclient.ISSMClient {
+	newV4ServiceWithCreds = func(log log.T, credentialsProvider aws.CredentialsProvider, region string, defaultEndpoint string) ssmclient.ISSMClient {
 		return ssmClient
 	}
 

@@ -214,7 +214,7 @@ func replaceValidatedSessionParameters(
 }
 
 // ParseParameters is a method to parse the ssm parameters into a string map interface
-func ParseParameters(log log.T, params map[string][]*string, paramsDef map[string]*contracts.Parameter) map[string]interface{} {
+func ParseParameters(log log.T, params map[string][]string, paramsDef map[string]*contracts.Parameter) map[string]interface{} {
 	result := make(map[string]interface{})
 
 	for name, param := range params {
@@ -222,15 +222,15 @@ func ParseParameters(log log.T, params map[string][]*string, paramsDef map[strin
 		if definition, ok := paramsDef[name]; ok {
 			switch definition.ParamType {
 			case contracts.ParamTypeString:
-				result[name] = *(param[0])
+				result[name] = param[0]
 			case contracts.ParamTypeStringList:
 				newParam := []string{}
 				for _, value := range param {
-					newParam = append(newParam, *value)
+					newParam = append(newParam, value)
 				}
 				result[name] = newParam
 			case contracts.ParamTypeStringMap:
-				result[name] = *(param[0])
+				result[name] = param[0]
 			default:
 				log.Debug("unknown parameter type ", definition.ParamType)
 			}

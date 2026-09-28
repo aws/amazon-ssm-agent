@@ -16,7 +16,7 @@ package ecs
 import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 // InstanceID returns the ecs Instance ID
@@ -44,9 +44,9 @@ func (e *Identity) AvailabilityZoneId() (string, error) { return "", nil }
 // InstanceType returns the managed instance instanceType
 func (e *Identity) InstanceType() (string, error) { return ecsInstanceType, nil }
 
-// Credentials returns the managed instance credentials
-func (e *Identity) Credentials() *credentials.Credentials {
-	return credentialproviders.GetRemoteCreds()
+// CredentialsProvider returns the managed instance CredentialsProvider
+func (e *Identity) CredentialsProvider() aws.CredentialsProvider {
+	return credentialproviders.GetECSCredsProvider()
 }
 
 // IsIdentityEnvironment returns if instance has managed instance registration

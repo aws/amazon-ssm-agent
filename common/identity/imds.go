@@ -14,14 +14,13 @@
 package identity
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 )
 
 const imdsTimeout = 2 * time.Second
@@ -38,13 +37,10 @@ var IsIMDSAvailableForProvider = func(provider appconfig.Provider) (bool, error)
 	}
 }
 
-// newEC2IMDSClient creates an ec2metadata client. Overridable for testing.
-var newEC2IMDSClient = func() (*ec2metadata.EC2Metadata, error) {
-	sess, err := session.NewSession()
-	if err != nil {
-		return nil, err
-	}
-	return ec2metadata.New(sess), nil
+// newEC2IMDSClient creates an IMDS client using aws-sdk-go-v2. Overridable for testing.
+var newEC2IMDSClient = func() (*imds.Client, error) {
+	client := imds.New(imds.Options{})
+	return client, nil
 }
 
 // checkEC2IMDSAvailable checks if EC2 IMDS is reachable
@@ -53,7 +49,14 @@ func checkEC2IMDSAvailable() bool {
 	if err != nil {
 		return false
 	}
-	return client.AvailableWithContext(aws.BackgroundContext())
+
+	ctx, cancel := context.WithTimeout(context.Background(), imdsTimeout)
+	defer cancel()
+
+	_, err = client.GetMetadata(ctx, &imds.GetMetadataInput{
+		Path: "instance-id",
+	})
+	return err == nil
 }
 
 // checkAzureIMDSAvailable checks if Azure IMDS is reachable

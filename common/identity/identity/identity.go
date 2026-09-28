@@ -16,8 +16,9 @@ package identity
 import (
 	"strings"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 const (
@@ -118,15 +119,39 @@ func (c *agentIdentityCacher) InstanceType() (string, error) {
 	return c.instanceType, err
 }
 
-func (c *agentIdentityCacher) Credentials() *credentials.Credentials {
+func (c *agentIdentityCacher) CredentialsProvider() aws.CredentialsProvider {
+	// Fast path: read the cached provider under RLock so concurrent callers
+	// (InstanceID, Region, etc.) that share this mutex don't serialize behind
+	// the network-I/O path below. We check credsProvider — not creds.HasKeys —
+	// because the provider itself is what callers use to Retrieve; caching the
+	// Retrieve result here would require holding the mutex across the network
+	// call to c.client.CredentialsProvider() for on-prem (a full RMIRT chain),
+	// which would block every other identity-metadata reader for the duration
+	// of that network round-trip.
 	c.mutex.Lock()
-	defer c.mutex.Unlock()
-	if c.creds != nil {
-		return c.creds
+	if c.credsProvider != nil {
+		provider := c.credsProvider
+		c.mutex.Unlock()
+		return provider
 	}
+	c.mutex.Unlock()
 
-	c.creds = c.client.Credentials()
-	return c.creds
+	// Slow path: resolve the provider without the mutex held. Concurrent
+	// callers may race to construct one; the last writer wins. The underlying
+	// providers are all safe to construct multiple times (EC2 identity returns
+	// a preassigned pointer; on-prem/azure return a fresh CredentialsProvider
+	// struct whose network I/O only fires on Retrieve, not on construction).
+	provider := c.client.CredentialsProvider()
+
+	c.mutex.Lock()
+	// If another goroutine set credsProvider while we were resolving ours,
+	// prefer the one already installed so all callers see a stable identity.
+	if c.credsProvider == nil {
+		c.credsProvider = provider
+	}
+	provider = c.credsProvider
+	c.mutex.Unlock()
+	return provider
 }
 
 func (c *agentIdentityCacher) IdentityType() string {

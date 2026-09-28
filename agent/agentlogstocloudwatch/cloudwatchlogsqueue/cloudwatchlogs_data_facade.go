@@ -24,8 +24,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
+
 	"github.com/Workiva/go-datastructures/queue"
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/cihub/seelog"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -186,19 +187,19 @@ func parseXMLConfigs(xmlConfig seelog.CustomReceiverInitArgs) (logGroup, sharing
 }
 
 // Dequeue Returns the batch of messages present in the queue. Returns nil if no messages or no queue present
-func Dequeue(pollingWaitTime time.Duration) ([]*cloudwatchlogs.InputLogEvent, error) {
+func Dequeue(pollingWaitTime time.Duration) ([]*types.InputLogEvent, error) {
 	// Acquiring Read Lock on the instance to allow multiple enqueuers/dequeuers to access queue
 	mutex.RLock()
 	defer mutex.RUnlock()
 
 	// Dequeue Message if queue present
 	if IsActive() {
-		messages := make([]*cloudwatchlogs.InputLogEvent, 0, 10)
+		messages := make([]*types.InputLogEvent, 0, 10)
 		cwCurrentBatchSize := 0
 		for i := 0; i < batchSize; i++ {
 			cwEvent, err := logDataFacadeInstance.messageQueue.Peek()
 			if err == nil {
-				if message, ok := cwEvent.(*cloudwatchlogs.InputLogEvent); ok {
+				if message, ok := cwEvent.(*types.InputLogEvent); ok {
 					if messageByte, marshallErr := json.Marshal(message); marshallErr == nil {
 						cwCurrentBatchSize += len(messageByte)
 						if cwCurrentBatchSize > batchByteSizeMax {
@@ -232,7 +233,7 @@ func Dequeue(pollingWaitTime time.Duration) ([]*cloudwatchlogs.InputLogEvent, er
 
 			for i := range genericMessages {
 				// Safe type conversion from interface{} to *cloudwatchlogs.InputLogEvent
-				if message, ok := genericMessages[i].(*cloudwatchlogs.InputLogEvent); ok {
+				if message, ok := genericMessages[i].(*types.InputLogEvent); ok {
 					messages = append(messages, message)
 				}
 			}
@@ -266,7 +267,7 @@ func GetSharingDestination() string {
 }
 
 // Enqueue to add message to queue
-func Enqueue(message *cloudwatchlogs.InputLogEvent) error {
+func Enqueue(message *types.InputLogEvent) error {
 	// Acquiring Read Lock on the instance to allow multiple enquequers/dequeuers to access queue
 	mutex.RLock()
 	defer mutex.RUnlock()

@@ -16,6 +16,7 @@ package config
 
 import (
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -119,6 +120,15 @@ var GetMgsEndpoint = func(context context.T, region string) string {
 
 	endpointHelper := endpoint.NewEndpointHelper(context.Log(), appConfig)
 	mgsEndpoint := endpointHelper.GetServiceEndpoint(ServiceName, region)
+
+	// The endpoint helper now returns scheme-prefixed URLs (https://...).
+	// Callers of GetMgsEndpoint prepend HttpsPrefix themselves (mgsinteractor,
+	// datachannel) or WebSocketPrefix (websocketchannel), so returning a
+	// scheme-prefixed hostname produces malformed URLs like
+	// "https://https://ssm-messages.<region>.amazonaws.com". Strip the scheme
+	// so the returned hostname matches the appconfig-override branch above.
+	mgsEndpoint = strings.TrimPrefix(mgsEndpoint, "https://")
+	mgsEndpoint = strings.TrimPrefix(mgsEndpoint, "http://")
 
 	return mgsEndpoint
 }

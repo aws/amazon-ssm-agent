@@ -16,10 +16,10 @@ package authtokenrequest
 
 import (
 	"context"
+	//"github.com/aws/aws-sdk-go/aws/request"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 type IClient interface {
@@ -31,10 +31,8 @@ type IClient interface {
 
 // ISsmSdk defines the functions needed from the AWS SSM SDK
 type ISsmSdk interface {
-	RequestManagedInstanceRoleToken(input *ssm.RequestManagedInstanceRoleTokenInput) (*ssm.RequestManagedInstanceRoleTokenOutput, error)
-	RequestManagedInstanceRoleTokenWithContext(ctx context.Context, input *ssm.RequestManagedInstanceRoleTokenInput, opts ...request.Option) (*ssm.RequestManagedInstanceRoleTokenOutput, error)
-	UpdateManagedInstancePublicKey(input *ssm.UpdateManagedInstancePublicKeyInput) (*ssm.UpdateManagedInstancePublicKeyOutput, error)
-	UpdateManagedInstancePublicKeyWithContext(ctx context.Context, input *ssm.UpdateManagedInstancePublicKeyInput, opts ...request.Option) (*ssm.UpdateManagedInstancePublicKeyOutput, error)
+	RequestManagedInstanceRoleToken(ctx context.Context, input *ssm.RequestManagedInstanceRoleTokenInput, optFns ...func(*ssm.Options)) (*ssm.RequestManagedInstanceRoleTokenOutput, error)
+	UpdateManagedInstancePublicKey(ctx context.Context, input *ssm.UpdateManagedInstancePublicKeyInput, optFns ...func(*ssm.Options)) (*ssm.UpdateManagedInstancePublicKeyOutput, error)
 }
 
 // Client is a service wrapper that delegates to the ssm sdk.
@@ -60,7 +58,7 @@ func (svc *Client) RequestManagedInstanceRoleTokenWithContext(ctx context.Contex
 		Fingerprint: aws.String(fingerprint),
 	}
 
-	return svc.sdk.RequestManagedInstanceRoleTokenWithContext(ctx, params)
+	return svc.sdk.RequestManagedInstanceRoleToken(ctx, params)
 }
 
 // UpdateManagedInstancePublicKey calls the UpdateManagedInstancePublicKey SSM API.
@@ -75,5 +73,5 @@ func (svc *Client) UpdateManagedInstancePublicKeyWithContext(ctx context.Context
 		NewPublicKeyType: aws.String(publicKeyType),
 	}
 
-	return svc.sdk.UpdateManagedInstancePublicKeyWithContext(ctx, &params)
+	return svc.sdk.UpdateManagedInstancePublicKey(ctx, &params)
 }

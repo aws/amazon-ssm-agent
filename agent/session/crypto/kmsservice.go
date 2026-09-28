@@ -15,16 +15,17 @@
 package crypto
 
 import (
+	cont "context"
 	"fmt"
+
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/kms"
-	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/kms"
 )
 
 // KMSKeySizeInBytes is the key size that is fetched from KMS. 64 bytes key is split into two halves.
@@ -32,45 +33,55 @@ import (
 const KMSKeySizeInBytes int64 = 64
 
 type IKMSService interface {
-	Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string, keyId string) (plainText []byte, err error)
+	Decrypt(cipherTextBlob []byte, encryptionContext map[string]string, keyId string) (plainText []byte, err error)
 }
 
 type KMSService struct {
-	client kmsiface.KMSAPI
+	client *kms.Client
 }
 
 // NewKMSService creates a new KMSService instance
 func NewKMSService(context context.T) (kmsService *KMSService, err error) {
 	var (
-		awsConfig        *aws.Config
-		appConfig        appconfig.SsmagentConfig
-		kmsClientSession *session.Session
-		agentName        string
-		agentVersion     string
+		awsConfig    aws.Config
+		appConfig    appconfig.SsmagentConfig
+		agentName    string
+		agentVersion string
 	)
 
 	awsConfig = sdkutil.AwsConfig(context, "kms")
 
 	appConfig = context.AppConfig()
 	if appConfig.Kms.Endpoint != "" {
-		awsConfig.Endpoint = &appConfig.Kms.Endpoint
+		ep := sdkutil.NormalizeEndpointScheme(appConfig.Kms.Endpoint)
+		awsConfig.BaseEndpoint = &ep
 	}
 	agentName = appConfig.Agent.Name
 	agentVersion = appConfig.Agent.Version
-	if kmsClientSession, err = session.NewSession(awsConfig); err != nil {
-		return nil, fmt.Errorf("Error creating new aws sdk session: %s", err)
-	}
-	kmsClientSession.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(agentName, agentVersion))
+
+	// Add UserAgent middleware BEFORE creating the client
+	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Build.Add(
+			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
+				req := in.Request.(*smithyhttp.Request)
+				userAgent := fmt.Sprintf("%s/%s", agentName, agentVersion)
+				req.Header.Add("User-Agent", userAgent)
+				return next.HandleBuild(ctx, in)
+			}),
+			middleware.After,
+		)
+	})
+
 	kmsService = &KMSService{
-		client: kms.New(kmsClientSession),
+		client: kms.NewFromConfig(awsConfig),
 	}
 
 	return kmsService, nil
 }
 
 // Decrypt will get the plaintext key from KMS service
-func (kmsService *KMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]*string, keyId string) (plainText []byte, err error) {
-	output, err := kmsService.client.Decrypt(&kms.DecryptInput{
+func (kmsService *KMSService) Decrypt(cipherTextBlob []byte, encryptionContext map[string]string, keyId string) (plainText []byte, err error) {
+	output, err := kmsService.client.Decrypt(cont.TODO(), &kms.DecryptInput{
 		CiphertextBlob:    cipherTextBlob,
 		EncryptionContext: encryptionContext,
 		KeyId:             &keyId,

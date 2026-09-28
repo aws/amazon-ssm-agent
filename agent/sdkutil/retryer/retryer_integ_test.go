@@ -22,216 +22,207 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/stretchr/testify/assert"
-
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/awstesting"
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/smithy-go"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
+	"github.com/stretchr/testify/assert"
 )
 
 type testData struct {
-	Data string
+	Data string `json:"data"`
+}
+
+type mockHTTPClient struct {
+	responses []http.Response
+	reqNum    int
+}
+
+func (m *mockHTTPClient) Do(req *http.Request) (*http.Response, error) {
+	if m.reqNum >= len(m.responses) {
+		return nil, fmt.Errorf("no more responses")
+	}
+	resp := m.responses[m.reqNum]
+	m.reqNum++
+	return &resp, nil
 }
 
 func body(str string) io.ReadCloser {
-	return ioutil.NopCloser(bytes.NewReader([]byte(str)))
-}
-
-func unmarshal(req *request.Request) {
-	defer req.HTTPResponse.Body.Close()
-	if req.Data != nil {
-		json.NewDecoder(req.HTTPResponse.Body).Decode(req.Data)
-	}
-	return
-}
-
-func unmarshalError(req *request.Request) {
-	bodyBytes, err := ioutil.ReadAll(req.HTTPResponse.Body)
-	if err != nil {
-		req.Error = awserr.New("UnmarshaleError", req.HTTPResponse.Status, err)
-		return
-	}
-	if len(bodyBytes) == 0 {
-		req.Error = awserr.NewRequestFailure(
-			awserr.New("UnmarshaleError", req.HTTPResponse.Status, fmt.Errorf("empty body")),
-			req.HTTPResponse.StatusCode,
-			"",
-		)
-		return
-	}
-	var jsonErr jsonErrorResponse
-	if err := json.Unmarshal(bodyBytes, &jsonErr); err != nil {
-		req.Error = awserr.New("UnmarshaleError", "JSON unmarshal", err)
-		return
-	}
-	req.Error = awserr.NewRequestFailure(
-		awserr.New(jsonErr.Code, jsonErr.Message, nil),
-		req.HTTPResponse.StatusCode,
-		"",
-	)
-}
-
-type jsonErrorResponse struct {
-	Code    string `json:"__type"`
-	Message string `json:"message"`
+	return io.NopCloser(bytes.NewReader([]byte(str)))
 }
 
 // test that retries occur for 5xx status codes
 func TestRequestRecoverRetry5xx(t *testing.T) {
-	reqNum := 0
-	reqs := []http.Response{
+	responses := []http.Response{
 		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
 		{StatusCode: 502, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
 		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
 	}
-	retryer := SsmRetryer{}
-	retryer.NumMaxRetries = 2
-	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
 
-	s.Handlers.Validate.Clear()
-	s.Handlers.Unmarshal.PushBack(unmarshal)
-	s.Handlers.UnmarshalError.PushBack(unmarshalError)
-	s.Handlers.Send.Clear() // mock sending
-	s.Handlers.Send.PushBack(func(r *request.Request) {
-		r.HTTPResponse = &reqs[reqNum]
-		reqNum++
-	})
-	out := &testData{}
-	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
-	err := r.Send()
-	assert.Nil(t, err)
-	assert.Equal(t, 2, int(r.RetryCount))
-	assert.Equal(t, "valid", out.Data)
+	retryer := &SsmRetryer{
+		Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+			so.MaxAttempts = 2
+		}),
+	}
+
+	// Simulate making a request that would retry on 5xx errors
+	var result testData
+
+	// Mock the retry logic by calling the retryer directly
+	attempt := 0
+	for {
+		resp := &responses[attempt]
+
+		if resp.StatusCode >= 500 {
+			// Check if we should retry
+			retryable := retryer.IsErrorRetryable(&smithyhttp.ResponseError{
+				Response: &smithyhttp.Response{Response: resp},
+				Err:      fmt.Errorf("server error"),
+			})
+
+			if retryable && attempt < retryer.MaxAttempts() {
+				attempt++
+				continue
+			}
+		}
+
+		if resp.StatusCode == 200 {
+			json.NewDecoder(resp.Body).Decode(&result)
+			break
+		}
+
+		attempt++
+		if attempt >= len(responses) {
+			break
+		}
+	}
+
+	assert.Equal(t, 2, attempt)
+	assert.Equal(t, "valid", result.Data)
 }
 
-// test that retries occur for 4xx status codes with a response type that can be retried - see `shouldRetry`
+// test that retries occur for 4xx status codes with a response type that can be retried
 func TestRequestRecoverRetry4xxRetryable(t *testing.T) {
-	reqNum := 0
-	reqs := []http.Response{
+	responses := []http.Response{
 		{StatusCode: 400, Body: body(`{"__type":"Throttling","message":"Rate exceeded."}`)},
 		{StatusCode: 429, Body: body(`{"__type":"ProvisionedThroughputExceededException","message":"Rate exceeded."}`)},
 		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
 	}
 
-	retryer := SsmRetryer{}
-	retryer.NumMaxRetries = 10
-	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
-	s.Handlers.Validate.Clear()
-	s.Handlers.Unmarshal.PushBack(unmarshal)
-	s.Handlers.UnmarshalError.PushBack(unmarshalError)
-	s.Handlers.Send.Clear() // mock sending
-	s.Handlers.Send.PushBack(func(r *request.Request) {
-		r.HTTPResponse = &reqs[reqNum]
-		reqNum++
-	})
-	out := &testData{}
-	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
-	err := r.Send()
-	assert.Nil(t, err)
-	assert.Equal(t, 2, int(r.RetryCount))
-	assert.Equal(t, "valid", out.Data)
+	retryer := &SsmRetryer{
+		Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+			so.MaxAttempts = 10
+		}),
+	}
+
+	var result testData
+	attempt := 0
+
+	for {
+		resp := &responses[attempt]
+
+		if resp.StatusCode == 400 || resp.StatusCode == 429 {
+			var errResp struct {
+				Type    string `json:"__type"`
+				Message string `json:"message"`
+			}
+			json.NewDecoder(resp.Body).Decode(&errResp)
+
+			retryable := retryer.IsErrorRetryable(&smithyhttp.ResponseError{
+				Response: &smithyhttp.Response{Response: resp},
+				Err: &smithy.GenericAPIError{
+					Code:    errResp.Type,
+					Message: errResp.Message,
+				},
+			})
+
+			if retryable && attempt < retryer.MaxAttempts() {
+				attempt++
+				continue
+			}
+		}
+
+		if resp.StatusCode == 200 {
+			json.NewDecoder(resp.Body).Decode(&result)
+			break
+		}
+
+		attempt++
+		if attempt >= len(responses) {
+			break
+		}
+	}
+
+	assert.Equal(t, 2, attempt)
+	assert.Equal(t, "valid", result.Data)
 }
 
 // test that retries don't occur for 4xx status codes with a response type that can't be retried
 func TestRequest4xxUnretryable(t *testing.T) {
-	retryer := SsmRetryer{}
-	retryer.NumMaxRetries = 10
-	s := awstesting.NewClient(&aws.Config{Retryer: &retryer})
-	s.Handlers.Validate.Clear()
-	s.Handlers.Unmarshal.PushBack(unmarshal)
-	s.Handlers.UnmarshalError.PushBack(unmarshalError)
-	s.Handlers.Send.Clear() // mock sending
-	s.Handlers.Send.PushBack(func(r *request.Request) {
-		r.HTTPResponse = &http.Response{StatusCode: 401, Body: body(`{"__type":"SignatureDoesNotMatch","message":"Signature does not match."}`)}
-	})
-	out := &testData{}
-	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
-	err := r.Send()
-	assert.NotNil(t, err)
-	if e, ok := err.(awserr.RequestFailure); ok {
-		assert.Equal(t, 401, e.StatusCode())
-	} else {
-		assert.Fail(t, "Expected error to be a service failure")
+	response := http.Response{
+		StatusCode: 401,
+		Body:       body(`{"__type":"SignatureDoesNotMatch","message":"Signature does not match."}`),
 	}
-	assert.Equal(t, "SignatureDoesNotMatch", err.(awserr.Error).Code())
-	assert.Equal(t, "Signature does not match.", err.(awserr.Error).Message())
-	assert.Equal(t, 0, int(r.RetryCount))
+
+	retryer := &SsmRetryer{
+		Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+			so.MaxAttempts = 10
+		}),
+	}
+
+	var errResp struct {
+		Type    string `json:"__type"`
+		Message string `json:"message"`
+	}
+	json.NewDecoder(response.Body).Decode(&errResp)
+
+	retryable := retryer.IsErrorRetryable(&smithyhttp.ResponseError{
+		Response: &smithyhttp.Response{Response: &response},
+		Err: &smithy.GenericAPIError{
+			Code:    errResp.Type,
+			Message: errResp.Message,
+		},
+	})
+
+	assert.False(t, retryable)
+	assert.Equal(t, "SignatureDoesNotMatch", errResp.Type)
+	assert.Equal(t, "Signature does not match.", errResp.Message)
 }
 
 // test that retries delay increase over time
 func TestDelayIncreasesOverTime(t *testing.T) {
-	reqNum := 0
-	reqs := []http.Response{
-		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
-		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
-		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
-		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
-		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
-	}
-	previousDelay := time.Duration(0)
-	sleepDelay := func(delay time.Duration) {
-		if delay < previousDelay {
-			assert.Fail(t, "Expect delay to increase")
-		}
-		previousDelay = delay
+	retryer := &SsmRetryer{
+		Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+			so.MaxAttempts = 10
+		}),
 	}
 
-	retryer := SsmRetryer{}
-	retryer.NumMaxRetries = 10
-	s := awstesting.NewClient(&aws.Config{Retryer: &retryer, SleepDelay: sleepDelay})
+	var delays []time.Duration
 
-	s.Handlers.Validate.Clear()
-	s.Handlers.Unmarshal.PushBack(unmarshal)
-	s.Handlers.UnmarshalError.PushBack(unmarshalError)
-	s.Handlers.Send.Clear() // mock sending
-	s.Handlers.Send.PushBack(func(r *request.Request) {
-		r.HTTPResponse = &reqs[reqNum]
-		reqNum++
-	})
-	out := &testData{}
-	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
-	err := r.Send()
-	assert.Nil(t, err)
-	assert.Equal(t, 4, int(r.RetryCount))
+	for i := 0; i < 4; i++ {
+		delay, _ := retryer.RetryDelay(i, nil)
+		delays = append(delays, delay)
+	}
 
+	for i := 1; i < len(delays); i++ {
+		assert.True(t, delays[i] >= delays[i-1],
+			"Expected delay to increase: %v >= %v", delays[i], delays[i-1])
+	}
 }
 
 // test that retries delay increase by at least a second
 func TestDelayIncreasesByASecond(t *testing.T) {
-	reqNum := 0
-	reqs := []http.Response{
-		{StatusCode: 500, Body: body(`{"__type":"UnknownError","message":"An error occurred."}`)},
-		{StatusCode: 200, Body: body(`{"data":"valid"}`)},
-	}
-	sleepDelay := func(delay time.Duration) {
-		if delay < time.Duration(1*time.Second) {
-			assert.Fail(t, "Expect delay to increase")
-		}
+	retryer := &SsmRetryer{
+		Standard: retry.NewStandard(func(so *retry.StandardOptions) {
+			so.MaxAttempts = 10
+		}),
 	}
 
-	retryer := SsmRetryer{}
-	retryer.NumMaxRetries = 10
-	s := awstesting.NewClient(&aws.Config{Retryer: &retryer, SleepDelay: sleepDelay})
+	delay, _ := retryer.RetryDelay(1, nil)
 
-	s.Handlers.Validate.Clear()
-	s.Handlers.Unmarshal.PushBack(unmarshal)
-	s.Handlers.UnmarshalError.PushBack(unmarshalError)
-	s.Handlers.Send.Clear() // mock sending
-	s.Handlers.Send.PushBack(func(r *request.Request) {
-		r.HTTPResponse = &reqs[reqNum]
-		reqNum++
-	})
-	out := &testData{}
-	r := s.NewRequest(&request.Operation{Name: "Operation"}, nil, out)
-	err := r.Send()
-	assert.Nil(t, err)
-	assert.Equal(t, 1, int(r.RetryCount))
-
+	assert.True(t, delay >= time.Second,
+		"Expected delay to be at least 1 second, got %v", delay)
 }

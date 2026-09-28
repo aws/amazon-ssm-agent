@@ -16,8 +16,9 @@ package identity
 import (
 	"context"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 // IAgentIdentity defines the interface identity cacher exposes
@@ -28,7 +29,7 @@ type IAgentIdentity interface {
 	AvailabilityZone() (string, error)
 	AvailabilityZoneId() (string, error)
 	InstanceType() (string, error)
-	Credentials() *credentials.Credentials
+	CredentialsProvider() aws.CredentialsProvider
 	IdentityType() string
 	GetServiceEndpoint(string) string
 }
@@ -49,7 +50,7 @@ type IAgentIdentityInner interface {
 	AvailabilityZoneId() (string, error)
 	InstanceType() (string, error)
 	IsIdentityEnvironment() bool
-	Credentials() *credentials.Credentials
+	CredentialsProvider() aws.CredentialsProvider
 	IdentityType() string
 }
 

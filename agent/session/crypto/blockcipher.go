@@ -88,14 +88,14 @@ func (blockCipher *BlockCipher) UpdateEncryptionKey(log log.T, cipherTextBlob []
 		plainTextKey []byte
 		err          error
 	)
-	var encryptionContext = make(map[string]*string)
+	var encryptionContext = make(map[string]string)
 	const encryptionContextSessionIdKey = "aws:ssm:SessionId"
-	encryptionContext[encryptionContextSessionIdKey] = &sessionId
+	encryptionContext[encryptionContextSessionIdKey] = sessionId
 	const encryptionContextTargetIdKey = "aws:ssm:TargetId"
-	encryptionContext[encryptionContextTargetIdKey] = &instanceId
+	encryptionContext[encryptionContextTargetIdKey] = instanceId
 	if useRandomChallenge {
 		const encryptionContextChallengeKey = "aws:ssm:RandomChallenge"
-		encryptionContext[encryptionContextChallengeKey] = &blockCipher.randomChallenge
+		encryptionContext[encryptionContextChallengeKey] = blockCipher.randomChallenge
 	}
 
 	if plainTextKey, err = blockCipher.kmsService.Decrypt(cipherTextBlob, encryptionContext, blockCipher.kmsKeyId); err != nil {

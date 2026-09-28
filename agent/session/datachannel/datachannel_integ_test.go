@@ -33,6 +33,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/retry"
 	"github.com/aws/amazon-ssm-agent/agent/session/service"
 	serviceMock "github.com/aws/amazon-ssm-agent/agent/session/service/mocks"
+	credentialmocks "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -74,6 +76,8 @@ func TestOpenDataChannel_MultiThread(suite *testing.T) {
 
 	mockServiceDC := &serviceMock.Service{}
 	dataChannel := getDataChannelRef(mockServiceDC)
+	mockProvider := &credentialmocks.CredentialsProvider{}
+	mockProvider.On("Retrieve", mock.Anything).Return(aws.Credentials{AccessKeyID: "AKID", SecretAccessKey: "SECRET", SessionToken: "SESSION"}, nil)
 	createDataChannelOutput := service.CreateDataChannelOutput{TokenValue: &token}
 	mockServiceDC.On("CreateDataChannel", mock.Anything, mock.Anything, mock.Anything).Return(&createDataChannelOutput, nil)
 	mockServiceDC.On("GetRegion").Return(region)
@@ -85,6 +89,7 @@ func TestOpenDataChannel_MultiThread(suite *testing.T) {
 	// Set local server URL
 	dataChannel.SetWebSocket(mockContext, mockServiceDC, sessionId, clientId, onMessageHandler)
 	dataChannel.wsChannel.SetUrl(u.String())
+	dataChannel.wsChannel.SetCredentialProvider(mockProvider)
 	assert.Nil(suite, err, "should not throw error during websocket creation")
 
 	// Get number of go-routines running
@@ -330,6 +335,8 @@ func TestOpenDataChannel_OpenDataChannelError_RetryCount(t *testing.T) {
 
 	createDataChannelOutput := service.CreateDataChannelOutput{TokenValue: &token}
 	mockServiceDC := &serviceMock.Service{}
+	mockProvider := &credentialmocks.CredentialsProvider{}
+	mockProvider.On("Retrieve", mock.Anything).Return(aws.Credentials{AccessKeyID: "AKID", SecretAccessKey: "SECRET", SessionToken: "SESSION"}, nil)
 	mockServiceDC.On("CreateDataChannel", mock.Anything, mock.Anything, mock.Anything).Return(&createDataChannelOutput, nil)
 	mockServiceDC.On("GetRegion").Return(region)
 	mockServiceDC.On("GetV4Signer").Return(signer)
@@ -350,6 +357,7 @@ func TestOpenDataChannel_OpenDataChannelError_RetryCount(t *testing.T) {
 				return nil, fmt.Errorf("failed to create websocket for datachannel with error: %s", err)
 			}
 			dataChannel.wsChannel.SetUrl(u.String())
+			dataChannel.wsChannel.SetCredentialProvider(mockProvider)
 			if err := dataChannel.Open(mockLog); err != nil {
 				return nil, fmt.Errorf("failed to open datachannel with error: %s", err)
 			}

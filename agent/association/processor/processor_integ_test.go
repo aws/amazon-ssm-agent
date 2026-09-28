@@ -22,12 +22,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+
 	"github.com/aws/amazon-ssm-agent/agent/association/converter"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
-	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -53,15 +54,15 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
 	assocRawData.Association.DocumentVersion = &documentVersion
 	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
-	params := make(map[string][]*string)
+	params := make(map[string][]string)
 	address := "http://7-zip.org/a/7z1602-x64.msi"
-	source := []*string{&address}
+	source := []string{address}
 	params["source"] = source
 
 	assocRawData.Association.Parameters = params
@@ -100,7 +101,7 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 	assert.Equal(t, contracts.Association, docState.DocumentType)
 
 	pluginInfo := docState.InstancePluginsInformation[0]
-	expectedProp := []interface{}{map[string]interface{}{"source": *source[0], "sourceHash": "", "id": "0.aws:applications", "action": "Install", "parameters": ""}}
+	expectedProp := []interface{}{map[string]interface{}{"source": source[0], "sourceHash": "", "id": "0.aws:applications", "action": "Install", "parameters": ""}}
 
 	assert.Equal(t, expectedProp, pluginInfo.Configuration.Properties)
 	assert.Equal(t, pluginConfig.Settings, pluginInfo.Configuration.Settings)
@@ -122,17 +123,17 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
 	assocRawData.Association.DocumentVersion = &documentVersion
 	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
-	params := make(map[string][]*string)
+	params := make(map[string][]string)
 	cmd0 := "ls"
-	source0 := []*string{&cmd0}
+	source0 := []string{cmd0}
 	cmd1 := "pwd"
-	source1 := []*string{&cmd1}
+	source1 := []string{cmd1}
 	params["runCommand0"] = source0
 	params["runCommand1"] = source1
 
@@ -186,8 +187,8 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 	assert.Equal(t, action0, pluginInfo1.Name)
 	assert.Equal(t, action1, pluginInfo2.Name)
 
-	expectProp1 := map[string]interface{}{"id": "0.aws:psModule", "runCommand": *source0[0]}
-	expectProp2 := map[string]interface{}{"id": "1.aws:psModule", "runCommand": *source1[0]}
+	expectProp1 := map[string]interface{}{"id": "0.aws:psModule", "runCommand": source0[0]}
+	expectProp2 := map[string]interface{}{"id": "1.aws:psModule", "runCommand": source1[0]}
 
 	assert.Equal(t, expectProp1, pluginInfo1.Configuration.Properties)
 	assert.Equal(t, expectProp2, pluginInfo2.Configuration.Properties)
@@ -208,17 +209,17 @@ func TestParseAssociationWithAssociationVersion2_0_StringMapParams(t *testing.T)
 		CreateDate: time.Now(),
 		Document:   &sampleFile,
 	}
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
 	assocRawData.Association.DocumentVersion = &documentVersion
 	assocRawData.Association.AssociationId = &assocId
 	assocRawData.Association.InstanceId = &instanceID
 
-	params := make(map[string][]*string)
+	params := make(map[string][]string)
 	cmd0 := "{\"name\":\"AWS-RunPowerShellScript\"}"
-	source0 := []*string{&cmd0}
+	source0 := []string{cmd0}
 	cmd1 := "pwd"
-	source1 := []*string{&cmd1}
+	source1 := []string{cmd1}
 	params["sourceInfo"] = source0
 	params["runCommand1"] = source1
 
@@ -272,8 +273,8 @@ func TestParseAssociationWithAssociationVersion2_0_StringMapParams(t *testing.T)
 	assert.Equal(t, action0, pluginInfo1.Name)
 	assert.Equal(t, action1, pluginInfo2.Name)
 
-	expectProp1 := map[string]interface{}{"sourceType": "SSMDocument", "sourceInfo": *source0[0], "id": "0.aws.downloadContent"}
-	expectProp2 := map[string]interface{}{"id": "1.aws:psModule", "runCommand": *source1[0]}
+	expectProp1 := map[string]interface{}{"sourceType": "SSMDocument", "sourceInfo": source0[0], "id": "0.aws.downloadContent"}
+	expectProp2 := map[string]interface{}{"id": "1.aws:psModule", "runCommand": source1[0]}
 
 	assert.Equal(t, expectProp1, pluginInfo1.Configuration.Properties)
 	assert.Equal(t, expectProp2, pluginInfo2.Configuration.Properties)

@@ -16,10 +16,14 @@ package inventory
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+	"github.com/aws/smithy-go"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -44,8 +48,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 // TODO: add more unit tests.
@@ -137,7 +139,7 @@ func NewPlugin(context context.T) (*Plugin, error) {
 // ApplyInventoryPolicy applies given inventory policy regarding which gatherers to run
 func (p *Plugin) ApplyInventoryPolicy(inventoryInput PluginInput, output iohandler.IOHandler) {
 	log := p.context.Log()
-	var optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem
+	var optimizedInventoryItems, nonOptimizedInventoryItems []*types.InventoryItem
 	var items []model.Item
 	var err error
 	var uploadFlag bool
@@ -200,8 +202,8 @@ func (p *Plugin) ApplyInventoryPolicy(inventoryInput PluginInput, output iohandl
 }
 
 // uploadItemsToSSM uploads inventory data to SSM and returns boolean flag based on whether upload was successful or not.
-func (p *Plugin) uploadItemsToSSM(nonOptimizedInventoryItems []*ssm.InventoryItem,
-	optimizedInventoryItems []*ssm.InventoryItem, output iohandler.IOHandler) bool {
+func (p *Plugin) uploadItemsToSSM(nonOptimizedInventoryItems []*types.InventoryItem,
+	optimizedInventoryItems []*types.InventoryItem, output iohandler.IOHandler) bool {
 	/*
 		In order to optimize PutInventory calls to SSM, we use following algo:
 
@@ -215,7 +217,7 @@ func (p *Plugin) uploadItemsToSSM(nonOptimizedInventoryItems []*ssm.InventoryIte
 	log := p.context.Log()
 	var inventoryItemIndex int
 	dataUploadStatus := true
-	var optimizedFileItems, nonOptimizedFileItems, optimizedNonFileItems, nonOptimizedNonFileItems []*ssm.InventoryItem
+	var optimizedFileItems, nonOptimizedFileItems, optimizedNonFileItems, nonOptimizedNonFileItems []*types.InventoryItem
 	optimizedNonFileItems = optimizedInventoryItems
 	nonOptimizedNonFileItems = nonOptimizedInventoryItems
 
@@ -261,12 +263,12 @@ func (p *Plugin) uploadItemsToSSM(nonOptimizedInventoryItems []*ssm.InventoryIte
 }
 
 // extractFileItems returns copies of optimized and non-optimized items list after removing File Item from it.
-func extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems []*ssm.InventoryItem,
+func extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems []*types.InventoryItem,
 	ItemIndex int) (nonOptimizedFileData,
 	optimizedFileData, nonOptimizedNonFileData,
-	optimizedNonFileData []*ssm.InventoryItem) {
+	optimizedNonFileData []*types.InventoryItem) {
 
-	// removing FileItem from the optimizedInventoryItems list based on it's index.
+	// removing FileItem from the optimizedInventoryItems list based on its index.
 	optimizedNewInventoryItem := optimizedInventoryItems[ItemIndex]
 	optimizedFileData = append(optimizedFileData, optimizedNewInventoryItem)
 
@@ -289,8 +291,8 @@ func extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems []*ssm
 
 // uploadDataToSSM uploads inventory data to SSM. First it tries to upload with optimizedInventoryItems
 // If that fails, it retries upload to SSM with the nonOptimizedInventoryItems.
-func (p *Plugin) uploadDataToSSM(nonOptimizedInventoryItems []*ssm.InventoryItem,
-	optimizedInventoryItems []*ssm.InventoryItem, output iohandler.IOHandler) error {
+func (p *Plugin) uploadDataToSSM(nonOptimizedInventoryItems []*types.InventoryItem,
+	optimizedInventoryItems []*types.InventoryItem, output iohandler.IOHandler) error {
 	var err error
 	log := p.context.Log()
 	//first send data in optimized fashion
@@ -311,7 +313,7 @@ func (p *Plugin) uploadDataToSSM(nonOptimizedInventoryItems []*ssm.InventoryItem
 
 // getLargeItemIndex returns index of the inventoryItem if inventoryItem is present in nonOptimizedInventoryItems
 // If not it returns default -1.
-func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*ssm.InventoryItem, itemName string) (int, error) {
+func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*types.InventoryItem, itemName string) (int, error) {
 	log := p.context.Log()
 	itemIndexToReturn := -1
 	nonOptimizedInventoryItemsCheck, err := json.Marshal(nonOptimizedInventoryItems)
@@ -341,7 +343,7 @@ func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*ssm.InventoryIt
 func (p Plugin) ApplyInventoryFrequentCollector(gatherers map[gatherers.T]model.Config, output iohandler.IOHandler) {
 	log := p.context.Log()
 
-	var dirtyItems []*ssm.InventoryItem
+	var dirtyItems []*types.InventoryItem
 	var items []model.Item
 	var err error
 
@@ -395,11 +397,12 @@ func (p Plugin) ApplyInventoryFrequentCollector(gatherers map[gatherers.T]model.
 // shouldRetryWithNonOptimizedData will return true if the Exception occurred is one of ItemContentMismatchException
 // or InvalidItemContentException and will retry sending data to SSM. It will return false, if any other error occurs.
 func shouldRetryWithNonOptimizedData(err error, log log.T) bool {
-	awsErr, isAwsError := err.(awserr.Error)
-	if isAwsError {
-		//NOTE: awsErr.Code -> is not the error code but the exception name itself!!!!
-		if awsErr.Code() == "ItemContentMismatchException" || awsErr.Code() == "InvalidItemContentException" {
-			log.Debugf("%v encountered - inventory plugin will try sending data again", awsErr.Code())
+	var ae smithy.APIError
+	var itemContentMismatch *types.ItemContentMismatchException
+	var invalidItemContent *types.InvalidItemContentException
+	if errors.As(err, &ae) {
+		if errors.As(err, &itemContentMismatch) || errors.As(err, &invalidItemContent) {
+			log.Debugf("%v encountered - inventory plugin will try sending data again", ae.ErrorCode())
 			return true
 		}
 	}

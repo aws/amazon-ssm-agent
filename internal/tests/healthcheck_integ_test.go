@@ -34,10 +34,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/hibernation"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
-	"github.com/aws/aws-sdk-go/service/ssm"
-	ssmsdkmock "github.com/aws/aws-sdk-go/service/ssm/ssmiface/mocks"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -47,7 +47,7 @@ type AgentHealthIntegrationTestSuite struct {
 	suite.Suite
 	context        context.T
 	ssmAgent       agent.ISSMAgent
-	ssmSdkMock     *ssmsdkmock.SSMAPI
+	ssmSdkMock     *ssmMock.Service
 	config         appconfig.SsmagentConfig
 	ssmHealthCheck *health.HealthCheck
 	log            log.T

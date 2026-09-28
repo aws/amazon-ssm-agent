@@ -31,9 +31,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/common/identity/identity"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
 
 // empty returns true if string is empty
@@ -42,7 +42,7 @@ func empty(s *string) bool {
 }
 
 // validate returns error if the message is invalid
-func validate(msg *ssmmds.Message) error {
+func validate(msg *mdsService.Message) error {
 	if msg == nil {
 		return errors.New("Message is nil")
 	}
@@ -62,7 +62,7 @@ func validate(msg *ssmmds.Message) error {
 }
 
 // newDocumentInfo initializes new DocumentInfo object
-func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandPayload) contracts.DocumentInfo {
+func newDocumentInfo(msg mdsService.Message, parsedMsg messageContracts.SendCommandPayload) contracts.DocumentInfo {
 
 	documentInfo := new(contracts.DocumentInfo)
 
@@ -78,7 +78,7 @@ func newDocumentInfo(msg ssmmds.Message, parsedMsg messageContracts.SendCommandP
 	return *documentInfo
 }
 
-func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
+func parseCancelCommandMessage(context context.T, msg *mdsService.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 	log := context.Log()
 
 	log.Debug("Processing cancel command message - ", *msg.MessageId)
@@ -148,7 +148,7 @@ func generateCloudWatchConfigFromPayload(context context.T, parsedMessage messag
 	return cloudWatchConfig, nil
 }
 
-func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
+func parseSendCommandMessage(context context.T, msg *mdsService.Message, messagesOrchestrationRootDir string) (*contracts.DocumentState, error) {
 	log := context.Log()
 	commandID, _ := messageContracts.GetCommandID(*msg.MessageId)
 

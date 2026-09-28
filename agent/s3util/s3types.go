@@ -14,7 +14,7 @@
 package s3util
 
 import (
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 // All of the *Input types have getBucket() functions, but sadly these are not
@@ -75,8 +75,6 @@ func getBucketFromParams(params interface{}) string {
 	case *s3.GetBucketInventoryConfigurationInput:
 		result = p.Bucket
 	case *s3.GetBucketLifecycleConfigurationInput:
-		result = p.Bucket
-	case *s3.GetBucketLifecycleInput:
 		result = p.Bucket
 	case *s3.GetBucketLocationInput:
 		result = p.Bucket
@@ -148,15 +146,11 @@ func getBucketFromParams(params interface{}) string {
 		result = p.Bucket
 	case *s3.PutBucketLifecycleConfigurationInput:
 		result = p.Bucket
-	case *s3.PutBucketLifecycleInput:
-		result = p.Bucket
 	case *s3.PutBucketLoggingInput:
 		result = p.Bucket
 	case *s3.PutBucketMetricsConfigurationInput:
 		result = p.Bucket
 	case *s3.PutBucketNotificationConfigurationInput:
-		result = p.Bucket
-	case *s3.PutBucketNotificationInput:
 		result = p.Bucket
 	case *s3.PutBucketPolicyInput:
 		result = p.Bucket

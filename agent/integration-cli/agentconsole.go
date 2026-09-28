@@ -30,7 +30,6 @@ import (
 	logger2 "github.com/aws/amazon-ssm-agent/agent/log/logger"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/common/identity/identity"
-	"github.com/aws/aws-sdk-go/aws"
 )
 
 var log logger.T
@@ -57,7 +56,7 @@ func main() {
 	instanceIDPtr := flag.String("i", "", "instance id")
 	regionPtr := flag.String("r", "us-east-1", "instance region")
 	flag.Parse()
-	var timeout int64 = 10000
+	var timeout int32 = 10000
 	timeoutPtr := &timeout
 	var err error
 
@@ -173,9 +172,9 @@ func main() {
 		//		commands[i] = strings.Replace(commands[i], `'`, `\'`, -1)
 	}
 
-	parameters := map[string][]*string{
-		"commands":         aws.StringSlice(commands),
-		"workingDirectory": aws.StringSlice([]string{*dirPtr}),
+	parameters := map[string][]string{
+		"commands":         commands,
+		"workingDirectory": []string{*dirPtr},
 	}
 
 	log.Infof("Sending command %v", parameters)
@@ -207,8 +206,8 @@ func main() {
 				continue
 			}
 			for _, inv := range out.CommandInvocations {
-				if *inv.Status == "Pending" {
-					log.Infof("Instance %v is in status %v; waiting some more", descr, *inv.Status)
+				if inv.Status == "Pending" {
+					log.Infof("Instance %v is in status %v; waiting some more", descr, inv.Status)
 					done = false
 					continue inst
 				}

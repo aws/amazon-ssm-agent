@@ -16,7 +16,6 @@ package runcommandmock
 import (
 	log "github.com/aws/amazon-ssm-agent/agent/log"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -29,15 +28,15 @@ type MockedMDS struct {
 }
 
 // GetMessages mocks the service function with the same name.
-func (_m *MockedMDS) GetMessages(_a0 log.T, instanceID string) (*ssmmds.GetMessagesOutput, error) {
+func (_m *MockedMDS) GetMessages(_a0 log.T, instanceID string) (*mdsService.GetMessagesOutput, error) {
 	ret := _m.Called(_a0, instanceID)
 
-	var r0 *ssmmds.GetMessagesOutput
-	if rf, ok := ret.Get(0).(func(log log.T, instanceID string) *ssmmds.GetMessagesOutput); ok {
+	var r0 *mdsService.GetMessagesOutput
+	if rf, ok := ret.Get(0).(func(log log.T, instanceID string) *mdsService.GetMessagesOutput); ok {
 		r0 = rf(_a0, instanceID)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*ssmmds.GetMessagesOutput)
+			r0 = ret.Get(0).(*mdsService.GetMessagesOutput)
 		}
 	}
 
@@ -94,15 +93,15 @@ func (mdsMock *MockedMDS) DeleteFailedReply(log log.T, replyId string) {
 	mdsMock.Called(log, replyId)
 }
 
-func (mdsMock *MockedMDS) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyInput) error {
+func (mdsMock *MockedMDS) PersistFailedReply(log log.T, sendReply mdsService.SendReplyInput) error {
 	return mdsMock.Called(log, sendReply).Error(0)
 }
 
-func (mdsMock *MockedMDS) GetFailedReply(log log.T, replyId string) (*ssmmds.SendReplyInput, error) {
+func (mdsMock *MockedMDS) GetFailedReply(log log.T, replyId string) (*mdsService.SendReplyInput, error) {
 	args := mdsMock.Called(log, replyId)
-	return args.Get(0).(*ssmmds.SendReplyInput), args.Error(1)
+	return args.Get(0).(*mdsService.SendReplyInput), args.Error(1)
 }
 
-func (mdsMock *MockedMDS) SendReplyWithInput(log log.T, sendReply *ssmmds.SendReplyInput) error {
+func (mdsMock *MockedMDS) SendReplyWithInput(log log.T, sendReply *mdsService.SendReplyInput) error {
 	return mdsMock.Called(log, sendReply).Error(0)
 }

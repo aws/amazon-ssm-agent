@@ -16,31 +16,34 @@ package ec2roleprovider
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"runtime"
 	"sync"
 	"time"
 
+	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	awserr "github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/ssmec2roleprovider"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 )
 
 // EC2RoleProvider provides credentials for the agent when on an EC2 instance
 type EC2RoleProvider struct {
-	credentials.Expiry
+	aws.Credentials
 	InnerProviders         *EC2InnerProviders
 	Log                    log.T
 	InstanceInfo           *ssmec2roleprovider.InstanceInfo
-	expirationUpdateLock   *sync.Mutex
+	mu                     sync.Mutex // guards Credentials and credentialSource
 	credentialSource       string
 	SsmEndpoint            string
 	shouldShareCredentials bool
@@ -71,7 +74,6 @@ func NewEC2RoleProvider(log log.T, innerProviders *EC2InnerProviders, instanceIn
 		RuntimeConfigClient:    runtimeConfigClient,
 		credentialSource:       credentialSource,
 		shouldShareCredentials: true,
-		expirationUpdateLock:   &sync.Mutex{},
 	}
 }
 
@@ -96,11 +98,13 @@ func (p *EC2RoleProvider) GetInstanceRegion() string {
 // and returns instance profile role credentials otherwise.
 // If neither can be retrieved then empty credentials are returned
 // This function is intended for use by agent workers that require credentials
-func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.Value, error) {
+func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (aws.Credentials, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	if runtimeConfig, err := p.RuntimeConfigClient.GetConfigWithRetry(); err != nil {
 		p.Log.Errorf("Failed to read runtime config for ShareFile information. Err: %v", err)
 	} else if runtimeConfig.ShareFile != "" {
-		sharedCreds, err := p.InnerProviders.SharedCredentialsProvider.RetrieveWithContext(ctx)
+		sharedCreds, err := p.InnerProviders.SharedCredentialsProvider.Retrieve(ctx)
 		if err != nil {
 			err = fmt.Errorf("unable to load shared credentials. Err: %w", err)
 			p.Log.Error(err)
@@ -108,12 +112,15 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 		}
 
 		p.credentialSource = CredentialSourceSSM
+		sharedCreds.Expires = timeNowFunc().Add(60 * time.Minute)
+		sharedCreds.CanExpire = true
 		return sharedCreds, nil
 	}
 
-	iprCredentials, err := p.InnerProviders.IPRProvider.RetrieveWithContext(ctx)
+	iprCredentials, err := p.InnerProviders.IPRProvider.Retrieve(ctx)
 	if err != nil {
 		if awsErr := sdkutil.GetAwsError(err); awsErr != nil {
+
 			err = awserr.New(awsErr.Code(), awsErr.Message(), nil)
 		}
 		err = fmt.Errorf("failed to retrieve instance profile role credentials. Err: %w", err)
@@ -121,9 +128,15 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 		return iprEmptyCredential, err
 	}
 
-	// set expiration to 30 minutes
-	p.InnerProviders.IPRProvider.SetExpiration(timeNowFunc().Add(30*time.Minute), 0)
+	// set expiration to 60 minutes
+	iprCredentials.Expires = timeNowFunc().Add(60 * time.Minute)
+	p.Credentials = iprCredentials
 	p.credentialSource = CredentialSourceEC2
+
+	// Propagate expiry to the inner provider so IsExpired() is consistent
+	if expirySetter, ok := p.InnerProviders.IPRProvider.(interface{ SetExpiry(time.Time) }); ok {
+		expirySetter.SetExpiry(iprCredentials.Expires)
+	}
 
 	return iprCredentials, nil
 }
@@ -131,7 +144,9 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (credentials.
 // RemoteRetrieve uses network calls to retrieve credentials for EC2 instances
 // This function is intended for use by the core module's credential refresher routine
 // When an error is returned, credential source is updated to CredentialSourceNone
-func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
+func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (aws.Credentials, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	p.Log.Debug("Attempting to retrieve instance profile role")
 	if iprCredentials, err := p.iprCredentials(ctx, p.SsmEndpoint); err != nil {
 		errCode := sdkutil.GetAwsErrorCode(err)
@@ -144,11 +159,12 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 	} else {
 		p.Log.Info("Successfully connected with instance profile role credentials")
 		p.credentialSource = CredentialSourceEC2
-		return iprCredentials.Get()
+		iprCredentials.Expires = timeNowFunc().Add(1 * time.Hour)
+		return iprCredentials, nil
 	}
 
 	p.Log.Debug("Attempting to retrieve credentials from Systems Manager")
-	if ssmCredentials, err := p.InnerProviders.SsmEc2Provider.RetrieveWithContext(ctx); err != nil {
+	if ssmCredentials, err := p.InnerProviders.SsmEc2Provider.Retrieve(ctx); err != nil {
 		p.Log.Errorf("Failed to connect to Systems Manager with SSM role credentials. %v", err)
 		p.credentialSource = CredentialSourceNone
 		return iprEmptyCredential, fmt.Errorf("no valid credentials could be retrieved for ec2 identity. Default Host Management Err: %w", err)
@@ -162,35 +178,37 @@ func (p *EC2RoleProvider) RemoteRetrieve(ctx context.Context) (credentials.Value
 // Retrieve returns instance profile role credentials if it has sufficient systems manager permissions and
 // returns ssm provided credentials otherwise. If neither can be retrieved then empty credentials are returned
 // This function is intended for use by agent workers that require credentials
-func (p *EC2RoleProvider) Retrieve() (credentials.Value, error) {
-	return p.RetrieveWithContext(context.Background())
+func (p *EC2RoleProvider) Retrieve(ctx context.Context) (aws.Credentials, error) {
+	return p.RetrieveWithContext(ctx)
 }
 
 // iprCredentials retrieves instance profile role credentials and returns an error if the returned credentials cannot
 // connect to Systems Manager
-func (p *EC2RoleProvider) iprCredentials(ctx context.Context, ssmEndpoint string) (*credentials.Credentials, error) {
+func (p *EC2RoleProvider) iprCredentials(ctx context.Context, ssmEndpoint string) (aws.Credentials, error) {
 	// Setup SSM client with instance profile role credentials
-	iprCredentials := newCredentials(p.InnerProviders.IPRProvider)
-	err := p.updateEmptyInstanceInformation(ctx, ssmEndpoint, iprCredentials)
+
+	iprCredentials, _ := p.InnerProviders.IPRProvider.Retrieve(ctx)
+	err := p.updateEmptyInstanceInformation(ctx, ssmEndpoint, p.InnerProviders.IPRProvider)
 	if err != nil {
-		if awsErr, ok := err.(awserr.RequestFailure); ok {
-			err = fmt.Errorf("retrieved credentials failed to report to ssm. RequestId: %s Error: %w", awsErr.RequestID(), awsErr)
+		var awsRequestFailure *awshttp.ResponseError
+		if isRequestFailure := errors.As(err, &awsRequestFailure); isRequestFailure {
+			err = fmt.Errorf("retrieved credentials failed to report to ssm. RequestId: %s Error: %w", awsRequestFailure.ServiceRequestID(), awsRequestFailure)
 		} else {
 			err = fmt.Errorf("retrieved credentials failed to report to ssm. Error: %w", err)
 		}
 
-		return nil, err
+		return iprEmptyCredential, err
 	}
 
 	// Trusting instance profile role credentials are valid for at least 1 hour when retrieved
-	p.InnerProviders.IPRProvider.SetExpiration(timeNowFunc().Add(1*time.Hour), 0)
+	iprCredentials.Expires = timeNowFunc().Add(1 * time.Hour)
 
 	return iprCredentials, nil
 }
 
 // updateEmptyInstanceInformation calls UpdateInstanceInformation with minimal parameters
-func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ssmEndpoint string, roleCredentials *credentials.Credentials) error {
-	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), roleCredentials, p.GetInstanceRegion(), ssmEndpoint)
+func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ssmEndpoint string, roleCredentialsProvider aws.CredentialsProvider) error {
+	ssmClient := newV4ServiceWithCreds(p.Log.WithContext("SSMService"), roleCredentialsProvider, p.GetInstanceRegion(), ssmEndpoint)
 
 	p.Log.Debugf("Calling UpdateInstanceInformation")
 	// Call update instance information with instance profile role
@@ -203,14 +221,14 @@ func (p *EC2RoleProvider) updateEmptyInstanceInformation(ctx context.Context, ss
 	goOS := runtime.GOOS
 	switch goOS {
 	case "windows":
-		input.PlatformType = aws.String(ssm.PlatformTypeWindows)
+		input.PlatformType = aws.String(string(ssmtypes.PlatformTypeWindows))
 	case "linux", "freebsd":
-		input.PlatformType = aws.String(ssm.PlatformTypeLinux)
+		input.PlatformType = aws.String(string(ssmtypes.PlatformTypeLinux))
 	case "darwin":
-		input.PlatformType = aws.String(ssm.PlatformTypeMacOs)
+		input.PlatformType = aws.String(string(ssmtypes.PlatformTypeMacos))
 	}
 
-	_, err := ssmClient.UpdateInstanceInformationWithContext(ctx, input)
+	_, err := ssmClient.UpdateInstanceInformation(ctx, input)
 	if err != nil {
 		if awsErr := sdkutil.GetAwsError(err); awsErr != nil {
 			err = awserr.New(awsErr.Code(), awsErr.Message(), awsErr.OrigErr())
@@ -256,7 +274,7 @@ func (p *EC2RoleProvider) ExpiresAt() time.Time {
 		return p.InnerProviders.SharedCredentialsProvider.ExpiresAt()
 	}
 
-	return p.InnerProviders.IPRProvider.ExpiresAt()
+	return p.Credentials.Expires
 }
 
 // RemoteExpiresAt returns the expiry of the remote inner provider currently in use
@@ -267,5 +285,7 @@ func (p *EC2RoleProvider) RemoteExpiresAt() time.Time {
 
 // CredentialSource returns the name of the current provider being used
 func (p *EC2RoleProvider) CredentialSource() string {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	return p.credentialSource
 }

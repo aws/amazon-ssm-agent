@@ -17,8 +17,8 @@ package authtokenrequest
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest/mocks"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	mocks "github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest/mocks"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -26,7 +26,7 @@ import (
 func TestSSMAuthTokenService_RequestManagedInstanceRoleToken_Success(t *testing.T) {
 	sdk := &mocks.ISsmSdk{}
 	response := &ssm.RequestManagedInstanceRoleTokenOutput{}
-	sdk.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(response, nil)
+	sdk.On("RequestManagedInstanceRoleToken", mock.Anything, mock.Anything).Return(response, nil)
 	authTokenService := NewClient(sdk)
 	result, err := authTokenService.RequestManagedInstanceRoleToken("SomeFingerprint")
 	assert.NoError(t, err)
@@ -36,7 +36,7 @@ func TestSSMAuthTokenService_RequestManagedInstanceRoleToken_Success(t *testing.
 func TestSSMAuthTokenService_UpdateManagedInstancePublicKey_Success(t *testing.T) {
 	sdk := &mocks.ISsmSdk{}
 	response := &ssm.UpdateManagedInstancePublicKeyOutput{}
-	sdk.On("UpdateManagedInstancePublicKeyWithContext", mock.Anything, mock.Anything).Return(response, nil)
+	sdk.On("UpdateManagedInstancePublicKey", mock.Anything, mock.Anything).Return(response, nil)
 	authTokenService := NewClient(sdk)
 	result, err := authTokenService.UpdateManagedInstancePublicKey("publicKey", "publicKeyType")
 	assert.NoError(t, err)

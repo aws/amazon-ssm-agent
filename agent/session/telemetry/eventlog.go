@@ -34,7 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/telemetry/metrics"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	cwtypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/carlescere/scheduler"
 	"github.com/gorilla/websocket"
 )
@@ -252,7 +252,7 @@ func (a *AuditLogTelemetry) sendAgentUpdateResultMessage(eventCount *logger.Even
 			}
 		}
 
-		var MetricData []*cloudwatch.MetricDatum
+		var MetricData []*cwtypes.MetricDatum
 		if targetVersion != "" {
 			// for normal update events
 			MetricData = append(MetricData, a.cloudWatchService.GenerateUpdateMetrics(
@@ -300,7 +300,7 @@ func (a *AuditLogTelemetry) sendBasicAgentTelemetryMessage(eventCount *logger.Ev
 		}
 	}
 
-	var MetricData []*cloudwatch.MetricDatum
+	var MetricData []*cwtypes.MetricDatum
 	MetricData = append(
 		MetricData,
 		a.cloudWatchService.GenerateBasicTelemetryMetrics(

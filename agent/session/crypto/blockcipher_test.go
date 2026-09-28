@@ -67,7 +67,7 @@ func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
 
 	challenge := blockCipher.GetRandomChallenge()
 
-	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId, "aws:ssm:RandomChallenge": &challenge}
+	var encryptionContext = map[string]string{"aws:ssm:SessionId": suite.sessionId, "aws:ssm:TargetId": suite.instanceId, "aws:ssm:RandomChallenge": challenge}
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKey, nil)
 
 	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId, true)
@@ -93,7 +93,7 @@ func (suite *BlockCipherTestSuite) TestNoRandomChallenge() {
 	blockCipher, err := NewBlockCipherKMS(suite.kmsKeyId, &suite.mockKMSService)
 	assert.Nil(suite.T(), err)
 
-	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId}
+	var encryptionContext = map[string]string{"aws:ssm:SessionId": suite.sessionId, "aws:ssm:TargetId": suite.instanceId}
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKey, nil)
 
 	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId, false)
@@ -107,7 +107,7 @@ func (suite *BlockCipherTestSuite) TestEncryptChangesNonce() {
 
 	challenge := blockCipher.GetRandomChallenge()
 
-	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId, "aws:ssm:RandomChallenge": &challenge}
+	var encryptionContext = map[string]string{"aws:ssm:SessionId": suite.sessionId, "aws:ssm:TargetId": suite.instanceId, "aws:ssm:RandomChallenge": challenge}
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext, suite.kmsKeyId).Return(suite.plainTextKey, nil)
 
 	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId, true)

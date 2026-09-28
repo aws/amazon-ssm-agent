@@ -17,7 +17,7 @@ package mocks
 import (
 	log "github.com/aws/amazon-ssm-agent/agent/log"
 	service "github.com/aws/amazon-ssm-agent/agent/session/service"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	mock "github.com/stretchr/testify/mock"
 )
 

@@ -3,8 +3,10 @@
 package mocks
 
 import (
+	context "context"
 	testing "testing"
 
+	aws "github.com/aws/aws-sdk-go-v2/aws"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -41,6 +43,29 @@ func (_m *ICredentialRefresher) Start() error {
 	}
 
 	return r0
+}
+
+// NewSharedCredentials provides a mock function with given fields: sharedCredsFile, sharedProfile, ctx
+func (_m *ICredentialRefresher) NewSharedCredentials(sharedCredsFile string, sharedProfile string, ctx context.Context) (aws.CredentialsProvider, error) {
+	ret := _m.Called(sharedCredsFile, sharedProfile, ctx)
+
+	var r0 aws.CredentialsProvider
+	if rf, ok := ret.Get(0).(func(string, string, context.Context) aws.CredentialsProvider); ok {
+		r0 = rf(sharedCredsFile, sharedProfile, ctx)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(aws.CredentialsProvider)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, string, context.Context) error); ok {
+		r1 = rf(sharedCredsFile, sharedProfile, ctx)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // Stop provides a mock function with given fields:

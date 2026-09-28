@@ -9,6 +9,11 @@ import (
 
 func TestGetMgsEndpointForUnknownRegion(t *testing.T) {
 	region := "unknown-region-1"
+	// GetMgsEndpoint returns a scheme-less hostname; callers prepend
+	// HttpsPrefix or WebSocketPrefix themselves (mgsinteractor, datachannel,
+	// websocketchannel). See config.go — the endpoint helper's scheme is
+	// stripped to keep this contract stable across appconfig-override and
+	// helper-fallback branches.
 	expected := ServiceName + "." + region + ".amazonaws.com"
 
 	contextMock := context.NewMockDefault()

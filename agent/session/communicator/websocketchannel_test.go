@@ -30,8 +30,7 @@ import (
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
 )
@@ -47,7 +46,7 @@ var (
 	token     = "token"
 	region    = "us-east-1"
 	mgsHost   = "ssmmessages.us-east-1.amazonaws.com"
-	signer    = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
+	signer    = v4.NewSigner(func(o *v4.SignerOptions) {})
 )
 
 var upgrader = websocket.Upgrader{

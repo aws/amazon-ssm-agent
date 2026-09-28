@@ -20,8 +20,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -73,9 +73,9 @@ func TestPollOnce(t *testing.T) {
 	proc, tc := prepareTestPollOnce()
 
 	// mock GetMessagesOutput to return one message
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          make([]*ssmmds.Message, 1),
+		Messages:          make([]*mdsService.Message, 1),
 		MessagesRequestId: &testMessageId,
 	}
 
@@ -83,7 +83,7 @@ func TestPollOnce(t *testing.T) {
 	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
 	// set expectations
 	countMessageProcessed := 0
-	processMessage = func(svc *RunCommandService, msg *ssmmds.Message) {
+	processMessage = func(svc *RunCommandService, msg *mdsService.Message) {
 		countMessageProcessed++
 	}
 
@@ -101,16 +101,16 @@ func TestPollOnceWithZeroMessage(t *testing.T) {
 	proc, tc := prepareTestPollOnce()
 
 	// mock GetMessagesOutput to return zero message
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          make([]*ssmmds.Message, 0),
+		Messages:          make([]*mdsService.Message, 0),
 		MessagesRequestId: &testMessageId,
 	}
 
 	// mock GetMessages function to return mocked GetMessagesOutput and no error
 	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
 	countMessageProcessed := 0
-	processMessage = func(svc *RunCommandService, msg *ssmmds.Message) {
+	processMessage = func(svc *RunCommandService, msg *mdsService.Message) {
 		countMessageProcessed++
 	}
 
@@ -128,16 +128,16 @@ func TestPollOnceMultipleTimes(t *testing.T) {
 	proc, tc := prepareTestPollOnce()
 
 	// mock GetMessagesOutput to return five message
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          make([]*ssmmds.Message, 5),
+		Messages:          make([]*mdsService.Message, 5),
 		MessagesRequestId: &testMessageId,
 	}
 
 	// mock GetMessages function to return mocked GetMessagesOutput and no error
 	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, nil)
 	countMessageProcessed := 0
-	processMessage = func(svc *RunCommandService, msg *ssmmds.Message) {
+	processMessage = func(svc *RunCommandService, msg *mdsService.Message) {
 		countMessageProcessed++
 	}
 
@@ -155,16 +155,16 @@ func TestPollOnceWithGetMessagesReturnError(t *testing.T) {
 	proc, tc := prepareTestPollOnce()
 
 	// mock GetMessagesOutput to return one message
-	getMessageOutput := ssmmds.GetMessagesOutput{
+	getMessageOutput := mdsService.GetMessagesOutput{
 		Destination:       &testDestination,
-		Messages:          make([]*ssmmds.Message, 1),
+		Messages:          make([]*mdsService.Message, 1),
 		MessagesRequestId: &testMessageId,
 	}
 
 	// mock GetMessages function to return an error
 	tc.MdsMock.On("GetMessages", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getMessageOutput, fmt.Errorf("Test"))
 	isMessageProcessed := false
-	processMessage = func(svc *RunCommandService, msg *ssmmds.Message) {
+	processMessage = func(svc *RunCommandService, msg *mdsService.Message) {
 		isMessageProcessed = true
 	}
 

@@ -36,12 +36,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	ssmmds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
+	mdssdkmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mds/mocks"
 	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
-	mdssdkmock "github.com/aws/aws-sdk-go/service/ssmmds/ssmmdsiface/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -84,7 +83,7 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
 	}
 
-	sendMdsSdkRequest := func(req *request.Request) error {
+	sendMdsSdkRequest := func(req *ssmmds.Request) error {
 		return nil
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
@@ -132,18 +131,18 @@ func verifyRunCommandOutput(suite *RunCommandOutputTestSuite,
 	code int,
 	expectedResultStatus contracts.ResultStatus,
 	wrongResultStatus contracts.ResultStatus) {
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*service.GetMessagesInput")).Return(&ssmmds.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		messageOutput, _ := testutils.GenerateMessages(suite.context, docContent)
 		return messageOutput
 	}, nil).Once()
 
-	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
+	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*service.GetMessagesInput")).Return(&ssmmds.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
 		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
 	c := make(chan int)
-	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*ssmmds.SendReplyInput")).Return(&request.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
+	suite.mdsSdkMock.On("SendReplyRequest", mock.AnythingOfType("*service.SendReplyInput")).Return(&ssmmds.Request{HTTPRequest: &http.Request{}}, func(input *ssmmds.SendReplyInput) *ssmmds.SendReplyOutput {
 		// unmarshal the reply sent back to MDS, verify plugin output
 		payload := input.Payload
 		var sendReplyPayload messageContracts.SendReplyPayload

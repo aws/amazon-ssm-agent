@@ -21,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	agentContext "github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
@@ -28,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 const (
@@ -56,15 +57,10 @@ func RegisterDiagnosticQuery(diagnosticQuery DiagnosticQuery) {
 	DiagnosticQueries = append(DiagnosticQueries, diagnosticQuery)
 }
 
-// GetAwsSession create a single session and shares the session cross diagnostics queries
-func GetAwsSession(agentIdentity identity.IAgentIdentity, service string) (*session.Session, error) {
-	agentConfig, err := cliutil.GetAgentConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentLogger(), agentConfig, agentIdentity), service)
-	return session.NewSession(awsConfig)
+// GetAwsConfig create an aws config for diagnostics queries
+func GetAwsConfig(agentIdentity identity.IAgentIdentity, service string) (*aws.Config, error) {
+	awsConfig := sdkutil.AwsConfig(agentContext.Default(logger.NewSilentLogger(), appconfig.DefaultConfig(), agentIdentity), service)
+	return &awsConfig, nil
 }
 
 func IsOnPremRegistration() bool {

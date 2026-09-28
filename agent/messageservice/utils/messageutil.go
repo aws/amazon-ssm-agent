@@ -8,7 +8,7 @@
 //
 // or in the "license" file accompanying this file. This file is distributed
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
-// either express or implied. See the License for the specific language governing`
+// either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
 // Package utils provides utility functions to be used by interactors
@@ -34,9 +34,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
 	model "github.com/aws/amazon-ssm-agent/agent/messageservice/contracts"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/common/identity/identity"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 )
 
 // TopicPrefix is the prefix of the Topic field in an MDS message.
@@ -68,7 +68,7 @@ func empty(s *string) bool {
 }
 
 // Validate returns error if the message is invalid
-func Validate(msg *ssmmds.Message) error {
+func Validate(msg *mdsService.Message) error {
 	if msg == nil {
 		return errors.New("Message is nil")
 	}

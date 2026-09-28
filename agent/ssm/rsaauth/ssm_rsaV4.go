@@ -14,14 +14,17 @@
 package rsaauth
 
 import (
+	cont "context"
 	"fmt"
 	"net/url"
+	"sort"
 	"strings"
+	"time"
+
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/auth"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 const (
@@ -35,39 +38,67 @@ const (
 // The credentials.AccessKeyID is the server id
 // The credentials.SecretAccessKey is the 64bit encoded private rsa key
 
-func SignRsa(req *request.Request) {
+func SignRsa(req *smithyhttp.Request, config aws.Config, service string) error {
 	// If the request does not need to be signed ignore the signing of the
 	// request if the AnonymousCredentials object is used.
-	if req.Config.Credentials == credentials.AnonymousCredentials {
+	anonCreds := aws.AnonymousCredentials{}
+	if config.Credentials == anonCreds {
+		return nil
+	}
+
+	var signingTime time.Time
+	if timeString := req.Request.Header.Get("X-Amz-Date"); timeString != "" {
+		// Parse existing X-Amz-Date header
+		parsedTime, err := time.Parse(timeFormat, timeString)
+		if err != nil {
+			// Fallback to current time if parsing fails
+			signingTime = time.Now()
+		} else {
+			signingTime = parsedTime
+		}
+	} else {
+		// Fallback to current time if no time header exists
+		signingTime = time.Now()
+	}
+
+	region := config.Region
+
+	name := service
+
+	s := signer{
+		Request:       req.Request,
+		SmithyRequest: req,
+		Time:          signingTime,
+		Query:         req.Request.URL.Query(),
+		ServiceName:   name,
+		Region:        region,
+		Credentials:   config.Credentials,
+		Logger:        config.Logger,
+	}
+	err := s.signRsa()
+
+	return err
+}
+
+func setSignedHeaderValuesInAuth(req *smithyhttp.Request, s *signer) {
+	currentAuth := req.Header.Get("Authorization")
+	if currentAuth == "" || s.signedHeaderVals == nil {
 		return
 	}
 
-	region := req.ClientInfo.SigningRegion
-	if region == "" {
-		region = aws.StringValue(req.Config.Region)
+	// Build signed header values string
+	var headerValuePairs []string
+	for key, values := range s.signedHeaderVals {
+		headerValuePairs = append(headerValuePairs, key+"="+strings.Join(values, ","))
 	}
 
-	name := req.ClientInfo.SigningName
-	if name == "" {
-		name = req.ClientInfo.ServiceName
-	}
+	// Sort for consistency
+	sort.Strings(headerValuePairs)
+	signedHeaderValues := strings.Join(headerValuePairs, ";")
 
-	s := signer{
-		Request:     req.HTTPRequest,
-		Time:        req.Time,
-		ExpireTime:  req.ExpireTime,
-		Query:       req.HTTPRequest.URL.Query(),
-		Body:        req.Body,
-		ServiceName: name,
-		Region:      region,
-		Credentials: req.Config.Credentials,
-		Debug:       req.Config.LogLevel.Value(),
-		Logger:      req.Config.Logger,
-		notHoist:    req.NotHoist,
-	}
-
-	req.Error = s.signRsa()
-	req.SignedHeaderVals = s.signedHeaderVals
+	// Add SignedHeaderValues to Authorization header
+	newAuth := currentAuth + ", SignedHeaderValues=" + signedHeaderValues
+	req.Header.Set("Authorization", newAuth)
 }
 
 func (v4 *signer) signRsa() error {
@@ -75,8 +106,14 @@ func (v4 *signer) signRsa() error {
 		v4.isPresign = true
 	}
 
+	var err error
+	v4.CredValues, err = v4.Credentials.Retrieve(cont.TODO())
+	if err != nil {
+		return err
+	}
+
 	if v4.isRequestSigned() {
-		if !v4.Credentials.IsExpired() {
+		if !v4.CredValues.Expired() {
 			// If the request is already signed, and the credentials have not
 			// expired yet ignore the signing request.
 			return nil
@@ -92,12 +129,6 @@ func (v4 *signer) signRsa() error {
 		}
 	}
 
-	var err error
-	v4.CredValues, err = v4.Credentials.Get()
-	if err != nil {
-		return err
-	}
-
 	if v4.isPresign {
 		v4.Query.Set("X-Amz-Algorithm", authHeaderPrefix)
 		if v4.CredValues.SessionToken != "" {
@@ -110,10 +141,6 @@ func (v4 *signer) signRsa() error {
 	}
 
 	v4.buildRsa()
-
-	if v4.Debug.Matches(aws.LogDebugWithSigning) {
-		v4.logSigningInfo()
-	}
 
 	return nil
 }
@@ -158,20 +185,21 @@ func (v4 *signer) buildRsaSignature() (err error) {
 }
 
 // MakeSignRsaHandler creates an http handler that signs the request using an RSA private key
-func MakeSignRsaHandler(encodedPrivateKey string) func(req *request.Request) {
-	return func(req *request.Request) {
-		authZHeader := req.HTTPRequest.Header.Get("Authorization")
+func MakeSignRsaHandler(encodedPrivateKey string) func(req *smithyhttp.Request) error {
+	return func(req *smithyhttp.Request) error {
+		authZHeader := req.Request.Header.Get("Authorization")
 		if len(authZHeader) == 0 {
-			req.Error = fmt.Errorf("unable to build RSA signature. No Authorization header in request")
-			return
+			err := fmt.Errorf("unable to build RSA signature. No Authorization header in request")
+			return err
 		}
 		signature, err := BuildRSASignature(encodedPrivateKey, authZHeader)
 		if err != nil {
-			req.Error = fmt.Errorf("failed to build RSA signature. Err: %v", err)
-			return
+			err := fmt.Errorf("failed to build RSA signature. Err: %v", err)
+			return err
 		}
 
-		req.HTTPRequest.Header[SsmAuthHeader] = []string{fmt.Sprintf("Signature=%s", signature)}
+		req.Request.Header[SsmAuthHeader] = []string{fmt.Sprintf("Signature=%s", signature)}
+		return nil
 	}
 }
 

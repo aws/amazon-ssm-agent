@@ -15,15 +15,15 @@
 package anonauth
 
 import (
+	"errors"
 	"fmt"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth/mocks"
+	mocks "github.com/aws/amazon-ssm-agent/agent/ssm/anonauth/mocks"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -41,7 +41,7 @@ func TestSdkService_RegisterManagedInstance_Success(t *testing.T) {
 	output := &ssm.RegisterManagedInstanceOutput{
 		InstanceId: aws.String("SomeInstanceId"),
 	}
-	anonServiceSdk.On("RegisterManagedInstance", mock.Anything).Return(output, nil)
+	anonServiceSdk.On("RegisterManagedInstance", mock.Anything, mock.Anything).Return(output, nil)
 	anonService := &Client{
 		sdk: anonServiceSdk,
 	}
@@ -55,13 +55,14 @@ func TestSdkService_RegisterManagedInstance_Success(t *testing.T) {
 }
 
 func TestSdkService_RegisterManagedInstance_Retries(t *testing.T) {
+	//var tooManyUpdates *ssmtypes.TooManyUpdates
 	testCases := []struct {
 		testName       string
 		retryableError error
 	}{
 		{
 			testName:       "TestSdkService_RegisterManagedInstance_Retries_WhenTooManyUpdates",
-			retryableError: awserr.New(ssm.ErrCodeTooManyUpdates, "too many activation updates", nil),
+			retryableError: errors.New("too many activation updates"),
 		},
 		{
 			testName:       "TestSdkService_RegisterManagedInstance_Retries_WhenNonAwsError",
@@ -79,7 +80,7 @@ func TestSdkService_RegisterManagedInstance_Retries(t *testing.T) {
 			fingerprint := "SomeFingerprint"
 			provider := "EC2"
 			anonServiceSdk := &mocks.ISsmSdk{}
-			anonServiceSdk.On("RegisterManagedInstance", mock.Anything).Return(nil, testCase.retryableError)
+			anonServiceSdk.On("RegisterManagedInstance", mock.Anything, mock.Anything).Return(nil, testCase.retryableError)
 			backoffRetry = func(o backoff.Operation, b backoff.BackOff) error {
 				err := o()
 				// Error triggers retries

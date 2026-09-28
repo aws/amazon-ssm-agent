@@ -15,6 +15,7 @@
 package ssmec2roleprovider
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
@@ -27,9 +28,9 @@ import (
 	authtokenrequestmocks "github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest/mocks"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/iirprovider"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	awserr "github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -141,11 +142,11 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsCredentials(t *testing.T) {
 	}
 
 	// Act
-	creds, err := roleProvider.Retrieve()
+	creds, err := roleProvider.Retrieve(context.TODO())
 
 	//Assert
 	assert.NoError(t, err)
-	assert.Equal(t, ProviderName, creds.ProviderName)
+	assert.Equal(t, ProviderName, roleProvider.Source)
 	assert.Equal(t, *roleCreds.AccessKeyId, creds.AccessKeyID)
 	assert.Equal(t, *roleCreds.SecretAccessKey, creds.SecretAccessKey)
 	assert.Equal(t, *roleCreds.SessionToken, creds.SessionToken)
@@ -158,7 +159,6 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NoRetry(t *testing.
 	statusCode := 400
 	statusMessage := "Unauthorized"
 	unauthorizedErr := awserr.New(fmt.Sprint(statusCode), statusMessage, nil)
-	unauthorizedRequestFailure := awserr.NewRequestFailure(unauthorizedErr, statusCode, "testRequestId")
 
 	registrationInfo := &authregister.RegistrationInfo{
 		PrivateKey: "SomePrivateKey",
@@ -173,12 +173,12 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_NoRetry(t *testing.
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 
-	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(nil, unauthorizedRequestFailure).Repeatability = 1
+	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(nil, unauthorizedErr).Repeatability = 1
 	newIirRsaAuth = func(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 		return tokenRequestService
 	}
 
-	creds, err := roleProvider.Retrieve()
+	creds, err := roleProvider.Retrieve(context.TODO())
 	assert.Error(t, err)
 	assert.Equal(t, EmptyCredentials(), creds)
 }
@@ -188,7 +188,6 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_Retries(t *testing.
 	statusCode := 500
 	statusMessage := "InternalServerError"
 	unauthorizedErr := awserr.New(fmt.Sprint(statusCode), statusMessage, nil)
-	unauthorizedRequestFailure := awserr.NewRequestFailure(unauthorizedErr, statusCode, "testRequestId")
 
 	registrationInfo := &authregister.RegistrationInfo{
 		InstanceId: "i-0123456789",
@@ -204,12 +203,12 @@ func TestSSMEC2RoleProvider_Retrieve_ReturnsEmptyCredentials_Retries(t *testing.
 
 	tokenRequestService := &authtokenrequestmocks.IClient{}
 
-	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(nil, unauthorizedRequestFailure)
+	tokenRequestService.On("RequestManagedInstanceRoleTokenWithContext", mock.Anything, mock.Anything).Return(nil, unauthorizedErr)
 	newIirRsaAuth = func(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient iirprovider.IEC2MdsSdkClient, region, encodedPrivateKey string) authtokenrequest.IClient {
 		return tokenRequestService
 	}
 
-	creds, err := roleProvider.Retrieve()
+	creds, err := roleProvider.Retrieve(context.TODO())
 	assert.Error(t, err)
 	assert.Equal(t, EmptyCredentials(), creds)
 }

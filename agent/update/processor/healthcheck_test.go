@@ -31,7 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
-	ssmService "github.com/aws/aws-sdk-go/service/ssm"
+	ssmService "github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
 

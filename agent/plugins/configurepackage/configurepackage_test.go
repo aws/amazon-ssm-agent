@@ -34,7 +34,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -1342,8 +1343,8 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 	getManifestOutput := &ssm.GetManifestOutput{
 		Manifest: &manifest,
 	}
-	bwFacade.On("GetManifest", getManifestInput).Return(getManifestOutput, nil).Once()
-	bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
+	bwFacade.On("GetManifest", mock.Anything, getManifestInput).Return(getManifestOutput, nil).Once()
+	bwFacade.On("PutConfigurePackageResult", mock.Anything, mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
 	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 
 	plugin := &Plugin{
@@ -1370,13 +1371,13 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 	stubs := setSuccessStubs()
 	defer stubs.Clear()
 	manifest := string(loadFile(t, "testdata/sampleManifest.json"))
-	documentFormat := ssm.DocumentFormatJson
-	documentType := ssm.DocumentTypePackage
-	documentStatus := ssm.DocumentStatusActive
+	documentFormat := ssmtypes.DocumentFormatJson
+	documentType := ssmtypes.DocumentTypePackage
+	documentStatus := ssmtypes.DocumentStatusActive
 	packageUrl_linux64bit := "https://s3.amazon.com/testPackage/testAgent-amd64-linux-rpm.zip"
 	packageUrl_linux32bit := "https://s3.amazon.com/testPackage/testAgent-386-linux-rpm.zip"
 	packageUrl_windows := "https://s3.amazon.com/testPackage/testAgent-windows.zip"
-	sha256 := "sha256"
+	sha256 := ssmtypes.AttachmentHashTypeSha256
 	fakeHash_linux64bit := "76edf2d951825650dc0960e9e5df7c9c16d570e380248b68ac19d4cf3013ff7d"
 	fakeHash_linux32bit := "7b8818d4db10a6b01ec261afe4a0b0c8178e97c33976f9aba34ac7529655e350"
 	fakeHash_windows := "d05804e5065ea5286ae4a1a45ff6eef299cddd1a78f7430672655c4c75a2fe9b"
@@ -1444,12 +1445,12 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			if packageservice.IsLatest(version) {
 				version = packageservice.Latest
 			}
-			docDescription := ssm.DocumentDescription{
+			docDescription := ssmtypes.DocumentDescription{
 				Name:            &pluginInformation.Name,
 				DocumentVersion: &docVersion,
 				VersionName:     &pluginInformation.Version,
 				Hash:            &fakeHash,
-				Status:          &documentStatus,
+				Status:          documentStatus,
 			}
 
 			installerMock := installerSuccessMock_Install(pluginInformation.Name, manifestVersion, testdata.action)
@@ -1478,31 +1479,31 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			if !testdata.getDocumentReturnsError {
 				getDocumentOutput = &ssm.GetDocumentOutput{
 					Content: &manifest,
-					AttachmentsContent: []*ssm.AttachmentContent{
+					AttachmentsContent: []ssmtypes.AttachmentContent{
 						{
 							Name:     &pluginInformation.Name,
 							Url:      &packageUrl_linux32bit,
-							HashType: &sha256,
+							HashType: sha256,
 							Hash:     &fakeHash_linux32bit,
 						},
 						{
 							Name:     &pluginInformation.Name,
 							Url:      &packageUrl_linux64bit,
-							HashType: &sha256,
+							HashType: sha256,
 							Hash:     &fakeHash_linux64bit,
 						},
 						{
 							Name:     &pluginInformation.Name,
 							Url:      &packageUrl_windows,
-							HashType: &sha256,
+							HashType: sha256,
 							Hash:     &fakeHash_windows,
 						},
 					},
-					DocumentFormat:  &documentFormat,
-					DocumentType:    &documentType,
+					DocumentFormat:  documentFormat,
+					DocumentType:    documentType,
 					DocumentVersion: &getDocument_DocVersion,
 					Name:            &pluginInformation.Name,
-					Status:          &documentStatus,
+					Status:          documentStatus,
 					VersionName:     &pluginInformation.Version,
 				}
 				getDocumentError = nil
@@ -1510,10 +1511,10 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 				getDocumentOutput = nil
 				getDocumentError = errors.New(resourceNotFoundException)
 			}
-			bwFacade.On("GetManifest", getManifestInput).Return(nil, errors.New(resourceNotFoundException)).Once()
-			bwFacade.On("DescribeDocument", describeDocumentInput).Return(describeDocumentOutput, nil)
-			bwFacade.On("GetDocument", getDocumentInput).Return(getDocumentOutput, getDocumentError).Once()
-			bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
+			bwFacade.On("GetManifest", mock.Anything, getManifestInput).Return(nil, errors.New(resourceNotFoundException)).Once()
+			bwFacade.On("DescribeDocument", mock.Anything, describeDocumentInput).Return(describeDocumentOutput, nil)
+			bwFacade.On("GetDocument", mock.Anything, getDocumentInput).Return(getDocumentOutput, getDocumentError).Once()
+			bwFacade.On("PutConfigurePackageResult", mock.Anything, mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
 
 			plugin := &Plugin{
 				context:                contextMock,

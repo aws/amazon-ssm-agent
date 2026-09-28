@@ -54,7 +54,7 @@ func TestResolveManifestUrl_EmptyURL_DynamicEndpointSuccess(t *testing.T) {
 
 	context.On("Identity").Return(identity)
 	context.On("Log").Return(logmocks.NewMockLog())
-	identity.On("GetServiceEndpoint", "s3").Return("SomeRandom_{Region}_URL")
+	identity.On("GetServiceEndpoint", "s3").Return("https://SomeRandom_{Region}_URL")
 	util := &updateS3UtilImpl{
 		context,
 	}

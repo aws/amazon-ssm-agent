@@ -17,14 +17,12 @@ package testutils
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/health"
-	ssmService "github.com/aws/amazon-ssm-agent/agent/ssm"
-	ssmsdkmock "github.com/aws/aws-sdk-go/service/ssm/ssmiface/mocks"
+	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
 )
 
-func NewHealthCheck(context context.T) (healthModule *health.HealthCheck, ssmsdkMock *ssmsdkmock.SSMAPI) {
-	sdkMock := new(ssmsdkmock.SSMAPI)
-	svc := ssmService.NewSSMService(context, sdkMock)
+func NewHealthCheck(context context.T) (healthModule *health.HealthCheck, ssmServiceMock *ssmMock.Service) {
+	serviceMock := new(ssmMock.Service)
 	// Create a new Healthcheck module
-	healthModule = health.NewHealthCheck(context, svc)
-	return healthModule, sdkMock
+	healthModule = health.NewHealthCheck(context, serviceMock)
+	return healthModule, serviceMock
 }

@@ -150,6 +150,9 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	}
 
 	service := anonauth.NewClient(log, region)
+	if service == nil {
+		return managedInstanceID, fmt.Errorf("failed to create anonymous auth client for region %v", region)
+	}
 	managedInstanceID, err = service.RegisterManagedInstance(
 		activationCode,
 		activationID,

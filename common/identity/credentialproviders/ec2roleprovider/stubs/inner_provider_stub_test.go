@@ -4,19 +4,22 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"testing"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestInnerProvider_RetrieveWithContext(t *testing.T) {
+	now := time.Now()
+	expectedExpiry := now.Add(1 * time.Hour)
 	testCases := []struct {
 		name           string
 		provider       *InnerProvider
 		ctx            context.Context
-		expectedValue  credentials.Value
+		expectedValue  aws.Credentials
 		expectedError  error
 		expectedExpiry time.Time
 	}{
@@ -24,11 +27,12 @@ func TestInnerProvider_RetrieveWithContext(t *testing.T) {
 			name: "Successful Retrieval",
 			provider: &InnerProvider{
 				ProviderName: "test-provider",
-				Expiry:       time.Now().Add(1 * time.Hour),
+				Expiry:       expectedExpiry,
 			},
 			ctx: context.Background(),
-			expectedValue: credentials.Value{
-				ProviderName: "test-provider",
+			expectedValue: aws.Credentials{
+				Source:  "test-provider",
+				Expires: expectedExpiry,
 			},
 			expectedError: nil,
 		},
@@ -38,14 +42,14 @@ func TestInnerProvider_RetrieveWithContext(t *testing.T) {
 				RetrieveErr: errors.New("retrieval failed"),
 			},
 			ctx:           context.Background(),
-			expectedValue: credentials.Value{},
+			expectedValue: aws.Credentials{},
 			expectedError: errors.New("retrieval failed"),
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			actualValue, actualErr := tc.provider.RetrieveWithContext(tc.ctx)
+			actualValue, actualErr := tc.provider.Retrieve(tc.ctx)
 
 			assert.Equal(t, tc.expectedValue, actualValue)
 
@@ -98,7 +102,7 @@ func TestInnerProviderRetrieve(t *testing.T) {
 	testCases := []struct {
 		name           string
 		mockProvider   *InnerProvider
-		expectedValue  credentials.Value
+		expectedValue  aws.Credentials
 		expectedError  error
 		expectedExpiry time.Time
 	}{
@@ -106,10 +110,11 @@ func TestInnerProviderRetrieve(t *testing.T) {
 			name: "Successful Credential Retrieval",
 			mockProvider: &InnerProvider{
 				ProviderName: "TestProvider",
-				Expiry:       time.Now().Add(1 * time.Hour),
+				Expiry:       time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC),
 			},
-			expectedValue: credentials.Value{
-				ProviderName: "TestProvider",
+			expectedValue: aws.Credentials{
+				Source:  "TestProvider",
+				Expires: time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC),
 			},
 			expectedError: nil,
 		},
@@ -118,17 +123,17 @@ func TestInnerProviderRetrieve(t *testing.T) {
 			mockProvider: &InnerProvider{
 				RetrieveErr: errors.New("retrieval failed"),
 			},
-			expectedValue: credentials.Value{},
+			expectedValue: aws.Credentials{},
 			expectedError: errors.New("retrieval failed"),
 		},
 		{
 			name: "Expired Credentials",
 			mockProvider: &InnerProvider{
-				ProviderName: "ExpiredProvider",
+				ProviderName: "",
 				Expiry:       time.Now().Add(-1 * time.Hour),
 				RetrieveErr:  errors.New("credentials expired"),
 			},
-			expectedValue: credentials.Value{},
+			expectedValue: aws.Credentials{},
 			expectedError: errors.New("credentials expired"),
 		},
 	}
@@ -136,7 +141,7 @@ func TestInnerProviderRetrieve(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			// Act
-			actualValue, actualErr := tc.mockProvider.Retrieve()
+			actualValue, actualErr := tc.mockProvider.Retrieve(context.TODO())
 
 			// Assert
 			assert.Equal(t, tc.expectedValue, actualValue)

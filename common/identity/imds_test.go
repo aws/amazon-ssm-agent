@@ -12,20 +12,17 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 	"github.com/stretchr/testify/assert"
 )
 
 // --- EC2 IMDS tests ---
 
 func TestCheckEC2IMDSAvailable_ReturnsTrue_WhenIMDSResponds(t *testing.T) {
+	t.Setenv("AWS_EC2_METADATA_DISABLED", "")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/latest/api/token", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("x-aws-ec2-metadata-token-ttl-seconds", "21600")
@@ -40,12 +37,11 @@ func TestCheckEC2IMDSAvailable_ReturnsTrue_WhenIMDSResponds(t *testing.T) {
 	defer server.Close()
 
 	original := newEC2IMDSClient
-	newEC2IMDSClient = func() (*ec2metadata.EC2Metadata, error) {
-		os.Unsetenv("AWS_EC2_METADATA_DISABLED")
-		sess, _ := session.NewSession(&aws.Config{
-			Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION"),
+	newEC2IMDSClient = func() (*imds.Client, error) {
+		client := imds.New(imds.Options{
+			Endpoint: server.URL,
 		})
-		return ec2metadata.New(sess, &aws.Config{Endpoint: aws.String(server.URL + "/latest")}), nil
+		return client, nil
 	}
 	defer func() { newEC2IMDSClient = original }()
 
@@ -66,12 +62,11 @@ func TestCheckEC2IMDSAvailable_ReturnsFalse_WhenIMDSReturns404(t *testing.T) {
 	defer server.Close()
 
 	original := newEC2IMDSClient
-	newEC2IMDSClient = func() (*ec2metadata.EC2Metadata, error) {
-		os.Unsetenv("AWS_EC2_METADATA_DISABLED")
-		sess, _ := session.NewSession(&aws.Config{
-			Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION"),
+	newEC2IMDSClient = func() (*imds.Client, error) {
+		client := imds.New(imds.Options{
+			Endpoint: server.URL,
 		})
-		return ec2metadata.New(sess, &aws.Config{Endpoint: aws.String(server.URL + "/latest")}), nil
+		return client, nil
 	}
 	defer func() { newEC2IMDSClient = original }()
 
@@ -84,22 +79,21 @@ func TestCheckEC2IMDSAvailable_ReturnsFalse_WhenUnreachable(t *testing.T) {
 	server.Close()
 
 	original := newEC2IMDSClient
-	newEC2IMDSClient = func() (*ec2metadata.EC2Metadata, error) {
-		os.Unsetenv("AWS_EC2_METADATA_DISABLED")
-		sess, _ := session.NewSession(&aws.Config{
-			Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION"),
+	newEC2IMDSClient = func() (*imds.Client, error) {
+		client := imds.New(imds.Options{
+			Endpoint: endpoint,
 		})
-		return ec2metadata.New(sess, &aws.Config{Endpoint: aws.String(endpoint + "/latest")}), nil
+		return client, nil
 	}
 	defer func() { newEC2IMDSClient = original }()
 
 	assert.False(t, checkEC2IMDSAvailable())
 }
 
-func TestCheckEC2IMDSAvailable_ReturnsFalse_WhenSessionFails(t *testing.T) {
+func TestCheckEC2IMDSAvailable_ReturnsFalse_WhenClientCreationFails(t *testing.T) {
 	original := newEC2IMDSClient
-	newEC2IMDSClient = func() (*ec2metadata.EC2Metadata, error) {
-		return nil, fmt.Errorf("session creation failed")
+	newEC2IMDSClient = func() (*imds.Client, error) {
+		return nil, fmt.Errorf("client creation failed")
 	}
 	defer func() { newEC2IMDSClient = original }()
 

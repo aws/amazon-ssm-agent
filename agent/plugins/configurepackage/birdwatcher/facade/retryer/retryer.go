@@ -15,39 +15,66 @@
 package retryer
 
 import (
+	"errors"
 	"math"
 	"math/rand"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/client"
-	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+
+	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	"github.com/aws/smithy-go"
 )
 
 type BirdwatcherRetryer struct {
-	client.DefaultRetryer
+	*retry.Standard
 }
 
 var timeUnit = 1000
 
-// RetryRules returns the delay duration before retrying this request again
-func (s BirdwatcherRetryer) RetryRules(r *request.Request) time.Duration {
-	// retry after a > 1 sec timeout, increasing exponentially with each retry
-	// attempt 1: 1s - 21s
-	// attempt 2: 4s - 1.4min
-	// attempt 3: 9s - 5.48min
-	rand.Seed(time.Now().UnixNano())
-	throttleDelay := (int(math.Pow(4, float64(r.RetryCount)))*rand.Intn(5) + int(math.Pow(float64(r.RetryCount+1), 2))) * timeUnit //for seconds
+// isThrottleError reports whether the error passed to RetryDelay represents a
+// service throttling response. It matches on the shapes observable inside the
+// retry Attempt middleware: the modelled *types.ThrottlingException that SSM
+// emits for a subset of operations, and any smithy.APIError whose ErrorCode is
+// one of the well-known throttle codes (Throttling / ThrottlingException /
+// TooManyRequestsException / ProvisionedThroughputExceededException /
+// RequestThrottled / RequestLimitExceeded).
+func isThrottleError(err error) bool {
+	var throttling *types.ThrottlingException
+	if errors.As(err, &throttling) {
+		return true
+	}
+	var apiErr smithy.APIError
+	if errors.As(err, &apiErr) {
+		switch apiErr.ErrorCode() {
+		case "Throttling",
+			"ThrottlingException",
+			"TooManyRequestsException",
+			"ProvisionedThroughputExceededException",
+			"RequestThrottled",
+			"RequestLimitExceeded":
+			return true
+		}
+	}
+	return false
+}
 
-	// Handle GetManifest, GetDocument and DescribeDocument Throttled calls error
-	if (r.Operation.Name == "GetManifest" || r.Operation.Name == "GetDocument" || r.Operation.Name == "DescribeDocument") && r.IsErrorThrottle() {
-		// throttling attempt. Increase the delay with greater exponential backoff
-		return time.Duration(throttleDelay) * time.Millisecond
+func (s BirdwatcherRetryer) RetryDelay(attempt int, err error) (time.Duration, error) {
+	rand.Seed(time.Now().UnixNano())
+
+	// BirdwatcherRetryer is attached only to the aws.Config used by the
+	// birdwatcher facade, which issues GetManifest / DescribeDocument /
+	// GetDocument, so every retry decision here belongs to one of those
+	// operations and no per-operation gating is needed.
+	if isThrottleError(err) {
+		// Throttled calls: widen the backoff window roughly as
+		// 4^attempt × [0,5) seconds so we back off aggressively during
+		// SSM/Distributor throttling events.
+		throttleDelay := (int(math.Pow(4, float64(attempt)))*rand.Intn(5) + int(math.Pow(float64(attempt+1), 2))) * timeUnit
+		return time.Duration(throttleDelay) * time.Millisecond, nil
 	}
 
-	// if error is not of throttle type, add regular retry strategy
-	// attempt 1: 1 - 5 sec
-	// attempt 2: 1 - 9 sec
-	// attempt 3: 1 - 17 sec
-	delay := (int(math.Pow(2, float64(r.RetryCount)))*rand.Intn(2) + 1) * timeUnit
-	return time.Duration(delay) * time.Millisecond
+	// Regular retry strategy for transient/network errors.
+	delay := (int(math.Pow(2, float64(attempt)))*rand.Intn(2) + 1) * timeUnit
+	return time.Duration(delay) * time.Millisecond, nil
 }

@@ -17,14 +17,16 @@ package service
 import (
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmSvc "github.com/aws/amazon-ssm-agent/agent/ssm/mocks/ssm"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -44,12 +46,12 @@ func TestListAssociations(t *testing.T) {
 
 	associationName := "test"
 	documentContent := "document content"
-	association := ssm.InstanceAssociationSummary{
+	association := types.InstanceAssociationSummary{
 		Name: &associationName,
 	}
 
 	output := ssm.ListInstanceAssociationsOutput{
-		Associations: []*ssm.InstanceAssociationSummary{&association},
+		Associations: []types.InstanceAssociationSummary{association},
 	}
 	getDocumentOutput := ssm.GetDocumentOutput{
 		Name:    &associationName,
@@ -58,7 +60,7 @@ func TestListAssociations(t *testing.T) {
 
 	descriptOutput := ssm.DescribeAssociationOutput{}
 
-	ssmMock.On("ListInstanceAssociations", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&output, nil)
+	ssmMock.On("ListInstanceAssociations", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("*string")).Return(&output, nil)
 	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
 	ssmMock.On("DescribeAssociation", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&descriptOutput, nil)
 
@@ -77,7 +79,7 @@ func TestLoadAssociationDetails(t *testing.T) {
 	documentContent := "document content"
 	associationID := "asso-Id-test"
 	assocRawData := model.InstanceAssociation{}
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	assocRawData.Association.Name = &associationName
 	assocRawData.Association.AssociationId = &associationID
 	assocRawData.Association.InstanceId = &instanceID
@@ -89,7 +91,7 @@ func TestLoadAssociationDetails(t *testing.T) {
 	}
 
 	associationOutput := ssm.DescribeAssociationOutput{
-		AssociationDescription: &ssm.AssociationDescription{},
+		AssociationDescription: &types.AssociationDescription{},
 	}
 
 	ssmMock.On("GetDocument", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(&getDocumentOutput, nil)
@@ -110,9 +112,9 @@ func TestUpdateAssociationStatus(t *testing.T) {
 	associationName := "test"
 	status := contracts.AssociationStatusPending
 	output := ssm.UpdateAssociationStatusOutput{
-		AssociationDescription: &ssm.AssociationDescription{
-			Status: &ssm.AssociationStatus{
-				Name: &status,
+		AssociationDescription: &types.AssociationDescription{
+			Status: &types.AssociationStatus{
+				Name: types.AssociationStatusName(status),
 			},
 		},
 	}
@@ -120,7 +122,7 @@ func TestUpdateAssociationStatus(t *testing.T) {
 		mock.AnythingOfType("*log.Mock"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.AssociationStatus")).Return(&output, nil)
+		mock.AnythingOfType("*types.AssociationStatus")).Return(&output, nil)
 
 	service.UpdateAssociationStatus(
 		logMock,

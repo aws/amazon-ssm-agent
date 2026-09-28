@@ -15,6 +15,7 @@
 package communicator
 
 import (
+	cont "context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -22,14 +23,17 @@ import (
 	"os"
 	"path"
 	"runtime/debug"
+	"strings"
 	"sync"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator/websocketutil"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/gorilla/websocket"
 )
 
@@ -51,23 +55,25 @@ type IWebSocketChannel interface {
 	StartPings(log log.T, pingInterval time.Duration)
 	SendMessage(log log.T, input []byte, inputType int) error
 	SetUrl(url string)
+	SetCredentialProvider(credentialsProvider aws.CredentialsProvider)
 	SetSubProtocol(subProtocol string)
 }
 
 // WebSocketChannel parent class for ControlChannel and DataChannel.
 type WebSocketChannel struct {
-	OnMessage    func([]byte)
-	OnError      func(error)
-	Context      context.T
-	ChannelToken string
-	Connection   *websocket.Conn
-	Url          string
-	SubProtocol  string
-	Signer       *v4.Signer
-	Region       string
-	IsOpen       bool
-	writeLock    *sync.Mutex
-	stopPinging  chan bool
+	OnMessage           func([]byte)
+	OnError             func(error)
+	Context             context.T
+	ChannelToken        string
+	Connection          *websocket.Conn
+	Url                 string
+	SubProtocol         string
+	Signer              *v4.Signer
+	CredentialsProvider aws.CredentialsProvider
+	Region              string
+	IsOpen              bool
+	writeLock           *sync.Mutex
+	stopPinging         chan bool
 }
 
 // Initialize a WebSocketChannel object.
@@ -85,6 +91,8 @@ func (webSocketChannel *WebSocketChannel) Initialize(context context.T,
 	if hostName == "" {
 		return fmt.Errorf("no MGS endpoint found")
 	}
+
+	hostName = TrimHttp(hostName)
 
 	channelUrl, err := url.Parse(mgsconfig.WebSocketPrefix + hostName)
 	if err != nil {
@@ -116,9 +124,24 @@ func (webSocketChannel *WebSocketChannel) Initialize(context context.T,
 	return nil
 }
 
+func TrimHttp(url string) string {
+	if strings.HasPrefix(url, "https://") {
+		return url[8:]
+	}
+	if strings.HasPrefix(url, "http://") {
+		return url[7:]
+	}
+	return url
+}
+
 // SetUrl sets the url for the WebSocketChannel.
 func (webSocketChannel *WebSocketChannel) SetUrl(url string) {
 	webSocketChannel.Url = url
+}
+
+// SetCredentialProvider sets the credentials provider for the WebSocketChannel.
+func (webSocketChannel *WebSocketChannel) SetCredentialProvider(credentialsProvider aws.CredentialsProvider) {
+	webSocketChannel.CredentialsProvider = credentialsProvider
 }
 
 // SetSubProtocol sets the subprotocol for the WebSocketChannel.
@@ -129,9 +152,36 @@ func (webSocketChannel *WebSocketChannel) SetSubProtocol(subProtocol string) {
 // getV4SignatureHeader gets the signed header.
 func (webSocketChannel *WebSocketChannel) getV4SignatureHeader(log log.T, Url string) (http.Header, error) {
 	request, err := http.NewRequest("GET", Url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	if webSocketChannel.CredentialsProvider == nil {
+		webSocketChannel.CredentialsProvider = webSocketChannel.Context.Identity().CredentialsProvider()
+	}
+
+	creds, err := webSocketChannel.CredentialsProvider.Retrieve(cont.TODO())
+	if err != nil {
+		return nil, err
+	}
 
 	if webSocketChannel.Signer != nil {
-		_, err = webSocketChannel.Signer.Sign(request, nil, mgsconfig.ServiceName, webSocketChannel.Region, time.Now())
+		payloadHash := "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" // empty payload SHA256
+
+		// Ensure we have valid service name and region
+		serviceName := mgsconfig.ServiceName
+		if serviceName == "" {
+			serviceName = "ssmmessages"
+		}
+		region := webSocketChannel.Region
+		if region == "" {
+			log.Error("region is empty; cannot sign websocket request")
+			return nil, errors.New("region is empty; cannot sign websocket request")
+		}
+
+		err = webSocketChannel.Signer.SignHTTP(cont.TODO(), creds, request, payloadHash, serviceName, region, time.Now())
+	} else {
+		return nil, errors.New("signer is nil")
 	}
 	return request.Header, err
 }

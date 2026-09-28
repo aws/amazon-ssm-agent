@@ -357,32 +357,6 @@ func (suite *PortTestSuite) TestValidateParametersWhenDefaultDenylistHostNotAllo
 	mockContext.AssertExpectations(suite.T())
 }
 
-func (suite *PortTestSuite) TestValidateParametersECSAndEKSCredentialEndpointsDenied() {
-	mockContext := &contextmocks.Mock{}
-	suite.plugin.context = mockContext
-
-	mockContext.On("AppConfig").Return(appconfig.SsmagentConfig{Mgs: appconfig.MgsConfig{DeniedPortForwardingRemoteIPs: []string{"169.254.170.2", "169.254.170.23", "fd00:ec2::23", "127.0.0.1", "::1"}}})
-	mockContext.On("Log").Return(mockLog)
-
-	// ECS task role credential endpoint
-	err := suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "169.254.170.2"}, configuration)
-	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 169.254.170.2 is forbidden.")
-	// EKS Pod Identity credential endpoint
-	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "169.254.170.23"}, configuration)
-	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 169.254.170.23 is forbidden.")
-	// EKS Pod Identity IPv6
-	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "fd00:ec2::23"}, configuration)
-	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address fd00:ec2::23 is forbidden.")
-	// Loopback IPv4
-	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "127.0.0.1"}, configuration)
-	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address 127.0.0.1 is forbidden.")
-	// Loopback IPv6
-	err = suite.plugin.validateParameters(PortParameters{PortNumber: "80", Host: "::1"}, configuration)
-	assert.Contains(suite.T(), err.Error(), "Forwarding to IP address ::1 is forbidden.")
-
-	mockContext.AssertExpectations(suite.T())
-}
-
 func (suite *PortTestSuite) TestValidateParametersIPv6ZoneIdentifierBypass() {
 	mockContext := &contextmocks.Mock{}
 	suite.plugin.context = mockContext

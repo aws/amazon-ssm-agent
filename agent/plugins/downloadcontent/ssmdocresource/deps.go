@@ -17,7 +17,7 @@ package ssmdocresource
 import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
 // dependency on SSM to get document

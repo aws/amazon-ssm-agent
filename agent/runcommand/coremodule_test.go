@@ -23,8 +23,8 @@ import (
 	"testing"
 	"time"
 
+	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
-	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -37,8 +37,8 @@ func TestSendFailedReplies(t *testing.T) {
 	mdsMock := new(runcommandmock.MockedMDS)
 	replies := GetTestFailedReplies()
 	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
-	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
-	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(nil)
+	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&mdsService.SendReplyInput{}, nil)
+	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &mdsService.SendReplyInput{}).Return(nil)
 	mdsMock.On("DeleteFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return()
 
 	proc := RunCommandService{
@@ -84,8 +84,8 @@ func TestSendFailedRepliesWithSendReplyReturnError(t *testing.T) {
 	mdsMock := new(runcommandmock.MockedMDS)
 	replies := GetTestFailedReplies()
 	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
-	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(fmt.Errorf("some error"))
-	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
+	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &mdsService.SendReplyInput{}).Return(fmt.Errorf("some error"))
+	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&mdsService.SendReplyInput{}, nil)
 
 	proc := RunCommandService{
 		name:    mdsName,

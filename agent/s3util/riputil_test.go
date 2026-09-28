@@ -28,10 +28,10 @@ type s3EndpointTest struct {
 var (
 	getFallbackS3EndpointTests = []s3EndpointTest{
 		// {region, output},
-		{"us-gov-east-1", "s3.us-gov-west-1.amazonaws.com"},
-		{"us-gov-west-1", "s3.us-gov-east-1.amazonaws.com"},
-		{"cn-north-1", "s3.cn-northwest-1.amazonaws.com.cn"},
-		{"cn-northwest-1", "s3.cn-north-1.amazonaws.com.cn"},
+		{"us-gov-east-1", "https://s3.us-gov-west-1.amazonaws.com"},
+		{"us-gov-west-1", "https://s3.us-gov-east-1.amazonaws.com"},
+		{"cn-north-1", "https://s3.cn-northwest-1.amazonaws.com.cn"},
+		{"cn-northwest-1", "https://s3.cn-north-1.amazonaws.com.cn"},
 	}
 )
 

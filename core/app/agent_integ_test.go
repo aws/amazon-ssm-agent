@@ -26,8 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identity2 "github.com/aws/amazon-ssm-agent/common/identity/identity"
 	"github.com/aws/amazon-ssm-agent/core/app/registrar"
-	"github.com/aws/aws-sdk-go/aws/ec2metadata"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -35,7 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	ctxMocks "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
-	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -49,15 +48,17 @@ func (s *ec2IdentitySelector) SelectAgentIdentity([]identity.IAgentIdentityInner
 
 func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSUnavailable_CancelsSuccessfully(t *testing.T) {
 	// Arrange
+	endpoint := "www.google.com:81"
 	log := log.NewMockLog()
-	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3).
-		WithEndpoint("www.google.com:81").                       // Endpoint is unreachable which causes timeout
-		WithHTTPClient(&http.Client{Timeout: time.Second * 10}). // Decrease timeout from http default for test efficiency
-		WithEC2MetadataDisableTimeoutOverride(false)
+	awsConfig := aws.Config{RetryMaxAttempts: 3,
+		BaseEndpoint: &endpoint,
+		HTTPClient:   &http.Client{Timeout: time.Second * 10},
+	}
+
 	os.Setenv("AWS_EC2_METADATA_DISABLED", "false")
-	sess, _ := session.NewSession(awsConfig)
-	imdsClient := ec2metadata.New(sess)
+	imdsClient := imds.NewFromConfig(awsConfig, func(o *imds.Options) {
+		o.DisableDefaultTimeout = false
+	})
 
 	config := appconfig.SsmagentConfig{
 		Ssm: appconfig.SsmCfg{},
@@ -69,7 +70,7 @@ func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSUnavailable_CancelsSuccess
 		},
 	}
 
-	authRegisterService := authregister.NewClientWithConfig(log, config, imdsClient, *awsConfig)
+	authRegisterService := authregister.NewClientWithConfig(log, config, imdsClient, awsConfig)
 	testAgentIdentity = &ec2.Identity{
 		Log:                 log,
 		Client:              imdsClient,
@@ -113,8 +114,6 @@ func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSUnavailable_CancelsSuccess
 		complete <- struct{}{}
 		close(complete)
 	}()
-
-	<-time.After(2 * time.Second)
 
 	// Act
 	statusComm.TerminationChan <- struct{}{}

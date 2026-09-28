@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -28,9 +30,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	awserr "github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/cenkalti/backoff/v4"
 )
 
@@ -71,7 +72,7 @@ func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info re
 	return provider
 }
 
-var emptyCredential = credentials.Value{ProviderName: ProviderName}
+var emptyCredential = aws.Credentials{Source: ProviderName}
 
 func shouldRetryAwsRequest(err error) bool {
 	// Don't retry if no error
@@ -92,15 +93,17 @@ func shouldRetryAwsRequest(err error) bool {
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 // This function is intended for use by agent workers that require credentials
-func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
-	return m.RemoteRetrieve(context.Background())
+func (m *onpremCredentialsProvider) Retrieve(ctx context.Context) (aws.Credentials, error) {
+	return m.RemoteRetrieve(ctx)
 }
 
 // RemoteRetrieve retrieves OnPrem credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 // This function is intended for use by the core module's credential refresher routine
-func (m *onpremCredentialsProvider) RemoteRetrieve(ctx context.Context) (credentials.Value, error) {
+func (m *onpremCredentialsProvider) RemoteRetrieve(ctx context.Context) (aws.Credentials, error) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	var err error
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
@@ -157,19 +160,19 @@ func (m *onpremCredentialsProvider) RemoteRetrieve(ctx context.Context) (credent
 	}
 
 	// Set the expiration of our credentials
-	m.SetExpiration(*roleCreds.TokenExpirationDate, expiryWindow)
+	m.Credentials.Expires = roleCreds.TokenExpirationDate.Round(0).Add(-expiryWindow)
+	m.Credentials.CanExpire = true
+	m.Credentials.AccessKeyID = *roleCreds.AccessKeyId
+	m.Credentials.SecretAccessKey = *roleCreds.SecretAccessKey
+	m.Credentials.SessionToken = *roleCreds.SessionToken
+	m.Credentials.Source = ProviderName
 
-	return credentials.Value{
-		AccessKeyID:     *roleCreds.AccessKeyId,
-		SecretAccessKey: *roleCreds.SecretAccessKey,
-		SessionToken:    *roleCreds.SessionToken,
-		ProviderName:    ProviderName,
-	}, nil
+	return m.Credentials, nil
 }
 
 // RemoteExpiresAt is used by the core module's credential refresher to check credential expiry
 func (m *onpremCredentialsProvider) RemoteExpiresAt() time.Time {
-	return m.ExpiresAt()
+	return m.Credentials.Expires
 }
 
 // rotatePrivateKey attempts to rotate the instance private key
@@ -301,4 +304,17 @@ var createNewClient = func(m *onpremCredentialsProvider, privateKey string) auth
 	region := m.registrationInfo.Region(m.log, "", registration.RegVaultKey)
 
 	return rsaauth.NewRsaClient(m.log, m.config, instanceID, region, privateKey)
+}
+
+// IsExpired wraps the IsExpired method of the current provider
+func (m *onpremCredentialsProvider) IsExpired() bool {
+
+	return m.Credentials.Expired()
+}
+
+// ExpiresAt returns the expiry of shared credentials using shared credentials
+// and returns instance profile role provider expiry otherwise
+func (m *onpremCredentialsProvider) ExpiresAt() time.Time {
+
+	return m.Credentials.Expires
 }

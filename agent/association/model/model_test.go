@@ -19,7 +19,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/association/scheduleexpression"
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -32,7 +32,7 @@ func TestRateExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 		CreateDate: time.Now(),
 	}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testRateExpression := "rate(5 days)"
 	assocRawData.Association.ScheduleExpression = &testRateExpression
 
@@ -53,7 +53,7 @@ func TestUpperCasedRateExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T)
 		CreateDate: time.Now(),
 	}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testRateExpression := "RATE(5 DAYS)"
 	assocRawData.Association.ScheduleExpression = &testRateExpression
 
@@ -74,7 +74,7 @@ func TestCronExpressionIsParsedSuccessfullyWhenItIsValid(t *testing.T) {
 		CreateDate: time.Now(),
 	}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testExpression := "0 0 0/1 * * ? *"
 	testCronExpression := "cron(" + testExpression + ")"
 	assocRawData.Association.ScheduleExpression = &testCronExpression
@@ -96,7 +96,7 @@ func TestParseExpressionReturnsErrorWhenCronExpressionIsInvalid(t *testing.T) {
 		CreateDate: time.Now(),
 	}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testExpression := "test 0 0 0/1 * * ? *"
 	testCronExpression := "cron(" + testExpression + ")"
 	assocRawData.Association.ScheduleExpression = &testCronExpression
@@ -115,7 +115,7 @@ func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidCronExpression(t *
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -150,7 +150,7 @@ func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidUpperCasedCronExpr
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -185,7 +185,7 @@ func TestNextScheduledDateIsCorrectWhenExpressionIsValidCronAndHasNotBeenParsedB
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -217,7 +217,7 @@ func TestNextScheduledDateIsNilWhenCronExpressionIsInvalid(t *testing.T) {
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -245,7 +245,7 @@ func TestNextScheduledDateIsCorrectWhenParsedExpressionIsValidRateExpression(t *
 
 	testInstanceAssociation := InstanceAssociation{}
 
-	testInstanceAssociation.Association = &ssm.InstanceAssociationSummary{}
+	testInstanceAssociation.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	testInstanceAssociation.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -276,7 +276,7 @@ func TestNextScheduledDateIsCorrectWhenExpressionIsValidRateAndHasNoteBeenParsed
 
 	testInstanceAssociation := InstanceAssociation{}
 
-	testInstanceAssociation.Association = &ssm.InstanceAssociationSummary{}
+	testInstanceAssociation.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	testInstanceAssociation.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -306,7 +306,7 @@ func TestNextScheduleDateIsNilWhenRateExpressionIsInvalid(t *testing.T) {
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	testRateExpression := "rate(test1 day2)"
@@ -334,7 +334,7 @@ func TestNextScheduleDateIsNilWhenExpressionTypeIsUnknownAndAssociationHasPrevio
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"
@@ -363,7 +363,7 @@ func TestNextScheduledDateIsNilWhenAssociationExpressionTypeIsUnknown(t *testing
 
 	assocRawData := InstanceAssociation{}
 
-	assocRawData.Association = &ssm.InstanceAssociationSummary{}
+	assocRawData.Association = &types.InstanceAssociationSummary{}
 	testAssociationName := "Test"
 	assocRawData.Association.Name = &testAssociationName
 	assocId := "b2f71a28-cbe1-4429-b848-26c7e1f5ad0d"

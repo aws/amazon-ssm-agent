@@ -16,16 +16,19 @@
 package cloudwatchlogsinterface
 
 import (
-	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+	cont "context"
+
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
 )
 
 // CloudWatchLogsClient interface for *cloudwatchlogs.CloudWatchLogs
 type CloudWatchLogsClient interface {
-	CreateLogGroup(input *cloudwatchlogs.CreateLogGroupInput) (*cloudwatchlogs.CreateLogGroupOutput, error)
-	CreateLogStream(input *cloudwatchlogs.CreateLogStreamInput) (*cloudwatchlogs.CreateLogStreamOutput, error)
-	DescribeLogGroups(input *cloudwatchlogs.DescribeLogGroupsInput) (*cloudwatchlogs.DescribeLogGroupsOutput, error)
-	PutLogEvents(input *cloudwatchlogs.PutLogEventsInput) (*cloudwatchlogs.PutLogEventsOutput, error)
-	DescribeLogStreams(input *cloudwatchlogs.DescribeLogStreamsInput) (*cloudwatchlogs.DescribeLogStreamsOutput, error)
+	CreateLogGroup(ctx cont.Context, params *cloudwatchlogs.CreateLogGroupInput, optFns ...func(*cloudwatchlogs.Options)) (*cloudwatchlogs.CreateLogGroupOutput, error)
+	CreateLogStream(ctx cont.Context, params *cloudwatchlogs.CreateLogStreamInput, optFns ...func(*cloudwatchlogs.Options)) (*cloudwatchlogs.CreateLogStreamOutput, error)
+	DescribeLogGroups(ctx cont.Context, params *cloudwatchlogs.DescribeLogGroupsInput, optFns ...func(*cloudwatchlogs.Options)) (*cloudwatchlogs.DescribeLogGroupsOutput, error)
+	PutLogEvents(ctx cont.Context, params *cloudwatchlogs.PutLogEventsInput, optFns ...func(*cloudwatchlogs.Options)) (*cloudwatchlogs.PutLogEventsOutput, error)
+	DescribeLogStreams(ctx cont.Context, params *cloudwatchlogs.DescribeLogStreamsInput, optFns ...func(*cloudwatchlogs.Options)) (*cloudwatchlogs.DescribeLogStreamsOutput, error)
 }
 
 // ICloudWatchLogsService interface for CloudWatchLogsService
@@ -35,11 +38,11 @@ type ICloudWatchLogsService interface {
 	CreateLogStream(logGroup, logStream string) (err error)
 	DescribeLogGroups(logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error)
 	DescribeLogStreams(logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error)
-	IsLogGroupPresent(logGroup string) (bool, *cloudwatchlogs.LogGroup)
+	IsLogGroupPresent(logGroup string) (bool, *types.LogGroup)
 	IsLogStreamPresent(logGroupName, logStreamName string) bool
 	GetSequenceTokenForStream(logGroupName, logStreamName string) (sequenceToken *string)
-	PutLogEvents(messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
-	IsLogGroupEncryptedWithKMS(logGroup *cloudwatchlogs.LogGroup) (bool, error)
+	PutLogEvents(messages []types.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
+	IsLogGroupEncryptedWithKMS(logGroup *types.LogGroup) (bool, error)
 	StreamData(logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, cleanupControlCharacters bool, structuredLogs bool) (success bool)
 	SetCloudWatchMessage(eventVersion string, awsRegion string, targetId string, runAsUser string, sessionId string, sessionOwner string)
 }

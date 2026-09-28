@@ -15,6 +15,7 @@ package s3util
 
 import (
 	"bytes"
+	cont "context"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -23,17 +24,21 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
+
+	"github.com/aws/smithy-go/middleware"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/Workiva/go-datastructures/cache"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/endpoints"
-	"github.com/aws/aws-sdk-go/aws/request"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 const (
@@ -41,6 +46,45 @@ const (
 	retryOnRedirectResponseCode   = 500
 	bucketRegionCacheItemCountMax = 128
 )
+
+// Custom middleware to intercept HTTP response and extract bucket region
+type bucketRegionExtractor struct {
+	bucketRegion *string
+}
+
+func (b *bucketRegionExtractor) ID() string {
+	return "BucketRegionExtractor"
+}
+
+func (b *bucketRegionExtractor) HandleDeserialize(
+	ctx cont.Context,
+	in middleware.DeserializeInput,
+	next middleware.DeserializeHandler,
+) (middleware.DeserializeOutput, middleware.Metadata, error) {
+
+	// Call the next handler first to get the HTTP response
+	out, metadata, err := next.HandleDeserialize(ctx, in)
+
+	// Extract HTTP response from the transport layer
+	if httpResp, ok := out.RawResponse.(*smithyhttp.Response); ok {
+		if region := httpResp.Header.Get(bucketRegionHeader); region != "" {
+			*b.bucketRegion = region
+		}
+
+		// Only suppress errors for expected redirect/access-denied responses when region was extracted
+		// These are expected when doing cross-region HeadBucket requests
+		if *b.bucketRegion != "" && err != nil {
+			statusCode := httpResp.StatusCode
+			// Suppress only redirect (301, 307) and access-related (400, 403) errors
+			// that are expected when probing bucket region
+			if statusCode == 301 || statusCode == 307 || statusCode == 400 || statusCode == 403 {
+				err = nil
+			}
+		}
+	}
+
+	return out, metadata, err
+}
 
 // Returns a Session capable of performing cross-region S3 bucket accesses
 // (i.e. the bucket region may be different from the instance's home region).
@@ -66,7 +110,7 @@ const (
 //
 // In most cases, the best-effort attempt will initialize the session with the correct
 // region, and the custom Transport and Handler chain will not need to make any changes.
-func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*session.Session, error) {
+func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*aws.Config, error) {
 	log := context.Log()
 
 	initialRegion, err := context.Identity().Region()
@@ -91,19 +135,52 @@ func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*sess
 	agentVersion = appConfig.Agent.Version
 
 	if appConfig.S3.Endpoint != "" {
-		config.Endpoint = &appConfig.S3.Endpoint
+		ep := sdkutil.NormalizeEndpointScheme(appConfig.S3.Endpoint)
+		config.BaseEndpoint = &ep
 	}
 
 	config.HTTPClient = &http.Client{
 		Transport: newS3BucketRegionHeaderCapturingTransport(log, context.AppConfig()),
 	}
 
-	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(agentName, agentVersion))
-	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler(log))
-	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log))
+	// User Agent handler
+	config.APIOptions = append(config.APIOptions, awsmiddleware.AddUserAgentKeyValue(agentName, agentVersion))
 
-	return sess, nil
+	// S3 cross-region correction middleware: on each retry attempt, check if
+	// the bucket region cache has a corrected region from a previous redirect
+	// response, and rewrite the request URL to the correct regional endpoint.
+	// This must be in Finalize (after "Retry") so it runs on every attempt.
+	config.APIOptions = append(config.APIOptions, func(stack *middleware.Stack) error {
+		return stack.Finalize.Insert(
+			middleware.FinalizeMiddlewareFunc("S3RegionCorrecting",
+				func(ctx cont.Context, in middleware.FinalizeInput, next middleware.FinalizeHandler) (middleware.FinalizeOutput, middleware.Metadata, error) {
+					req, ok := in.Request.(*smithyhttp.Request)
+					if !ok {
+						return next.HandleFinalize(ctx, in)
+					}
+
+					bucket := getBucketFromRequest(log, req)
+					if bucket == "" {
+						return next.HandleFinalize(ctx, in)
+					}
+
+					if cachedRegion, found := getBucketRegionMap().Get(bucket); found {
+						endpointHelper := endpoint.NewEndpointHelper(log, appConfig)
+						correctEndpoint := endpointHelper.GetServiceEndpoint("s3", cachedRegion)
+						if correctEndpoint != "" {
+							log.Infof("Correcting S3 request for bucket %s to region %s", bucket, cachedRegion)
+							fixupRequestUrl(log, req, correctEndpoint)
+						}
+					}
+
+					return next.HandleFinalize(ctx, in)
+				}),
+			"Retry",
+			middleware.After,
+		)
+	})
+
+	return &config, nil
 }
 
 // Tries to determine the correct region for the specified bucket by doing
@@ -122,41 +199,72 @@ func getBucketRegionFromSignedHeadBucketRequest(context context.T, instanceRegio
 	var bucketRegion = ""
 	log := context.Log()
 
-	credentials := context.Identity().Credentials()
-	ctx := aws.BackgroundContext()
+	credentials := context.Identity().CredentialsProvider()
+	ctx := cont.Background()
 
-	config := &aws.Config{
+	// Normalize the endpoint scheme — regionalEndpoint may come from the raw
+	// appconfig override (S3.Endpoint), which can be scheme-less. SDK v2's
+	// URI validator requires a scheme on BaseEndpoint, so add https:// when
+	// missing.
+	normalizedEndpoint := sdkutil.NormalizeEndpointScheme(regionalEndpoint)
+
+	config := aws.Config{
 		Credentials: credentials,
-		Endpoint:    aws.String(regionalEndpoint),
-		Region:      aws.String(instanceRegion),
+		Region:      instanceRegion,
+	}
+	// Only pin BaseEndpoint when the helper actually produced one. Leaving
+	// it nil lets the SDK ruleset resolver produce the partition-appropriate
+	// default; setting it to aws.String("") would short-circuit the resolver
+	// and produce an empty request URI.
+	if normalizedEndpoint != "" {
+		config.BaseEndpoint = aws.String(normalizedEndpoint)
 	}
 
-	sess, _ := session.NewSession(config)
-	svc := s3.New(sess)
-
-	req, _ := svc.HeadBucketRequest(&s3.HeadBucketInput{
-		Bucket: aws.String(bucketName),
-	})
-
-	req.Config.Credentials = credentials
-	req.SetContext(ctx)
-	req.DisableFollowRedirects = true
-
-	req.Handlers.Send.PushBack(func(r *request.Request) {
-		bucketRegion = r.HTTPResponse.Header.Get(bucketRegionHeader)
-		if len(bucketRegion) == 0 {
-			return
+	client := s3.NewFromConfig(config, func(o *s3.Options) {
+		o.HTTPClient = &http.Client{
+			// Use the agent's default transport so proxy, TLS, and CA settings
+			// are honored instead of falling back to http.DefaultTransport.
+			Transport: network.GetDefaultTransport(log, context.AppConfig()),
+			Timeout:   10 * time.Second,
+			// Disable following redirects — we want the 301/307 response to extract
+			// the x-amz-bucket-region header, not follow it and amplify requests.
+			CheckRedirect: func(req *http.Request, via []*http.Request) error {
+				return http.ErrUseLastResponse
+			},
 		}
-		r.HTTPResponse.StatusCode = 200
-		r.HTTPResponse.Status = "OK"
-		r.Error = nil
+		o.RetryMaxAttempts = 1
+
+		// Add our custom middleware to extract bucket region
+		o.APIOptions = append(o.APIOptions, func(stack *middleware.Stack) error {
+			return stack.Deserialize.Add(&bucketRegionExtractor{
+				bucketRegion: &bucketRegion,
+			}, middleware.After)
+		})
 	})
 
-	if err := req.Send(); err != nil {
+	headBucketInput := &s3.HeadBucketInput{
+		Bucket: aws.String(bucketName),
+	}
+
+	_, err := client.HeadBucket(ctx, headBucketInput)
+	if err != nil {
 		log.Warnf("Signed HeadBucket request failed, continuing to fallback logic")
 	}
 
 	return bucketRegion
+}
+
+func getBucketFromRequest(log log.T, req *smithyhttp.Request) string {
+	if req == nil || req.URL == nil {
+		return ""
+	}
+
+	parseOutput := ParseAmazonS3URL(log, req.URL)
+	if parseOutput.IsValidS3URI && parseOutput.Bucket != "" {
+		return parseOutput.Bucket
+	}
+
+	return ""
 }
 
 func getBucketRegion(context context.T, instanceRegion, bucketName string, httpProvider HttpProvider) (region string) {
@@ -190,8 +298,10 @@ func getBucketRegion(context context.T, instanceRegion, bucketName string, httpP
 	}
 
 	for _, endpoint := range endpoints {
+		// Strip scheme — endpoints may now be scheme-prefixed from GetServiceEndpoint
+		bareEndpoint := strings.TrimPrefix(strings.TrimPrefix(endpoint, "https://"), "http://")
 		for _, proto := range protocols {
-			url := proto + "://" + bucketName + "." + endpoint
+			url := proto + "://" + bucketName + "." + bareEndpoint
 			resp, err := httpProvider.Head(url)
 			if err == nil && resp != nil {
 				if resp.Header != nil {
@@ -269,71 +379,6 @@ func (m *bucketRegionMap) Remove(bucketName string) {
 	m.bucketNameCache.Remove(bucketName)
 }
 
-// Returns a handler that corrects the region and endpoint.  If a request
-// is targeting an S3 bucket which is known to reside in a region different
-// from the region specified in the request, the handler will replace the
-// request's region and endpoint with the correct region and endpoint for the
-// bucket.  Whether or not the request has the correct region for the bucket
-// is determined by checking the bucketRegionMap, which will have been populated
-// during previous requests by s3BucketRegionHeaderCapturingTransport.
-//
-// The handler should be added to the handler list for the Validate step.  For
-// example:
-//
-//	sess := session.New(config)
-//	sess.Handlers.Validate.PushBackNamed(makeS3RegionCorrectingValidateHandler())
-//
-// This will ensure that this handler runs before the standard S3 client's Build
-// handlers (which make their own modifications to the URL), and before the Sign
-// handlers (which calculate the signature based on the region).
-func makeS3RegionCorrectingValidateHandler(log log.T) request.NamedHandler {
-	return request.NamedHandler{
-		Name: "S3RegionCorrectingValidateHandler",
-		Fn: func(request *request.Request) {
-			if bucketName := getBucketFromParams(request.Params); bucketName != "" {
-				if region, ok := getBucketRegionMap().Get(bucketName); ok {
-					log.Infof("using cached region %v for bucket %v", region, bucketName)
-					fixupRequest(log, request, region)
-				}
-			} else {
-				log.Errorf("could not determine bucket name from params, request.Params=%v", request.Params)
-			}
-		},
-	}
-}
-
-// Returns a Handler that prepares the request for retry, in the case where
-// S3 has returned a response indicating that the requested S3 bucket is in
-// a different region.
-//
-// This handler should be added to the Retry handler chain, as follows:
-//
-//	sess = session.New(config)
-//	sess.Handlers.Retry.PushFrontNamed(makeS3RegionCorrectingRetryHandler(log))
-func makeS3RegionCorrectingRetryHandler(log log.T) request.NamedHandler {
-	return request.NamedHandler{
-		Name: "S3RegionCorrectingRetryHandler",
-		Fn: func(request *request.Request) {
-			resp := request.HTTPResponse
-			if resp != nil && isRedirectResponseCode(resp.StatusCode) {
-				if bucketName := getBucketFromParams(request.Params); bucketName != "" {
-					if correctRegion, ok := getBucketRegionMap().Get(bucketName); ok {
-						log.Infof("received %v response from S3, sending requests for %v to %v",
-							resp.StatusCode, bucketName, correctRegion)
-						fixupRequest(log, request, correctRegion)
-						request.HTTPResponse.StatusCode = retryOnRedirectResponseCode
-					} else {
-						log.Debugf("received %v response from S3, but bucket %v not found in bucket-region map",
-							resp.StatusCode, bucketName)
-					}
-				} else {
-					log.Errorf("could not determine bucket name from params, request.Params=%v", request.Params)
-				}
-			}
-		},
-	}
-}
-
 // Indicates whether the HTTP response code indicates that the response
 // may contain information about the bucket region.
 // References:
@@ -344,67 +389,19 @@ func isRedirectResponseCode(responseCode int) bool {
 	return responseCode == 301 || responseCode == 307 || responseCode == 400
 }
 
-// Sets the request's region to the specified region.  The new region
-// will be used for signing and automatic endpoint selection.  If the
-// HTTP request URL has already been set, then the request URL will be
-// regenerated using the new region and endpoint.
-//
-// Notes:
-// request.Config.Endpoint is the optional custom endpoint from the
-// agent appconfig.  We never overwrite this value if it is set, and
-// if it is set, it will take precedence over the endpoint resolver
-// when selecting the effective endpoint for requests.
-//
-// request.ClientInfo.Endpoint is the effective endpoint URL that is
-// used when building HTTP requests.  We do overwrite this value with
-// the selected endpoint URL.
-func fixupRequest(log log.T, request *request.Request, newRegion string) {
-	if endpointUrl := determineEndpointUrl(log, request, newRegion); endpointUrl != "" {
-		request.Config.Region = &newRegion
-		request.ClientInfo.SigningRegion = newRegion
-		request.ClientInfo.Endpoint = endpointUrl
-		if request.HTTPRequest != nil && request.HTTPRequest.URL != nil {
-			fixupRequestUrl(log, request, endpointUrl)
-		}
-	}
-}
-
 // Replaces the Host field of the request URL to match endpointUrl
-func fixupRequestUrl(log log.T, request *request.Request, endpointUrl string) {
+func fixupRequestUrl(log log.T, request *smithyhttp.Request, endpointUrl string) {
 	endpointUrl = removeProtocol(removeTrailingSlash(endpointUrl))
-	originalUrl := ParseAmazonS3URL(log, request.HTTPRequest.URL)
+	originalUrl := ParseAmazonS3URL(log, request.Request.URL)
 	if originalUrl.IsValidS3URI {
 		if originalUrl.IsPathStyle {
-			request.HTTPRequest.URL.Host = endpointUrl
+			request.Request.URL.Host = endpointUrl
 		} else {
-			request.HTTPRequest.URL.Host = originalUrl.Bucket + "." + endpointUrl
+			request.Request.URL.Host = originalUrl.Bucket + "." + endpointUrl
 		}
 	} else {
-		log.Errorf("invalid request URL, not fixing up: %v", request.HTTPRequest.URL)
+		log.Errorf("invalid request URL, not fixing up: %v", request.Request.URL)
 	}
-}
-
-// Determines the correct endpoint for the request, given that newRegion is the
-// correct region.  If the request has an explicitly configured endpoint, then that
-// endpoint will be used.  Otherwise, returns the default S3 endpoint for newRegion.
-// If the endpoint resolver fails to find the endpoint for the region, returns "".
-func determineEndpointUrl(log log.T, request *request.Request, newRegion string) string {
-	var endpoint = ""
-	if request.Config.Endpoint != nil && *request.Config.Endpoint != "" {
-		endpoint = *request.Config.Endpoint
-	} else {
-		resolver := request.Config.EndpointResolver
-		if resolver == nil {
-			log.Warnf("no endpoint resolver in request config, using default resolver. request: %v", request)
-			resolver = endpoints.DefaultResolver()
-		}
-		if resolved, err := resolver.EndpointFor("s3", newRegion); err == nil {
-			endpoint = resolved.URL
-		} else {
-			log.Warnf("failed to resolve S3 endpoint for region %v: %v", newRegion, err)
-		}
-	}
-	return endpoint
 }
 
 // Trims the protocol prefix (e.g. "https://") from the given URL string
@@ -453,6 +450,10 @@ func (t *s3BucketRegionHeaderCapturingTransport) RoundTrip(request *http.Request
 			if parseOutput.IsValidS3URI && parseOutput.Bucket != "" {
 				t.logger.Infof("caching region %v for bucket %v from S3 response header", bucketRegion, parseOutput.Bucket)
 				getBucketRegionMap().Put(parseOutput.Bucket, bucketRegion)
+				// Return a 500 status code to trigger SDK retry.
+				// On retry, the Build middleware will rewrite the endpoint
+				// to the correct region from the cache.
+				response.StatusCode = retryOnRedirectResponseCode
 			} else {
 				t.logger.Errorf("failed to parse request URL %v", request.URL)
 			}

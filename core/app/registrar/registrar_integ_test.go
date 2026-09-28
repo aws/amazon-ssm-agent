@@ -17,7 +17,9 @@
 package registrar
 
 import (
+	"io"
 	"net/http"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -26,7 +28,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2/mocks"
-	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 	"github.com/stretchr/testify/mock"
 
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
@@ -36,20 +39,26 @@ import (
 func TestRetryableRegistrar_RegisterWithRetry_WhenIMDSAvailable_AndSSMUnavailable_Cancelled(t *testing.T) {
 	// Arrange
 	log := log.NewMockLog()
-	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3).
-		WithEndpoint("www.google.com:81").                      // Endpoint is unreachable which causes timeout
-		WithHTTPClient(&http.Client{Timeout: time.Second * 10}) // Decrease timeout from http default for test efficiency
+	endpoint := "www.google.com:81" // Endpoint is unreachable which causes timeout
+	awsConfig := &aws.Config{RetryMaxAttempts: 3,
+		BaseEndpoint: &endpoint,
+		HTTPClient:   &http.Client{Timeout: time.Second * 10}, // Decrease timeout from http default for test efficiency
+	}
 	imdsClient := &mocks.IEC2MdsSdkClient{}
-	imdsClient.On("GetMetadataWithContext", mock.Anything, mock.Anything).
-		Return("SomeInstanceId", nil).
+
+	readCloser := io.NopCloser(strings.NewReader("SomeInstanceId"))
+	mdOutput := imds.GetMetadataOutput{Content: readCloser}
+
+	imdsClient.On("GetMetadata", mock.Anything, mock.Anything).
+		Return(&mdOutput, nil).
 		Repeatability = 0
-	// TODO: GetMetadata is still called by the IIRRoleProvider Retrieve() method instead of GetMetadataWithContext
-	imdsClient.On("GetMetadata", mock.Anything).
-		Return("SomeInstanceId", nil).
+
+	imdsClient.On("GetMetadata", mock.Anything, mock.Anything).
+		Return(&mdOutput, nil).
 		Repeatability = 0
-	imdsClient.On("RegionWithContext", mock.Anything).
-		Return("SomeRegion", nil).
+
+	imdsClient.On("GetRegion", mock.Anything, mock.Anything).
+		Return(&imds.GetRegionOutput{Region: "SomeRegion"}, nil).
 		Repeatability = 0
 
 	config := appconfig.SsmagentConfig{

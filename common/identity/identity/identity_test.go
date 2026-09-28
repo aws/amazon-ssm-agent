@@ -18,10 +18,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds"
+
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2/mocks"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -108,14 +109,23 @@ func TestAgentIdentityCacher_InstanceType(t *testing.T) {
 }
 
 func TestAgentIdentityCacher_Credentials(t *testing.T) {
-	val := &credentials.Credentials{}
+	val := ec2rolecreds.New()
 	agentIdentityInner := &mocks.IEC2Identity{}
-	agentIdentityInner.On("Credentials").Return(val).Once()
+	// .Once() asserts the inner CredentialsProvider() is called EXACTLY once
+	// across all cacher.CredentialsProvider() invocations below — proving the
+	// cache actually hits. A previous revision of the cacher never wrote its
+	// provider field, so every call fell through to the inner client and this
+	// assertion would have failed with "Return not set for call 2".
+	agentIdentityInner.On("CredentialsProvider").Return(val).Once()
 
 	cacher := agentIdentityCacher{log: log.NewMockLog(), client: agentIdentityInner}
 
-	assert.Equal(t, val, cacher.Credentials())
-	assert.Equal(t, val, cacher.Credentials())
+	assert.Equal(t, val, cacher.CredentialsProvider())
+	// Second and third calls must be served from the cache — the .Once()
+	// expectation above fires if the inner is consulted again.
+	assert.Equal(t, val, cacher.CredentialsProvider())
+	assert.Equal(t, val, cacher.CredentialsProvider())
+	agentIdentityInner.AssertExpectations(t)
 }
 
 func TestAgentIdentityCacher_IdentityType(t *testing.T) {

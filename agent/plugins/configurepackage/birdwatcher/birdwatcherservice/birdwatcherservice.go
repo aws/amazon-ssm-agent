@@ -15,6 +15,7 @@
 package birdwatcherservice
 
 import (
+	cont "context"
 	"errors"
 	"fmt"
 	"net/url"
@@ -35,7 +36,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
 )
 
 // NanoTime is helper interface for mocking time
@@ -128,11 +130,11 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 		previousPackageVersion = &result.PreviousPackageVersion
 	}
 
-	var steps []*ssm.ConfigurePackageResultStep
+	var steps []types.ConfigurePackageResultStep
 	for _, t := range result.Trace {
 		timing := (t.Timing - result.Timing) / 1000000 // converting nano to miliseconds
 		steps = append(steps,
-			&ssm.ConfigurePackageResultStep{
+			types.ConfigurePackageResultStep{
 				Action: &t.Operation,
 				Result: &t.Exitcode,
 				Timing: &timing,
@@ -148,19 +150,19 @@ func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservic
 		Operation:              &result.Operation,
 		OverallTiming:          &overallTiming,
 		Result:                 &result.Exitcode,
-		Attributes: map[string]*string{
-			"platformName":     &env.OperatingSystem.Platform,
-			"platformVersion":  &env.OperatingSystem.PlatformVersion,
-			"architecture":     &env.OperatingSystem.Architecture,
-			"instanceID":       &env.Ec2Infrastructure.InstanceID,
-			"instanceType":     &env.Ec2Infrastructure.InstanceType,
-			"region":           &env.Ec2Infrastructure.Region,
-			"availabilityZone": &env.Ec2Infrastructure.AvailabilityZone,
+		Attributes: map[string]string{
+			"platformName":     env.OperatingSystem.Platform,
+			"platformVersion":  env.OperatingSystem.PlatformVersion,
+			"architecture":     env.OperatingSystem.Architecture,
+			"instanceID":       env.Ec2Infrastructure.InstanceID,
+			"instanceType":     env.Ec2Infrastructure.InstanceType,
+			"region":           env.Ec2Infrastructure.Region,
+			"availabilityZone": env.Ec2Infrastructure.AvailabilityZone,
 		},
 		Steps: steps,
 	}
 
-	_, err = ds.facadeClient.PutConfigurePackageResult(input)
+	_, err = ds.facadeClient.PutConfigurePackageResult(cont.TODO(), input)
 
 	if err != nil {
 		return fmt.Errorf("failed to report results: %v", err)

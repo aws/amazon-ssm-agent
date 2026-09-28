@@ -17,9 +17,11 @@ package mocks
 import (
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/mock"
 )
@@ -112,6 +114,11 @@ func (_m *IWebSocketChannel) SetSubProtocol(subProtocol string) {
 // SetUrl provides a mock function with given fields: url
 func (_m *IWebSocketChannel) SetUrl(url string) {
 	_m.Called(url)
+}
+
+// SetCredentialProvider provides a mock function with given fields: CredentialsProvider
+func (_m *IWebSocketChannel) SetCredentialProvider(credentialsProvider aws.CredentialsProvider) {
+	_m.Called(credentialsProvider)
 }
 
 // StartPings provides a mock function with given fields: _a0, pingInterval

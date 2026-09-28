@@ -143,18 +143,18 @@ func TestGetConnectionChannelReturnsEmptyStringIfConnectionHasNotBeenSet(t *test
 	assert.Equal(t, string(messagingService), "")
 }
 
-func setConnectionChannelForTest(channel contracts.SSMConnectionChannel) {
-	connectionChannelMutex.Lock()
-	connectionChannel.SSMConnectionChannel = channel
-	connectionChannelMutex.Unlock()
-}
-
 func resetConnectionChannel() {
-	setConnectionChannelForTest("")
-
-	// Drain any pending signal from the channel.
+	connectionChannel.SSMConnectionChannel = ""
+	// Drain any pending signal from the channel
 	select {
 	case <-mdsSwitchChannel:
 	default:
 	}
+}
+
+// setConnectionChannelForTest directly sets the current connection channel,
+// bypassing SetConnectionChannel's state machine so tests can establish a
+// known starting state.
+func setConnectionChannelForTest(channel contracts.SSMConnectionChannel) {
+	connectionChannel.SSMConnectionChannel = channel
 }

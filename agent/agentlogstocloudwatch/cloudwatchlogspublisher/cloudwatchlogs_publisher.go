@@ -19,6 +19,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
+
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -245,7 +247,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 
 				if messages != nil && len(messages) > 0 {
 					// There are some messages. Call the PUT Api
-					if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(messages, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
+					if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(ConvertMessages(messages), cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
 						// Error pushing logs even after retries and fixing sequence token
 						// Skipping the batch and continuing
 						log.Errorf("Error pushing logs, skipping the batch:%v", err)
@@ -255,7 +257,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 
 					if cloudwatchPublisher.isSharingEnabled {
 
-						if sequenceTokenSharing, err = cloudwatchPublisher.cloudWatchLogsServiceSharing.PutLogEvents(messages, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream, sequenceTokenSharing); err != nil {
+						if sequenceTokenSharing, err = cloudwatchPublisher.cloudWatchLogsServiceSharing.PutLogEvents(ConvertMessages(messages), cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream, sequenceTokenSharing); err != nil {
 							// Error pushing logs even after retries and fixing sequence token
 							// Skipping the batch and continuing
 							log.Errorf("Error pushing logs (for sharing), skipping the batch:%v", err)
@@ -293,6 +295,14 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 			}
 		}
 	}()
+}
+
+func ConvertMessages(messages []*types.InputLogEvent) []types.InputLogEvent {
+	convertedMessages := make([]types.InputLogEvent, len(messages))
+	for i, msg := range messages {
+		convertedMessages[i] = *msg
+	}
+	return convertedMessages
 }
 
 // getSharingConfigurations gets the sharing configurations structure. Returns nil if configurations incorrect

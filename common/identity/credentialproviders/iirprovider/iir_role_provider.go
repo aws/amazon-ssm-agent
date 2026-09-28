@@ -15,19 +15,23 @@
 package iirprovider
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+
 	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 )
 
 // IIRRoleProvider gets identity role credentials from instance metadata service
 type IIRRoleProvider struct {
-	credentials.Expiry
+	aws.Credentials
 	// ExpiryWindow will allow the credentials to trigger refreshing prior to
 	// the credentials actually expiring. This is beneficial so race conditions
 	// with expiring credentials do not cause request to fail unexpectedly
@@ -45,15 +49,25 @@ type IIRRoleProvider struct {
 
 // Retrieve returns nil if it successfully retrieved the instance identity role credentials.
 // Error is returned if the value were not obtainable, or empty.
-func (p *IIRRoleProvider) Retrieve() (credentials.Value, error) {
-	resp, err := p.IMDSClient.GetMetadata(iirCredentialsPath)
+func (p *IIRRoleProvider) Retrieve(ctx context.Context) (aws.Credentials, error) {
+	credentialPathInput := imds.GetMetadataInput{Path: iirCredentialsPath}
+	resp, err := p.IMDSClient.GetMetadata(ctx, &credentialPathInput)
 	if err != nil {
 		p.Log.Errorf("failed to retrieve instance identity role. Error: %v", err)
 		return EmptyCredentials(), err
 	}
 	respCreds := Ec2RoleCreds{}
 
-	if err := json.NewDecoder(strings.NewReader(resp)).Decode(&respCreds); err != nil {
+	rc := resp.Content
+	defer rc.Close()
+	bytes, err := io.ReadAll(rc)
+	if err != nil {
+		p.Log.Errorf("failed to retrieve instance identity role. Error: %v", err)
+		return EmptyCredentials(), err
+	}
+	respStr := string(bytes)
+
+	if err := json.NewDecoder(strings.NewReader(respStr)).Decode(&respCreds); err != nil {
 		p.Log.Errorf("failed to decode instance identity role credentials. Error: %v", err)
 		return EmptyCredentials(), err
 	}
@@ -70,18 +84,18 @@ func (p *IIRRoleProvider) Retrieve() (credentials.Value, error) {
 	p.ExpiryWindow = time.Until(respCreds.Expiration) / 2
 
 	// Set the expiration of our credentials
-	p.SetExpiration(respCreds.Expiration, p.ExpiryWindow)
+	p.Credentials.Expires = respCreds.Expiration.Round(0).Add(-p.ExpiryWindow)
+	p.Credentials.CanExpire = true
+	p.Credentials.AccessKeyID = respCreds.AccessKeyID
+	p.Credentials.SecretAccessKey = respCreds.SecretAccessKey
+	p.Credentials.SessionToken = respCreds.Token
+	p.Credentials.Source = ProviderName
 
-	return credentials.Value{
-		AccessKeyID:     respCreds.AccessKeyID,
-		SecretAccessKey: respCreds.SecretAccessKey,
-		SessionToken:    respCreds.Token,
-		ProviderName:    ProviderName,
-	}, nil
+	return p.Credentials, nil
 
 }
 
 // EmptyCredentials returns empty instance identity role credentials
-func EmptyCredentials() credentials.Value {
-	return credentials.Value{ProviderName: ProviderName}
+func EmptyCredentials() aws.Credentials {
+	return aws.Credentials{Source: ProviderName}
 }

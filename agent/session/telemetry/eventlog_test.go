@@ -27,7 +27,7 @@ import (
 	commMock "github.com/aws/amazon-ssm-agent/agent/session/communicator/mocks"
 	cloudWatchMock "github.com/aws/amazon-ssm-agent/agent/session/telemetry/metrics/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem"
-	"github.com/aws/aws-sdk-go/service/cloudwatch"
+	cwtypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -54,8 +54,8 @@ func (suite *TelemetrySchedulerTestSuite) SetupTest() {
 	suite.EventLog = logger.GetEventLog(path, "testEventLog")
 
 	cwMock := &cloudWatchMock.ICloudWatchService{}
-	cwMock.On("GenerateUpdateMetrics", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(&cloudwatch.MetricDatum{})
-	cwMock.On("GenerateBasicTelemetryMetrics", mock.Anything, mock.Anything, mock.Anything).Return(&cloudwatch.MetricDatum{})
+	cwMock.On("GenerateUpdateMetrics", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(&cwtypes.MetricDatum{})
+	cwMock.On("GenerateBasicTelemetryMetrics", mock.Anything, mock.Anything, mock.Anything).Return(&cwtypes.MetricDatum{})
 	cwMock.On("PutMetrics", mock.Anything).Return(nil)
 	cwMock.On("IsCloudWatchEnabled").Return(true)
 

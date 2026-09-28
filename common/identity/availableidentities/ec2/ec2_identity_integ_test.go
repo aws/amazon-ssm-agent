@@ -26,20 +26,20 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/stretchr/testify/assert"
 )
 
 // / TestEC2Identity_Register_CancelTest tests that aws calls are cancelled when the context is cancelled
 func TestEC2Identity_Register_CancelTest(t *testing.T) {
 	// Arrange
-	awsConfig := &aws.Config{}
-	awsConfig = awsConfig.WithMaxRetries(3).
-		WithEndpoint("www.google.com:81").                      // Endpoint is unreachable which causes timeout
-		WithEC2MetadataDisableTimeoutOverride(true).            // IMDS timeout is 1 second by default
-		WithHTTPClient(&http.Client{Timeout: time.Second * 10}) // Decrease timeout from http default for test efficiency
-	sess, _ := session.NewSession(awsConfig)
+	endpoint := "www.google.com:81"
+	awsConfig := aws.Config{RetryMaxAttempts: 3, BaseEndpoint: &endpoint, HTTPClient: &http.Client{Timeout: time.Second * 10}}
+	//awsConfig = awsConfig.WithMaxRetries(3).
+	//	WithEndpoint("www.google.com:81").                      // Endpoint is unreachable which causes timeout
+	//	WithEC2MetadataDisableTimeoutOverride(true).            // IMDS timeout is 1 second by default
+	//	WithHTTPClient(&http.Client{Timeout: time.Second * 10}) // Decrease timeout from http default for test efficiency
+	//sess, _ := session.NewSession(awsConfig)
 
 	region := "SomeRegion"
 	getStoredPrivateKey = func(log log.T, manifestFileNamePrefix, vaultKey string) string {
@@ -58,7 +58,7 @@ func TestEC2Identity_Register_CancelTest(t *testing.T) {
 	}
 
 	log := logmocks.NewMockLog()
-	imdsClient := newImdsClient(sess)
+	imdsClient := newImdsClient(awsConfig)
 	identity := &Identity{
 		Log:                 log,
 		Client:              imdsClient,

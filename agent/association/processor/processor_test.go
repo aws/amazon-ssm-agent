@@ -19,6 +19,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/ssm/types"
+
 	processor2 "github.com/aws/amazon-ssm-agent/agent/association/mocks/processor"
 	"github.com/aws/amazon-ssm-agent/agent/association/mocks/service"
 	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/mocks/uploader"
@@ -29,8 +31,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/ssm"
 	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -103,7 +105,11 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult"))
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"))
 	complianceUploader.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
 	complianceUploader.On(
 		"UpdateAssociationCompliance",
@@ -177,7 +183,10 @@ func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
 		mock.AnythingOfType("string"),
-		mock.AnythingOfType("*ssm.InstanceAssociationExecutionResult"))
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"),
+		mock.AnythingOfType("string"))
 }
 
 func TestProcessAssociationSuccessful(t *testing.T) {
@@ -230,7 +239,7 @@ func TestUpdatePluginAssociationInstances(t *testing.T) {
 	testName := "testName"
 	testAssociations := []*model.InstanceAssociation{
 		&model.InstanceAssociation{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId: &testAssociationID,
 				Name:          &testName,
 			},
@@ -258,7 +267,7 @@ func TestRemovePluginAssociationInstances(t *testing.T) {
 	testName := "testName"
 	testAssociations := []*model.InstanceAssociation{
 		&model.InstanceAssociation{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId: &testAssociationID,
 				Name:          &testName,
 			},
@@ -296,7 +305,7 @@ func createProcessor() *Processor {
 }
 
 func createAssociationRawData() []*model.InstanceAssociation {
-	association := ssm.InstanceAssociationSummary{
+	association := types.InstanceAssociationSummary{
 		Name:               aws.String("Test-Association"),
 		DocumentVersion:    aws.String("1"),
 		AssociationId:      aws.String("Id-Test"),
@@ -317,7 +326,7 @@ func TestIsAssociationTimedOut_TrackedStartTimeNotExpired(t *testing.T) {
 	assocID := "test-assoc-1"
 	testAssociations := []*model.InstanceAssociation{
 		{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId: aws.String(assocID),
 				Name:          aws.String("Test"),
 				InstanceId:    aws.String("i-123"),
@@ -338,7 +347,7 @@ func TestIsAssociationTimedOut_NoTrackedStartTimeFallbackToLastExecution(t *test
 	oldTime := time.Now().UTC().Add(-3 * time.Hour)
 	testAssociations := []*model.InstanceAssociation{
 		{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId:     aws.String(assocID),
 				Name:              aws.String("Test"),
 				InstanceId:        aws.String("i-123"),
@@ -358,7 +367,7 @@ func TestIsAssociationTimedOut_LastExecutionDateNil(t *testing.T) {
 	assocID := "test-assoc-4"
 	testAssociations := []*model.InstanceAssociation{
 		{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId: aws.String(assocID),
 				Name:          aws.String("Test"),
 				InstanceId:    aws.String("i-123"),
@@ -376,7 +385,7 @@ func TestIsAssociationTimedOut_StartTimePreservedAcrossRefresh(t *testing.T) {
 	assocID := "test-assoc-5"
 	testAssociations := []*model.InstanceAssociation{
 		{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId: aws.String(assocID),
 				Name:          aws.String("Test"),
 				InstanceId:    aws.String("i-123"),
@@ -405,7 +414,7 @@ func TestIsAssociationTimedOut_NewExecutionAtTwoHourBoundary(t *testing.T) {
 	twoHoursAgo := time.Now().UTC().Add(-2 * time.Hour)
 	testAssociations := []*model.InstanceAssociation{
 		{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId:     aws.String(assocID),
 				Name:              aws.String("AWS-RunShellScript"),
 				InstanceId:        aws.String("i-test"),
@@ -429,7 +438,7 @@ func TestIsAssociationTimedOut_OldBehaviorWouldFalsePositive(t *testing.T) {
 	twoHoursAgo := time.Now().UTC().Add(-2*time.Hour - time.Second)
 	testAssociations := []*model.InstanceAssociation{
 		{
-			Association: &ssm.InstanceAssociationSummary{
+			Association: &types.InstanceAssociationSummary{
 				AssociationId:     aws.String(assocID),
 				Name:              aws.String("AWS-RunShellScript"),
 				InstanceId:        aws.String("i-test"),
