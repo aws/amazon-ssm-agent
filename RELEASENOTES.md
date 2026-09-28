@@ -1,5 +1,9 @@
 Latest
 ===============
+- Migrate from aws-sdk-go v1 to aws-sdk-go-v2
+
+3.3.5390.0
+===============
 - Bump github.com/gorilla/websocket from v1.4.2 to v1.5.3
 - Bump golang.org/x/crypto from v0.53.0 to v0.56.0
 - Bump golang.org/x/net from v0.56.0 to v0.57.0
