@@ -47,8 +47,16 @@ func NewSerialPortWithRetry(log log.T) (sp *SerialPort, err error) {
 	return sp, nil
 }
 
+// Replaceable in unit tests.
+var (
+	isEC2Func                  = IsEC2Environment
+	newSerialPortWithRetryFunc = NewSerialPortWithRetry
+)
+
 // EmitSerialPortMessage sends a message to the serial port.
 // This function is intended to be used by components that need to log to the serial port.
+// The message is only written when running in EC2; on other hosts it is skipped without
+// opening the port.
 func EmitSerialPortMessage(log log.T, msg string) {
 	// Create serial port specific logger context
 	serialLog := log.WithContext("[SerialPort]")
@@ -60,7 +68,12 @@ func EmitSerialPortMessage(log log.T, msg string) {
 		}
 	}()
 
-	sp, err := NewSerialPortWithRetry(serialLog)
+	if !isEC2Func(serialLog) {
+		serialLog.Debugf("Not running in EC2, skipping serial port message: %s", msg)
+		return
+	}
+
+	sp, err := newSerialPortWithRetryFunc(serialLog)
 	if err != nil {
 		serialLog.Errorf("Error occurred while opening serial port: %v", err.Error())
 		return
