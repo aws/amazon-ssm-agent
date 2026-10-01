@@ -36,11 +36,12 @@ const imdsMaxAttempts = 10
 func IsEC2Environment(log log.T) bool {
 	// IMDS ignores RetryMaxAttempts and only honors a Retryer func, so bound
 	// retries via WithRetryer instead of WithRetryMaxAttempts.
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRetryer(func() aws.Retryer {
+	retryer := func() aws.Retryer {
 		return retry.NewStandard(func(o *retry.StandardOptions) {
 			o.MaxAttempts = imdsMaxAttempts
 		})
-	}))
+	}
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRetryer(retryer))
 	if err != nil {
 		// LoadDefaultConfig can fail for reasons unrelated to EC2 detection
 		// (e.g. unreadable shared config/credentials files). Rather than
@@ -48,7 +49,7 @@ func IsEC2Environment(log log.T) bool {
 		// minimal config so we can still probe the metadata service.
 		log.Warnf("failed to load default AWS config, falling back to minimal config: %v", err)
 		cfg = aws.Config{
-			RetryMaxAttempts: imdsMaxAttempts,
+			Retryer: retryer,
 		}
 	}
 
