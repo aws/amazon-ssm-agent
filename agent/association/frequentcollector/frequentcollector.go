@@ -301,16 +301,19 @@ func (collector *FrequentCollector) getValidInventoryGathererConfigMap(context c
 	}
 
 	if dataB, err = json.Marshal(pluginState.Configuration.Properties); err != nil {
-		log.Error("error occurred while json.Marshal(pluginState.Configuration.Properties)")
+		log.Errorf("error occurred while json.Marshal(pluginState.Configuration.Properties): %s", err)
 		return
 	}
 
 	if err = json.Unmarshal(dataB, &inventoryInput); err != nil {
-		log.Error("error occurred while json.Unmarshal(dataB, &inventoryInput)")
+		log.Errorf("error occurred while json.Unmarshal(dataB, &inventoryInput): %s", err)
 		return
 	}
 	log.Debugf("unmarshal channel response: %v", inventoryInput)
 	validGatherers, err = plugin.ValidateInventoryInput(context, inventoryInput)
+	if err != nil {
+		log.Errorf("error occured validating inventory input: %s", err)
+	}
 	return
 }
 
