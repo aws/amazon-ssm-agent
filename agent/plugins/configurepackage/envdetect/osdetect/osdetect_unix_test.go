@@ -170,6 +170,14 @@ func TestParseOSreleaseFile(t *testing.T) {
 			"alpine", "3.5.0", false,
 		},
 		{
+			[]string{`NAME="Chainguard"`, `ID=chainguard`, `VERSION_ID=20230214`, `PRETTY_NAME="Chainguard"`, `HOME_URL="https://chainguard.dev"`},
+			"chainguard", "20230214", false,
+		},
+		{
+			[]string{`NAME="Wolfi"`, `ID=wolfi`, `VERSION_ID=20230201`, `PRETTY_NAME="Wolfi"`, `HOME_URL="https://wolfi.dev"`, `BUG_REPORT_URL="https://github.com/wolfi-dev/os/issues"`},
+			"wolfi", "20230201", false,
+		},
+		{
 			[]string{`NAME="CentOS Linux"`, `VERSION="7 (Core)"`, `ID="centos"`, `ID_LIKE="rhel fedora"`, `VERSION_ID="7"`, `PRETTY_NAME="CentOS Linux 7 (Core)"`, `ANSI_COLOR="0;31"`, `CPE_NAME="cpe:/o:centos:centos:7"`, `HOME_URL="https://www.centos.org/"`, `BUG_REPORT_URL="https://bugs.centos.org/"`, `CENTOS_MANTISBT_PROJECT="CentOS-7"`, `CENTOS_MANTISBT_PROJECT_VERSION="7"`, `REDHAT_SUPPORT_PRODUCT="centos"`, `REDHAT_SUPPORT_PRODUCT_VERSION="7"`},
 			"centos", "7", false,
 		},
