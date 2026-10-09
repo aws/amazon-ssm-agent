@@ -67,6 +67,7 @@ func AwsConfigForEndpoint(context context.T, endpoint, region string) (awsConfig
 		},
 		Credentials: context.Identity().CredentialsProvider(),
 	}
+	conf.APIOptions = append(conf.APIOptions, invalidateCredsOnExpiredError(conf.Credentials))
 
 	// Only set BaseEndpoint when an endpoint is provided; an empty string would
 	// override SDK default endpoint resolution with an invalid endpoint.
@@ -87,6 +88,7 @@ func AwsConfigForEndpoint(context context.T, endpoint, region string) (awsConfig
 var sharedRetryer aws.Retryer = &retryer.SsmRetryer{
 	Standard: retry.NewStandard(func(so *retry.StandardOptions) {
 		so.MaxAttempts = 4
+		so.Retryables = append(so.Retryables, retry.RetryableErrorCode{Codes: expiredCredsCodes})
 	}),
 }
 
