@@ -358,18 +358,11 @@ func (i *Identity) initEc2RoleProvider(endpointHelper endpoint.IEndpointHelper, 
 		IMDSClient:   i.Client,
 		InstanceInfo: instanceInfo,
 	}
-	// Wrap SSMEC2RoleProvider in a caching adapter so a
-	// RequestManagedInstanceRoleToken call isn't issued on every SDK attempt
-	// during the DHMC-fallback path. SSMEC2RoleProvider does not implement
-	// HandleFailToRefresh, so the underlying aws.CredentialsCache surfaces
-	// a failed Retrieve immediately instead of extending stale credentials.
-	cachedSsmEC2Provider := ec2roleprovider.NewCachedInnerProvider(ssmEC2RoleProvider)
-
 	sharedCredentialsProvider := sharedprovider.NewCredentialsProvider(i.Log)
 
 	innerProviders := &ec2roleprovider.EC2InnerProviders{
 		IPRProvider:               i.createIPRProvider(),
-		SsmEc2Provider:            cachedSsmEC2Provider,
+		SsmEc2Provider:            ssmEC2RoleProvider,
 		SharedCredentialsProvider: sharedCredentialsProvider,
 	}
 
