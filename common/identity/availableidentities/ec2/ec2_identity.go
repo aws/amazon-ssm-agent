@@ -424,7 +424,7 @@ func (i *Identity) initIMDSClient(cfg aws.Config) {
 		return
 	}
 
-	i.Client = newImdsClient(cfg)
+	i.Client = newImdsClient(cfg, func(o *imds.Options) { o.EnableFallback = aws.FalseTernary })
 }
 
 // initAuthRegisterService initializes the client used to make requests to RegisterManagedInstance

@@ -126,8 +126,6 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (aws.Credenti
 		return iprEmptyCredential, err
 	}
 
-	// set expiration to 60 minutes
-	iprCredentials.Expires = timeNowFunc().Add(60 * time.Minute)
 	p.Credentials = iprCredentials
 	p.credentialSource = CredentialSourceEC2
 

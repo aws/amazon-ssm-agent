@@ -16,6 +16,8 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"sync"
 	"testing"
@@ -749,4 +751,28 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 
 	// Assert
 	assert.NoError(t, err)
+}
+
+func TestInitIMDSClient_DoesNotFallBackToIMDSv1(t *testing.T) {
+	imdsV1Requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPut {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+		if r.Header.Get("X-aws-ec2-metadata-token") == "" {
+			imdsV1Requests++
+		}
+		w.Write([]byte("i-123"))
+	}))
+	defer server.Close()
+	t.Setenv("AWS_EC2_METADATA_SERVICE_ENDPOINT", server.URL)
+	t.Setenv("AWS_EC2_METADATA_DISABLED", "")
+
+	identity := &Identity{}
+	identity.initIMDSClient(aws.Config{})
+	_, err := identity.Client.GetMetadata(context.Background(), &imds.GetMetadataInput{Path: "instance-id"})
+
+	assert.Error(t, err)
+	assert.Zero(t, imdsV1Requests)
 }

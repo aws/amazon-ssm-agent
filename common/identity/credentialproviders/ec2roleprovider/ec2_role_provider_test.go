@@ -256,7 +256,8 @@ func TestEC2RoleProvider_IPRCredentials_ReturnsError(t *testing.T) {
 func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 	// Arrange
 	_, ec2RoleProvider := arrangeUpdateInstanceInformation(nil)
-	iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName}
+	realExpiry := time.Now().Add(20 * time.Minute)
+	iprProvider := &stubs.InnerProvider{ProviderName: IPRProviderName, Expiry: realExpiry}
 	sharedProvider := &stubs.InnerProvider{ProviderName: "SharedCredentialsProvider"}
 	ec2RoleProvider.InnerProviders = &EC2InnerProviders{
 		IPRProvider:               iprProvider,
@@ -268,16 +269,11 @@ func TestEC2RoleProvider_Retrieve_ReturnsIPRCredentials(t *testing.T) {
 	ec2RoleProvider.RuntimeConfigClient = runtimeConfigClient
 
 	// Act
-	flag := false
-	timeNowFunc = func() time.Time {
-		flag = true
-		return time.Now()
-	}
 	creds, err := ec2RoleProvider.Retrieve(context.TODO())
-	expiryMins := time.Now().Sub(ec2RoleProvider.ExpiresAt()).Minutes()
+
 	//Assert
-	assert.True(t, flag)
-	assert.True(t, 28 >= expiryMins && expiryMins <= 30)
+	assert.Equal(t, realExpiry, creds.Expires)
+	assert.Equal(t, realExpiry, ec2RoleProvider.ExpiresAt())
 	assert.NoError(t, err)
 	assert.Equal(t, iprProvider.ProviderName, creds.Source)
 	assert.Equal(t, CredentialSourceEC2, ec2RoleProvider.credentialSource)
