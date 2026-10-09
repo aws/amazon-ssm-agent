@@ -1,5 +1,10 @@
 Latest
 ===============
+- Bug fixes for aws-sdk-go-v2
+- Upgrade Go version to 1.26.9
+
+3.3.5512.0
+===============
 - Migrate from aws-sdk-go v1 to aws-sdk-go-v2
 
 3.3.5390.0
