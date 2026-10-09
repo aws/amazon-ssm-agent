@@ -141,8 +141,18 @@ func (i *Identity) CredentialsProvider() aws.CredentialsProvider {
 	i.shareLock.Lock()
 	defer i.shareLock.Unlock()
 
-	return i.credentialsProvider
+	if i.credentialsProvider == nil {
+		return nil
+	}
 
+	// Cache the client-facing provider so SDK clients don't fetch credentials per request.
+	if i.cachedCredsProvider == nil {
+		i.cachedCredsProvider = aws.NewCredentialsCache(i.credentialsProvider, func(o *aws.CredentialsCacheOptions) {
+			o.ExpiryWindow = 5 * time.Minute
+			o.ExpiryWindowJitterFrac = 0.5
+		})
+	}
+	return i.cachedCredsProvider
 }
 
 // IsIdentityEnvironment returns if instance is a ec2 instance

@@ -112,8 +112,6 @@ func (p *EC2RoleProvider) RetrieveWithContext(ctx context.Context) (aws.Credenti
 		}
 
 		p.credentialSource = CredentialSourceSSM
-		sharedCreds.Expires = timeNowFunc().Add(60 * time.Minute)
-		sharedCreds.CanExpire = true
 		return sharedCreds, nil
 	}
 

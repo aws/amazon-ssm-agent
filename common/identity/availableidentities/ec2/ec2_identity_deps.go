@@ -70,6 +70,7 @@ type Identity struct {
 	Config              *appconfig.SsmagentConfig
 	credentials         aws.Credentials
 	credentialsProvider ec2roleprovider.IEC2RoleProvider
+	cachedCredsProvider aws.CredentialsProvider
 	AuthRegisterService authregister.IClient
 	shareLock           *sync.RWMutex
 	runtimeConfigClient runtimeconfig.IIdentityRuntimeConfigClient

@@ -16,6 +16,7 @@ package onprem
 import (
 	"context"
 	"sync"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 
@@ -70,10 +71,14 @@ func (i *Identity) initNonShareCreds() {
 	i.credentials, _ = i.credentialsProvider.Retrieve(context.TODO())
 }
 
-// CredentialProvider returns the initialized credentials provider
+// CredentialsProvider returns a cached credentials provider for use by SDK clients.
 func (i *Identity) CredentialsProvider() aws.CredentialsProvider {
 	i.credsInitMutex.Lock()
 	defer i.credsInitMutex.Unlock()
+
+	if i.cachedCredsProvider != nil {
+		return i.cachedCredsProvider
+	}
 
 	if !i.credentials.HasKeys() {
 		if i.shouldShareCredentials {
@@ -83,11 +88,26 @@ func (i *Identity) CredentialsProvider() aws.CredentialsProvider {
 		}
 	}
 
-	if i.credentialsProvider == nil {
-		i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, i.shouldShareCredentials)
+	if i.shouldShareCredentials {
+		// Sharing mode: cache the shared-credentials-file provider.
+		i.cachedCredsProvider = aws.NewCredentialsCache(
+			sharedprovider.NewCredentialsProvider(i.Log),
+			func(o *aws.CredentialsCacheOptions) {
+				o.ExpiryWindow = 5 * time.Minute
+				o.ExpiryWindowJitterFrac = 0.5
+			},
+		)
+	} else {
+		if i.credentialsProvider == nil {
+			i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, i.shouldShareCredentials)
+		}
+		// Non-sharing mode: cache the onprem provider directly.
+		i.cachedCredsProvider = aws.NewCredentialsCache(i.credentialsProvider, func(o *aws.CredentialsCacheOptions) {
+			o.ExpiryWindow = 5 * time.Minute
+			o.ExpiryWindowJitterFrac = 0.5
+		})
 	}
-
-	return i.credentialsProvider
+	return i.cachedCredsProvider
 }
 
 // CredentialProvider returns the initialized credentials provider

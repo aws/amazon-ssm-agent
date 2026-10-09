@@ -36,6 +36,7 @@ type Identity struct {
 	registrationInfo       registration.IOnpremRegistrationInfo
 	credentials            aws.Credentials
 	credentialsProvider    credentialproviders.IRemoteProvider
+	cachedCredsProvider    aws.CredentialsProvider
 	shareFile              string
 	shouldShareCredentials bool
 	credsInitMutex         sync.Mutex
