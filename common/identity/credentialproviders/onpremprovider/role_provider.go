@@ -15,6 +15,7 @@ package onpremprovider
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -30,8 +31,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 
-	awserr "github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
+	"github.com/aws/smithy-go"
 	"github.com/cenkalti/backoff/v4"
 )
 
@@ -80,7 +81,8 @@ func shouldRetryAwsRequest(err error) bool {
 		return false
 	}
 
-	if _, ok := err.(awserr.Error); ok {
+	var apiErr smithy.APIError
+	if errors.As(err, &apiErr) {
 		// No aws sdk errors for RequestManagedInstanceRoleToken nor UpdateManagedInstancePublicKey are retryable
 		return false
 	}
