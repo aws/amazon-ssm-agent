@@ -21,9 +21,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -121,10 +120,7 @@ func NewService(context context.T) Service {
 	}
 
 	ssmService := ssm.NewFromConfig(awsConfig, func(o *ssm.Options) {
-		o.APIOptions = append(o.APIOptions, func(stack *middleware.Stack) error {
-			return smithyhttp.AddHeaderValue("User-Agent",
-				fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version))(stack)
-		})
+		o.APIOptions = append(o.APIOptions, awsmiddleware.AddUserAgentKeyValue(appConfig.Agent.Name, appConfig.Agent.Version))
 	})
 	return NewSSMService(context, ssmService)
 }

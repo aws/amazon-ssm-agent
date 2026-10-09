@@ -18,8 +18,7 @@ import (
 	cont "context"
 	"fmt"
 
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -60,17 +59,7 @@ func NewKMSService(context context.T) (kmsService *KMSService, err error) {
 	agentVersion = appConfig.Agent.Version
 
 	// Add UserAgent middleware BEFORE creating the client
-	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", agentName, agentVersion)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	awsConfig.APIOptions = append(awsConfig.APIOptions, awsmiddleware.AddUserAgentKeyValue(agentName, agentVersion))
 
 	kmsService = &KMSService{
 		client: kms.NewFromConfig(awsConfig),

@@ -16,18 +16,14 @@
 package facade
 
 import (
-	cont "context"
-	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/retryer"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/aws-sdk-go-v2/aws"
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
 
 const (
@@ -56,17 +52,6 @@ func NewBirdwatcherFacade(context context.T) BirdwatcherFacade {
 
 	// Create SSM client with user agent handler in APIOptions
 	return ssm.NewFromConfig(awsConfig, func(o *ssm.Options) {
-		o.APIOptions = append(o.APIOptions, func(stack *middleware.Stack) error {
-			return stack.Build.Add(
-				middleware.BuildMiddlewareFunc("SSMAgentVersionUserAgent",
-					func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-						req := in.Request.(*smithyhttp.Request)
-						userAgent := fmt.Sprintf("%s/%s", context.AppConfig().Agent.Name, version.Version)
-						req.Header.Add("User-Agent", userAgent)
-						return next.HandleBuild(ctx, in)
-					}),
-				middleware.After,
-			)
-		})
+		o.APIOptions = append(o.APIOptions, awsmiddleware.AddUserAgentKeyValue(context.AppConfig().Agent.Name, version.Version))
 	})
 }

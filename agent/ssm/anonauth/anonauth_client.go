@@ -17,13 +17,11 @@ package anonauth
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
@@ -118,17 +116,7 @@ func NewClient(logger logger.T, region string) IClient {
 		return nil
 	}
 
-	cfg.APIOptions = append(cfg.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx context.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	cfg.APIOptions = append(cfg.APIOptions, awsmiddleware.AddUserAgentKeyValue(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	ssmService := ssm.NewFromConfig(cfg)
 	return &Client{sdk: ssmService}

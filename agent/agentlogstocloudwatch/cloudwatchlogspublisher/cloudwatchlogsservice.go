@@ -20,16 +20,14 @@ import (
 	cont "context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"runtime/debug"
 	"strings"
 	"time"
 
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs/types"
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -143,17 +141,7 @@ func createCloudWatchClientWithConfig(context context.T, config aws.Config) clou
 
 	appConfig := context.AppConfig()
 
-	config.APIOptions = append(config.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	config.APIOptions = append(config.APIOptions, awsmiddleware.AddUserAgentKeyValue(appConfig.Agent.Name, appConfig.Agent.Version))
 	return cloudwatchlogs.NewFromConfig(config)
 
 }

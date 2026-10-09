@@ -25,8 +25,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -83,17 +82,7 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	if appCfg.Agent.Region != "" {
 		cfg.Region = appCfg.Agent.Region
 	}
-	cfg.APIOptions = append(cfg.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", appCfg.Agent.Name, appCfg.Agent.Version)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	cfg.APIOptions = append(cfg.APIOptions, awsmiddleware.AddUserAgentKeyValue(appCfg.Agent.Name, appCfg.Agent.Version))
 
 	uploader.ssm = ssm.NewFromConfig(cfg)
 

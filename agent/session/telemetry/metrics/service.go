@@ -18,11 +18,9 @@ package metrics
 import (
 	cont "context"
 	"errors"
-	"fmt"
 
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
-	"github.com/aws/smithy-go/middleware"
-	smithyhttp "github.com/aws/smithy-go/transport/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -175,17 +173,7 @@ func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.Client {
 	}
 
 	appConfig := c.context.AppConfig()
-	config.APIOptions = append(config.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	config.APIOptions = append(config.APIOptions, awsmiddleware.AddUserAgentKeyValue(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	return cloudwatch.NewFromConfig(config)
 }

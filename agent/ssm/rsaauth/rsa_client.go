@@ -16,7 +16,6 @@ package rsaauth
 
 import (
 	cont "context"
-	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -24,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/authtokenrequest"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/iirprovider"
 	"github.com/aws/aws-sdk-go-v2/aws"
+	awsmiddleware "github.com/aws/aws-sdk-go-v2/aws/middleware"
 	"github.com/aws/smithy-go/middleware"
 	smithyhttp "github.com/aws/smithy-go/transport/http"
 )
@@ -39,17 +39,7 @@ func NewRsaClient(log log.T, appConfig *appconfig.SsmagentConfig, serverId, regi
 		awsConfig.BaseEndpoint = &ep
 	}
 
-	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	awsConfig.APIOptions = append(awsConfig.APIOptions, awsmiddleware.AddUserAgentKeyValue(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
 		// Remove original signing and add our RSA signer
@@ -89,17 +79,7 @@ func NewIirRsaClient(log log.T, appConfig *appconfig.SsmagentConfig, imdsClient 
 		awsConfig.BaseEndpoint = &ep
 	}
 
-	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
-		return stack.Build.Add(
-			middleware.BuildMiddlewareFunc("AddUserAgent", func(ctx cont.Context, in middleware.BuildInput, next middleware.BuildHandler) (middleware.BuildOutput, middleware.Metadata, error) {
-				req := in.Request.(*smithyhttp.Request)
-				userAgent := fmt.Sprintf("%s/%s", appConfig.Agent.Name, appConfig.Agent.Version)
-				req.Header.Add("User-Agent", userAgent)
-				return next.HandleBuild(ctx, in)
-			}),
-			middleware.After,
-		)
-	})
+	awsConfig.APIOptions = append(awsConfig.APIOptions, awsmiddleware.AddUserAgentKeyValue(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	awsConfig.APIOptions = append(awsConfig.APIOptions, func(stack *middleware.Stack) error {
 		return stack.Finalize.Add(
