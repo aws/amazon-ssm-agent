@@ -78,16 +78,16 @@ func httpDownload(ctx context.T, fileURL string, destFile string, expectedBucket
 		if err != nil {
 			return
 		}
+		// Attach the bucket-owner condition whenever one is set.
+		expectedBucketOwner = strings.TrimSpace(expectedBucketOwner)
+		if expectedBucketOwner != "" {
+			httpRequest.Header.Add("x-amz-expected-bucket-owner", expectedBucketOwner)
+		}
 		if fileutil.Exists(destFile) == true && fileutil.Exists(eTagFile) == true {
 			log.Debugf("destFile exists at %v, etag file exists at %v", destFile, eTagFile)
 			var existingETag string
 			existingETag, err = fileutil.ReadAllText(eTagFile)
 			httpRequest.Header.Add("If-None-Match", existingETag)
-
-			expectedBucketOwner = strings.TrimSpace(expectedBucketOwner)
-			if expectedBucketOwner != "" {
-				httpRequest.Header.Add("x-amz-expected-bucket-owner", expectedBucketOwner)
-			}
 		}
 		customTransport := network.GetDefaultTransport(log, ctx.AppConfig())
 		customTransport.TLSHandshakeTimeout = 20 * time.Second
