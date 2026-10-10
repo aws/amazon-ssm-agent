@@ -33,11 +33,11 @@ require (
 	github.com/xtaci/smux v1.5.15
 	github.com/yusufpapurcu/wmi v1.2.4
 	go.nanomsg.org/mangos/v3 v3.3.0
-	golang.org/x/crypto v0.56.0
-	golang.org/x/net v0.57.0
+	golang.org/x/crypto v0.57.0
+	golang.org/x/net v0.60.0
 	golang.org/x/oauth2 v0.28.0
 	golang.org/x/sync v0.21.0
-	golang.org/x/sys v0.47.0
+	golang.org/x/sys v0.48.0
 	gopkg.in/ini.v1 v1.62.0
 	gopkg.in/yaml.v2 v2.4.0
 )
