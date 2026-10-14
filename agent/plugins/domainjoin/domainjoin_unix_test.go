@@ -209,7 +209,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 	context := contextmocks.NewMockDefault()
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, "", []string{})
 	commandLine, _ := makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine := "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1"
+	expectedCommandLine := "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ := makeCommandParts(commandLine)
 	expectedCommandParts := []string{
@@ -225,7 +225,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, testDirectoryOU, []string{"172.31.4.141", "172.31.21.240"})
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --directory-ou 'OU=test,OU=corp,DC=test,DC=com' --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --directory-ou 'OU=test,OU=corp,DC=test,DC=com' --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -245,7 +245,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, testDirectoryOUWithSpace, []string{"172.31.4.141", "172.31.21.240"})
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --directory-ou 'OU=test with space,OU=corp,DC=test,DC=com' --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --directory-ou 'OU=test with space,OU=corp,DC=test,DC=com' --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -265,7 +265,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, testDirectoryOUWithSpaceQuoted, []string{"172.31.4.141", "172.31.21.240"})
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --directory-ou 'OU=test with space,OU=corp,DC=test,DC=com' --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --directory-ou 'OU=test with space,OU=corp,DC=test,DC=com' --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -305,7 +305,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, "", []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --set-hostname 'my_hostname' --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -325,7 +325,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostNameWithAppendDigits(testDirectoryId, testDirectoryName, "", []string{"172.31.4.141", "172.31.21.240"}, testSetHostName, testSetHostNameNumAppendDigits)
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --set-hostname-append-num-digits 5 --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --set-hostname 'my_hostname' --set-hostname-append-num-digits 5 --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -363,7 +363,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, "", []string{"172.31.4.141", "172.31.21.240"}, testKeepHostNameBool)
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname   --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --keep-hostname   --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -382,7 +382,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, "", []string{"172.31.4.141", "172.31.21.240"}, testNotKeepHostNameString)
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240"
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -400,7 +400,7 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostNameNoIPs(testDirectoryId, testDirectoryName, "", testKeepHostNameString)
 	commandLine, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expectedCommandLine = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --keep-hostname  "
+	expectedCommandLine = "./aws_domainjoin.sh --directory-id 'd-0123456789' --directory-name 'corp.test.com' --instance-region us-east-1 --keep-hostname  "
 	assert.Equal(t, expectedCommandLine, commandLine)
 	commandParts, _ = makeCommandParts(commandLine)
 	expectedCommandParts = []string{
@@ -425,4 +425,186 @@ func TestMakeArgumentsAndCommandParts(t *testing.T) {
 	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc || rm *")
 	shellInjectionCheck = isShellInjection("echo abc ; rm *")
 	assert.Equal(t, shellInjectionCheck, true, "test failed for echo abc ; rm *")
+}
+
+// invalidParameterCharacters returns the characters that must never appear in a
+// domain-join parameter value: the shell metacharacters already covered by the
+// denylist, the single quote used to wrap the value for single-token parsing,
+// and the newline / carriage return that would introduce an extra token when
+// the command line is re-parsed. These are character-class probes, not working
+// commands.
+func invalidParameterCharacters() []string {
+	return []string{"$", "`", ";", "|", "&", "'", "\n", "\r"}
+}
+
+// TestIsShellInjection_RejectsQuoteAndNewline locks the denylist contract at the
+// function level: the single quote and the newline / carriage return must be
+// rejected in addition to the previously covered shell metacharacters.
+func TestIsShellInjection_RejectsQuoteAndNewline(t *testing.T) {
+	assert.True(t, isShellInjection("abc'def"), "single quote must be rejected")
+	assert.True(t, isShellInjection("abc\ndef"), "newline must be rejected")
+	assert.True(t, isShellInjection("abc\rdef"), "carriage return must be rejected")
+	// A legitimate value with none of these characters must still be accepted.
+	assert.False(t, isShellInjection("OU=My Servers,DC=corp,DC=example,DC=com"))
+}
+
+// TestMakeArguments_RejectsInvalidCharactersInDirectoryId proves makeArguments
+// rejects a DirectoryId that contains any disallowed character.
+func TestMakeArguments_RejectsInvalidCharactersInDirectoryId(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	for _, bad := range invalidParameterCharacters() {
+		input := generateDomainJoinPluginInput("d-012"+bad, testDirectoryName, "", []string{"10.0.0.1"})
+		commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+		assert.Empty(t, commandLine, "expected rejection for DirectoryId containing %q", bad)
+		assert.Error(t, err, "expected error for DirectoryId containing %q", bad)
+	}
+}
+
+// TestMakeArguments_RejectsInvalidCharactersInDirectoryName proves makeArguments
+// rejects a DirectoryName that contains any disallowed character.
+func TestMakeArguments_RejectsInvalidCharactersInDirectoryName(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	for _, bad := range invalidParameterCharacters() {
+		input := generateDomainJoinPluginInput(testDirectoryId, "corp.test.com"+bad, "", []string{"10.0.0.1"})
+		commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+		assert.Empty(t, commandLine, "expected rejection for DirectoryName containing %q", bad)
+		assert.Error(t, err, "expected error for DirectoryName containing %q", bad)
+	}
+}
+
+// TestMakeArguments_RejectsInvalidCharactersInDirectoryOU proves makeArguments
+// rejects a DirectoryOU that contains any disallowed character. DirectoryOU is
+// single-quote wrapped for single-token parsing, so a single quote in the value
+// would otherwise terminate the wrapping.
+func TestMakeArguments_RejectsInvalidCharactersInDirectoryOU(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	for _, bad := range invalidParameterCharacters() {
+		input := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, "OU=test"+bad+",DC=corp", []string{"10.0.0.1"})
+		commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+		assert.Empty(t, commandLine, "expected rejection for DirectoryOU containing %q", bad)
+		assert.Error(t, err, "expected error for DirectoryOU containing %q", bad)
+	}
+}
+
+// TestMakeArguments_RejectsInvalidCharactersInHostName proves makeArguments
+// rejects a HostName that contains any disallowed character.
+func TestMakeArguments_RejectsInvalidCharactersInHostName(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	for _, bad := range invalidParameterCharacters() {
+		input := generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, "", []string{"10.0.0.1"}, "host"+bad+"name")
+		commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+		assert.Empty(t, commandLine, "expected rejection for HostName containing %q", bad)
+		assert.Error(t, err, "expected error for HostName containing %q", bad)
+	}
+}
+
+// TestMakeArguments_LegitimateValuesParseAsSingleTokens proves the token-integrity
+// contract: legitimate values (including an OU and a hostname that contain
+// spaces) survive the re-parse as single tokens rather than being split into
+// extra arguments to the helper script.
+func TestMakeArguments_LegitimateValuesParseAsSingleTokens(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	input := generateDomainJoinPluginInputOptionalParamSetHostName(
+		"d-0123456789",
+		"corp.example.com",
+		"OU=My Servers,DC=corp,DC=example,DC=com",
+		[]string{"172.31.4.141", "172.31.21.240"},
+		"my_hostname",
+	)
+	commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+	assert.NoError(t, err)
+	assert.NotEmpty(t, commandLine)
+
+	parts, err := makeCommandParts(commandLine)
+	assert.NoError(t, err)
+	assert.Contains(t, parts, "d-0123456789")
+	assert.Contains(t, parts, "corp.example.com")
+	// The OU with a space must be a single token, not two.
+	assert.Contains(t, parts, "OU=My Servers,DC=corp,DC=example,DC=com")
+	assert.Contains(t, parts, "my_hostname")
+	assert.Contains(t, parts, "172.31.4.141,172.31.21.240")
+}
+
+// TestRunCommandsRawInput_RejectsInvalidDocumentParameters is an integration
+// test over the full document-parameter path: parameters arrive as the raw
+// map that runCommandsRawInput receives from the document, flow through
+// runCommands into the real argument builder, and a value carrying a character
+// that is not permitted in a domain-join value must be rejected end-to-end -
+// the command is marked failed and is never handed to the executer. This guards
+// against a regression that re-opens the validation at any layer of that path.
+func TestRunCommandsRawInput_RejectsInvalidDocumentParameters(t *testing.T) {
+	// Use the real argument builder, not the stub used elsewhere in this file.
+	makeArgs = makeArguments
+	makeDir = func(destinationDir string) (err error) { return nil }
+	createOrchesDir = func(log log.T, orchestrationDir string, pluginInput DomainJoinPluginInput) (scriptPath string, err error) {
+		return "./aws_domainjoin.sh", nil
+	}
+
+	executed := false
+	exe := func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+		executed = true
+		return "Success", nil
+	}
+
+	cases := []struct {
+		name  string
+		input DomainJoinPluginInput
+	}{
+		{"single-quote in DirectoryOU", generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, "OU=test',DC=corp", []string{"10.0.0.1"})},
+		{"newline in DirectoryName", generateDomainJoinPluginInput(testDirectoryId, "corp.test.com\nextra", "", []string{"10.0.0.1"})},
+		{"metacharacter in DirectoryId", generateDomainJoinPluginInput("d-012;id", testDirectoryName, "", []string{"10.0.0.1"})},
+		{"carriage-return in HostName", generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, "", []string{"10.0.0.1"}, "host\rname")},
+	}
+
+	for _, tc := range cases {
+		executed = false
+
+		var rawPluginInput map[string]interface{}
+		err := jsonutil.Remarshal(tc.input, &rawPluginInput)
+		assert.Nil(t, err)
+
+		p := &Plugin{context: contextmocks.NewMockDefault()}
+		mockCancelFlag := new(task.MockCancelFlag)
+		mockIOHandler := new(iohandlermocks.MockIOHandler)
+		mockIOHandler.On("MarkAsFailed", mock.Anything).Return()
+
+		p.runCommandsRawInput("domainjoin", rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, exe)
+
+		mockIOHandler.AssertCalled(t, "MarkAsFailed", mock.Anything)
+		mockIOHandler.AssertNotCalled(t, "MarkAsSucceeded")
+		assert.False(t, executed, "executer must not run for rejected document input: %s", tc.name)
+	}
+}
+
+// TestRunCommandsRawInput_AcceptsLegitimateDocumentParameters is the positive
+// half of the integration path: a legitimate set of document parameters
+// (including an OU with a space) must still complete successfully, proving the
+// validation does not reject valid domain-join requests.
+func TestRunCommandsRawInput_AcceptsLegitimateDocumentParameters(t *testing.T) {
+	makeArgs = makeArguments
+	makeDir = func(destinationDir string) (err error) { return nil }
+	createOrchesDir = func(log log.T, orchestrationDir string, pluginInput DomainJoinPluginInput) (scriptPath string, err error) {
+		return "./aws_domainjoin.sh", nil
+	}
+	exe := func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+		return "Success", nil
+	}
+
+	input := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, testDirectoryOUWithSpace, []string{"172.31.4.141", "172.31.21.240"})
+	var rawPluginInput map[string]interface{}
+	err := jsonutil.Remarshal(input, &rawPluginInput)
+	assert.Nil(t, err)
+
+	p := &Plugin{context: contextmocks.NewMockDefault()}
+	mockCancelFlag := new(task.MockCancelFlag)
+	mockIOHandler := new(iohandlermocks.MockIOHandler)
+	mockIOHandler.On("SetStatus", mock.Anything).Return()
+	mockIOHandler.On("GetStdoutWriter", mock.Anything).Return(new(multiwritermock.MockDocumentIOMultiWriter))
+	mockIOHandler.On("GetStderrWriter", mock.Anything).Return(new(multiwritermock.MockDocumentIOMultiWriter))
+	mockIOHandler.On("MarkAsSucceeded").Return()
+
+	p.runCommandsRawInput("domainjoin", rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, exe)
+
+	mockIOHandler.AssertCalled(t, "MarkAsSucceeded")
+	mockIOHandler.AssertNotCalled(t, "MarkAsFailed", mock.Anything)
 }

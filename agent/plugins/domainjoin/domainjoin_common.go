@@ -25,8 +25,15 @@ import (
 func isShellInjection(arg string) bool {
 	// The following characters are common shell injection characters
 	// Keeping the checks separate for readability
+	//
+	// The single quote is included because domain-join parameters are
+	// single-quote wrapped before the command line is re-parsed; an embedded
+	// single quote would terminate that wrapping. The newline and carriage
+	// return are included because they would introduce an additional token
+	// during that re-parse. None of these characters is valid in a directory
+	// id, directory name, OU, hostname, or DNS address.
 
-	injectionCharsArray := []byte{'$', '`', ';', '|', '&'}
+	injectionCharsArray := []byte{'$', '`', ';', '|', '&', '\'', '\n', '\r'}
 
 	for _, c := range injectionCharsArray {
 		for _, s := range arg {

@@ -253,8 +253,13 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		return "", fmt.Errorf("Shell command injection string %s", pluginInput.DirectoryId)
 	}
 
+	// Single-quote wrap the value so it is treated as a single token when the
+	// command line is re-parsed, preventing a value with spaces from being
+	// split into additional arguments to the helper script.
 	buffer.WriteString(DirectoryIdArg)
+	buffer.WriteString("'")
 	buffer.WriteString(pluginInput.DirectoryId)
+	buffer.WriteString("'")
 
 	if len(pluginInput.DirectoryName) == 0 {
 		return "", fmt.Errorf("directoryName is required")
@@ -263,8 +268,12 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 	if isShellInjection(pluginInput.DirectoryName) {
 		return "", fmt.Errorf("Shell command injection string %s", pluginInput.DirectoryName)
 	}
+	// Single-quote wrap the value so it is treated as a single token when the
+	// command line is re-parsed.
 	buffer.WriteString(DirectoryNameArg)
+	buffer.WriteString("'")
 	buffer.WriteString(pluginInput.DirectoryName)
+	buffer.WriteString("'")
 
 	region, err := context.Identity().Region()
 	if err != nil || region == "" {
@@ -280,6 +289,10 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 
 	// check if user provides the directory OU parameter
 	if len(pluginInput.DirectoryOU) != 0 {
+		// Validate before writing so an invalid value never reaches the buffer.
+		if isShellInjection(pluginInput.DirectoryOU) {
+			return "", fmt.Errorf("Shell command injection string %s", pluginInput.DirectoryOU)
+		}
 		log.Debugf("Customized directory OU parameter provided: %v", pluginInput.DirectoryOU)
 		buffer.WriteString(DirectoryOUArg)
 		// when using OU name with spaces, we should expect users passing in the OU parameter within quotation marks
@@ -290,16 +303,16 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		buffer.WriteString("'")
 	}
 
-	if isShellInjection(pluginInput.DirectoryOU) {
-		return "", fmt.Errorf("Shell command injection string %s", pluginInput.DirectoryOU)
-	}
-
 	if len(pluginInput.HostName) != 0 {
 		if isShellInjection(pluginInput.HostName) {
 			return "", fmt.Errorf("Shell command injection string %s", pluginInput.HostName)
 		}
+		// Single-quote wrap the value so it is treated as a single token when
+		// the command line is re-parsed.
 		buffer.WriteString(SetHostNameArg)
+		buffer.WriteString("'")
 		buffer.WriteString(pluginInput.HostName)
+		buffer.WriteString("'")
 
 		if len(pluginInput.HostNameNumAppendDigits) != 0 {
 			val, err := strconv.Atoi(pluginInput.HostNameNumAppendDigits)
