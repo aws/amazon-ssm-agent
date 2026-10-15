@@ -19,6 +19,7 @@ package platform
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	logger "github.com/aws/amazon-ssm-agent/agent/mocks/log"
@@ -222,4 +223,81 @@ func TestGetSystemInfoWithNonExistingParam(t *testing.T) {
 	//make sure we don't cache values for non existing params
 	GetSystemInfo(logMock, XenUuidSystemInfoParamKey)
 	assert.Equal(t, 2, cacheInitCount)
+}
+
+func TestSetOOMScoreAdjust(t *testing.T) {
+	// Save original functions
+	tmpFileExists := fileExists
+	tmpWriteFile := writeFile
+	defer func() {
+		fileExists = tmpFileExists
+		writeFile = tmpWriteFile
+	}()
+
+	// Mock file exists
+	fileExists = func(filePath string) bool {
+		return filePath == "/proc/self/oom_score_adj"
+	}
+
+	// Mock successful write
+	writeCalled := false
+	var writtenData []byte
+	writeFile = func(name string, data []byte, perm os.FileMode) error {
+		writeCalled = true
+		writtenData = data
+		return nil
+	}
+
+	logMock := logger.NewMockLog()
+	SetOOMScoreAdjust(logMock)
+
+	assert.True(t, writeCalled, "WriteFile should have been called")
+	assert.Equal(t, "-1000", string(writtenData), "Should write -1000")
+}
+
+func TestSetOOMScoreAdjustError(t *testing.T) {
+	// Save original functions
+	tmpFileExists := fileExists
+	tmpWriteFile := writeFile
+	defer func() {
+		fileExists = tmpFileExists
+		writeFile = tmpWriteFile
+	}()
+
+	fileExists = func(filePath string) bool {
+		return filePath == "/proc/self/oom_score_adj"
+	}
+
+	writeFile = func(name string, data []byte, perm os.FileMode) error {
+		return fmt.Errorf("permission denied")
+	}
+
+	logMock := logger.NewMockLog()
+	SetOOMScoreAdjust(logMock)
+
+	assert.NotNil(t, logMock)
+}
+
+func TestSetOOMScoreAdjustNotSupported(t *testing.T) {
+	tmpFileExists := fileExists
+	tmpWriteFile := writeFile
+	defer func() {
+		fileExists = tmpFileExists
+		writeFile = tmpWriteFile
+	}()
+
+	fileExists = func(filePath string) bool {
+		return false
+	}
+
+	writeCalled := false
+	writeFile = func(name string, data []byte, perm os.FileMode) error {
+		writeCalled = true
+		return nil
+	}
+
+	logMock := logger.NewMockLog()
+	SetOOMScoreAdjust(logMock)
+
+	assert.False(t, writeCalled, "WriteFile should not have been called when file doesn't exist")
 }
