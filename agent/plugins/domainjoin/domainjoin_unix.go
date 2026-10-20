@@ -253,6 +253,11 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		return "", fmt.Errorf("Shell command injection string %s", pluginInput.DirectoryId)
 	}
 
+	// Allowlist: a directory id must be the canonical d-xxxxxxxxxx form.
+	if !isValidDirectoryId(pluginInput.DirectoryId) {
+		return "", fmt.Errorf("Invalid directoryId %s", pluginInput.DirectoryId)
+	}
+
 	// Single-quote wrap the value so it is treated as a single token when the
 	// command line is re-parsed, preventing a value with spaces from being
 	// split into additional arguments to the helper script.
@@ -267,6 +272,10 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 
 	if isShellInjection(pluginInput.DirectoryName) {
 		return "", fmt.Errorf("Shell command injection string %s", pluginInput.DirectoryName)
+	}
+	// Allowlist: a directory name may contain only DNS-name characters.
+	if !isValidDirectoryName(pluginInput.DirectoryName) {
+		return "", fmt.Errorf("Invalid directoryName %s", pluginInput.DirectoryName)
 	}
 	// Single-quote wrap the value so it is treated as a single token when the
 	// command line is re-parsed.

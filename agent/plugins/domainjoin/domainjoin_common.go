@@ -17,9 +17,28 @@ package domainjoin
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/google/shlex"
 )
+
+// directoryIdPattern matches the canonical directory id form: "d-" followed
+// by exactly ten lowercase hex characters.
+var directoryIdPattern = regexp.MustCompile(`^d-[0-9a-f]{10}$`)
+
+// directoryNamePattern matches DNS-label characters (letters, digits, dot,
+// hyphen) and requires an alphanumeric first and last character.
+var directoryNamePattern = regexp.MustCompile(`^[A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?$`)
+
+// isValidDirectoryId returns true when arg matches directoryIdPattern.
+func isValidDirectoryId(arg string) bool {
+	return directoryIdPattern.MatchString(arg)
+}
+
+// isValidDirectoryName returns true when arg matches directoryNamePattern.
+func isValidDirectoryName(arg string) bool {
+	return directoryNamePattern.MatchString(arg)
+}
 
 // Returns true if an injection command is detected in a shell command
 func isShellInjection(arg string) bool {

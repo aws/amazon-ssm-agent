@@ -116,9 +116,9 @@ set_hostname() {
     check_for_write_protect hostname
     HOSTNAMECTL=$(which hostnamectl)
     if [ ! -z "$HOSTNAMECTL" ]; then
-        hostnamectl set-hostname $COMPUTER_NAME.$DIRECTORY_NAME >/dev/null
+        hostnamectl set-hostname "$COMPUTER_NAME.$DIRECTORY_NAME" >/dev/null
     else
-        hostname $COMPUTER_NAME.$DIRECTORY_NAME >/dev/null
+        hostname "$COMPUTER_NAME.$DIRECTORY_NAME" >/dev/null
     fi
     if [ $? -ne 0 ]; then echo "***Failed: set_hostname(): set hostname failed" && exit 1; fi
 
@@ -131,8 +131,8 @@ set_hostname() {
 
 get_list_of_computers() {
     check_for_write_protect ldapsearch
-    LDAP_BASE_DN=$(echo $DIRECTORY_NAME | awk -F\. '{ for (i = 1; i <= NF; i++) { if (i != NF) printf "DC=%s,",$i ; else printf "DC=%s", $i} }')
-    printf '%s' "$DOMAIN_PASSWORD" | ldapsearch -H ldap://$DIRECTORY_NAME -b $LDAP_BASE_DN 'objectClass=computer' -D "$DOMAIN_USERNAME@$REALM" -y /dev/stdin  | grep "cn:" | sed 's/cn://g'
+    LDAP_BASE_DN=$(echo "$DIRECTORY_NAME" | awk -F\. '{ for (i = 1; i <= NF; i++) { if (i != NF) printf "DC=%s,",$i ; else printf "DC=%s", $i} }')
+    printf '%s' "$DOMAIN_PASSWORD" | ldapsearch -H "ldap://$DIRECTORY_NAME" -b "$LDAP_BASE_DN" 'objectClass=computer' -D "$DOMAIN_USERNAME@$REALM" -y /dev/stdin  | grep "cn:" | sed 's/cn://g'
 }
 
 cleanup_temp_files() {
@@ -767,7 +767,7 @@ resolve_name_to_ip() {
 
    # Derive DNS IPs if they are not provided as inputs
    if [ -z "$INPUT_DNS_IP_ADDRESS1" ] && [ -z "$INPUT_DNS_IP_ADDRESS2" ]; then
-     DS_DNS_IP_ADDRESSES=$($AWSCLI ds describe-directories --region $REGION --directory-id $DIRECTORY_ID --query 'DirectoryDescriptions[*].DnsIpAddrs' --output text)
+     DS_DNS_IP_ADDRESSES=$($AWSCLI ds describe-directories --region $REGION --directory-id "$DIRECTORY_ID" --query 'DirectoryDescriptions[*].DnsIpAddrs' --output text)
      if [ $? -ne 0 ] || [ -z "$DS_DNS_IP_ADDRESSES" ]; then
          echo "Cannot find IPs from directory $DIRECTORY_ID"
          # This may be a shared directory connected over a peering VPC connection
@@ -811,7 +811,7 @@ resolve_name_to_ip() {
 ##################################################
 is_directory_reachable() {
     check_for_write_protect dig
-    RESOLVED_DNS_IP_ADDRESSES=$(dig ${DIRECTORY_NAME} +short | tr '\n' ' ')
+    RESOLVED_DNS_IP_ADDRESSES=$(dig "${DIRECTORY_NAME}" +short | tr '\n' ' ')
     if [ ! -z "$RESOLVED_DNS_IP_ADDRESSES" ]; then
        echo "Resolved $DIRECTORY_NAME to IP address(es): $RESOLVED_DNS_IP_ADDRESSES"
        return 0
@@ -903,7 +903,7 @@ config_nsswitch() {
 ###################################################
 config_samba() {
     check_for_write_protect adcli
-    AD_INFO=$(adcli info ${DIRECTORY_NAME} | grep '^domain-name = ' | awk '{print $3}')
+    AD_INFO=$(adcli info "${DIRECTORY_NAME}" | grep '^domain-name = ' | awk '{print $3}')
     if [ -z $AD_INFO ]; then
         echo "**Failed: adcli info output is empty" && exit 1
     fi
@@ -1067,7 +1067,7 @@ do
     sleep 30
 done
 
-resolve_name_to_ip $DIRECTORY_NAME
+resolve_name_to_ip "$DIRECTORY_NAME"
 
 # Modify DNS config only if DNS resolution does not already work
 if [ $UNMUTATED_DNS_RESOLVE_STATUS -eq 1 ]; then

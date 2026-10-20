@@ -608,3 +608,116 @@ func TestRunCommandsRawInput_AcceptsLegitimateDocumentParameters(t *testing.T) {
 	mockIOHandler.AssertCalled(t, "MarkAsSucceeded")
 	mockIOHandler.AssertNotCalled(t, "MarkAsFailed", mock.Anything)
 }
+
+// TestIsValidDirectoryId tests that isValidDirectoryId accepts only the
+// canonical d-xxxxxxxxxx form (ten lowercase hex chars).
+func TestIsValidDirectoryId(t *testing.T) {
+	valid := []string{"d-0123456789", "d-abcdef0123", "d-00000000aa"}
+	for _, v := range valid {
+		assert.True(t, isValidDirectoryId(v), "expected %q to be a valid directory id", v)
+	}
+
+	invalid := []string{
+		"",
+		"d-0123456789 --endpoint-url=https://actor", // space + injected flag
+		"d-0123456789 ",   // trailing space
+		"d-012345678",     // too short
+		"d-01234567890",   // too long
+		"d-ABCDEF0123",    // uppercase hex not allowed
+		"d-01234567zz",    // non-hex
+		"x-0123456789",    // wrong prefix
+		"d-0123456789;id", // metacharacter
+	}
+	for _, v := range invalid {
+		assert.False(t, isValidDirectoryId(v), "expected %q to be rejected", v)
+	}
+}
+
+// TestIsValidDirectoryName tests that isValidDirectoryName accepts only
+// DNS-name characters (letters, digits, dot, hyphen).
+func TestIsValidDirectoryName(t *testing.T) {
+	valid := []string{"corp.test.com", "example.com", "my-corp.example.co.uk", "a.b"}
+	for _, v := range valid {
+		assert.True(t, isValidDirectoryName(v), "expected %q to be a valid directory name", v)
+	}
+
+	invalid := []string{
+		"",
+		"evil.example -H ldap://actor", // space + injected flag
+		"corp.test.com ",               // trailing space
+		"corp.test.com\nextra",         // newline
+		"corp.test.com;id",             // metacharacter
+		"corp_test_com",                // underscore not in DNS label set
+		"-foo",                         // leading hyphen (parsed as a flag)
+		"--version",                    // leading double hyphen (parsed as a flag)
+		"corp.test.com-",               // trailing hyphen
+		".corp.test.com",               // leading dot
+	}
+	for _, v := range invalid {
+		assert.False(t, isValidDirectoryName(v), "expected %q to be rejected", v)
+	}
+}
+
+// TestMakeArguments_RejectsSpaceInjectedDirectoryId tests that makeArguments
+// rejects a DirectoryId that smuggles an extra argument using a space.
+func TestMakeArguments_RejectsSpaceInjectedDirectoryId(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	input := generateDomainJoinPluginInput("d-0123456789 --endpoint-url=https://actor", testDirectoryName, "", []string{"10.0.0.1"})
+	commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+	assert.Empty(t, commandLine)
+	assert.Error(t, err)
+}
+
+// TestMakeArguments_RejectsSpaceInjectedDirectoryName tests that makeArguments
+// rejects a DirectoryName that smuggles an extra argument using a space.
+func TestMakeArguments_RejectsSpaceInjectedDirectoryName(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	input := generateDomainJoinPluginInput(testDirectoryId, "evil.example -H ldap://actor", "", []string{"10.0.0.1"})
+	commandLine, err := makeArguments(context, "./aws_domainjoin.sh", input)
+	assert.Empty(t, commandLine)
+	assert.Error(t, err)
+}
+
+// TestRunCommandsRawInput_RejectsSpaceInjectedDocumentParameters tests that a
+// DirectoryId or DirectoryName carrying a space and an extra argument is
+// rejected end-to-end (command marked failed, executer never invoked).
+func TestRunCommandsRawInput_RejectsSpaceInjectedDocumentParameters(t *testing.T) {
+	makeArgs = makeArguments
+	makeDir = func(destinationDir string) (err error) { return nil }
+	createOrchesDir = func(log log.T, orchestrationDir string, pluginInput DomainJoinPluginInput) (scriptPath string, err error) {
+		return "./aws_domainjoin.sh", nil
+	}
+
+	executed := false
+	exe := func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error) {
+		executed = true
+		return "Success", nil
+	}
+
+	cases := []struct {
+		name  string
+		input DomainJoinPluginInput
+	}{
+		{"space-injected DirectoryId", generateDomainJoinPluginInput("d-0123456789 --endpoint-url=https://actor", testDirectoryName, "", []string{"10.0.0.1"})},
+		{"space-injected DirectoryName", generateDomainJoinPluginInput(testDirectoryId, "evil.example -H ldap://actor", "", []string{"10.0.0.1"})},
+	}
+
+	for _, tc := range cases {
+		executed = false
+
+		var rawPluginInput map[string]interface{}
+		err := jsonutil.Remarshal(tc.input, &rawPluginInput)
+		assert.Nil(t, err)
+
+		p := &Plugin{context: contextmocks.NewMockDefault()}
+		mockCancelFlag := new(task.MockCancelFlag)
+		mockIOHandler := new(iohandlermocks.MockIOHandler)
+		mockIOHandler.On("MarkAsFailed", mock.Anything).Return()
+
+		p.runCommandsRawInput("domainjoin", rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, exe)
+
+		mockIOHandler.AssertCalled(t, "MarkAsFailed", mock.Anything)
+		mockIOHandler.AssertNotCalled(t, "MarkAsSucceeded")
+		assert.False(t, executed, "executer must not run for rejected document input: %s", tc.name)
+	}
+}
