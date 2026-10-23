@@ -68,7 +68,29 @@ func (l *linuxManager) VerifySignature(log log.T, signaturePath string, artifact
 		// gpg not available, try gpgv as fallback
 		log.Infof("gpg is not available, checking for gpgv")
 		if !l.managerHelper.IsCommandAvailable("gpgv") {
-			return fmt.Errorf("gpg and gpgv are not installed. Please install gpg or gpgv to validate the signature of binaries or pass -skip-signature-validation flag")
+			// gpgv also unavailable; try sqv (Debian 13 ships sqv as its OpenPGP verifier) before in-process.
+			if l.managerHelper.IsCommandAvailable("sqv") {
+				log.Infof("gpg and gpgv not available, using sqv for signature verification")
+				// sqv reads an ASCII-armored keyring directly, so reuse the armored public key.
+				sqvKeyPath := filepath.Join(artifactsPath, appconfig.DefaultAgentName+".asc")
+				if err := l.createPublicKeyFile(sqvKeyPath); err != nil {
+					return fmt.Errorf("failed to create armored public key file for sqv: %v", err)
+				}
+				// sqv takes the keyring via --keyring then the detached signature and the signed file positionally.
+				output, err := l.managerHelper.RunCommand("sqv", "--keyring", sqvKeyPath, signaturePath, binaryPath)
+				if err != nil {
+					if l.managerHelper.IsTimeoutError(err) {
+						return fmt.Errorf("sqv command timed out")
+					}
+					return fmt.Errorf("sqv verify: failed to verify signature using sqv with output '%v' and error: %v", output, err)
+				}
+				log.Infof("Successfully verified signature using sqv")
+				return nil
+			}
+
+			// Neither gpg, gpgv, nor sqv is installed; verify the detached signature in-process using the embedded keys.
+			log.Infof("gpg, gpgv, and sqv are not available, falling back to in-process signature verification")
+			return l.verifySignatureInProcess(log, signaturePath, binaryPath)
 		}
 
 		// gpgv requires a dearmored (binary) keyring file
