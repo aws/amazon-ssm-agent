@@ -49,10 +49,12 @@ func TestProviderConstants(t *testing.T) {
 	// Test that the new provider constants are defined correctly
 	assert.Equal(t, appconfig.Provider("EC2"), appconfig.EC2)
 	assert.Equal(t, appconfig.Provider("Azure"), appconfig.Azure)
+	assert.Equal(t, appconfig.Provider("GCP"), appconfig.GCP)
 
 	// Test that the Providers map contains the expected entries
 	assert.Equal(t, appconfig.EC2, appconfig.Providers["EC2"])
 	assert.Equal(t, appconfig.Azure, appconfig.Providers["Azure"])
+	assert.Equal(t, appconfig.GCP, appconfig.Providers["GCP"])
 }
 
 func TestProviderFunctionSignatures(t *testing.T) {
@@ -66,4 +68,8 @@ func TestProviderFunctionSignatures(t *testing.T) {
 	// Test newAzureProvider signature
 	var azureProvider identity.IProvider = newAzureProvider(mockLog, config)
 	_ = azureProvider
+
+	// Test newGCPProvider signature
+	var gcpProvider identity.IProvider = newGCPProvider(mockLog, config)
+	_ = gcpProvider
 }

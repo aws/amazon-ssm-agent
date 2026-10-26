@@ -22,10 +22,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/logger"
@@ -759,6 +761,7 @@ func verifyParams(log log.T, additionalVerifier func() string) {
 
 	log.Infof("register=%v", register)
 	log.Infof("region=%v", region)
+	log.Infof("provider=%v", provider)
 	log.Infof("override=%v", override)
 
 	log.Infof("version=%v", version)
@@ -793,6 +796,8 @@ func onPremParamVerification() string {
 	if !register && !install {
 		errMessage += "Action required (-register or -install flag required). "
 	}
+	// provider is optional, but when passed it must be a provider supported by the agent
+	errMessage += validateAndNormalizeProvider()
 	// return when only installation is needed
 	if isAgentInstallationOnly() {
 		return errMessage
@@ -808,6 +813,38 @@ func onPremParamVerification() string {
 		errMessage += "Activation id/code required for on-prem registration. "
 	}
 	return errMessage
+}
+
+// validateAndNormalizeProvider verifies that the value passed in the -provider flag is a cloud
+// provider supported by the agent (EC2, Azure, GCP) and normalizes it to the casing expected by
+// the agent registration command, for example 'gcp' becomes 'GCP'. It returns an empty string
+// when the provider is either empty or valid, otherwise it returns the validation error message.
+func validateAndNormalizeProvider() string {
+	trimmedProvider := strings.TrimSpace(provider)
+	provider = trimmedProvider
+	if trimmedProvider == "" {
+		return ""
+	}
+
+	for providerName := range appconfig.Providers {
+		if strings.EqualFold(trimmedProvider, providerName) {
+			// use the canonical provider name, the agent lookup is case-sensitive
+			provider = providerName
+			return ""
+		}
+	}
+
+	return fmt.Sprintf("Invalid provider %v, supported providers are (%v). ", trimmedProvider, strings.Join(getSupportedProviders(), "|"))
+}
+
+// getSupportedProviders returns the sorted list of cloud providers supported by the agent
+func getSupportedProviders() []string {
+	supportedProviders := make([]string, 0, len(appconfig.Providers))
+	for providerName := range appconfig.Providers {
+		supportedProviders = append(supportedProviders, providerName)
+	}
+	sort.Strings(supportedProviders)
+	return supportedProviders
 }
 
 func greengrassParamVerification() string {
@@ -838,7 +875,7 @@ func flagUsage() {
 	fmt.Fprintln(os.Stderr, "\t-register      \tRegister ssm agent if unregistered or override is set \t(REQUIRED)")
 	fmt.Fprintln(os.Stderr, "\t\t-activation-code  \tSSM Activation Code for Onprem environment \t(REQUIRED and paired with activation-id)")
 	fmt.Fprintln(os.Stderr, "\t\t-activation-id  \tSSM Activation ID for Onprem environment \t(REQUIRED and paired with Activation code)")
-	fmt.Fprintln(os.Stderr, "\t\t-provider  \t\tIdentity provider for on-prem registration \t(OPTIONAL)")
+	fmt.Fprintln(os.Stderr, "\t\t-provider  \t\tCloud metadata provider ('"+strings.Join(getSupportedProviders(), "'/'")+"') the instance runs on \t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\t\t-override \t\tOverride existing registration if present \t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\t\t-use-dualstack-endpoint\tUse dual-stack endpoints for AWS services \t(OPTIONAL)")
 

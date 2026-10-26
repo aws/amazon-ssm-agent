@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/azure"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/googlecloud"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 
 	"github.com/carlescere/scheduler"
@@ -89,6 +90,12 @@ var newAzureProvider = func(log log.T, config *appconfig.SsmagentConfig) identit
 	}
 	return nil
 }
+var newGCPProvider = func(log log.T, config *appconfig.SsmagentConfig) identity.IProvider {
+	if identityRef := googlecloud.NewGCPIdentity(log, config); identityRef != nil {
+		return identityRef
+	}
+	return nil
+}
 
 // getIdentityProvider creates and returns an identity provider based on the registered provider type.
 // Returns nil if the provider is invalid or cannot be created.
@@ -106,6 +113,8 @@ var getIdentityProvider = func(log log.T, provider string, appConfig *appconfig.
 		return NewEC2Provider(log)
 	case appconfig.Azure:
 		return newAzureProvider(log, appConfig)
+	case appconfig.GCP:
+		return newGCPProvider(log, appConfig)
 	default:
 		log.Warnf("Unexpected provider %s", parsedProvider)
 		return nil

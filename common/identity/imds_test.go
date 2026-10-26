@@ -142,3 +142,45 @@ func TestCheckAzureIMDSAvailable_ReturnsFalse_WhenUnreachable(t *testing.T) {
 
 	assert.False(t, checkAzureIMDSAvailable())
 }
+
+// --- GCP IMDS tests ---
+
+func TestCheckGCPIMDSAvailable_ReturnsTrue_WhenMetadataResponds(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, "Google", r.Header.Get("Metadata-Flavor"))
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("1234567890"))
+	}))
+	defer server.Close()
+
+	origEndpoint := appconfig.GCPMetadataEndpoint
+	appconfig.GCPMetadataEndpoint = server.URL
+	defer func() { appconfig.GCPMetadataEndpoint = origEndpoint }()
+
+	assert.True(t, checkGCPIMDSAvailable())
+}
+
+func TestCheckGCPIMDSAvailable_ReturnsFalse_WhenMetadataReturns404(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer server.Close()
+
+	origEndpoint := appconfig.GCPMetadataEndpoint
+	appconfig.GCPMetadataEndpoint = server.URL
+	defer func() { appconfig.GCPMetadataEndpoint = origEndpoint }()
+
+	assert.False(t, checkGCPIMDSAvailable())
+}
+
+func TestCheckGCPIMDSAvailable_ReturnsFalse_WhenUnreachable(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+	endpoint := server.URL
+	server.Close()
+
+	origEndpoint := appconfig.GCPMetadataEndpoint
+	appconfig.GCPMetadataEndpoint = endpoint
+	defer func() { appconfig.GCPMetadataEndpoint = origEndpoint }()
+
+	assert.False(t, checkGCPIMDSAvailable())
+}

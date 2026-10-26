@@ -121,6 +121,48 @@ func TestRegisterAgent_ValidActionIdActionCode_Success(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestRegisterAgent_WithProvider_Success(t *testing.T) {
+	for _, provider := range []string{"GCP", "Azure", "EC2"} {
+		t.Run(provider, func(t *testing.T) {
+			helperMock := &mhMock.IManagerHelper{}
+
+			rm := registerManager{helperMock, "SomeBinPath"}
+			helperMock.On("RunCommand", "SomeBinPath", "-register", "-y",
+				"-region", "SomeRegion",
+				"-code", "SomeActivationCode",
+				"-id", "SomeActivationId",
+				"-provider", provider).Return("", nil).Once()
+			input := &RegisterAgentInputModel{
+				Region:         "SomeRegion",
+				ActivationId:   "SomeActivationId",
+				ActivationCode: "SomeActivationCode",
+				Provider:       provider,
+			}
+			err := rm.RegisterAgent(input)
+			assert.NoError(t, err)
+			helperMock.AssertExpectations(t)
+		})
+	}
+}
+
+func TestRegisterAgent_WithoutProvider_ProviderFlagNotPassed(t *testing.T) {
+	helperMock := &mhMock.IManagerHelper{}
+
+	rm := registerManager{helperMock, "SomeBinPath"}
+	helperMock.On("RunCommand", "SomeBinPath", "-register", "-y",
+		"-region", "SomeRegion",
+		"-code", "SomeActivationCode",
+		"-id", "SomeActivationId").Return("", nil).Once()
+	input := &RegisterAgentInputModel{
+		Region:         "SomeRegion",
+		ActivationId:   "SomeActivationId",
+		ActivationCode: "SomeActivationCode",
+	}
+	err := rm.RegisterAgent(input)
+	assert.NoError(t, err)
+	helperMock.AssertExpectations(t)
+}
+
 func TestRegisterAgent_Failure(t *testing.T) {
 	helperMock := &mhMock.IManagerHelper{}
 

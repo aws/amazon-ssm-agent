@@ -321,6 +321,7 @@ type Provider string
 const (
 	EC2   Provider = "EC2"
 	Azure Provider = "Azure"
+	GCP   Provider = "GCP"
 
 	// AzureIMDSAPIVersion is the API version for Azure IMDS requests
 	AzureIMDSAPIVersion = "2025-04-07"
@@ -329,7 +330,11 @@ const (
 // AzureIMDSEndpoint is the Azure Instance Metadata Service endpoint
 var AzureIMDSEndpoint = "http://169.254.169.254/metadata/instance"
 
+// GCPMetadataEndpoint is the GCP Compute Engine metadata service endpoint
+var GCPMetadataEndpoint = "http://metadata.google.internal/computeMetadata/v1"
+
 var Providers = map[string]Provider{
 	"EC2":   EC2,
 	"Azure": Azure,
+	"GCP":   GCP,
 }

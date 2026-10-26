@@ -32,6 +32,8 @@ var IsIMDSAvailableForProvider = func(provider appconfig.Provider) (bool, error)
 		return checkEC2IMDSAvailable(), nil
 	case appconfig.Azure:
 		return checkAzureIMDSAvailable(), nil
+	case appconfig.GCP:
+		return checkGCPIMDSAvailable(), nil
 	default:
 		return false, fmt.Errorf("unknown provider: %s", provider)
 	}
@@ -72,6 +74,25 @@ func checkAzureIMDSAvailable() bool {
 	q.Set("format", "json")
 	q.Set("api-version", appconfig.AzureIMDSAPIVersion)
 	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+
+	return resp.StatusCode == http.StatusOK
+}
+
+// checkGCPIMDSAvailable checks if GCP metadata service is reachable
+func checkGCPIMDSAvailable() bool {
+	client := &http.Client{Timeout: imdsTimeout}
+
+	req, err := http.NewRequest("GET", appconfig.GCPMetadataEndpoint+"/instance/id", nil)
+	if err != nil {
+		return false
+	}
+	req.Header.Set("Metadata-Flavor", "Google")
 
 	resp, err := client.Do(req)
 	if err != nil {

@@ -190,15 +190,6 @@ func fetchAvailabilityZone() (string, error) {
 	return metadata.Compute.Zone, nil
 }
 
-// fetchInstanceType returns the Azure VM size
-func fetchInstanceType() (string, error) {
-	metadata, err := fetchAzureMetadata()
-	if err != nil {
-		return "", err
-	}
-	return metadata.Compute.VMSize, nil
-}
-
 func fetchComputerName() (string, error) {
 	metadata, err := fetchAzureMetadata()
 	if err != nil {
@@ -206,33 +197,6 @@ func fetchComputerName() (string, error) {
 	}
 	computerName := fmt.Sprintf("%s.%s.%s", metadata.Compute.SubscriptionID, metadata.Compute.ResourceGroupName, metadata.Compute.Name)
 	return computerName, nil
-}
-
-// fetchResourceID returns the Azure resource ID
-func fetchResourceID() (string, error) {
-	metadata, err := fetchAzureMetadata()
-	if err != nil {
-		return "", err
-	}
-	return metadata.Compute.ResourceID, nil
-}
-
-// fetchSubscriptionID returns the Azure subscription ID
-func fetchSubscriptionID() (string, error) {
-	metadata, err := fetchAzureMetadata()
-	if err != nil {
-		return "", err
-	}
-	return metadata.Compute.SubscriptionID, nil
-}
-
-// fetchResourceGroupName returns the Azure resource group name
-func fetchResourceGroupName() (string, error) {
-	metadata, err := fetchAzureMetadata()
-	if err != nil {
-		return "", err
-	}
-	return metadata.Compute.ResourceGroupName, nil
 }
 
 // fetchCIDRBlock returns the CIDR blocks from Azure network metadata

@@ -22,6 +22,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	rMock "github.com/aws/amazon-ssm-agent/agent/managedInstances/registration/mocks"
@@ -569,4 +570,95 @@ func Test_hasAgentAlreadyInstalledOrNewer_works(t *testing.T) {
 	installedOrNewer, err = hasAgentAlreadyInstalledOrNewer("3.3.0.0")
 	assert.NoError(t, err)
 	assert.True(t, installedOrNewer)
+}
+
+func Test_getSupportedProviders_containsAllAgentProviders(t *testing.T) {
+	supportedProviders := getSupportedProviders()
+
+	assert.Equal(t, len(appconfig.Providers), len(supportedProviders))
+	assert.Contains(t, supportedProviders, "EC2")
+	assert.Contains(t, supportedProviders, "Azure")
+	assert.Contains(t, supportedProviders, "GCP")
+	// verify list is sorted to keep the usage output stable
+	assert.Equal(t, []string{"Azure", "EC2", "GCP"}, supportedProviders)
+}
+
+func Test_validateAndNormalizeProvider(t *testing.T) {
+	defer func() { provider = "" }()
+
+	testCases := []struct {
+		name             string
+		inputProvider    string
+		expectedProvider string
+		expectError      bool
+	}{
+		{"emptyProvider", "", "", false},
+		{"whitespaceProvider", "   ", "", false},
+		{"gcpProvider", "GCP", "GCP", false},
+		{"gcpProviderLowerCase", "gcp", "GCP", false},
+		{"gcpProviderWithWhitespace", " GCP ", "GCP", false},
+		{"azureProvider", "Azure", "Azure", false},
+		{"azureProviderLowerCase", "azure", "Azure", false},
+		{"ec2Provider", "EC2", "EC2", false},
+		{"unsupportedProvider", "Google", "Google", true},
+		{"unsupportedProviderGCE", "GCE", "GCE", true},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			provider = testCase.inputProvider
+			errMessage := validateAndNormalizeProvider()
+
+			assert.Equal(t, testCase.expectedProvider, provider)
+			if testCase.expectError {
+				assert.Contains(t, errMessage, "Invalid provider")
+				assert.Contains(t, errMessage, "Azure|EC2|GCP")
+			} else {
+				assert.Empty(t, errMessage)
+			}
+		})
+	}
+}
+
+func TestMain_Register_GCPProvider_NormalizedInRegisterInputModel(t *testing.T) {
+	defer storeMockedFunctionsOnprem()()
+	defer setArgsAndRestoreOnprem("/some/path/setupcli", "-env", "onprem", "-register",
+		"-region", "SomeRegion", "-activation-id", "SomeId", "-activation-code", "SomeCode", "-provider", "gcp")()
+	defer func() { provider = "" }()
+
+	logMock := logmocks.NewMockLog()
+	setParams()
+	setVerifyOnpremParams(logMock)
+
+	assert.Equal(t, "GCP", provider)
+	assert.Equal(t, "GCP", registerInputModel.Provider)
+	assert.Equal(t, "SomeRegion", registerInputModel.Region)
+}
+
+func TestMain_Register_InvalidProvider_Failed(t *testing.T) {
+	defer storeMockedFunctionsOnprem()()
+	defer setArgsAndRestoreOnprem("/some/path/setupcli", "-env", "onprem", "-register",
+		"-region", "SomeRegion", "-activation-id", "SomeId", "-activation-code", "SomeCode", "-provider", "SomeProvider")()
+	defer func() { provider = "" }()
+
+	getServiceManager = func(log.T) (servicemanagers.IServiceManager, error) {
+		managerMock := &smMock.IServiceManager{}
+		return managerMock, nil
+	}
+
+	osExit = func(exitCode int, log log.T, message string, args ...interface{}) {
+		assert.Equal(t, 1, exitCode)
+		message = fmt.Sprintf(message, args...)
+		assert.Contains(t, message, "Invalid provider SomeProvider")
+		assert.Contains(t, message, "Azure|EC2|GCP")
+		panic(breakOutWithPanicMessageOnprem)
+	}
+
+	defer func() {
+		if errInterface := recover(); errInterface != nil {
+			assert.Equal(t, breakOutWithPanicMessageOnprem, errInterface)
+		}
+	}()
+	main()
+	assert.True(t, false, "Should never reach here because of exit")
 }
