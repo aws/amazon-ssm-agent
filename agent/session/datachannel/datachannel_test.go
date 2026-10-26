@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -451,6 +452,140 @@ func TestResendStreamDataMessageScheduler(t *testing.T) {
 
 	wg.Wait()
 	mockWsChannel.AssertExpectations(t)
+}
+
+// TestResendSchedulerStopsOnClose verifies the resend scheduler goroutine exits
+// after Close() signals it, even when a never-acknowledged message remains in
+// the outgoing buffer (regression test for the orphan session-worker leak).
+func TestResendSchedulerStopsOnClose(t *testing.T) {
+	dataChannel := getDataChannel()
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+	mockWsChannel.On("Close", mock.Anything).Return(nil)
+
+	// Leave a message in the buffer that never gets acknowledged.
+	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[0])
+
+	stopped := make(chan struct{})
+	go func() {
+		dataChannel.runResendScheduler(mockLog)
+		close(stopped)
+	}()
+
+	// Give the loop a moment to start, then close the channel.
+	time.Sleep(50 * time.Millisecond)
+	err := dataChannel.Close(mockLog)
+	assert.Nil(t, err)
+
+	select {
+	case <-stopped:
+		// Scheduler exited as expected.
+	case <-time.After(5 * time.Second):
+		t.Fatal("resend scheduler did not exit after Close()")
+	}
+
+	// Close() must also clear the outgoing buffer so no stuck message remains.
+	assert.Equal(t, 0, dataChannel.OutgoingMessageBuffer.Messages.Len())
+}
+
+// TestResendSchedulerSurvivesClosedSocket verifies a closed-socket send error
+// (as seen during Reconnect) does not stop the resend loop; only Close() does.
+func TestResendSchedulerSurvivesClosedSocket(t *testing.T) {
+	dataChannel := getDataChannel()
+	closedWsChannel := &communicatorMocks.IWebSocketChannel{}
+	closedWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).
+		Return(errors.New("websocket: close sent"))
+	closedWsChannel.On("Close", mock.Anything).Return(nil)
+	dataChannel.wsChannel = closedWsChannel
+
+	// Stale LastSentTime so the message is eligible for resend every tick.
+	staleMessage := StreamingMessage{streamingMessages[0].Content, 0, time.Now().Add(-time.Hour)}
+	dataChannel.AddDataToOutgoingMessageBuffer(staleMessage)
+
+	stopped := make(chan struct{})
+	go func() {
+		dataChannel.runResendScheduler(mockLog)
+		close(stopped)
+	}()
+
+	// Long enough for several resend attempts to fail.
+	time.Sleep(500 * time.Millisecond)
+	select {
+	case <-stopped:
+		t.Fatal("resend scheduler exited on a closed-socket send error")
+	default:
+	}
+
+	assert.Nil(t, dataChannel.Close(mockLog))
+	select {
+	case <-stopped:
+	case <-time.After(5 * time.Second):
+		t.Fatal("resend scheduler did not exit after Close()")
+	}
+}
+
+// TestResendSchedulerReleasesMutexOnUnexpectedElement verifies a non-StreamingMessage
+// element in the buffer does not leave the buffer mutex locked.
+func TestResendSchedulerReleasesMutexOnUnexpectedElement(t *testing.T) {
+	dataChannel := getDataChannel()
+	mockWsChannel.On("Close", mock.Anything).Return(nil)
+
+	dataChannel.OutgoingMessageBuffer.Mutex.Lock()
+	dataChannel.OutgoingMessageBuffer.Messages.PushBack("not a StreamingMessage")
+	dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
+
+	stopped := make(chan struct{})
+	go func() {
+		dataChannel.runResendScheduler(mockLog)
+		close(stopped)
+	}()
+
+	// Let the loop hit the bad element a few times.
+	time.Sleep(3 * mgsConfig.ResendSleepInterval)
+
+	// Close() takes the buffer mutex; it would block if the loop leaked it.
+	closed := make(chan struct{})
+	go func() {
+		dataChannel.Close(mockLog)
+		close(closed)
+	}()
+	select {
+	case <-closed:
+	case <-time.After(5 * time.Second):
+		t.Fatal("Close() blocked: buffer mutex left locked")
+	}
+	select {
+	case <-stopped:
+	case <-time.After(5 * time.Second):
+		t.Fatal("resend scheduler did not exit after Close()")
+	}
+}
+
+// TestPrepareToCloseChannelPollerExitsAfterTimeout verifies the buffer poller
+// started by PrepareToCloseChannel exits once the buffer empties, even after
+// PrepareToCloseChannel has already returned on its timeout.
+func TestPrepareToCloseChannelPollerExitsAfterTimeout(t *testing.T) {
+	dataChannel := getDataChannel()
+	mockWsChannel.On("Close", mock.Anything).Return(nil)
+
+	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[0])
+	dataChannel.PrepareToCloseChannel(mockLog) // returns on the 2s timeout
+
+	// Clearing the buffer lets the poller reach its send on done.
+	dataChannel.Close(mockLog)
+
+	deadline := time.Now().Add(2 * time.Second)
+	for {
+		buf := make([]byte, 1<<20)
+		n := runtime.Stack(buf, true)
+		if !strings.Contains(string(buf[:n]), "PrepareToCloseChannel.func") {
+			return
+		}
+		if time.Now().After(deadline) {
+			t.Fatal("PrepareToCloseChannel poller goroutine did not exit")
+		}
+		time.Sleep(20 * time.Millisecond)
+	}
 }
 
 func TestProcessAcknowledgedMessage(t *testing.T) {

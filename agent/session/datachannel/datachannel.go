@@ -121,6 +121,11 @@ type DataChannel struct {
 	// Indicates whether encryption was enabled
 	encryptionEnabled     bool
 	separateOutputPayload bool
+	// stopResendScheduler signals the ResendStreamDataMessageScheduler goroutine
+	// to exit. It is closed exactly once by Close(); stopResendOnce guards the
+	// close so a second Close() cannot panic on an already-closed channel.
+	stopResendScheduler chan struct{}
+	stopResendOnce      sync.Once
 }
 
 type ListMessageBuffer struct {
@@ -251,6 +256,7 @@ func (dataChannel *DataChannel) Initialize(context context.T,
 	dataChannel.ExpectedSequenceNumber = 0
 	dataChannel.StreamDataSequenceNumber = 0
 	dataChannel.StreamDataSequenceNumberMutex = &sync.Mutex{}
+	dataChannel.stopResendScheduler = make(chan struct{})
 	dataChannel.OutgoingMessageBuffer = ListMessageBuffer{
 		list.New(),
 		mgsConfig.OutgoingMessageBufferCapacity,
@@ -400,14 +406,34 @@ func (dataChannel *DataChannel) Reconnect(log log.T) error {
 // Close closes datachannel - its web socket connection.
 func (dataChannel *DataChannel) Close(log log.T) error {
 	log.Infof("Closing datachannel with channel Id %s", dataChannel.ChannelId)
+
+	// Stop the resend scheduler goroutine deterministically. Without this the
+	// goroutine keeps firing SendMessage against the now-closed websocket, logs
+	// "Unable to send stream data message", resets LastSentTime and loops
+	// forever - keeping the session worker process alive and burning CPU.
+	// stopResendOnce guards the close so a second Close() is safe.
+	if dataChannel.stopResendScheduler != nil {
+		dataChannel.stopResendOnce.Do(func() {
+			close(dataChannel.stopResendScheduler)
+		})
+	}
+
+	// Drop any never-acknowledged trailing message so a stuck buffer entry
+	// cannot keep anything spinning via another code path.
+	dataChannel.OutgoingMessageBuffer.Mutex.Lock()
+	dataChannel.OutgoingMessageBuffer.Messages.Init()
+	dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
+
 	return dataChannel.wsChannel.Close(log)
 }
 
 // PrepareToCloseChannel waits for all messages to be sent to MGS
 func (dataChannel *DataChannel) PrepareToCloseChannel(log log.T) {
-	done := make(chan bool)
+	// Buffered so the poller can exit after the timeout below has fired.
+	done := make(chan bool, 1)
 	go func() {
-		for dataChannel.OutgoingMessageBuffer.Messages.Len() > 0 {
+		// Use the thread-safe Len(): Close() may clear the buffer concurrently.
+		for dataChannel.OutgoingMessageBuffer.Len() > 0 {
 			time.Sleep(10 * time.Millisecond)
 		}
 		done <- true
@@ -520,34 +546,81 @@ func (dataChannel *DataChannel) ResendStreamDataMessageScheduler(log log.T) erro
 				log.Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 		}()
-		for {
-			time.Sleep(mgsConfig.ResendSleepInterval)
-			if dataChannel.Pause {
-				log.Tracef("Resend stream data message has been paused")
-				continue
-			}
-			streamMessageElement := dataChannel.OutgoingMessageBuffer.Messages.Front()
-			if streamMessageElement == nil {
-				continue
-			}
+		dataChannel.runResendScheduler(log)
+	}()
+	return nil
+}
 
-			streamMessage := streamMessageElement.Value.(StreamingMessage)
-			if time.Since(streamMessage.LastSentTime) > dataChannel.RetransmissionTimeout {
-				log.Tracef("Resend stream data message: %d", streamMessage.SequenceNumber)
-				if err := dataChannel.SendMessage(log, streamMessage.Content, websocket.BinaryMessage); err != nil {
-					log.Errorf("Unable to send stream data message: %s", err)
-				}
+// runResendScheduler runs the resend loop synchronously.
+// It is the body of ResendStreamDataMessageScheduler, factored out so it can be
+// driven and observed directly in unit tests. It returns when the channel is
+// closed (stopResendScheduler signalled).
+func (dataChannel *DataChannel) runResendScheduler(log log.T) {
+	for {
+		select {
+		case <-dataChannel.stopResendScheduler:
+			log.Debugf("Resend stream data message scheduler stopping for channel %s", dataChannel.ChannelId)
+			return
+		case <-time.After(mgsConfig.ResendSleepInterval):
+		}
+
+		if dataChannel.Pause {
+			log.Tracef("Resend stream data message has been paused")
+			continue
+		}
+		// Read the front of the buffer and a copy of its message under the
+		// buffer mutex. Close() clears the list concurrently (Messages.Init())
+		// and ProcessAcknowledgedMessage traverses/removes under the same mutex,
+		// so the element and its value must not be touched unlocked.
+		dataChannel.OutgoingMessageBuffer.Mutex.Lock()
+		streamMessageElement := dataChannel.OutgoingMessageBuffer.Messages.Front()
+		if streamMessageElement == nil {
+			dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
+			continue
+		}
+		// Comma-ok so a bad element can't panic with the mutex held.
+		streamMessage, ok := streamMessageElement.Value.(StreamingMessage)
+		dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
+		if !ok {
+			log.Warnf("Unexpected element type in outgoing message buffer: %T", streamMessageElement.Value)
+			continue
+		}
+
+		if time.Since(streamMessage.LastSentTime) > dataChannel.RetransmissionTimeout {
+			log.Tracef("Resend stream data message: %d", streamMessage.SequenceNumber)
+			// SendMessage is network I/O and must not run under the buffer
+			// mutex.
+			if err := dataChannel.SendMessage(log, streamMessage.Content, websocket.BinaryMessage); err != nil {
+				// Not terminal: Reconnect() briefly closes the socket on a live
+				// session, so keep retrying until Close() stops the loop.
+				log.Errorf("Unable to send stream data message: %s", err)
+			}
+			// Write the updated LastSentTime back under the mutex, and only if
+			// the element is still at the front of the buffer. A concurrent
+			// ProcessAcknowledgedMessage (ACK) or Close() may have removed or
+			// cleared it while SendMessage was in flight; re-checking Front()
+			// keeps the read-modify-write consistent with the buffer.
+			dataChannel.OutgoingMessageBuffer.Mutex.Lock()
+			if dataChannel.OutgoingMessageBuffer.Messages.Front() == streamMessageElement {
 				streamMessage.LastSentTime = time.Now()
 				streamMessageElement.Value = streamMessage
 			}
+			dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
 		}
-	}()
-	return nil
+	}
 }
 
 // ProcessAcknowledgedMessage processes acknowledge messages by deleting them from OutgoingMessageBuffer.
 func (dataChannel *DataChannel) ProcessAcknowledgedMessage(log log.T, acknowledgeMessageContent mgsContracts.AcknowledgeContent) {
 	acknowledgeSequenceNumber := acknowledgeMessageContent.SequenceNumber
+	// Hold the buffer mutex across the whole traversal: this runs on the
+	// incoming-message handler goroutine and can race a concurrent Close()
+	// (which resets the list via Messages.Init()) or the resend scheduler.
+	// Traversing the list while another goroutine mutates it is undefined.
+	// We remove the matched element inline rather than via
+	// RemoveDataFromOutgoingMessageBuffer, which would re-lock the same mutex.
+	dataChannel.OutgoingMessageBuffer.Mutex.Lock()
+	defer dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
 	for streamMessageElement := dataChannel.OutgoingMessageBuffer.Messages.Front(); streamMessageElement != nil; streamMessageElement = streamMessageElement.Next() {
 		streamMessage := streamMessageElement.Value.(StreamingMessage)
 		if streamMessage.SequenceNumber == acknowledgeSequenceNumber {
@@ -556,7 +629,7 @@ func (dataChannel *DataChannel) ProcessAcknowledgedMessage(log log.T, acknowledg
 			dataChannel.calculateRetransmissionTimeout(log, streamMessage)
 
 			log.Tracef("Delete stream data from OutgoingMessageBuffer. Sequence Number: %d", streamMessage.SequenceNumber)
-			dataChannel.RemoveDataFromOutgoingMessageBuffer(streamMessageElement)
+			dataChannel.OutgoingMessageBuffer.Messages.Remove(streamMessageElement)
 			break
 		}
 	}
@@ -635,12 +708,12 @@ func (dataChannel *DataChannel) sendAgentMessage(log log.T, messageType string, 
 
 // AddDataToOutgoingMessageBuffer adds given message at the end of OutputMessageBuffer if it has capacity.
 func (dataChannel *DataChannel) AddDataToOutgoingMessageBuffer(streamMessage StreamingMessage) {
+	dataChannel.OutgoingMessageBuffer.Mutex.Lock()
+	defer dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
 	if dataChannel.OutgoingMessageBuffer.Messages.Len() == dataChannel.OutgoingMessageBuffer.Capacity {
 		return
 	}
-	dataChannel.OutgoingMessageBuffer.Mutex.Lock()
 	dataChannel.OutgoingMessageBuffer.Messages.PushBack(streamMessage)
-	dataChannel.OutgoingMessageBuffer.Mutex.Unlock()
 }
 
 // RemoveDataFromOutgoingMessageBuffer removes given element from OutgoingMessageBuffer.
