@@ -490,6 +490,12 @@ func CollectFilesAndRebase(sourceDir, rebaseToDir string) (files []string, err e
 			}
 
 			if !info.IsDir() {
+				// Skip symlinks: a tracked symlink from a Git repo must not be
+				// collected into the download result, preventing the agent from
+				// following it during the subsequent chmod or move operations.
+				if info.Mode()&os.ModeSymlink != 0 {
+					return nil
+				}
 				// Compute the actual path of the file after the contents will be moved
 				relParentPath, err := filepath.Rel(sourceDir, filepath.Dir(path))
 				if err != nil {

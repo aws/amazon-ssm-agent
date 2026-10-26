@@ -260,6 +260,15 @@ func validateInput(input *DownloadContentPlugin) (valid bool, err error) {
 func SetFilePermissions(log log.T, workingDir string) error {
 
 	var permissionsWalk = func(path string, info os.FileInfo, e error) (err error) {
+		if e != nil {
+			return e
+		}
+		// filepath.Walk provides Lstat info; skip symlinks so os.Chmod cannot
+		// follow a tracked symlink from a Git repo to an arbitrary file on the host.
+		if info.Mode()&os.ModeSymlink != 0 {
+			log.Infof("Skipping symlink, not changing permissions for %v", path)
+			return nil
+		}
 		log.Info("Changing permissions for ", path)
 		return os.Chmod(path, appconfig.ReadWriteExecuteAccess)
 	}
