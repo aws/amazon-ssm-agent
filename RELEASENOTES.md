@@ -1,5 +1,14 @@
 Latest
 ===============
+- Send bucket-owner header on s3 http/https fallback
+- Only write serial port messages when running in EC2
+- Apply IMDS retry bound in fallback config path
+- Harden input validation for Linux domain join parameters
+- Add multicloud support enabling SSM Agent registration with GCP
+- Add sqv fallthrough for setupcli when gpg is not installed
+
+3.3.5700.0
+===============
 - Normalize scheme-less Ssm.Endpoint before baking it into SDK LoadOptions
 
 3.3.5678.0
