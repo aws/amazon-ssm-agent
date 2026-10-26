@@ -1,5 +1,9 @@
 Latest
 ===============
+- Normalize scheme-less Ssm.Endpoint before baking it into SDK LoadOptions
+
+3.3.5678.0
+===============
 - Bump golang.org/x/sys from v0.47.0 to v0.48.0
 - Bump golang.org/x/net from v0.57.0 to v0.60.0
 - Upgrade Go version to 1.26.10
