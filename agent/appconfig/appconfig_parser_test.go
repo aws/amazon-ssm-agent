@@ -216,3 +216,57 @@ func TestCredentialRetryMaxSleepSecondsOverride(t *testing.T) {
 		})
 	}
 }
+
+func TestNormalizeEndpointScheme(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{"", ""},
+		{"   ", ""},
+		{"vpce-123.ssm.cn-north-1.vpce.amazonaws.com.cn", "https://vpce-123.ssm.cn-north-1.vpce.amazonaws.com.cn"},
+		{" ssm.us-east-1.amazonaws.com ", "https://ssm.us-east-1.amazonaws.com"},
+		{"https://ssm.us-east-1.amazonaws.com", "https://ssm.us-east-1.amazonaws.com"},
+		{"HTTPS://ssm.us-east-1.amazonaws.com", "HTTPS://ssm.us-east-1.amazonaws.com"},
+		{"http://localhost:8080", "http://localhost:8080"},
+	}
+	for _, tt := range tests {
+		assert.Equal(t, tt.expected, NormalizeEndpointScheme(tt.input), "input %q", tt.input)
+	}
+}
+
+func TestParser_NormalizesSsmEndpointOnly(t *testing.T) {
+	agentConfig := DefaultConfig()
+	agentConfig.Ssm.Endpoint = "vpce-1.ssm.cn-north-1.vpce.amazonaws.com.cn"
+	agentConfig.Mds.Endpoint = "vpce-2.ec2messages.cn-north-1.vpce.amazonaws.com.cn"
+	agentConfig.Mgs.Endpoint = "vpce-3.ssmmessages.cn-north-1.vpce.amazonaws.com.cn"
+
+	parser(&agentConfig)
+
+	assert.Equal(t, "https://vpce-1.ssm.cn-north-1.vpce.amazonaws.com.cn", agentConfig.Ssm.Endpoint)
+	assert.Equal(t, "vpce-2.ec2messages.cn-north-1.vpce.amazonaws.com.cn", agentConfig.Mds.Endpoint)
+	assert.Equal(t, "vpce-3.ssmmessages.cn-north-1.vpce.amazonaws.com.cn", agentConfig.Mgs.Endpoint)
+}
+
+func TestParser_LeavesEmptySsmEndpointEmpty(t *testing.T) {
+	agentConfig := DefaultConfig()
+
+	parser(&agentConfig)
+
+	assert.Empty(t, agentConfig.Ssm.Endpoint)
+}
+
+func TestConfig_NormalizesSchemelessEndpointFromFile(t *testing.T) {
+	configPath := filepath.Join(t.TempDir(), "amazon-ssm-agent.json")
+	content := `{"Ssm": {"Endpoint": "vpce-1.ssm.cn-north-1.vpce.amazonaws.com.cn"}}`
+	assert.NoError(t, os.WriteFile(configPath, []byte(content), 0600))
+
+	originalPath := retrieveAppConfigPath
+	retrieveAppConfigPath = func() (string, error) { return configPath, nil }
+	defer func() { retrieveAppConfigPath = originalPath }()
+
+	agentConfig, err := Config(true)
+
+	assert.NoError(t, err)
+	assert.Equal(t, "https://vpce-1.ssm.cn-north-1.vpce.amazonaws.com.cn", agentConfig.Ssm.Endpoint)
+}

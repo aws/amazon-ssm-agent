@@ -27,7 +27,7 @@ func TestSSMClient_AppConfigLoad_NoEndpointInConfig_Success(t *testing.T) {
 	defaultSsmEndpoint := "ssm.com.test"
 	ssmClient := NewV4ServiceWithCreds(logger, credentialsProvider, region, defaultSsmEndpoint).(*ssm.Client)
 	ssmClientOptions := ssmClient.Options()
-	assert.Equal(t, defaultSsmEndpoint, *ssmClientOptions.BaseEndpoint, "Endpoint mismatch")
+	assert.Equal(t, "https://"+defaultSsmEndpoint, *ssmClientOptions.BaseEndpoint, "Endpoint mismatch")
 	assert.Equal(t, credentialsProvider, ssmClientOptions.Credentials, "credential mismatch")
 	assert.Equal(t, region, ssmClientOptions.Region, "region mismatch")
 }
@@ -69,7 +69,7 @@ func TestSSMClient_AppConfigLoadErrorWithEmptyConfig_Success(t *testing.T) {
 	ssmClient := NewV4ServiceWithCreds(logger, credentialsProvider, region, defaultSsmEndpoint).(*ssm.Client)
 	ssmClientOptions := ssmClient.Options()
 	logger.AssertCalled(t, "Warnf", "Error while loading app config. Err: %v", mock.Anything)
-	assert.Equal(t, defaultSsmEndpoint, *ssmClientOptions.BaseEndpoint, "Endpoint mismatch")
+	assert.Equal(t, "https://"+defaultSsmEndpoint, *ssmClientOptions.BaseEndpoint, "Endpoint mismatch")
 	assert.Equal(t, credentialsProvider, ssmClientOptions.Credentials, "credential mismatch")
 	assert.Equal(t, region, ssmClientOptions.Region, "region mismatch")
 }

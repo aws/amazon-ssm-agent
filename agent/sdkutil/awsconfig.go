@@ -16,11 +16,11 @@ package sdkutil
 
 import (
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
@@ -43,13 +43,9 @@ func AwsConfigForRegion(context context.T, service, region string) (awsConfig aw
 	return AwsConfigForEndpoint(context, endpointHelper.GetServiceEndpoint(service, region), region)
 }
 
-// NormalizeEndpointScheme ensures the endpoint has an https:// scheme prefix,
-// which SDK v2's URI validator requires on BaseEndpoint values.
+// NormalizeEndpointScheme prefixes https:// to a non-empty endpoint without an http or https scheme.
 func NormalizeEndpointScheme(endpoint string) string {
-	if endpoint != "" && !strings.HasPrefix(endpoint, "http://") && !strings.HasPrefix(endpoint, "https://") {
-		endpoint = "https://" + endpoint
-	}
-	return endpoint
+	return appconfig.NormalizeEndpointScheme(endpoint)
 }
 
 // AwsConfigForEndpoint returns the default aws.Config object with the appropriate

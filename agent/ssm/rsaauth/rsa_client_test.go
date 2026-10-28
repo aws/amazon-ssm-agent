@@ -93,3 +93,42 @@ func TestNewIirRsaAuth(t *testing.T) {
 	assert.NotNil(t, svc)
 	assert.Equal(t, "https://"+agentConfig.Ssm.Endpoint, *capturedConfig.BaseEndpoint, "app config endpoint should overwrite awsConfig endpoint")
 }
+
+// endpointCapturingDeps uses the real dependencies and records the SSM client's resolved BaseEndpoint.
+type endpointCapturingDeps struct {
+	rsaClientDeps
+	resolvedEndpoint string
+}
+
+func (d *endpointCapturingDeps) NewSsmSdk(cfg aws.Config) *ssm.Client {
+	client := d.rsaClientDeps.NewSsmSdk(cfg)
+	d.resolvedEndpoint = aws.ToString(client.Options().BaseEndpoint)
+	return client
+}
+
+func TestRsaClients_SchemelessSsmEndpoint_ResolvesToHttps(t *testing.T) {
+	vpceEndpoint := "vpce-0123456789abcdef0-abcdefgh.ssm.cn-north-1.vpce.amazonaws.com.cn"
+	agentConfig := appconfig.DefaultConfig()
+	agentConfig.Ssm.Endpoint = vpceEndpoint
+
+	originalDeps := deps
+	defer func() { deps = originalDeps }()
+
+	t.Run("NewRsaClient", func(t *testing.T) {
+		capturingDeps := &endpointCapturingDeps{}
+		deps = capturingDeps
+
+		NewRsaClient(log.NewMockLog(), &agentConfig, "mi-0123456789abcdef0", "cn-north-1", "SomePrivateKey")
+
+		assert.Equal(t, "https://"+vpceEndpoint, capturingDeps.resolvedEndpoint)
+	})
+
+	t.Run("NewIirRsaClient", func(t *testing.T) {
+		capturingDeps := &endpointCapturingDeps{}
+		deps = capturingDeps
+
+		NewIirRsaClient(log.NewMockLog(), &agentConfig, &iirprovidermocks.IEC2MdsSdkClient{}, "cn-north-1", "SomePrivateKey")
+
+		assert.Equal(t, "https://"+vpceEndpoint, capturingDeps.resolvedEndpoint)
+	})
+}

@@ -18,6 +18,7 @@ package appconfig
 import (
 	"log"
 	"runtime"
+	"strings"
 )
 
 // func parser(config *T) {
@@ -97,7 +98,7 @@ func parser(config *SsmagentConfig) {
 	config.Mds.Endpoint = getStringValue(config.Mds.Endpoint, "")
 
 	// SSM config
-	config.Ssm.Endpoint = getStringValue(config.Ssm.Endpoint, "")
+	config.Ssm.Endpoint = NormalizeEndpointScheme(getStringValue(config.Ssm.Endpoint, ""))
 	config.Ssm.HealthFrequencyMinutes = getNumericValue(
 		config.Ssm.HealthFrequencyMinutes,
 		DefaultSsmHealthFrequencyMinutesMin,
@@ -169,6 +170,19 @@ func parser(config *SsmagentConfig) {
 	for _, customIdentity := range config.Identity.CustomIdentities {
 		customIdentity.CredentialsProvider = getStringEnumMap(customIdentity.CredentialsProvider, CredentialsProviderOptions, DefaultCustomIdentityCredentialsProvider)
 	}
+}
+
+// NormalizeEndpointScheme trims whitespace and prefixes https:// to a non-empty endpoint without an http or https scheme.
+func NormalizeEndpointScheme(endpoint string) string {
+	endpoint = strings.TrimSpace(endpoint)
+	if endpoint == "" {
+		return endpoint
+	}
+	lower := strings.ToLower(endpoint)
+	if strings.HasPrefix(lower, "https://") || strings.HasPrefix(lower, "http://") {
+		return endpoint
+	}
+	return "https://" + endpoint
 }
 
 // getStringValue returns the default value if config is empty, else the config value

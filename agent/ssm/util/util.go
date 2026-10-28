@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	//"github.com/aws/smithy-go/logging"
@@ -53,7 +54,7 @@ func AwsConfig(logger log.T, appConfig appconfig.SsmagentConfig, service, region
 	// ssm.NewFromConfig's resolveBaseEndpoint, which re-reads LoadOptions via
 	// ResolveServiceBaseEndpoint and returns the originally baked endpoint.
 	if service == "ssm" && appConfig.Ssm.Endpoint != "" {
-		svcEndpoint = appConfig.Ssm.Endpoint
+		svcEndpoint = sdkutil.NormalizeEndpointScheme(appConfig.Ssm.Endpoint)
 	}
 
 	opts := []func(*config.LoadOptions) error{
@@ -109,6 +110,10 @@ func AwsConfig(logger log.T, appConfig appconfig.SsmagentConfig, service, region
 // proxy / custom CA / TLS settings apply uniformly across service calls and
 // credential resolution.
 func AwsConfigWithEndpoint(logger log.T, appConfig appconfig.SsmagentConfig, service, region string, endpoint *string) aws.Config {
+	if endpoint != nil && *endpoint != "" {
+		normalized := sdkutil.NormalizeEndpointScheme(*endpoint)
+		endpoint = &normalized
+	}
 	opts := []func(*config.LoadOptions) error{
 		config.WithRegion(region),
 		config.WithRetryer(newRetryer),
