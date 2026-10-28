@@ -24,6 +24,7 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
+	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -39,6 +40,8 @@ import (
 	runtimeConfigMocks "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
 
 	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+	"github.com/aws/smithy-go"
+	smithyhttp "github.com/aws/smithy-go/transport/http"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -753,6 +756,39 @@ func TestEC2Identity_Register_ReturnsNil_WhenInstanceAlreadyRegistered(t *testin
 
 	// Assert
 	assert.NoError(t, err)
+}
+
+func TestIsInstanceAlreadyRegisteredError(t *testing.T) {
+	wrapAsSdkError := func(apiErr error) error {
+		return &smithy.OperationError{
+			ServiceID:     "SSM",
+			OperationName: "RegisterManagedInstance",
+			Err: &awshttp.ResponseError{
+				ResponseError: &smithyhttp.ResponseError{
+					Response: &smithyhttp.Response{Response: &http.Response{StatusCode: 400}},
+					Err:      apiErr,
+				},
+				RequestID: "SomeRequestId",
+			},
+		}
+	}
+
+	tests := []struct {
+		name     string
+		err      error
+		expected bool
+	}{
+		{"wire error code", wrapAsSdkError(&smithy.GenericAPIError{Code: "InstanceAlreadyRegistered", Message: "i-123"}), true},
+		{"modeled exception", wrapAsSdkError(&ssmtypes.InstanceAlreadyRegisteredException{Message: aws.String("i-123")}), true},
+		{"other api error", wrapAsSdkError(&smithy.GenericAPIError{Code: "InvalidInstanceId", Message: "i-123"}), false},
+		{"non api error", fmt.Errorf("network error"), false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.expected, isInstanceAlreadyRegisteredError(tt.err))
+		})
+	}
 }
 
 func TestInitIMDSClient_DoesNotFallBackToIMDSv1(t *testing.T) {

@@ -46,8 +46,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
+	"github.com/aws/smithy-go"
 	"github.com/cenkalti/backoff/v4"
 )
+
+// errCodeInstanceAlreadyRegistered is the error code SSM returns when the instance is already registered.
+const errCodeInstanceAlreadyRegistered = "InstanceAlreadyRegistered"
 
 var (
 	newSharedCredentialsProvider = sharedprovider.NewCredentialsProvider
@@ -239,8 +243,7 @@ func (i *Identity) Register(ctx context.Context) error {
 	i.Log.Info("Registering EC2 instance with Systems Manager")
 	_, err = i.AuthRegisterService.RegisterManagedInstance(ctx, publicKey, keyType, instanceId, "", "", "")
 	if err != nil {
-		var IARException *ssmtypes.InstanceAlreadyRegisteredException
-		if errors.As(err, &IARException) {
+		if isInstanceAlreadyRegisteredError(err) {
 			i.Log.Errorf("Instance appears to already be registered. Err: %v", err)
 			return nil
 		}
@@ -265,6 +268,19 @@ func (i *Identity) Register(ctx context.Context) error {
 
 	i.Log.Info("EC2 registration was successful.")
 	return nil
+}
+
+// isInstanceAlreadyRegisteredError returns true if err is an InstanceAlreadyRegistered error from SSM.
+func isInstanceAlreadyRegisteredError(err error) bool {
+	var iarException *ssmtypes.InstanceAlreadyRegisteredException
+	if errors.As(err, &iarException) {
+		return true
+	}
+	var apiErr smithy.APIError
+	if errors.As(err, &apiErr) {
+		return apiErr.ErrorCode() == errCodeInstanceAlreadyRegistered
+	}
+	return false
 }
 
 func (i *Identity) loadRegistrationInfo(instanceId string) *authregister.RegistrationInfo {
