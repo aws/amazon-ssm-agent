@@ -137,11 +137,11 @@ dFhX3LXCbV4+5LXTG8Oqr5jT
   echo "Verifying signature of binary file"
   gpg --no-tty --batch --verify $sig_path $binary_path
 
-elif [[ -x "$(command -v gpgv)" ]]; then
-  echo "gpg not found, but gpgv is installed. Using gpgv for verification."
+elif [[ -x "$(command -v gpgv)" ]] || [[ -x "$(command -v sqv)" ]]; then
+  echo "gpg not found; building binary keyring for gpgv/sqv verification."
 
-  echo "Creating binary keyring for gpgv"
-  # gpgv requires a binary keyring; it cannot parse ASCII-armored keys. The two
+  echo "Creating binary keyring"
+  # gpgv and sqv both accept a binary keyring (gpgv cannot parse ASCII-armored keys). The two
   # SSM Agent signing keys below are the dearmored (binary) form of the two
   # armored blocks used in the gpg branch above, each base64-encoded separately.
   # A binary keyring is simply the keys' binary packets concatenated, so we
@@ -161,10 +161,15 @@ elif [[ -x "$(command -v gpgv)" ]]; then
   echo "$SSM_AGENT_KEY_3_B64" | base64 -d >> amazon-ssm-agent-keyring.gpg
   chmod 0644 amazon-ssm-agent-keyring.gpg
 
-  echo "Verifying signature of binary file using gpgv"
-  gpgv --keyring amazon-ssm-agent-keyring.gpg $sig_path $binary_path
+  if [[ -x "$(command -v gpgv)" ]]; then
+    echo "Verifying signature of binary file using gpgv"
+    gpgv --keyring amazon-ssm-agent-keyring.gpg $sig_path $binary_path
+  else
+    echo "gpg and gpgv not found, using sqv for verification"
+    sqv --keyring amazon-ssm-agent-keyring.gpg $sig_path $binary_path
+  fi
 
 else
-  echo "gpg and gpgv not found. Please install gpg or gpgv to validate setupcli binary"
+  echo "gpg, gpgv, and sqv not found. Please install gpg, gpgv, or sqv to validate setupcli binary"
   exit 1
 fi
