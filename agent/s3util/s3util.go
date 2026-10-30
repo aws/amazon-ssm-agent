@@ -87,7 +87,7 @@ func NewAmazonS3Util(context context.T, bucketName string) (res *AmazonS3Util, e
 		log.Errorf("failed to create AmazonS3Util: %v", err)
 		return nil, err
 	}
-	client := s3.NewFromConfig(*cfg)
+	client := newS3Client(*cfg)
 	res = &AmazonS3Util{
 		myUploader: s3manager.NewUploader(client),
 		s3Client:   client,
