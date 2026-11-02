@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 func main() {
@@ -19,6 +20,9 @@ func main() {
 	log := logger.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
+
+	// Adjust OOM score to protect the SSM agent from being killed by the OOM killer
+	platform.SetOOMScoreAdjust(log)
 
 	// parse input parameters
 	parseFlags(log)
