@@ -44,6 +44,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
+	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
 	"github.com/aws/aws-sdk-go-v2/feature/ec2/imds"
 	"github.com/cenkalti/backoff/v4"
 )
@@ -312,7 +313,9 @@ func NewEC2IdentityWithConfig(log log.T, imdsAwsConfig aws.Config) *Identity {
 
 	// Ensure IMDS client is initialized before attempting to get instance info
 	identity.initIMDSClient(imdsAwsConfig)
-	instanceInfo, err := getInstanceInfo(context.Background(), identity)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	instanceInfo, err := getInstanceInfo(ctx, identity)
 	if err != nil {
 		log.Errorf("Failed to get instance info from IMDS. Err: %v", err)
 		return nil
@@ -339,7 +342,8 @@ func NewEC2Identity(log log.T) *Identity {
 	// config. Set the max attempts via a Retryer so retries are actually bounded.
 	awsConfig.Retryer = func() aws.Retryer {
 		return retry.NewStandard(func(o *retry.StandardOptions) {
-			o.MaxAttempts = 3
+			// Initial attempt plus eight retries for IMDS downtime during EC2 live updates.
+			o.MaxAttempts = 9
 		})
 	}
 	return NewEC2IdentityWithConfig(log, awsConfig)
@@ -424,7 +428,13 @@ func (i *Identity) initIMDSClient(cfg aws.Config) {
 		return
 	}
 
-	i.Client = newImdsClient(cfg, func(o *imds.Options) { o.EnableFallback = aws.FalseTernary })
+	i.Client = newImdsClient(cfg, func(o *imds.Options) {
+		o.EnableFallback = aws.FalseTernary
+		// Freeze prevents IMDS from reapplying its shorter dial/header deadlines.
+		if o.HTTPClient == nil {
+			o.HTTPClient = awshttp.NewBuildableClient().WithTimeout(time.Second).Freeze()
+		}
+	})
 }
 
 // initAuthRegisterService initializes the client used to make requests to RegisterManagedInstance

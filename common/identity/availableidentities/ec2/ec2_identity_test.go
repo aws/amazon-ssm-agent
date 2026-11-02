@@ -20,11 +20,13 @@ import (
 	"net/http/httptest"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	ssmtypes "github.com/aws/aws-sdk-go-v2/service/ssm/types"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
 	authregistermocks "github.com/aws/amazon-ssm-agent/agent/ssm/authregister/mocks"
@@ -775,4 +777,32 @@ func TestInitIMDSClient_DoesNotFallBackToIMDSv1(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Zero(t, imdsV1Requests)
+}
+
+func TestNewEC2Identity_RecoversDuringLiveUpdate(t *testing.T) {
+	var attempts int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPut {
+			if atomic.AddInt32(&attempts, 1) <= 8 {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			w.Header().Set("X-aws-ec2-metadata-token-ttl-seconds", "60")
+			io.WriteString(w, "token")
+		} else if r.URL.Path == "/latest/meta-data/instance-id" {
+			io.WriteString(w, "i-test")
+		} else {
+			io.WriteString(w, `{"region":"us-east-1"}`)
+		}
+	}))
+	defer server.Close()
+	t.Setenv("AWS_EC2_METADATA_SERVICE_ENDPOINT", server.URL)
+	t.Setenv("AWS_EC2_METADATA_DISABLED", "false")
+	oldConfig := loadAppConfig
+	t.Cleanup(func() { loadAppConfig = oldConfig })
+	loadAppConfig = func(bool) (appconfig.SsmagentConfig, error) { return appconfig.DefaultConfig(), nil }
+
+	// Exercise the production constructor, retry budget, backoff and startup deadline.
+	assert.NotNil(t, NewEC2Identity(logmocks.NewMockLog()))
+	assert.Equal(t, int32(9), atomic.LoadInt32(&attempts))
 }
