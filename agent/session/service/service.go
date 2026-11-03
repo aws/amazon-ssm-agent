@@ -42,7 +42,14 @@ import (
 )
 
 const (
-	mgsClientTimeout      = time.Second * 15
+	// mgsClientTimeout bounds the wait for the MGS response headers once a connection
+	// is established. When the per-address dial timeout is disabled it is also used
+	// as the overall http.Client timeout (pre-fix behavior).
+	mgsClientTimeout = time.Second * 15
+
+	// mgsDialKeepAlive matches the keep-alive interval of http.DefaultTransport's dialer.
+	mgsDialKeepAlive = time.Second * 30
+
 	httpStatusCodeCreated = 201
 )
 
@@ -114,11 +121,7 @@ var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, identity 
 		return nil, fmt.Errorf("failed to sign the request: %s", err)
 	}
 
-	tr := network.GetDefaultTransport(log, appConfig)
-	client := &http.Client{
-		Timeout:   mgsClientTimeout,
-		Transport: tr,
-	}
+	client := newMgsHttpClient(log, appConfig)
 
 	resp, err := client.Do(httpRequest)
 	if err != nil {
@@ -135,6 +138,40 @@ var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, identity 
 		return body, nil
 	} else {
 		return nil, fmt.Errorf("unexpected response from the service %s", body)
+	}
+}
+
+// newMgsHttpClient builds the http client used for the CreateControlChannel and
+// CreateDataChannel REST calls.
+//
+// Since Go 1.23, net/http no longer cancels an in-flight dial when the request is
+// canceled, so http.Client.Timeout does not bound the dial. The only deadline the
+// dial sees is the transport dialer's Timeout, which net.Dialer splits evenly across
+// the resolved addresses. With http.DefaultTransport's 30s dialer and two resolved
+// addresses, a black-holed first address consumes 15s, i.e. the whole previous
+// 15s client budget, and the request never reaches the second address.
+//
+// To avoid that, the dial uses the same configurable timeout as the control-channel
+// websocket dial (Mgs.ControlChannelDialTimeoutMillis), the wait for the response
+// headers is bounded separately by mgsClientTimeout, and http.Client.Timeout is
+// raised to cover both as a backstop. A dial timeout of 0 keeps the pre-fix behavior.
+func newMgsHttpClient(log log.T, appConfig appconfig.SsmagentConfig) *http.Client {
+	tr := network.GetDefaultTransport(log, appConfig)
+	clientTimeout := mgsClientTimeout
+
+	if dialTimeoutMillis := appConfig.Mgs.ControlChannelDialTimeoutMillis; dialTimeoutMillis > 0 {
+		dialTimeout := time.Duration(dialTimeoutMillis) * time.Millisecond
+		tr.DialContext = (&net.Dialer{
+			Timeout:   dialTimeout,
+			KeepAlive: mgsDialKeepAlive,
+		}).DialContext
+		tr.ResponseHeaderTimeout = mgsClientTimeout
+		clientTimeout = dialTimeout + tr.TLSHandshakeTimeout + mgsClientTimeout
+	}
+
+	return &http.Client{
+		Timeout:   clientTimeout,
+		Transport: tr,
 	}
 }
 
