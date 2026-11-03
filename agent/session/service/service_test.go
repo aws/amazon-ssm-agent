@@ -17,7 +17,11 @@ package service
 import (
 	"crypto/tls"
 	"encoding/xml"
+	"io"
+	"net/http"
+	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/common/identity"
 
@@ -134,4 +138,88 @@ func getService() Service {
 		signer:  signer,
 		context: contextmocks.NewMockDefault(),
 	}
+}
+
+func TestNewMgsHttpClient_DefaultDialTimeout(t *testing.T) {
+	appConfig := appconfig.DefaultConfig()
+	dialTimeout := time.Duration(appConfig.Mgs.ControlChannelDialTimeoutMillis) * time.Millisecond
+
+	client := newMgsHttpClient(logmocks.NewMockLog(), appConfig)
+
+	tr, ok := client.Transport.(*http.Transport)
+	assert.True(t, ok)
+	assert.NotNil(t, tr.DialContext)
+	assert.NotNil(t, tr.TLSClientConfig)
+	assert.NotNil(t, tr.Proxy)
+	assert.Equal(t, mgsClientTimeout, tr.ResponseHeaderTimeout)
+	// The client timeout must cover the dial, the TLS handshake and the response
+	// headers, so that a slow first address does not consume the whole budget.
+	assert.Equal(t, dialTimeout+tr.TLSHandshakeTimeout+mgsClientTimeout, client.Timeout)
+	assert.Greater(t, client.Timeout, dialTimeout)
+}
+
+func TestNewMgsHttpClient_CustomDialTimeout(t *testing.T) {
+	appConfig := appconfig.DefaultConfig()
+	appConfig.Mgs.ControlChannelDialTimeoutMillis = 4000
+
+	client := newMgsHttpClient(logmocks.NewMockLog(), appConfig)
+
+	tr := client.Transport.(*http.Transport)
+	assert.Equal(t, mgsClientTimeout, tr.ResponseHeaderTimeout)
+	assert.Equal(t, 4*time.Second+tr.TLSHandshakeTimeout+mgsClientTimeout, client.Timeout)
+}
+
+func TestNewMgsHttpClient_DialTimeoutDisabled(t *testing.T) {
+	appConfig := appconfig.DefaultConfig()
+	appConfig.Mgs.ControlChannelDialTimeoutMillis = 0
+
+	client := newMgsHttpClient(logmocks.NewMockLog(), appConfig)
+
+	// A dial timeout of 0 keeps the pre-fix behavior: the default transport
+	// with a 15s overall client timeout and no separate response header timeout.
+	tr := client.Transport.(*http.Transport)
+	defaultTr := http.DefaultTransport.(*http.Transport)
+	assert.Equal(t, time.Duration(0), tr.ResponseHeaderTimeout)
+	assert.Equal(t, mgsClientTimeout, client.Timeout)
+	assert.Equal(t, defaultTr.TLSHandshakeTimeout, tr.TLSHandshakeTimeout)
+}
+
+func TestNewMgsHttpClient_RoundTrip(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(httpStatusCodeCreated)
+		_, _ = w.Write([]byte("ok"))
+	}))
+	defer server.Close()
+
+	client := newMgsHttpClient(logmocks.NewMockLog(), appconfig.DefaultConfig())
+
+	resp, err := client.Post(server.URL, "application/json", nil)
+	assert.Nil(t, err)
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	assert.Nil(t, err)
+	assert.Equal(t, httpStatusCodeCreated, resp.StatusCode)
+	assert.Equal(t, "ok", string(body))
+}
+
+func TestNewMgsHttpClient_ResponseHeaderTimeout(t *testing.T) {
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		<-release
+		w.WriteHeader(httpStatusCodeCreated)
+	}))
+	defer server.Close()
+	defer close(release)
+
+	client := newMgsHttpClient(logmocks.NewMockLog(), appconfig.DefaultConfig())
+	tr := client.Transport.(*http.Transport)
+	// Shorten the response header timeout so the test runs quickly.
+	tr.ResponseHeaderTimeout = 100 * time.Millisecond
+
+	start := time.Now()
+	_, err := client.Post(server.URL, "application/json", nil)
+
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "timeout awaiting response headers")
+	assert.Less(t, time.Since(start), client.Timeout)
 }
