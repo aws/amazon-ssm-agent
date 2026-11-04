@@ -48,6 +48,10 @@ func (p *Processor) tryProcessEscape() int {
 	if data[0] == ansiEscape[0] {
 		consumed := p.handleEscapeSeq(data)
 		if consumed > 0 {
+			// Colors don't move the cursor, so a space before them still counts.
+			if sgrLen(data) != consumed {
+				p.prevChar = ""
+			}
 			p.buf.Next(consumed)
 			return 1 // Processed
 		}
@@ -59,8 +63,9 @@ func (p *Processor) tryProcessEscape() int {
 	// Check for control characters
 	ch := string(data[0:1])
 	if p.isControlChar(ch) {
-		p.handleControlChar(ch)
+		p.handleControlChar(ch, data[1:])
 		p.buf.Next(1)
+		p.prevChar = ""
 		return 1 // Processed
 	}
 
@@ -73,31 +78,25 @@ func (p *Processor) isControlChar(ch string) bool {
 		ch == ansiReturn || ch == ansiNull || ch == ansiDelete
 }
 
-func (p *Processor) handleControlChar(ch string) {
+// handleControlChar applies a control character. next holds the bytes that
+// follow it, if already buffered.
+func (p *Processor) handleControlChar(ch string, next []byte) {
 	switch ch {
 	case ansiBackspace:
+		// Backspace stops at the start of the line, as on a terminal.
 		b := p.output.Bytes()
 		pos := len(b) - p.cursorOffset
-		if pos > 0 {
+		if pos > lineStart(b, pos) {
 			_, size := utf8.DecodeLastRune(b[:pos])
 			p.cursorOffset += size
 		}
 	case ansiReturn:
-		if p.prevChar == ansiSpace {
-			//assume that this is line wrap by pty terminal
+		if p.prevChar == ansiSpace && isLineWrap(next) {
+			// The space wrapped onto a new row; the next character overwrites it.
 			p.cursorOffset = 1
 		} else {
 			b := p.output.Bytes()
-			pos := len(b) - p.cursorOffset
-			lineStart := 0
-			for i := pos - 1; i >= 0; i-- {
-				if b[i] == '\n' {
-					lineStart = i + 1
-					break
-				}
-			}
-			// Count bytes from lineStart to end of buffer
-			p.cursorOffset = len(b) - lineStart
+			p.cursorOffset = len(b) - lineStart(b, len(b)-p.cursorOffset)
 		}
 	case ansiLineFeed, ansiVertTab, ansiFormFeed:
 		p.output.WriteByte('\n')
@@ -186,11 +185,12 @@ func (p *Processor) executeCSI(cmd string, params string) {
 			p.cursorOffset = 0
 		}
 	case cmdCursorBack:
-		// Move cursor back by count runes, not bytes
+		// Move cursor back by count runes, not bytes, stopping at the line start
 		b := p.output.Bytes()
 		pos := len(b) - p.cursorOffset
+		start := lineStart(b, pos)
 		moved := 0
-		for i := 0; i < count && pos > 0; i++ {
+		for i := 0; i < count && pos > start; i++ {
 			_, size := utf8.DecodeLastRune(b[:pos])
 			pos -= size
 			moved += size
@@ -271,6 +271,49 @@ func (p *Processor) writeNextChar() {
 	} else {
 		p.output.WriteString(string(r))
 	}
+}
+
+// isLineWrap reports whether a carriage return right after a space is a line
+// wrap, given the bytes after the carriage return. A wrap continues with text,
+// possibly after colors; a redraw moves the cursor or erases first.
+func isLineWrap(next []byte) bool {
+	for {
+		n := sgrLen(next)
+		if n == 0 {
+			break
+		}
+		next = next[n:]
+	}
+	if len(next) == 0 {
+		return true
+	}
+	return next[0] >= 0x20 && next[0] != 0x7f
+}
+
+// sgrLen returns the length of a complete color sequence (ESC [ params m) at
+// the start of b, or 0.
+func sgrLen(b []byte) int {
+	if len(b) < 3 || b[0] != ansiEscape[0] || b[1] != '[' {
+		return 0
+	}
+	for i := 2; i < len(b); i++ {
+		switch c := b[i]; {
+		case c == 'm':
+			return i + 1
+		case (c >= '0' && c <= '9') || c == ';':
+		default:
+			return 0
+		}
+	}
+	return 0
+}
+
+// lineStart returns the offset just after the last newline before pos.
+func lineStart(b []byte, pos int) int {
+	if i := bytes.LastIndexByte(b[:pos], '\n'); i >= 0 {
+		return i + 1
+	}
+	return 0
 }
 
 func (p *Processor) GetOutput() []byte {

@@ -1,6 +1,10 @@
 package ansiprocessing
 
-import "testing"
+import (
+	"bufio"
+	"strings"
+	"testing"
+)
 
 func TestProcessor(t *testing.T) {
 	tests := []struct {
@@ -84,5 +88,94 @@ func TestProcessor_IncompleteCSIFollowedByText(t *testing.T) {
 	// Result: ESC[3w is consumed, leaving "orld"
 	if output != "helloorld" {
 		t.Errorf("After text: expected %q, got %q", "helloorld", output)
+	}
+}
+
+func TestProcessor_LineHandling(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    string
+		expected string
+	}{
+		{"Prompt redraw after space", "sh-5.2$ \r\x1b[K\rsh-5.2$ ls", "sh-5.2$ ls"},
+		{"Trailing space command redraw", "sh-5.2$ \x1b[7mecho hi \x1b[27m\r\x1b[C\x1b[C\x1b[C\x1b[C\x1b[C\x1b[C\x1b[C\x1b[Cecho hi \n", "sh-5.2$ echo hi \n"},
+		{"Line wrap twice", "abcd \refgh \rij", "abcdefghij"},
+		{"Line wrap after a color", "abcd \x1b[0m\refgh", "abcdefgh"},
+		{"Line wrap into a color", "PS C:\\> Get-Child \r\x1b[33mItem", "PS C:\\> Get-ChildItem"},
+		{"Line wrap with wide chars", "世界 \rab", "世界ab"},
+		{"Line wrap at end of chunk", "abcd \r", "abcd "},
+		{"Backspace stops at line start", "cmd\n\b\b\b\b\x1b[Knext", "cmd\nnext"},
+		{"Cursor back stops at line start", "cmd\n\x1b[10D\x1b[Knext", "cmd\nnext"},
+		{"Backspace within line still works", "cmd\nabc\b\b\x1b[K", "cmd\na"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := NewProcessor()
+			s.WriteString(tt.input)
+			if got := string(s.GetOutput()); got != tt.expected {
+				t.Errorf("Expected %q, got %q", tt.expected, got)
+			}
+		})
+	}
+}
+
+// customerSessionLog is a shell session recorded by bash with bracketed paste,
+// where printf writes backspaces and an erase-in-line after a command.
+func customerSessionLog() string {
+	fwd := strings.Repeat("\x1b[C", 8)
+	cmdLine := func(cmd string) string {
+		return "\x1b[?2004hsh-5.2$ \x1b[7m" + cmd + "\x1b[27m\r" + fwd + cmd + "\r\n"
+	}
+	printfCmd := "printf '" + strings.Repeat(`\b`, 40) + `\033[K'`
+	return "\x1b[?2004hsh-5.2$ \r\x1b[K\rsh-5.2$ \x1b[7mecho AUDIT-MARK-1\x1b[27m\r" + fwd + "echo AUDIT-MARK-1\r\n" +
+		"\x1b[?2004l\rAUDIT-MARK-1\r\n" +
+		cmdLine(printfCmd) +
+		"\x1b[?2004l\r" + strings.Repeat("\b", 40) + "\x1b[K" + cmdLine("echo AUDIT-MARK-2") +
+		"\x1b[?2004l\rAUDIT-MARK-2\r\n" +
+		cmdLine("echo hello") +
+		"\x1b[?2004l\rhello\r\n" +
+		cmdLine("echo hello ") +
+		"\x1b[?2004l\rhello\r\n" +
+		"\x1b[?2004hsh-5.2$ "
+}
+
+func TestProcessor_SessionLogKeepsEveryCommand(t *testing.T) {
+	expectedLines := []string{
+		"sh-5.2$ echo AUDIT-MARK-1",
+		"AUDIT-MARK-1",
+		"sh-5.2$ printf '" + strings.Repeat(`\b`, 40) + `\033[K'`,
+		"sh-5.2$ echo AUDIT-MARK-2",
+		"AUDIT-MARK-2",
+		"sh-5.2$ echo hello",
+		"hello",
+		"sh-5.2$ echo hello ",
+		"hello",
+		"sh-5.2$ ",
+	}
+
+	// One processor over the whole file, as for the S3 upload.
+	s := NewProcessor()
+	scanner := bufio.NewScanner(strings.NewReader(customerSessionLog()))
+	for scanner.Scan() {
+		s.WriteString(scanner.Text())
+		s.WriteString("\n")
+	}
+	whole := strings.Split(strings.TrimSuffix(string(s.GetOutput()), "\n"), "\n")
+	if strings.Join(whole, "\n") != strings.Join(expectedLines, "\n") {
+		t.Errorf("whole file: expected\n%q\ngot\n%q", expectedLines, whole)
+	}
+
+	// A new processor per line, as for CloudWatch streaming.
+	var got []string
+	scanner = bufio.NewScanner(strings.NewReader(customerSessionLog()))
+	for scanner.Scan() {
+		s := NewProcessor()
+		s.WriteString(scanner.Text())
+		if out := string(s.GetOutput()); out != "" {
+			got = append(got, out)
+		}
+	}
+	if strings.Join(got, "\n") != strings.Join(expectedLines, "\n") {
+		t.Errorf("per line: expected\n%q\ngot\n%q", expectedLines, got)
 	}
 }
