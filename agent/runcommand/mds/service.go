@@ -108,8 +108,9 @@ func NewService(context context.T, connectionTimeout time.Duration) Service {
 	clientBasedErrorMessages = make([]string, 1)
 	clientBasedErrorMessages = append(clientBasedErrorMessages, "Client.Timeout exceeded while awaiting headers")
 
+	// Each call is retried; see executeRequest.
 	sendMdsSdkRequest := func(req *Request) error {
-		return req.Send()
+		return mdsClient.executeRequest(req, req.Data)
 	}
 	cancelMdsSDKRequest := func(trans *http.Transport, req *Request) {
 		if req != nil && req.HTTPRequest != nil {
@@ -361,7 +362,7 @@ func (mds *sdkService) Stop() {
 	mds.context.Log().Infof("Stopped Mds service")
 }
 
-// sendRequest wraps req.Send() so that it can keep track of the executing request
+// sendRequest sends req through sendSdkRequest so that it can keep track of the executing request
 func (mds *sdkService) sendRequest(req *Request) error {
 	mds.storeRequest(req)
 	defer mds.clearRequest()

@@ -13,6 +13,8 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"net/url"
+	"reflect"
 	"strings"
 	"time"
 
@@ -20,7 +22,9 @@ import (
 	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 
 	agentcontext "github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 )
 
@@ -75,6 +79,7 @@ func NewMdsClient(agentContext agentcontext.T, httpClient *http.Client) *Ssmmds 
 		region:             region,
 		credentialProvider: credProvider,
 		userAgent:          userAgent,
+		log:                agentContext.Log(),
 	}
 }
 
@@ -103,6 +108,7 @@ type Ssmmds struct {
 	region             string
 	credentialProvider aws.CredentialsProvider
 	userAgent          string
+	log                log.T
 }
 
 // Config holds AWS configuration
@@ -122,66 +128,8 @@ type Request struct {
 	Data          interface{}
 	Error         error
 	context       context.Context
-	httpClient    *http.Client
 	body          []byte // original request body for re-signing on retry
 	operationName string // API operation name, used to tune retry behavior
-}
-
-// Send executes the request
-func (r *Request) Send() error {
-	if r.Error != nil {
-		return r.Error
-	}
-
-	if r.HTTPRequest == nil {
-		return fmt.Errorf("HTTPRequest is nil")
-	}
-
-	// Use the context if available
-	ctx := r.context
-	if ctx == nil {
-		ctx = context.Background()
-	}
-
-	// Set the context on the HTTP request using a local variable. Reassigning
-	// r.HTTPRequest here would race with Stop()/cancelSdkRequest, which reads
-	// r.HTTPRequest concurrently to cancel the in-flight request.
-	httpReq := r.HTTPRequest.WithContext(ctx)
-
-	// Use the configured client (preserves TLS config, proxy, timeouts)
-	client := r.httpClient
-	if client == nil {
-		client = &http.Client{Timeout: 30 * time.Second}
-	}
-	resp, err := client.Do(httpReq)
-	if err != nil {
-		r.Error = err
-		return err
-	}
-	defer resp.Body.Close()
-
-	// Read response body
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		r.Error = err
-		return err
-	}
-
-	// Handle HTTP errors
-	if resp.StatusCode >= 400 {
-		r.Error = parseError(body, resp.StatusCode)
-		return r.Error
-	}
-
-	// Parse response into Data if it's provided
-	if len(body) > 0 && r.Data != nil {
-		if err := json.Unmarshal(body, r.Data); err != nil {
-			r.Error = err
-			return err
-		}
-	}
-
-	return nil
 }
 
 // SetContext sets the request context
@@ -217,23 +165,17 @@ func (c *Ssmmds) newRequest(op *Operation, params, data interface{}) *Request {
 		req.Header.Set("User-Agent", c.userAgent)
 	}
 
-	// Retrieve fresh credentials and sign request
-	if err := c.signRequest(req, body); err != nil {
-		return &Request{Error: err}
-	}
-
 	return &Request{
 		HTTPRequest:   req,
 		Data:          data,
-		httpClient:    c.client,
 		body:          body,
 		operationName: op.Name,
 	}
 }
 
-// signRequest signs the HTTP request using AWS Signature Version 4
-func (c *Ssmmds) signRequest(req *http.Request, body []byte) error {
-	creds, err := c.credentialProvider.Retrieve(context.TODO())
+// signRequest signs the HTTP request using AWS Signature Version 4; ctx lets Stop() interrupt a credential refresh.
+func (c *Ssmmds) signRequest(ctx context.Context, req *http.Request, body []byte) error {
+	creds, err := c.credentialProvider.Retrieve(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve credentials: %w", err)
 	}
@@ -243,10 +185,12 @@ func (c *Ssmmds) signRequest(req *http.Request, body []byte) error {
 	payloadHash := hex.EncodeToString(hasher.Sum(nil))
 
 	signer := v4.NewSigner()
-	return signer.SignHTTP(context.TODO(), creds, req, payloadHash, EndpointsID, c.region, time.Now().UTC())
+	return signer.SignHTTP(ctx, creds, req, payloadHash, EndpointsID, c.region, time.Now().UTC())
 }
 
-// executeRequest executes HTTP request and handles response with retry
+// executeRequest sends req and retries it up to 3 times with the same body. A GetMessages retry keeps
+// its MessagesRequestId, so MDS can answer it
+// from its response cache once the original poll was answered.
 func (c *Ssmmds) executeRequest(req *Request, output interface{}) error {
 	if req.Error != nil {
 		return req.Error
@@ -259,92 +203,174 @@ func (c *Ssmmds) executeRequest(req *Request, output interface{}) error {
 
 	const maxAttempts = 4
 	var lastErr error
+	warnedExpired := false
 
 	for attempt := 0; attempt < maxAttempts; attempt++ {
+		// A fresh copy per attempt: the transport may still hold the previous attempt's headers and body.
+		httpReq := req.HTTPRequest.Clone(ctx)
+		httpReq.Body = io.NopCloser(bytes.NewReader(req.body))
 		if attempt > 0 {
-			var delay time.Duration
-			// GetMessages is a long-poll operation that should recover quickly
-			// after a timeout. When the previous failure was a timeout, use a
-			// short fixed 100ms retry delay instead of exponential backoff so
-			// the agent resumes polling for messages promptly.
-			if req.operationName == opGetMessages && isTimeoutError(lastErr) {
-				delay = 100 * time.Millisecond
-			} else {
-				// Exponential backoff with jitter: base 1s × 2^attempt + random 0-500ms
-				backoff := time.Duration(math.Pow(2, float64(attempt))) * time.Second
-				jitter := time.Duration(rand.Intn(500)) * time.Millisecond
-				delay = backoff + jitter
-			}
-			time.Sleep(delay)
-
-			// Reset body and re-sign the request since the signature has a timestamp
-			req.HTTPRequest.Body = io.NopCloser(bytes.NewReader(req.body))
-			if err := c.signRequest(req.HTTPRequest, req.body); err != nil {
-				return err
-			}
+			delay := retryDelay(req.operationName, lastErr, attempt-1)
+			c.log.Debugf("Retrying MDS %s (attempt %d of %d) in %v after: %v", req.operationName, attempt+1, maxAttempts, delay, lastErr)
+			sleepDelay(delay) // does not watch Stop(); the send below then fails fast if stopped
+		}
+		// Signed per attempt, since the signature has a timestamp
+		if err := c.signRequest(ctx, httpReq, req.body); err != nil {
+			c.log.Debugf("MDS %s request could not be signed, check the agent's credentials: %v", req.operationName, err)
+			return err
 		}
 
-		httpReq := req.HTTPRequest.WithContext(ctx)
 		resp, err := c.client.Do(httpReq)
 		if err != nil {
-			lastErr = err
-			continue // network error — retry
-		}
-
-		body, err := io.ReadAll(resp.Body)
-		resp.Body.Close()
-		if err != nil {
+			if ctx.Err() != nil || !isRetryableNetError(err) {
+				return err // stopped, or the server may already have acted on the request
+			}
 			lastErr = err
 			continue
 		}
 
-		if resp.StatusCode >= 400 {
-			lastErr = parseError(body, resp.StatusCode)
-			if isRetryableError(lastErr, resp.StatusCode) {
+		// Decode straight from the stream: a complete reply counts even if the connection then ends early.
+		var raw bytes.Buffer
+		dec := json.NewDecoder(io.TeeReader(resp.Body, &raw))
+		if resp.StatusCode >= 300 {
+			var apiErr struct {
+				Type    string `json:"__type"`
+				Message string `json:"message"` // decoded so a non-string message counts as undecodable
+			}
+			decodeErr := dec.Decode(&apiErr)
+			resp.Body.Close()
+			if decodeErr != nil && decodeErr != io.EOF {
+				// An error body that does not decode (such as a proxy's HTML page) is retried, unless the
+				// connection was reset after the request went out.
+				lastErr = fmt.Errorf("HTTP %d: %s: %w", resp.StatusCode, raw.Bytes(), decodeErr) // keep the body, as before
+				if !isRetryableResponse(resp.StatusCode, "") && !isRetryableNetError(decodeErr) {
+					return lastErr
+				}
 				continue
 			}
-			return lastErr // non-retryable API error
+			code := errorCode(apiErr.Type)
+			lastErr = parseError(raw.Bytes(), resp.StatusCode)
+			if !isRetryableResponse(resp.StatusCode, code) {
+				return lastErr // non-retryable API error
+			}
+			if isExpiredTokenCode(code) {
+				if !warnedExpired {
+					c.log.Warnf("MDS %s got %s; dropping cached credentials and retrying, check the agent's credential refresh", req.operationName, code)
+					warnedExpired = true
+				}
+				c.invalidateCredentials() // the retry must sign with fresh credentials
+			}
+			continue
 		}
 
-		// Success
-		if len(body) > 0 && output != nil {
-			return json.Unmarshal(body, output)
+		if output == nil {
+			_, _ = io.Copy(io.Discard, resp.Body) // calls without a reply body ignore it
+			resp.Body.Close()
+			return nil
+		}
+		decodeErr := dec.Decode(output)
+		resp.Body.Close()
+		// A body read cut by Stop() is retried after the usual sleep and then fails fast.
+		if decodeErr != nil && decodeErr != io.EOF { // an empty reply is success
+			v := reflect.ValueOf(output).Elem()
+			v.Set(reflect.Zero(v.Type())) // keep nothing from a reply that failed to decode
+			lastErr = decodeErr
+			if !isRetryableNetError(decodeErr) {
+				return decodeErr
+			}
+			continue
 		}
 		return nil
 	}
 
-	return fmt.Errorf("exceeded maximum number of attempts (%d): %w", maxAttempts, lastErr)
+	c.log.Debugf("MDS %s failed after %d attempts, check connectivity to %s: %v", req.operationName, maxAttempts, c.endpoint, lastErr)
+	return lastErr
 }
 
-// isRetryableError returns true for transient/throttle errors that should be retried
-func isRetryableError(err error, statusCode int) bool {
-	if statusCode == 429 || statusCode == 500 || statusCode == 502 || statusCode == 503 || statusCode == 504 {
-		return true
+// retryDelay is the wait before a retry: 100ms after a GetMessages client timeout,
+// otherwise 2^retryCount * (1000-1500ms), with retryCount starting at 0.
+func retryDelay(operation string, err error, retryCount int) time.Duration {
+	if isPollTimeout(operation, err) {
+		return 100 * time.Millisecond
 	}
-	switch err.(type) {
-	case *InternalServerException, *RequestTimeoutException, *TooManyRequestsException:
-		return true
-	}
-	return false
+	return time.Duration(int(math.Pow(2, float64(retryCount)))*(rand.Intn(500)+1000)) * time.Millisecond
 }
 
-// isTimeoutError returns true if the error is a network/transport timeout or a
-// service-side RequestTimeoutException.
-func isTimeoutError(err error) bool {
-	if err == nil {
+// isPollTimeout reports a GetMessages long poll that hit the client timeout, the expected idle case.
+func isPollTimeout(operation string, err error) bool {
+	return operation == opGetMessages && err != nil && strings.Contains(err.Error(), "Client.Timeout")
+}
+
+// sleepDelay waits between retries; a plain time.Sleep, so Stop() takes effect after the wait.
+var sleepDelay = time.Sleep
+
+// isExpiredTokenCode reports an expired-credentials reply that fresh credentials can fix. RequestExpired is
+// left out: it means clock skew, which a retry signed with the same clock cannot fix.
+func isExpiredTokenCode(code string) bool {
+	return code != "RequestExpired" && sdkutil.IsExpiredCredsCode(code)
+}
+
+// Retryable and throttle error codes.
+var retryableErrorCodes = map[string]bool{
+	"RequestError": true, "RequestTimeout": true, "ResponseTimeout": true, "RequestTimeoutException": true,
+	"ProvisionedThroughputExceededException": true, "ThrottledException": true, "Throttling": true,
+	"ThrottlingException": true, "RequestLimitExceeded": true, "RequestThrottled": true,
+	"RequestThrottledException": true, "TooManyRequestsException": true, "PriorRequestNotComplete": true,
+	"TransactionInProgressException": true, "EC2ThrottledException": true,
+}
+
+// isRetryableResponse reports whether an HTTP error response is retried:
+// status 500, 429, 502, 503 or 504, or a retryable, throttle or credential-expiry code.
+func isRetryableResponse(statusCode int, code string) bool {
+	switch statusCode {
+	case 500, 429, 502, 503, 504:
+		return true
+	}
+	return retryableErrorCodes[code] || isExpiredTokenCode(code)
+}
+
+// isRetryableNetError reports whether a failed send or body read is retried: a refused or failed dial and a
+// temporary error are retried; a reset while reading the response is not, as the server may have acted on it.
+func isRetryableNetError(err error) bool {
+	if strings.Contains(err.Error(), "connection refused") {
+		return true
+	}
+	var urlErr *url.Error
+	if errors.As(err, &urlErr) {
+		err = urlErr.Err
+	}
+	if opErr, ok := err.(*net.OpError); ok && opErr.Op == "dial" {
+		return true
+	}
+	if t, ok := err.(interface{ Temporary() bool }); ok {
+		return t.Temporary() || isConnectionReset(err)
+	}
+	return !strings.Contains(err.Error(), "net/http: request canceled")
+}
+
+// isConnectionReset reports a dropped connection, except a reset while reading the response.
+func isConnectionReset(err error) bool {
+	msg := err.Error()
+	if strings.Contains(msg, "read: connection reset") {
 		return false
 	}
-	if errors.Is(err, context.DeadlineExceeded) {
-		return true
+	return strings.Contains(msg, "use of closed network connection") ||
+		strings.Contains(msg, "connection reset") || strings.Contains(msg, "broken pipe")
+}
+
+// invalidateCredentials drops cached credentials so the next signature fetches fresh ones.
+func (c *Ssmmds) invalidateCredentials() {
+	if cache, ok := c.credentialProvider.(interface{ Invalidate() }); ok {
+		cache.Invalidate()
+		return
 	}
-	var netErr net.Error
-	if errors.As(err, &netErr) && netErr.Timeout() {
-		return true
-	}
-	if _, ok := err.(*RequestTimeoutException); ok {
-		return true
-	}
-	return strings.Contains(err.Error(), "Client.Timeout") || strings.Contains(err.Error(), "timeout")
+	c.log.Debugf("MDS credentials provider %T has no cache to invalidate; the retry fetches credentials from it again", c.credentialProvider)
+}
+
+// errorCode returns an error __type without its namespace prefix (text up to the first '#').
+func errorCode(errorType string) string {
+	parts := strings.SplitN(errorType, "#", 2)
+	return parts[len(parts)-1]
 }
 
 // parseError parses AWS error response
@@ -620,7 +646,7 @@ func (c *Ssmmds) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (*Req
 		input = &AcknowledgeMessageInput{}
 	}
 	output := &AcknowledgeMessageOutput{}
-	return c.newRequest(op, input, output), output
+	return c.newRequest(op, input, nil), output
 }
 
 func (c *Ssmmds) AcknowledgeMessage(input *AcknowledgeMessageInput) (*AcknowledgeMessageOutput, error) {
@@ -640,7 +666,7 @@ func (c *Ssmmds) DeleteMessageRequest(input *DeleteMessageInput) (*Request, *Del
 		input = &DeleteMessageInput{}
 	}
 	output := &DeleteMessageOutput{}
-	return c.newRequest(op, input, output), output
+	return c.newRequest(op, input, nil), output
 }
 
 func (c *Ssmmds) DeleteMessage(input *DeleteMessageInput) (*DeleteMessageOutput, error) {
@@ -660,7 +686,7 @@ func (c *Ssmmds) FailMessageRequest(input *FailMessageInput) (*Request, *FailMes
 		input = &FailMessageInput{}
 	}
 	output := &FailMessageOutput{}
-	return c.newRequest(op, input, output), output
+	return c.newRequest(op, input, nil), output
 }
 
 func (c *Ssmmds) FailMessage(input *FailMessageInput) (*FailMessageOutput, error) {

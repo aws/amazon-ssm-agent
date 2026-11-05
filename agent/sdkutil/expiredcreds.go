@@ -27,6 +27,12 @@ var expiredCredsCodes = map[string]struct{}{
 	"RequestExpired":        {},
 }
 
+// IsExpiredCredsCode reports whether an error code means the cached credentials expired.
+func IsExpiredCredsCode(code string) bool {
+	_, expired := expiredCredsCodes[code]
+	return expired
+}
+
 // invalidateCredsOnExpiredError invalidates provider after any attempt that fails with an expired credentials code.
 func invalidateCredsOnExpiredError(provider aws.CredentialsProvider) func(*middleware.Stack) error {
 	cache, ok := provider.(interface{ Invalidate() })
