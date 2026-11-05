@@ -28,11 +28,12 @@ for name in $BINARIES; do
         continue
     fi
 
-    # Informational: count LSE instructions present in the binary. The Go
-    # runtime (GOARM64=v8.0) carries a few behind a runtime CPU check.
+    # Informational: count casa/swpl, the glibc lock pattern from #683.
+    # Go code (GOARM64=v8.0) also contains LSE ops, but behind a runtime CPU
+    # check, so this count is a hint only; the qemu run below is the gate.
     if command -v objdump >/dev/null; then
-        lse=$(objdump -d "$bin" 2>/dev/null | grep -cE $'\t(cas|casa|casal|casl|casp[a-z]*|swp|swpa|swpal|swpl|ld(add|clr|eor|set|smax|smin|umax|umin)(a|al|l)?(b|h)?)\t')
-        echo "$name: $lse LSE instructions"
+        lse=$(objdump -d "$bin" 2>/dev/null | grep -cE $'\t(casa|swpl)\t')
+        echo "$name: $lse casa/swpl instructions"
     fi
 
     # -version for the agent; anything else just needs to get past startup.
