@@ -214,9 +214,16 @@ func (p *Processor) executeCSI(cmd string, params string) {
 			if p.cursorOffset < 0 {
 				p.cursorOffset = 0
 			}
-		} else if len(b) >= count {
+		} else {
+			// Cursor at the end: drop up to count runes, but only on this line.
+			start := lineStart(b, pos)
+			end := len(b)
+			for i := 0; i < count && end > start; i++ {
+				_, size := utf8.DecodeLastRune(b[start:end])
+				end -= size
+			}
 			p.output.Reset()
-			p.output.Write(b[:len(b)-count])
+			p.output.Write(b[:end])
 		}
 	case cmdEraseInLine:
 		if pos >= 0 && pos <= len(b) {

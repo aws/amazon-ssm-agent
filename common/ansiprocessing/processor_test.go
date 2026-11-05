@@ -107,6 +107,10 @@ func TestProcessor_LineHandling(t *testing.T) {
 		{"Backspace stops at line start", "cmd\n\b\b\b\b\x1b[Knext", "cmd\nnext"},
 		{"Cursor back stops at line start", "cmd\n\x1b[10D\x1b[Knext", "cmd\nnext"},
 		{"Backspace within line still works", "cmd\nabc\b\b\x1b[K", "cmd\na"},
+		{"Delete char at end stops at line start", "cmd\n\x1b[10P", "cmd\n"},
+		{"Delete char at end within line", "cmd\nabc\x1b[2P", "cmd\na"},
+		{"Delete char at end counts runes", "世界\x1b[1P", "世"},
+		{"Delete char cannot remove earlier command", "sh-5.2$ echo SECRET-CMD\nSECRET\nsh-5.2$ printf '\\033[45P'\n\x1b[45Psh-5.2$ echo after\n", "sh-5.2$ echo SECRET-CMD\nSECRET\nsh-5.2$ printf '\\033[45P'\nsh-5.2$ echo after\n"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
