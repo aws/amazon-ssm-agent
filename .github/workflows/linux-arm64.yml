@@ -1,0 +1,97 @@
+name: linux-arm64 build
+
+# Builds the linux/arm64 agent natively on a GitHub-hosted ARM runner with the
+# production static-pie flags, then checks that every binary starts on an
+# ARMv8.0 CPU (Cortex-A53 under qemu-user). Regression test for
+# https://github.com/aws/amazon-ssm-agent/issues/683
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: arm64 static-pie (${{ matrix.builder }})
+    runs-on: ubuntu-24.04-arm
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Fixed toolchain: glibc built for the ARMv8.0 baseline.
+          - builder: debian-bookworm
+            image: public.ecr.aws/docker/library/debian:bookworm
+            expect_armv8_0: pass
+          # Toolchain used since 3.3.5512.0: glibc built for ARMv8.2.
+          # Kept as a control to prove the gate detects the regression.
+          - builder: amazonlinux-2023
+            image: public.ecr.aws/amazonlinux/amazonlinux:2023
+            expect_armv8_0: sigill
+    steps:
+      - name: Install build dependencies (Debian)
+        if: startsWith(matrix.builder, 'debian')
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ca-certificates gcc libc6-dev binutils make git tar gzip qemu-user-static
+
+      - name: Install build dependencies (Amazon Linux 2023)
+        if: startsWith(matrix.builder, 'amazonlinux')
+        run: |
+          dnf install -y gcc glibc-static binutils make git tar gzip findutils
+          # AL2023 has no qemu-user; borrow the static binary from Debian.
+          dnf install -y --allowerasing curl
+          curl -fsSL -o /tmp/qemu.deb "http://deb.debian.org/debian/pool/main/q/qemu/$(curl -fsSL http://deb.debian.org/debian/pool/main/q/qemu/ | grep -oE 'qemu-user-static_[^"]+bookworm[^"]*_arm64\.deb' | sort -V | tail -1)"
+          mkdir /tmp/qemu && cd /tmp/qemu && dnf install -y binutils xz && ar x /tmp/qemu.deb && tar -xf data.tar.xz ./usr/bin/qemu-aarch64-static
+          install -m 755 /tmp/qemu/usr/bin/qemu-aarch64-static /usr/local/bin/
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Toolchain info
+        run: |
+          uname -m
+          go version
+          gcc --version | head -1
+          grep -m1 Features /proc/cpuinfo || true
+
+      - name: Install goimports (needed by checkstyle)
+        run: |
+          go install golang.org/x/tools/cmd/goimports@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Build linux/arm64 static-pie
+        run: make build-arm64-static-pie
+
+      - name: Inspect binaries
+        run: |
+          file bin/linux_arm64/* 2>/dev/null || ls -l bin/linux_arm64
+          go version -m bin/linux_arm64/amazon-ssm-agent | head -20
+
+      - name: Verify binaries start on ARMv8.0 (Cortex-A53)
+        run: |
+          set +e
+          make verify-arm64-baseline
+          rc=$?
+          if [ "${{ matrix.expect_armv8_0 }}" = "pass" ]; then
+            exit $rc
+          fi
+          if [ $rc -eq 0 ]; then
+            echo "::error::Expected SIGILL with ${{ matrix.builder }} toolchain, but binaries ran on ARMv8.0"
+            exit 1
+          fi
+          echo "::notice::${{ matrix.builder }} toolchain produces ARMv8.1+-only binaries (expected control result)"
+
+      - name: Upload binaries
+        if: matrix.expect_armv8_0 == 'pass'
+        uses: actions/upload-artifact@v4
+        with:
+          name: amazon-ssm-agent-linux-arm64
+          path: bin/linux_arm64/
