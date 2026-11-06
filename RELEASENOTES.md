@@ -1,5 +1,18 @@
 Latest
 ===============
+- Add sqv fallthrough to binary data-integrity check in setupcli
+- Allow IMDS recovery during EC2 live updates
+- Bump golang.org/x/net from v0.60.0 to v0.62.0
+- Fix symlink-following chmod in aws:downloadContent Git source
+- Keep delete-char from erasing earlier session log lines
+- Keep every command in processed session logs
+- Retry MDS calls with the same request after timeouts and errors
+- Stop resend scheduler on datachannel close to prevent orphan session workers
+- Treat InstanceAlreadyRegistered error code as already-registered in EC2 registration
+- Update the C toolchain to restore arm64 v8 compatibility
+
+3.3.5708.0
+===============
 - Send bucket-owner header on s3 http/https fallback
 - Only write serial port messages when running in EC2
 - Apply IMDS retry bound in fallback config path
