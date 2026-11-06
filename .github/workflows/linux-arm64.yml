@@ -1,0 +1,112 @@
+name: linux-arm64 build
+
+# Builds the linux/arm64 agent natively on a GitHub-hosted ARM runner with the
+# production static-pie flags, then checks that every binary starts on an
+# ARMv8.0 CPU (Cortex-A53 under qemu-user). Regression test for
+# https://github.com/aws/amazon-ssm-agent/issues/683
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build (${{ matrix.builder }})
+    runs-on: ubuntu-24.04-arm
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Fixed toolchain: glibc built for the ARMv8.0 baseline.
+          - builder: debian-trixie
+            image: public.ecr.aws/docker/library/debian:trixie
+          # Toolchain used since 3.3.5512.0: glibc built for ARMv8.2.
+          # Kept as a control to prove the gate detects the regression.
+          - builder: amazonlinux-2023
+            image: public.ecr.aws/amazonlinux/amazonlinux:2023
+    steps:
+      - name: Install build dependencies (Debian)
+        if: startsWith(matrix.builder, 'debian')
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ca-certificates gcc libc6-dev binutils make git tar gzip
+
+      - name: Install build dependencies (Amazon Linux 2023)
+        if: startsWith(matrix.builder, 'amazonlinux')
+        run: dnf install -y gcc glibc-static binutils make git tar gzip findutils
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Toolchain info
+        run: |
+          uname -m
+          go version
+          gcc --version | head -1
+          grep -m1 Features /proc/cpuinfo || true
+
+      - name: Install goimports (needed by checkstyle)
+        run: |
+          go install golang.org/x/tools/cmd/goimports@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Build linux/arm64 static-pie
+        run: make build-arm64-static-pie
+
+      - name: Inspect binaries
+        run: go version -m bin/linux_arm64/amazon-ssm-agent | head -20
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: amazon-ssm-agent-linux-arm64-${{ matrix.builder }}
+          path: bin/linux_arm64/
+
+  verify-armv8_0:
+    name: verify on Cortex-A53 (${{ matrix.builder }})
+    needs: build
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - builder: debian-trixie
+            expect: pass
+          - builder: amazonlinux-2023
+            expect: sigill
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install qemu-user
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static binutils
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: amazon-ssm-agent-linux-arm64-${{ matrix.builder }}
+          path: bin/linux_arm64
+
+      - name: Verify binaries start on ARMv8.0 (Cortex-A53)
+        run: |
+          chmod +x bin/linux_arm64/*
+          set +e
+          make verify-arm64-baseline
+          rc=$?
+          if [ "${{ matrix.expect }}" = "pass" ]; then
+            exit $rc
+          fi
+          if [ $rc -eq 0 ]; then
+            echo "::error::Expected SIGILL with ${{ matrix.builder }} toolchain, but binaries ran on ARMv8.0"
+            exit 1
+          fi
+          echo "::notice::${{ matrix.builder }} toolchain produces ARMv8.1+-only binaries (expected control result)"
