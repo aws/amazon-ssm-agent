@@ -23,8 +23,8 @@ jobs:
       matrix:
         include:
           # Fixed toolchain: glibc built for the ARMv8.0 baseline.
-          - builder: debian-bookworm
-            image: public.ecr.aws/docker/library/debian:bookworm
+          - builder: debian-trixie
+            image: public.ecr.aws/docker/library/debian:trixie
           # Toolchain used since 3.3.5512.0: glibc built for ARMv8.2.
           # Kept as a control to prove the gate detects the regression.
           - builder: amazonlinux-2023
@@ -79,7 +79,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - builder: debian-bookworm
+          - builder: debian-trixie
             expect: pass
           - builder: amazonlinux-2023
             expect: sigill
