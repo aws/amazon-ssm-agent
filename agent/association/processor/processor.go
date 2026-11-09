@@ -38,7 +38,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/common/identity/identity"
-	"github.com/carlescere/scheduler"
 )
 
 const (
@@ -52,7 +51,7 @@ const (
 
 // Processor contains the logic for processing association
 type Processor struct {
-	pollJob            *scheduler.Job
+	pollJob            *assocScheduler.Job
 	assocSvc           service.T
 	complianceUploader complianceUploader.T
 	context            context.T
@@ -101,7 +100,7 @@ func (p *Processor) ModuleExecute() {
 	associationFrequenceMinutes := p.context.AppConfig().Ssm.AssociationFrequencyMinutes
 	log.Debug("Starting association polling")
 	log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
-	var job *scheduler.Job
+	var job *assocScheduler.Job
 	var err error
 	if job, err = assocScheduler.CreateScheduler(
 		log,
@@ -143,7 +142,7 @@ func (p *Processor) InitializeAssociationProcessor() {
 }
 
 // SetPollJob represents setter for PollJob
-func (p *Processor) SetPollJob(job *scheduler.Job) {
+func (p *Processor) SetPollJob(job *assocScheduler.Job) {
 	p.pollJob = job
 }
 

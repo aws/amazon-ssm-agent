@@ -15,6 +15,7 @@
     "Ssm": {
         "Endpoint": "",
         "HealthFrequencyMinutes": 5,
+        "AssociationFrequencyMinutes": 10,
         "CustomInventoryDefaultLocation" : "",
         "HibernationMaxBackoffIntervalMinutes" : 60,
         "AssociationLogsRetentionDurationHours" : 24,

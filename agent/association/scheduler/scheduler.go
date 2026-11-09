@@ -15,53 +15,108 @@
 package scheduler
 
 import (
+	"fmt"
 	"math/rand"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/carlescere/scheduler"
+	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
-const (
-	defaultSleepDurationInMilliSeconds int = 30000
-)
+const initialJitter = 30 * time.Second
 
-// CreateScheduler runs a given poll job every pollFrequencyMinutes
-func CreateScheduler(log log.T, task func(), frequencyInMinutes int) (job *scheduler.Job, err error) {
-	if job, err = scheduler.Every(frequencyInMinutes).Minutes().Run(func() {
-		loop(task, log, job)
-	}); err != nil {
-		return nil, log.Errorf("unable to create scheduler, %v", err)
+// Job serializes polls and supports stopping or requesting an earlier poll.
+type Job struct {
+	stop     chan struct{}
+	wake     chan struct{}
+	done     chan struct{}
+	stopOnce sync.Once
+}
+
+// CreateScheduler preserves prompt initial discovery, then spreads recurring
+// polls across the full configured interval. The phase is chosen once per job,
+// so healthy recurring polls remain one interval apart.
+func CreateScheduler(log log.T, task func(), frequencyInMinutes int) (*Job, error) {
+	return createScheduler(log, task, frequencyInMinutes, rand.Int63n, times.DefaultClock)
+}
+
+func createScheduler(log log.T, task func(), frequencyInMinutes int, random func(int64) int64, clock times.Clock) (*Job, error) {
+	if frequencyInMinutes <= 0 || int64(frequencyInMinutes) > (1<<63-1)/int64(time.Minute) {
+		return nil, fmt.Errorf("association polling frequency must be a positive duration in minutes")
 	}
+	if task == nil {
+		return nil, fmt.Errorf("association polling task must not be nil")
+	}
+	interval := time.Duration(frequencyInMinutes) * time.Minute
+	initialDelay := time.Duration(random(int64(initialJitter)))
+	// Use (0, interval] so a zero random draw does not produce a second
+	// immediate poll following initial discovery.
+	phaseDelay := time.Duration(random(int64(interval)))
+	if phaseDelay == 0 {
+		phaseDelay = interval
+	}
+	job := &Job{
+		stop: make(chan struct{}),
+		wake: make(chan struct{}, 1),
+		done: make(chan struct{}),
+	}
+	log.Infof("Association polling interval %v, initial delay %v, recurring phase delay %v", interval, initialDelay, phaseDelay)
+	go job.run(task, interval, initialDelay, phaseDelay, clock)
 	return job, nil
 }
 
-// Stop stops the scheduler.
-func Stop(job *scheduler.Job) {
-	if job != nil {
-		job.Quit <- true
+func (job *Job) run(task func(), interval, initialDelay, phaseDelay time.Duration, clock times.Clock) {
+	defer close(job.done)
+	next := clock.Now().Add(initialDelay)
+	initial := true
+	for {
+		select {
+		case <-job.stop:
+			return
+		case <-job.wake:
+		case <-clock.After(next.Sub(clock.Now())):
+		}
+		// Give stop priority if it arrived along with a timer or wake request.
+		select {
+		case <-job.stop:
+			return
+		default:
+		}
+
+		task()
+		now := clock.Now()
+		if initial {
+			initial = false
+			next = now.Add(phaseDelay)
+		} else if !next.After(now) {
+			// Keep the selected phase even after slow polls or explicit wakes.
+			// Skip missed slots instead of overlapping polls or catching up in a burst.
+			next = next.Add((now.Sub(next)/interval + 1) * interval)
+		}
 	}
 }
 
-// loop executes the task provided when creates scheduler
-func loop(task func(), log log.T, job *scheduler.Job) {
-	// time lock to only have one loop active anytime.
-	// this is extra insurance to prevent any race condition
-	taskStartTime := time.Now()
-
-	sleepMilli(taskStartTime, defaultSleepDurationInMilliSeconds)
-
-	task()
+// Stop cancels all future polls. An already running poll is allowed to finish.
+func Stop(job *Job) {
+	if job != nil {
+		job.stopOnce.Do(func() { close(job.stop) })
+	}
 }
 
-// ScheduleNextRun skips waiting and schedule next run immediately
-func ScheduleNextRun(j *scheduler.Job) {
-	j.SkipWait <- true
-}
-
-var sleepMilli = func(pollStartTime time.Time, sleepDurationInMilliseconds int) {
-	sleepDurationInMilliseconds = rand.Intn(sleepDurationInMilliseconds)
-	if time.Since(pollStartTime) < 1*time.Second {
-		time.Sleep(time.Duration(sleepDurationInMilliseconds) * time.Millisecond)
+// ScheduleNextRun requests a poll without shifting the recurring phase.
+// Requests arriving while a poll is running coalesce into one pending request.
+func ScheduleNextRun(job *Job) {
+	if job == nil {
+		return
+	}
+	select {
+	case <-job.stop:
+		return
+	default:
+	}
+	select {
+	case job.wake <- struct{}{}:
+	default:
 	}
 }
