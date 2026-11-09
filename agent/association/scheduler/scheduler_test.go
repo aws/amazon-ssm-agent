@@ -153,23 +153,6 @@ func TestZeroPhaseDrawWaitsAnInterval(t *testing.T) {
 	require.Equal(t, 10*time.Minute, clock.nextWait(t).delay)
 }
 
-func TestExplicitWakePreservesRecurringPhase(t *testing.T) {
-	clock := newManualClock()
-	calls := make(chan time.Time, 4)
-	job := testJob(t, clock, func() { calls <- clock.Now() }, 10, 12*time.Second, 287*time.Second)
-	clock.fire(clock.nextWait(t))
-	nextCall(t, calls)
-	require.Equal(t, 287*time.Second, clock.nextWait(t).delay)
-	clock.advance(100 * time.Second)
-	ScheduleNextRun(job)
-	require.Equal(t, time.Unix(112, 0), nextCall(t, calls))
-	request := clock.nextWait(t)
-	require.Equal(t, 187*time.Second, request.delay)
-	clock.fire(request)
-	require.Equal(t, time.Unix(299, 0), nextCall(t, calls))
-	require.Equal(t, 10*time.Minute, clock.nextWait(t).delay)
-}
-
 func TestSlowPollSkipsMissedSlotsWithoutCatchUp(t *testing.T) {
 	clock := newManualClock()
 	calls := make(chan time.Time, 4)
@@ -212,50 +195,9 @@ func TestStopCancelsInitialAndRecurringDelays(t *testing.T) {
 			waitStopped(t, job)
 			before := atomic.LoadInt32(&count)
 			clock.fire(request)
-			ScheduleNextRun(job)
 			require.Equal(t, before, atomic.LoadInt32(&count))
 		})
 	}
-}
-
-func TestPollsDoNotOverlapAndWakeRequestsCoalesce(t *testing.T) {
-	clock := newManualClock()
-	calls := make(chan time.Time, 4)
-	release := make(chan struct{})
-	releaseOnce := sync.Once{}
-	unblock := func() { releaseOnce.Do(func() { close(release) }) }
-	defer unblock()
-	job := testJob(t, clock, func() {
-		calls <- clock.Now()
-		<-release
-	}, 10, 0, 5*time.Minute)
-	clock.fire(clock.nextWait(t))
-	nextCall(t, calls)
-	queued := make(chan struct{})
-	go func() {
-		for i := 0; i < 100; i++ {
-			ScheduleNextRun(job)
-		}
-		close(queued)
-	}()
-	select {
-	case <-queued:
-	case <-time.After(time.Second):
-		t.Fatal("wake requests blocked behind an active poll")
-	}
-	select {
-	case <-calls:
-		t.Fatal("a second poll overlapped the active poll")
-	default:
-	}
-	unblock()
-	// One wait follows initial discovery; the queued wake bypasses that wait.
-	clock.nextWait(t)
-	nextCall(t, calls)
-	clock.nextWait(t)
-	Stop(job)
-	waitStopped(t, job)
-	require.Empty(t, calls, "coalesced wake requests produced extra polls")
 }
 
 func TestStopAllowsActivePollToFinish(t *testing.T) {
@@ -269,6 +211,13 @@ func TestStopAllowsActivePollToFinish(t *testing.T) {
 	defer close(release)
 	clock.fire(clock.nextWait(t))
 	nextCall(t, calls)
+	clock.advance(30 * time.Minute)
+	select {
+	case <-clock.requests:
+		t.Fatal("scheduler started another timer while a poll was active")
+	default:
+	}
+	require.Empty(t, calls, "a second poll overlapped the active poll")
 	Stop(job)
 	select {
 	case <-job.done:

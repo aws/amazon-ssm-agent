@@ -26,10 +26,9 @@ import (
 
 const initialJitter = 30 * time.Second
 
-// Job serializes polls and supports stopping or requesting an earlier poll.
+// Job runs polls serially until stopped.
 type Job struct {
 	stop     chan struct{}
-	wake     chan struct{}
 	done     chan struct{}
 	stopOnce sync.Once
 }
@@ -58,7 +57,6 @@ func createScheduler(log log.T, task func(), frequencyInMinutes int, random func
 	}
 	job := &Job{
 		stop: make(chan struct{}),
-		wake: make(chan struct{}, 1),
 		done: make(chan struct{}),
 	}
 	log.Infof("Association polling interval %v, initial delay %v, recurring phase delay %v", interval, initialDelay, phaseDelay)
@@ -74,10 +72,9 @@ func (job *Job) run(task func(), interval, initialDelay, phaseDelay time.Duratio
 		select {
 		case <-job.stop:
 			return
-		case <-job.wake:
 		case <-clock.After(next.Sub(clock.Now())):
 		}
-		// Give stop priority if it arrived along with a timer or wake request.
+		// Give stop priority if it arrived along with the timer.
 		select {
 		case <-job.stop:
 			return
@@ -89,8 +86,8 @@ func (job *Job) run(task func(), interval, initialDelay, phaseDelay time.Duratio
 		if initial {
 			initial = false
 			next = now.Add(phaseDelay)
-		} else if !next.After(now) {
-			// Keep the selected phase even after slow polls or explicit wakes.
+		} else {
+			// Keep the selected phase even after slow polls.
 			// Skip missed slots instead of overlapping polls or catching up in a burst.
 			next = next.Add((now.Sub(next)/interval + 1) * interval)
 		}
@@ -101,22 +98,5 @@ func (job *Job) run(task func(), interval, initialDelay, phaseDelay time.Duratio
 func Stop(job *Job) {
 	if job != nil {
 		job.stopOnce.Do(func() { close(job.stop) })
-	}
-}
-
-// ScheduleNextRun requests a poll without shifting the recurring phase.
-// Requests arriving while a poll is running coalesce into one pending request.
-func ScheduleNextRun(job *Job) {
-	if job == nil {
-		return
-	}
-	select {
-	case <-job.stop:
-		return
-	default:
-	}
-	select {
-	case job.wake <- struct{}{}:
-	default:
 	}
 }

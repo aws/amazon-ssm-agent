@@ -25,22 +25,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreatingScheduler(t *testing.T) {
+func TestCreatingAndStoppingScheduler(t *testing.T) {
 	context := context.NewMockDefault()
-	calls := make(chan struct{}, 2)
-	job, err := CreateScheduler(context.Log(), func() { calls <- struct{}{} }, 10)
+	job, err := CreateScheduler(context.Log(), func() {}, 10)
 	require.NoError(t, err)
 	t.Cleanup(func() { Stop(job) })
-	ScheduleNextRun(job)
-	select {
-	case <-calls:
-	case <-time.After(time.Second):
-		t.Fatal("explicit poll did not bypass initial delay")
-	}
 	Stop(job)
 	select {
 	case <-job.done:
 	case <-time.After(time.Second):
-		t.Fatal("scheduler did not stop during its recurring delay")
+		t.Fatal("scheduler did not stop during its delay")
 	}
 }
