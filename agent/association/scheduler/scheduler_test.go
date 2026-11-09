@@ -175,6 +175,38 @@ func TestSlowPollSkipsMissedSlotsWithoutCatchUp(t *testing.T) {
 	require.Equal(t, 10*time.Minute, clock.nextWait(t).delay)
 }
 
+func TestDelayedTimerKeepsRecurringPhase(t *testing.T) {
+	for _, tc := range []struct {
+		phase    time.Duration
+		nextPoll time.Duration
+	}{
+		{2 * time.Minute, 32 * time.Minute},
+		{7 * time.Minute, 27 * time.Minute},
+	} {
+		t.Run(tc.phase.String(), func(t *testing.T) {
+			clock := newManualClock()
+			calls := make(chan time.Time, 4)
+			testJob(t, clock, func() { calls <- clock.Now() }, 10, 0, tc.phase)
+			clock.fire(clock.nextWait(t))
+			nextCall(t, calls)
+			request := clock.nextWait(t)
+			require.Equal(t, tc.phase, request.delay)
+
+			// Both phases wake at the same time after a pause, with their timers overdue.
+			clock.advance(25 * time.Minute)
+			request.ready <- clock.Now()
+			require.Equal(t, time.Unix(1500, 0), nextCall(t, calls))
+
+			// Recovery runs one poll, then resumes the previously selected phase.
+			request = clock.nextWait(t)
+			require.Equal(t, tc.nextPoll-25*time.Minute, request.delay)
+			clock.fire(request)
+			require.Equal(t, time.Unix(0, 0).Add(tc.nextPoll), nextCall(t, calls))
+			require.Equal(t, 10*time.Minute, clock.nextWait(t).delay)
+		})
+	}
+}
+
 func TestStopCancelsInitialAndRecurringDelays(t *testing.T) {
 	for _, afterInitial := range []bool{false, true} {
 		name := "initial"
