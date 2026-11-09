@@ -188,7 +188,7 @@ To set up your own custom configuration for the agent:
     * Endpoint (string)
     * HealthFrequencyMinutes (int)
         * Default: 5
-    * AssociationFrequencyMinutes (int) - Interval between recurring State Manager discovery polls. Initial discovery retains a random delay of less than 30 seconds. After it completes, the first recurring poll is delayed by a random amount up to this interval; later polls retain that phase. Slow polls skip missed slots instead of overlapping.
+    * AssociationFrequencyMinutes (int) - Base interval for recurring State Manager discovery polls. Initial discovery retains a random delay of less than 30 seconds. After it completes, the first recurring poll is delayed by a random amount up to this interval. Every later wait subtracts a fresh random amount from 0 to 30 seconds, allowing agents to spread out over time (9 minutes 30 seconds to 10 minutes at the default). Waits start after each poll completes, so slow polls never overlap or catch up in a burst.
         * Default: 10
         * Min: 5
         * Max: 60

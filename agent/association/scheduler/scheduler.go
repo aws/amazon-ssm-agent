@@ -24,7 +24,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
-const initialJitter = 30 * time.Second
+const (
+	initialJitter   = 30 * time.Second
+	recurringJitter = 30 * time.Second
+)
 
 // Job runs polls serially until stopped.
 type Job struct {
@@ -34,8 +37,8 @@ type Job struct {
 }
 
 // CreateScheduler preserves prompt initial discovery, then spreads recurring
-// polls across the full configured interval. The phase is chosen once per job,
-// so healthy recurring polls remain one interval apart.
+// polls across the full configured interval. Each subsequent wait subtracts
+// fresh jitter from the interval so agents continue to spread out over time.
 func CreateScheduler(log log.T, task func(), frequencyInMinutes int) (*Job, error) {
 	return createScheduler(log, task, frequencyInMinutes, rand.Int63n, times.DefaultClock)
 }
@@ -51,28 +54,28 @@ func createScheduler(log log.T, task func(), frequencyInMinutes int, random func
 	initialDelay := time.Duration(random(int64(initialJitter)))
 	// Use (0, interval] so a zero random draw does not produce a second
 	// immediate poll following initial discovery.
-	phaseDelay := time.Duration(random(int64(interval)))
-	if phaseDelay == 0 {
-		phaseDelay = interval
+	firstRecurringDelay := time.Duration(random(int64(interval)))
+	if firstRecurringDelay == 0 {
+		firstRecurringDelay = interval
 	}
 	job := &Job{
 		stop: make(chan struct{}),
 		done: make(chan struct{}),
 	}
-	log.Infof("Association polling interval %v, initial delay %v, recurring phase delay %v", interval, initialDelay, phaseDelay)
-	go job.run(task, interval, initialDelay, phaseDelay, clock)
+	log.Infof("Association polling interval %v, initial delay %v, first recurring delay %v, recurring jitter up to %v", interval, initialDelay, firstRecurringDelay, recurringJitter)
+	go job.run(task, interval, initialDelay, firstRecurringDelay, random, clock)
 	return job, nil
 }
 
-func (job *Job) run(task func(), interval, initialDelay, phaseDelay time.Duration, clock times.Clock) {
+func (job *Job) run(task func(), interval, initialDelay, firstRecurringDelay time.Duration, random func(int64) int64, clock times.Clock) {
 	defer close(job.done)
-	next := clock.Now().Add(initialDelay)
+	delay := initialDelay
 	initial := true
 	for {
 		select {
 		case <-job.stop:
 			return
-		case <-clock.After(next.Sub(clock.Now())):
+		case <-clock.After(delay):
 		}
 		// Give stop priority if it arrived along with the timer.
 		select {
@@ -82,14 +85,18 @@ func (job *Job) run(task func(), interval, initialDelay, phaseDelay time.Duratio
 		}
 
 		task()
-		now := clock.Now()
+		select {
+		case <-job.stop:
+			return
+		default:
+		}
 		if initial {
 			initial = false
-			next = now.Add(phaseDelay)
+			delay = firstRecurringDelay
 		} else {
-			// Keep the selected phase even after slow polls.
-			// Skip missed slots instead of overlapping polls or catching up in a burst.
-			next = next.Add((now.Sub(next)/interval + 1) * interval)
+			// Draw again after every poll, including recovery from a delayed
+			// timer. Wait from completion so slow polls never catch up in a burst.
+			delay = interval - time.Duration(random(int64(recurringJitter)+1))
 		}
 	}
 }
