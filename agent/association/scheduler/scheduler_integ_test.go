@@ -32,7 +32,7 @@ func TestCreatingAndStoppingScheduler(t *testing.T) {
 	t.Cleanup(func() { Stop(job) })
 	Stop(job)
 	select {
-	case <-job.done:
+	case <-job.Done():
 	case <-time.After(time.Second):
 		t.Fatal("scheduler did not stop during its delay")
 	}

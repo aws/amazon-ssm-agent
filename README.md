@@ -186,9 +186,12 @@ To set up your own custom configuration for the agent:
         * Default: 15
 * Ssm - represents configuration for Simple Systems Manager (SSM)
     * Endpoint (string)
-    * HealthFrequencyMinutes (int)
+    * HealthFrequencyMinutes (int) - Mean wait for periodic `UpdateInstanceInformation` health reports. The initial report runs immediately. After it completes, the first recurring report is delayed by a random amount up to this interval. Every later wait adds fresh random jitter from -15 to +15 seconds, allowing agents to spread out over time without increasing the steady average polling rate (4 minutes 45 seconds to 5 minutes 15 seconds at the default; 11 minutes 45 seconds to 12 minutes 15 seconds with a 12-minute setting). Waits start after each report completes, so slow reports never overlap or catch up in a burst.
         * Default: 5
-    * AssociationFrequencyMinutes (int) - Base interval for recurring State Manager discovery polls. Initial discovery retains a random delay of less than 30 seconds. After it completes, the first recurring poll is delayed by a random amount up to this interval. Every later wait subtracts a fresh random amount from 0 to 30 seconds, allowing agents to spread out over time (9 minutes 30 seconds to 10 minutes at the default). Waits start after each poll completes, so slow polls never overlap or catch up in a burst.
+        * Min: 5
+        * Max: 60
+        * Requires an agent restart. Invalid values revert to the default. This controls periodic health reports; credential checks, service-availability probes, and SDK retries retain their existing behavior.
+    * AssociationFrequencyMinutes (int) - Mean wait for recurring State Manager discovery polls. Initial discovery retains a random delay of less than 30 seconds. After it completes, the first recurring poll is delayed by a random amount up to this interval. Every later wait adds fresh random jitter from -15 to +15 seconds, allowing agents to spread out over time without increasing the steady average polling rate (9 minutes 45 seconds to 10 minutes 15 seconds at the default). Waits start after each poll completes, so slow polls never overlap or catch up in a burst.
         * Default: 10
         * Min: 5
         * Max: 60

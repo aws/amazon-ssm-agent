@@ -15,7 +15,6 @@ package health
 
 import (
 	"errors"
-	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -24,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	logmocks "github.com/aws/amazon-ssm-agent/agent/mocks/log"
+	"github.com/aws/amazon-ssm-agent/agent/polling"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	ssmMock "github.com/aws/amazon-ssm-agent/agent/ssm/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
@@ -31,21 +31,20 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 
-	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 )
 
 // HealthCheck Test suite. Define the testsuite object.
-// Add logMock, contextMock, serviceMock, healthJobMock struct into test suite.
+// Add logMock, contextMock, and serviceMock to the test suite.
 // Suite is the testify framework struct
 type HealthCheckTestSuite struct {
 	suite.Suite
 	logMock     *logmocks.Mock
 	contextMock *context.Mock
 	serviceMock *ssmMock.Service
-	healthJob   *scheduler.Job
 	stopPolicy  *sdkutil.StopPolicy
 	healthCheck IHealthCheck
 }
@@ -56,21 +55,30 @@ func (suite *HealthCheckTestSuite) SetupTest() {
 	contextMock := context.NewMockDefault()
 
 	serviceMock := new(ssmMock.Service)
-	healthJob := &scheduler.Job{
-		Quit: make(chan bool),
-	}
 
 	stopPolicy := sdkutil.NewStopPolicy("hibernation", 10)
 
 	suite.logMock = logMock
 	suite.contextMock = contextMock
 	suite.serviceMock = serviceMock
-	suite.healthJob = healthJob
 	suite.stopPolicy = stopPolicy
 	suite.healthCheck = &HealthCheck{
 		healthCheckStopPolicy: suite.stopPolicy,
 		context:               suite.contextMock,
 		service:               suite.serviceMock,
+	}
+}
+
+// Stop pending timers and let an active report finish before replacing mocks.
+func (suite *HealthCheckTestSuite) TearDownTest() {
+	h := suite.healthCheck.(*HealthCheck)
+	suite.NoError(h.ModuleStop())
+	if h.healthJob != nil {
+		select {
+		case <-h.healthJob.Done():
+		case <-time.After(time.Second):
+			suite.T().Fatal("health polling did not stop")
+		}
 	}
 }
 
@@ -134,8 +142,12 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName).Return(nil, nil)
-	suite.healthCheck.ModuleExecute()
-	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	suite.NoError(suite.healthCheck.ModuleExecute())
+	job := suite.healthCheck.(*HealthCheck).healthJob
+	// Repeated starts must not introduce another immediate report or poll loop.
+	suite.NoError(suite.healthCheck.ModuleExecute())
+	suite.Same(job, suite.healthCheck.(*HealthCheck).healthJob)
+	// Allow the asynchronous initial health report to complete.
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName)
@@ -204,7 +216,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithOnPremIdentity() {
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "", ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName).Return(nil, nil)
 	suite.healthCheck.ModuleExecute()
-	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	// Allow the asynchronous initial health report to complete.
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, "", "", ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName)
@@ -272,7 +284,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithNilOnPremIdentity() {
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName).Return(nil, nil)
 	suite.healthCheck.ModuleExecute()
-	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	// Allow the asynchronous initial health report to complete.
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName)
@@ -337,7 +349,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecuteWithMDSConnection() {
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName).Return(nil, nil)
 	suite.healthCheck.ModuleExecute()
-	// Because ModuleExecute will launch two new go routine, wait 100ms to make sure the updateHealth() has launched
+	// Allow the asynchronous initial health report to complete.
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.
 	suite.serviceMock.AssertCalled(suite.T(), "UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName, availabilityZone, availabilityZoneId, ssmConnectionChannel, sourceId, sourceType, sourceLocation, computerName)
@@ -364,38 +376,33 @@ func (suite *HealthCheckTestSuite) resetConnectionChannel() {
 	<-done
 }
 
-// Testing the ModuleStop method with healthjob define
 func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
-	suite.healthCheck = &HealthCheck{
-		context:               suite.contextMock,
-		healthJob:             suite.healthJob,
-		service:               suite.serviceMock,
-		healthCheckStopPolicy: suite.stopPolicy,
+	job, err := polling.Start(suite.logMock, func() {}, 5, 30*time.Second)
+	suite.Require().NoError(err)
+	suite.healthCheck.(*HealthCheck).healthJob = job
+	suite.NoError(suite.healthCheck.ModuleStop())
+	suite.NoError(suite.healthCheck.ModuleStop())
+	select {
+	case <-job.Done():
+	case <-time.After(time.Second):
+		suite.T().Fatal("ModuleStop did not cancel the pending health job")
 	}
-	// Start a new wg to avoid go panic.
-	wg := new(sync.WaitGroup)
-	wg.Add(1)
-	go func(wgc *sync.WaitGroup) {
-		defer wgc.Done()
-		suite.healthCheck.ModuleStop()
-	}(wg)
-	// Check the value is sent to healthJobMock channel. And the value is true.
-	val := <-suite.healthJob.Quit
-	close(suite.healthJob.Quit)
-	wg.Wait()
-	assert.Equal(suite.T(), val, true, "ModuleStop should return true")
 }
 
-// Testing the ModuleStop method which doesn't have healthjob defination
 func (suite *HealthCheckTestSuite) TestModuleStopWithoutHealthJob() {
-	// Start a new wg to avoid go panic
-	wg := new(sync.WaitGroup)
-	wg.Add(1)
-	go func(wgc *sync.WaitGroup) {
-		defer wgc.Done()
-		rst := suite.healthCheck.ModuleStop()
-		assert.Nil(suite.T(), rst, "result from ModuleStop should be nil")
-	}(wg)
+	suite.NoError(suite.healthCheck.ModuleStop())
+}
+
+func TestHealthPollingUsesConfiguredFrequency(t *testing.T) {
+	for _, test := range []struct{ configured, expected int }{
+		{5, 5}, {12, 12}, {60, 60}, {0, 5}, {4, 5}, {61, 5},
+	} {
+		config := appconfig.DefaultConfig()
+		config.Ssm.HealthFrequencyMinutes = test.configured
+		ctx := context.NewMockDefaultWithConfig(config)
+		h := &HealthCheck{context: ctx}
+		require.Equal(t, test.expected, h.scheduleInMinutes())
+	}
 }
 
 // Testing the GetAgentState method which should return Active status
