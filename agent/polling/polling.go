@@ -24,9 +24,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 )
 
-const (
-	recurringJitter = 15 * time.Second
-)
+// Jitter bounds each recurring wait independently before and after its interval.
+// Equal bounds preserve the mean interval; larger Late bounds slow polling.
+type Jitter struct {
+	Early time.Duration
+	Late  time.Duration
+}
 
 // Job runs polls serially until stopped.
 type Job struct {
@@ -38,21 +41,26 @@ type Job struct {
 // Start schedules task serially with an initial delay in [0, initialJitter).
 // A zero initialJitter runs the initial task promptly. After initial completion,
 // the first recurring wait spans (0, interval]. Every later wait adds fresh
-// jitter in [-15s, +15s], allowing phases to drift without shortening the
-// configured mean interval.
+// jitter in [-jitter.Early, +jitter.Late], allowing phases to drift.
 // Waits begin after task completion, preventing overlapping or catch-up calls.
-func Start(log log.T, task func(), frequencyInMinutes int, initialJitter time.Duration) (*Job, error) {
-	return start(log, task, frequencyInMinutes, initialJitter, rand.Int63n, times.DefaultClock)
+func Start(log log.T, task func(), frequencyInMinutes int, initialJitter time.Duration, jitter Jitter) (*Job, error) {
+	return start(log, task, frequencyInMinutes, initialJitter, jitter, rand.Int63n, times.DefaultClock)
 }
 
-func start(log log.T, task func(), frequencyInMinutes int, initialJitter time.Duration, random func(int64) int64, clock times.Clock) (*Job, error) {
-	if frequencyInMinutes <= 0 || int64(frequencyInMinutes) > ((1<<63-1)-int64(recurringJitter))/int64(time.Minute) {
+func start(log log.T, task func(), frequencyInMinutes int, initialJitter time.Duration, jitter Jitter, random func(int64) int64, clock times.Clock) (*Job, error) {
+	if jitter.Early < 0 || jitter.Late < 0 {
+		return nil, fmt.Errorf("recurring polling jitter bounds must not be negative")
+	}
+	if frequencyInMinutes <= 0 || int64(frequencyInMinutes) > ((1<<63-1)-int64(jitter.Late))/int64(time.Minute) {
 		return nil, fmt.Errorf("polling frequency must be a positive duration in minutes")
 	}
 	if task == nil {
 		return nil, fmt.Errorf("polling task must not be nil")
 	}
 	interval := time.Duration(frequencyInMinutes) * time.Minute
+	if jitter.Early >= interval {
+		return nil, fmt.Errorf("early polling jitter must be less than the polling interval")
+	}
 	if initialJitter < 0 {
 		return nil, fmt.Errorf("initial polling jitter must not be negative")
 	}
@@ -70,12 +78,12 @@ func start(log log.T, task func(), frequencyInMinutes int, initialJitter time.Du
 		stop: make(chan struct{}),
 		done: make(chan struct{}),
 	}
-	log.Infof("Polling interval %v, initial delay %v, first recurring delay %v, recurring jitter +/- %v", interval, initialDelay, firstRecurringDelay, recurringJitter)
-	go job.run(task, interval, initialDelay, firstRecurringDelay, random, clock)
+	log.Infof("Polling interval %v, initial delay %v, first recurring delay %v, recurring jitter -%v/+%v", interval, initialDelay, firstRecurringDelay, jitter.Early, jitter.Late)
+	go job.run(task, interval, initialDelay, firstRecurringDelay, jitter, random, clock)
 	return job, nil
 }
 
-func (job *Job) run(task func(), interval, initialDelay, firstRecurringDelay time.Duration, random func(int64) int64, clock times.Clock) {
+func (job *Job) run(task func(), interval, initialDelay, firstRecurringDelay time.Duration, jitter Jitter, random func(int64) int64, clock times.Clock) {
 	defer close(job.done)
 	delay := initialDelay
 	initial := true
@@ -104,8 +112,9 @@ func (job *Job) run(task func(), interval, initialDelay, firstRecurringDelay tim
 		} else {
 			// Draw again after every poll, including recovery from a delayed
 			// timer. Wait from completion so slow polls never catch up in a burst.
-			// Center jitter on zero to retain the configured mean interval.
-			delay = interval + recurringJitter - time.Duration(random(int64(2*recurringJitter)+1))
+			// Equal bounds retain the configured mean interval. Zero bounds
+			// disable recurring jitter while preserving the initial phase spread.
+			delay = interval + jitter.Late - time.Duration(random(int64(jitter.Early+jitter.Late)+1))
 		}
 	}
 }

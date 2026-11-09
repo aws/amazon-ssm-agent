@@ -377,7 +377,7 @@ func (suite *HealthCheckTestSuite) resetConnectionChannel() {
 }
 
 func (suite *HealthCheckTestSuite) TestModuleStopWithHealthJob() {
-	job, err := polling.Start(suite.logMock, func() {}, 5, 30*time.Second)
+	job, err := polling.Start(suite.logMock, func() {}, 5, 30*time.Second, polling.Jitter{})
 	suite.Require().NoError(err)
 	suite.healthCheck.(*HealthCheck).healthJob = job
 	suite.NoError(suite.healthCheck.ModuleStop())

@@ -97,15 +97,15 @@ func NewAssociationProcessor(context context.T) *Processor {
 
 func (p *Processor) ModuleExecute() {
 	log := p.context.Log()
-	associationFrequenceMinutes := p.context.AppConfig().Ssm.AssociationFrequencyMinutes
+	ssmConfig := p.context.AppConfig().Ssm
 	log.Debug("Starting association polling")
-	log.Debugf("Association polling frequency is %v", associationFrequenceMinutes)
+	log.Debugf("Association polling frequency is %v", ssmConfig.AssociationFrequencyMinutes)
 	var job *assocScheduler.Job
 	var err error
 	if job, err = assocScheduler.CreateScheduler(
 		log,
 		p.ProcessAssociation,
-		associationFrequenceMinutes); err != nil {
+		ssmConfig); err != nil {
 		p.context.Log().Errorf("unable to schedule association processor. %v", err)
 	}
 	p.InitializeAssociationProcessor()

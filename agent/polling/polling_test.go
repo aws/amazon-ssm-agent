@@ -114,8 +114,8 @@ func testJobWithInitialJitter(t *testing.T, clock *manualClock, task func(), min
 			require.Equal(t, int64(time.Duration(minutes)*time.Minute), bound)
 			return int64(firstRecurring)
 		default:
-			if bound != int64(30*time.Second)+1 {
-				t.Errorf("recurring jitter bound = %v, want %v", bound, int64(30*time.Second)+1)
+			if bound != int64(10*time.Second)+1 {
+				t.Errorf("recurring jitter bound = %v, want %v", bound, int64(10*time.Second)+1)
 			}
 			if index := draws - 3; index < len(jitters) {
 				return int64(jitters[index])
@@ -123,7 +123,7 @@ func testJobWithInitialJitter(t *testing.T, clock *manualClock, task func(), min
 			return 0
 		}
 	}
-	job, err := start(logmocks.NewMockLog(), task, minutes, initialJitter, random, clock)
+	job, err := start(logmocks.NewMockLog(), task, minutes, initialJitter, Jitter{Early: 5 * time.Second, Late: 5 * time.Second}, random, clock)
 	require.NoError(t, err)
 	t.Cleanup(func() {
 		job.Stop()
@@ -139,10 +139,10 @@ func TestImmediateReportThenFreshJitterAtConfiguredHeartbeatIntervals(t *testing
 			calls := make(chan time.Time, 8)
 			interval := time.Duration(minutes) * time.Minute
 			testJobWithInitialJitter(t, clock, func() { calls <- clock.Now() }, minutes,
-				0, 0, interval-time.Nanosecond, 0, 30*time.Second, 15*time.Second)
+				0, 0, interval-time.Nanosecond, 0, 10*time.Second, 5*time.Second)
 			for _, expectedDelay := range []time.Duration{
 				0, interval - time.Nanosecond,
-				interval + 15*time.Second, interval - 15*time.Second, interval,
+				interval + 5*time.Second, interval - 5*time.Second, interval,
 			} {
 				request := clock.nextWait(t)
 				require.Equal(t, expectedDelay, request.delay)
@@ -158,7 +158,7 @@ func TestImmediateReportsSeparateAgainAfterSharedPause(t *testing.T) {
 	calls := []chan time.Time{make(chan time.Time, 8), make(chan time.Time, 8)}
 	for i, clock := range clocks {
 		testJobWithInitialJitter(t, clock, func() { calls[i] <- clock.Now() }, 12,
-			0, 0, 3*time.Minute, 15*time.Second, time.Duration(i)*30*time.Second)
+			0, 0, 3*time.Minute, 5*time.Second, time.Duration(i)*10*time.Second)
 		for poll := 0; poll < 2; poll++ {
 			clock.fire(clock.nextWait(t))
 			nextCall(t, calls[i])
@@ -173,7 +173,7 @@ func TestImmediateReportsSeparateAgainAfterSharedPause(t *testing.T) {
 		clock.fire(clock.nextWait(t))
 		starts[i] = nextCall(t, calls[i])
 	}
-	require.Equal(t, 30*time.Second, starts[0].Sub(starts[1]),
+	require.Equal(t, 10*time.Second, starts[0].Sub(starts[1]),
 		"fresh recurring jitter separates reports following a shared pause")
 }
 
@@ -208,11 +208,11 @@ func TestEveryRecurringWaitDrawsFreshJitter(t *testing.T) {
 	clock := newManualClock()
 	calls := make(chan time.Time, 10)
 	testJob(t, clock, func() { calls <- clock.Now() }, 10, 12*time.Second, 287*time.Second,
-		0, 30*time.Second, 15*time.Second, 4*time.Second)
+		0, 10*time.Second, 5*time.Second, 2*time.Second)
 	for _, expectedDelay := range []time.Duration{
 		12 * time.Second, 287 * time.Second,
-		10*time.Minute + 15*time.Second, 9*time.Minute + 45*time.Second,
-		10 * time.Minute, 10*time.Minute + 11*time.Second,
+		10*time.Minute + 5*time.Second, 9*time.Minute + 55*time.Second,
+		10 * time.Minute, 10*time.Minute + 3*time.Second,
 	} {
 		request := clock.nextWait(t)
 		require.Equal(t, expectedDelay, request.delay)
@@ -250,16 +250,16 @@ func TestRecurringJitterUsesConfiguredInterval(t *testing.T) {
 			clock := newManualClock()
 			calls := make(chan time.Time, 4)
 			testJob(t, clock, func() { calls <- clock.Now() }, minutes, 0, time.Minute,
-				30*time.Second, 0)
+				10*time.Second, 0)
 			for i := 0; i < 2; i++ {
 				clock.fire(clock.nextWait(t))
 				nextCall(t, calls)
 			}
 			request := clock.nextWait(t)
-			require.Equal(t, time.Duration(minutes)*time.Minute-15*time.Second, request.delay)
+			require.Equal(t, time.Duration(minutes)*time.Minute-5*time.Second, request.delay)
 			clock.fire(request)
 			nextCall(t, calls)
-			require.Equal(t, time.Duration(minutes)*time.Minute+15*time.Second, clock.nextWait(t).delay)
+			require.Equal(t, time.Duration(minutes)*time.Minute+5*time.Second, clock.nextWait(t).delay)
 		})
 	}
 }
@@ -274,15 +274,15 @@ func TestSlowPollWaitsAfterCompletionWithoutCatchUp(t *testing.T) {
 		if count == 2 {
 			clock.advance(25 * time.Minute)
 		}
-	}, 10, 10*time.Second, 2*time.Minute, 30*time.Second, 15*time.Second)
+	}, 10, 10*time.Second, 2*time.Minute, 10*time.Second, 5*time.Second)
 	clock.fire(clock.nextWait(t))
 	nextCall(t, calls)
 	clock.fire(clock.nextWait(t))
 	require.Equal(t, time.Unix(130, 0), nextCall(t, calls))
 	request := clock.nextWait(t)
-	require.Equal(t, 9*time.Minute+45*time.Second, request.delay)
+	require.Equal(t, 9*time.Minute+55*time.Second, request.delay)
 	clock.fire(request)
-	require.Equal(t, time.Unix(2215, 0), nextCall(t, calls))
+	require.Equal(t, time.Unix(2225, 0), nextCall(t, calls))
 	require.Equal(t, 10*time.Minute, clock.nextWait(t).delay)
 }
 
@@ -292,7 +292,7 @@ func TestSynchronizedPollsSpreadOutOverTime(t *testing.T) {
 	testJob(t, clocks[0], func() { calls[0] <- clocks[0].Now() }, 10, 0, 2*time.Minute,
 		0, 0, 0, 0)
 	testJob(t, clocks[1], func() { calls[1] <- clocks[1].Now() }, 10, 0, 2*time.Minute,
-		30*time.Second, 30*time.Second, 30*time.Second, 30*time.Second)
+		10*time.Second, 10*time.Second, 10*time.Second, 10*time.Second)
 	for poll := 0; poll < 6; poll++ {
 		starts := make([]time.Time, 2)
 		for i, clock := range clocks {
@@ -302,7 +302,7 @@ func TestSynchronizedPollsSpreadOutOverTime(t *testing.T) {
 		if poll < 2 {
 			require.Equal(t, starts[0], starts[1], "initial polling phases match")
 		} else {
-			require.Equal(t, time.Duration(poll-1)*30*time.Second, starts[0].Sub(starts[1]),
+			require.Equal(t, time.Duration(poll-1)*10*time.Second, starts[0].Sub(starts[1]),
 				"fresh jitter accumulates instead of returning to the initial phase")
 		}
 	}
@@ -312,9 +312,9 @@ func TestDelayedTimersSpreadOutAgain(t *testing.T) {
 	clocks := []*manualClock{newManualClock(), newManualClock()}
 	calls := []chan time.Time{make(chan time.Time, 8), make(chan time.Time, 8)}
 	testJob(t, clocks[0], func() { calls[0] <- clocks[0].Now() }, 10, 0, 2*time.Minute,
-		10*time.Second, 0, 15*time.Second)
+		3*time.Second, 0, 5*time.Second)
 	testJob(t, clocks[1], func() { calls[1] <- clocks[1].Now() }, 10, 0, 7*time.Minute,
-		20*time.Second, 30*time.Second, 5*time.Second)
+		7*time.Second, 10*time.Second, 2*time.Second)
 	for i, clock := range clocks {
 		// Complete initial discovery and the first recurring poll.
 		for poll := 0; poll < 2; poll++ {
@@ -332,12 +332,12 @@ func TestDelayedTimersSpreadOutAgain(t *testing.T) {
 	// Fresh jitter separates the next polls despite the common recovery time.
 	for i, clock := range clocks {
 		request := clock.nextWait(t)
-		require.Equal(t, 10*time.Minute+15*time.Second-time.Duration(i)*30*time.Second, request.delay)
+		require.Equal(t, 10*time.Minute+5*time.Second-time.Duration(i)*10*time.Second, request.delay)
 		clock.fire(request)
-		require.Equal(t, time.Unix(2115-int64(i)*30, 0), nextCall(t, calls[i]))
+		require.Equal(t, time.Unix(2105-int64(i)*10, 0), nextCall(t, calls[i]))
 	}
 	require.Equal(t, 10*time.Minute, clocks[0].nextWait(t).delay)
-	require.Equal(t, 10*time.Minute+10*time.Second, clocks[1].nextWait(t).delay)
+	require.Equal(t, 10*time.Minute+3*time.Second, clocks[1].nextWait(t).delay)
 }
 
 func TestStopCancelsInitialAndRecurringDelays(t *testing.T) {
@@ -389,11 +389,11 @@ func TestStopAllowsActivePollToFinish(t *testing.T) {
 
 func TestInvalidSchedulerInputs(t *testing.T) {
 	for _, minutes := range []int{0, -1} {
-		job, err := Start(logmocks.NewMockLog(), func() {}, minutes, 30*time.Second)
+		job, err := Start(logmocks.NewMockLog(), func() {}, minutes, 30*time.Second, Jitter{})
 		require.Error(t, err)
 		require.Nil(t, job)
 	}
-	job, err := Start(logmocks.NewMockLog(), nil, 10, 30*time.Second)
+	job, err := Start(logmocks.NewMockLog(), nil, 10, 30*time.Second, Jitter{})
 	require.Error(t, err)
 	require.Nil(t, job)
 }
@@ -405,8 +405,8 @@ func TestRecurringJitterPreservesConfiguredMean(t *testing.T) {
 			calls := make(chan time.Time, 16)
 			// Balanced draws span both endpoints and intermediate values. Their
 			// average wait must equal the configured interval, not shorten it.
-			draws := []time.Duration{0, 30 * time.Second, 5 * time.Second, 25 * time.Second,
-				10 * time.Second, 20 * time.Second, 15 * time.Second, 15 * time.Second}
+			draws := []time.Duration{0, 10 * time.Second, 2 * time.Second, 8 * time.Second,
+				3 * time.Second, 7 * time.Second, 5 * time.Second, 5 * time.Second}
 			testJob(t, clock, func() { calls <- clock.Now() }, minutes, 0, time.Minute, draws...)
 			for poll := 0; poll < 2; poll++ {
 				clock.fire(clock.nextWait(t))
@@ -419,5 +419,65 @@ func TestRecurringJitterPreservesConfiguredMean(t *testing.T) {
 			}
 			require.Equal(t, time.Duration(len(draws)*minutes)*time.Minute, clock.Now().Sub(started))
 		})
+	}
+}
+
+func TestIndependentJitterBounds(t *testing.T) {
+	for _, test := range []struct {
+		name        string
+		early, late time.Duration
+	}{
+		{"late only", 0, 5 * time.Second},
+		{"early only", 5 * time.Second, 0},
+		{"asymmetric", 2 * time.Second, 9 * time.Second},
+		{"disabled", 0, 0},
+		{"maximum configured", 60 * time.Second, 60 * time.Second},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			clock := newManualClock()
+			calls := make(chan time.Time, 8)
+			draws := 0
+			random := func(bound int64) int64 {
+				draws++
+				if draws == 1 {
+					return int64(time.Minute) // First recurring phase.
+				}
+				if bound != int64(test.early+test.late)+1 {
+					t.Errorf("unexpected recurring jitter range: %v", bound)
+				}
+				if draws == 3 {
+					return bound - 1 // Earliest possible recurring wait.
+				}
+				return 0 // Latest possible recurring wait.
+			}
+			job, err := start(logmocks.NewMockLog(), func() { calls <- clock.Now() },
+				5, 0, Jitter{Early: test.early, Late: test.late}, random, clock)
+			require.NoError(t, err)
+			t.Cleanup(func() { job.Stop(); waitStopped(t, job) })
+			for _, delay := range []time.Duration{
+				0, time.Minute, 5*time.Minute + test.late, 5*time.Minute - test.early,
+			} {
+				request := clock.nextWait(t)
+				require.Equal(t, delay, request.delay)
+				clock.fire(request)
+				nextCall(t, calls)
+			}
+			require.Equal(t, 11*time.Minute+test.late-test.early, clock.Now().Sub(time.Unix(0, 0)),
+				"unequal bounds shift the mean wait by (late - early) / 2")
+		})
+	}
+}
+
+func TestInvalidJitterCannotCreateImmediateLoopsOrOverflow(t *testing.T) {
+	for _, jitter := range []Jitter{
+		{Early: -time.Second},
+		{Late: -time.Second},
+		{Early: 5 * time.Minute},
+		{Early: 6 * time.Minute},
+		{Late: time.Duration(1<<63 - 1)},
+	} {
+		job, err := Start(logmocks.NewMockLog(), func() {}, 5, 0, jitter)
+		require.Error(t, err)
+		require.Nil(t, job)
 	}
 }

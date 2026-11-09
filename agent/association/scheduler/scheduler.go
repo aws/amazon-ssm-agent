@@ -17,6 +17,7 @@ package scheduler
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/polling"
 )
@@ -26,8 +27,11 @@ type Job = polling.Job
 
 // CreateScheduler preserves initial discovery within 30 seconds, then spreads
 // recurring polls across the configured interval with fresh jitter on each wait.
-func CreateScheduler(log log.T, task func(), frequencyInMinutes int) (*Job, error) {
-	return polling.Start(log, task, frequencyInMinutes, 30*time.Second)
+func CreateScheduler(log log.T, task func(), config appconfig.SsmCfg) (*Job, error) {
+	return polling.Start(log, task, config.AssociationFrequencyMinutes, 30*time.Second, polling.Jitter{
+		Early: time.Duration(config.PollingJitterEarlySeconds) * time.Second,
+		Late:  time.Duration(config.PollingJitterLateSeconds) * time.Second,
+	})
 }
 
 // Stop cancels future polls while allowing an active poll to finish.

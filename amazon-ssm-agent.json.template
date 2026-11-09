@@ -16,6 +16,8 @@
         "Endpoint": "",
         "HealthFrequencyMinutes": 5,
         "AssociationFrequencyMinutes": 10,
+        "PollingJitterEarlySeconds": 5,
+        "PollingJitterLateSeconds": 5,
         "CustomInventoryDefaultLocation" : "",
         "HibernationMaxBackoffIntervalMinutes" : 60,
         "AssociationLogsRetentionDurationHours" : 24,

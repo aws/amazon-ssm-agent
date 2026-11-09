@@ -111,6 +111,8 @@ func DefaultConfig() SsmagentConfig {
 	ssm := SsmCfg{
 		HealthFrequencyMinutes:                DefaultSsmHealthFrequencyMinutes,
 		AssociationFrequencyMinutes:           DefaultSsmAssociationFrequencyMinutes,
+		PollingJitterEarlySeconds:             DefaultSsmPollingJitterEarlySeconds,
+		PollingJitterLateSeconds:              DefaultSsmPollingJitterLateSeconds,
 		AssociationRetryLimit:                 5,
 		CustomInventoryDefaultLocation:        DefaultCustomInventoryFolder,
 		HibernationMaxBackoffIntervalMinutes:  DefaultHibernationMaxBackoffIntervalMinutes,

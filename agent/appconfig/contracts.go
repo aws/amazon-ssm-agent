@@ -37,6 +37,8 @@ type SsmCfg struct {
 	Endpoint                       string
 	HealthFrequencyMinutes         int
 	AssociationFrequencyMinutes    int
+	PollingJitterEarlySeconds      int
+	PollingJitterLateSeconds       int
 	AssociationRetryLimit          int
 	CustomInventoryDefaultLocation string
 	// Max back off interval minutes for agent hibernation

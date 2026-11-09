@@ -17,6 +17,7 @@ package health
 import (
 	"runtime/debug"
 	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -161,7 +162,11 @@ func (h *HealthCheck) scheduleUpdateHealth() error {
 	}
 	// Report health promptly, then spread the first recurring report across the
 	// interval and draw fresh jitter after every subsequent report completes.
-	job, err := polling.Start(h.context.Log(), h.updateHealth, h.scheduleInMinutes(), 0)
+	config := h.context.AppConfig().Ssm
+	job, err := polling.Start(h.context.Log(), h.updateHealth, h.scheduleInMinutes(), 0, polling.Jitter{
+		Early: time.Duration(config.PollingJitterEarlySeconds) * time.Second,
+		Late:  time.Duration(config.PollingJitterLateSeconds) * time.Second,
+	})
 	if err != nil {
 		h.context.Log().Errorf("unable to schedule health update. %v", err)
 		return err

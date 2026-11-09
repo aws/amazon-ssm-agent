@@ -21,13 +21,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCreatingAndStoppingScheduler(t *testing.T) {
 	context := context.NewMockDefault()
-	job, err := CreateScheduler(context.Log(), func() {}, 10)
+	job, err := CreateScheduler(context.Log(), func() {}, appconfig.DefaultConfig().Ssm)
 	require.NoError(t, err)
 	t.Cleanup(func() { Stop(job) })
 	Stop(job)

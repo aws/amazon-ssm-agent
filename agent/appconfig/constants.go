@@ -66,6 +66,11 @@ const (
 	DefaultSsmAssociationFrequencyMinutesMin = 5
 	DefaultSsmAssociationFrequencyMinutesMax = 60
 
+	DefaultSsmPollingJitterEarlySeconds = 5
+	DefaultSsmPollingJitterLateSeconds  = 5
+	DefaultSsmPollingJitterSecondsMin   = 0
+	DefaultSsmPollingJitterSecondsMax   = 60
+
 	DefaultSsmSelfUpdateFrequencyDays    = 7
 	DefaultSsmSelfUpdateFrequencyDaysMin = 1 // Minimum frequency is 1 day
 	DefaultSsmSelfUpdateFrequencyDaysMax = 7 // Maximum frequency is 7 day

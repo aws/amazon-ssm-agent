@@ -186,16 +186,25 @@ To set up your own custom configuration for the agent:
         * Default: 15
 * Ssm - represents configuration for Simple Systems Manager (SSM)
     * Endpoint (string)
-    * HealthFrequencyMinutes (int) - Mean wait for periodic `UpdateInstanceInformation` health reports. The initial report runs immediately. After it completes, the first recurring report is delayed by a random amount up to this interval. Every later wait adds fresh random jitter from -15 to +15 seconds, allowing agents to spread out over time without increasing the steady average polling rate (4 minutes 45 seconds to 5 minutes 15 seconds at the default; 11 minutes 45 seconds to 12 minutes 15 seconds with a 12-minute setting). Waits start after each report completes, so slow reports never overlap or catch up in a burst.
+    * HealthFrequencyMinutes (int) - Base interval for periodic `UpdateInstanceInformation` health reports. The initial report runs immediately. After it completes, the first recurring report is delayed by a random amount up to this interval. Later waits use the shared polling jitter settings below (4 minutes 55 seconds to 5 minutes 5 seconds with defaults; 11 minutes 55 seconds to 12 minutes 5 seconds with a 12-minute interval).
         * Default: 5
         * Min: 5
         * Max: 60
         * Requires an agent restart. Invalid values revert to the default. This controls periodic health reports; credential checks, service-availability probes, and SDK retries retain their existing behavior.
-    * AssociationFrequencyMinutes (int) - Mean wait for recurring State Manager discovery polls. Initial discovery retains a random delay of less than 30 seconds. After it completes, the first recurring poll is delayed by a random amount up to this interval. Every later wait adds fresh random jitter from -15 to +15 seconds, allowing agents to spread out over time without increasing the steady average polling rate (9 minutes 45 seconds to 10 minutes 15 seconds at the default). Waits start after each poll completes, so slow polls never overlap or catch up in a burst.
+    * AssociationFrequencyMinutes (int) - Base interval for recurring State Manager discovery polls. Initial discovery retains a random delay of less than 30 seconds. After it completes, the first recurring poll is delayed by a random amount up to this interval. Later waits use the shared polling jitter settings below (9 minutes 55 seconds to 10 minutes 5 seconds with defaults).
         * Default: 10
         * Min: 5
         * Max: 60
         * Requires an agent restart. This controls discovery polling, not association document execution schedules. Zero does not disable associations; invalid values revert to the default.
+    * PollingJitterEarlySeconds (int) - Maximum seconds by which a recurring wait can be shorter than its configured interval. Applies to both association discovery and periodic health reporting.
+        * Default: 5
+        * Min: 0
+        * Max: 60
+    * PollingJitterLateSeconds (int) - Maximum seconds by which a recurring wait can be longer than its configured interval. Applies to both association discovery and periodic health reporting.
+        * Default: 5
+        * Min: 0
+        * Max: 60
+        * Both jitter settings require an agent restart. Each invalid bound independently reverts to its default; explicit zero is supported. Every steady recurring wait is uniformly sampled from `[interval - early, interval + late]`, with mean `interval + (late - early) / 2`. Equal bounds preserve the configured mean; keep `late >= early` to avoid increasing the steady average polling rate. For example, early `0` / late `5` only adds delay. Setting both to `0` disables recurring jitter while retaining the full-interval first recurring spread. Waits start after each call completes, adding request execution time and preventing overlapping calls or catch-up bursts.
     * CustomInventoryDefaultLocation (string)
     * AssociationLogsRetentionDurationHours (int)
         * Default: 24
