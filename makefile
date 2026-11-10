@@ -217,6 +217,24 @@ build-arm64: GOARCH=arm64
 build-arm64: GO_BUILD=$(GO_BUILD_NOPIE)
 build-arm64: build-any-linux-arm64
 
+# Production-style linux/arm64 build (static PIE, external linker).
+# The static PIE link embeds the build host's libc.a in every binary, so the
+# libc must target the ARMv8.0 baseline (e.g. Debian trixie). Linking against
+# a glibc built for ARMv8.1+ (e.g. Amazon Linux 2023) emits LSE atomics
+# (casa/swpl) with no runtime check, and the agent dies with SIGILL on
+# Cortex-A53/A72 (Raspberry Pi 3/4, EC2 A1). See aws/amazon-ssm-agent#683.
+.PHONY: build-arm64-static-pie
+build-arm64-static-pie: GOOS=linux
+build-arm64-static-pie: GOARCH=arm64
+build-arm64-static-pie: GO_BUILD=GOARM64=v8.0 CGO_ENABLED=1 $(GO_BUILD_STATIC_PIE)
+build-arm64-static-pie: build-any-linux-arm64
+
+# Fails if any linux/arm64 binary cannot start on an ARMv8.0 CPU (no LSE).
+# Runs each binary under qemu-user emulating a Cortex-A53.
+.PHONY: verify-arm64-baseline
+verify-arm64-baseline:
+	$(GO_SPACE)/Tools/src/verify_arm64_baseline.sh $(GO_SPACE)/bin/linux_arm64
+
 .PHONY: copy-src
 copy-src:
 	rm -rf $(GOTEMPCOPYPATH)
