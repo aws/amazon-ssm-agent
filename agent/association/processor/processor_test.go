@@ -26,6 +26,7 @@ import (
 	complianceUploader "github.com/aws/amazon-ssm-agent/agent/association/mocks/uploader"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
+	assocScheduler "github.com/aws/amazon-ssm-agent/agent/association/scheduler"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	processormock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
@@ -33,14 +34,13 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
-	"github.com/carlescere/scheduler"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestSetJob(t *testing.T) {
 	processor := Processor{}
-	job := scheduler.Job{}
+	job := assocScheduler.Job{}
 
 	processor.SetPollJob(&job)
 

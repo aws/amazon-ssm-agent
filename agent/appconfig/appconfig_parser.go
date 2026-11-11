@@ -109,6 +109,16 @@ func parser(config *SsmagentConfig) {
 		DefaultSsmAssociationFrequencyMinutesMin,
 		DefaultSsmAssociationFrequencyMinutesMax,
 		DefaultSsmAssociationFrequencyMinutes)
+	config.Ssm.PollingJitterEarlySeconds = getNumericValue(
+		config.Ssm.PollingJitterEarlySeconds,
+		DefaultSsmPollingJitterSecondsMin,
+		DefaultSsmPollingJitterSecondsMax,
+		DefaultSsmPollingJitterEarlySeconds)
+	config.Ssm.PollingJitterLateSeconds = getNumericValue(
+		config.Ssm.PollingJitterLateSeconds,
+		DefaultSsmPollingJitterSecondsMin,
+		DefaultSsmPollingJitterSecondsMax,
+		DefaultSsmPollingJitterLateSeconds)
 	config.Ssm.HibernationMaxBackoffIntervalMinutes = getNumericValue(
 		config.Ssm.HibernationMaxBackoffIntervalMinutes,
 		DefaultHibernationMaxBackoffIntervalMinutesMin,

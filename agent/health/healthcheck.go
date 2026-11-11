@@ -15,14 +15,15 @@
 package health
 
 import (
-	"math/rand"
 	"runtime/debug"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/aws/amazon-ssm-agent/agent/polling"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/ssmconnectionchannel"
@@ -33,8 +34,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/googlecloud"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
-
-	"github.com/carlescere/scheduler"
 )
 
 type IHealthCheck interface {
@@ -48,7 +47,8 @@ type IHealthCheck interface {
 type HealthCheck struct {
 	context               context.T
 	healthCheckStopPolicy *sdkutil.StopPolicy
-	healthJob             *scheduler.Job
+	healthJob             *polling.Job
+	healthJobMutex        sync.Mutex
 	service               ssm.Service
 }
 
@@ -150,11 +150,29 @@ func NewHealthCheck(context context.T, svc ssm.Service) *HealthCheck {
 }
 
 // schedules recurrent updateHealth calls
-func (h *HealthCheck) scheduleUpdateHealth() {
-	var err error
-	if h.healthJob, err = scheduler.Every(h.scheduleInMinutes()).Minutes().Run(h.updateHealth); err != nil {
-		h.context.Log().Errorf("unable to schedule health update. %v", err)
+func (h *HealthCheck) scheduleUpdateHealth() error {
+	h.healthJobMutex.Lock()
+	defer h.healthJobMutex.Unlock()
+	if h.healthJob != nil {
+		select {
+		case <-h.healthJob.Done():
+		default:
+			return nil
+		}
 	}
+	// Report health promptly, then spread the first recurring report across the
+	// interval and draw fresh jitter after every subsequent report completes.
+	config := h.context.AppConfig().Ssm
+	job, err := polling.Start(h.context.Log(), h.updateHealth, h.scheduleInMinutes(), 0, polling.Jitter{
+		Early: time.Duration(config.PollingJitterEarlySeconds) * time.Second,
+		Late:  time.Duration(config.PollingJitterLateSeconds) * time.Second,
+	})
+	if err != nil {
+		h.context.Log().Errorf("unable to schedule health update. %v", err)
+		return err
+	}
+	h.healthJob = job
+	return nil
 }
 
 // updates SSM with the instance health information
@@ -296,31 +314,16 @@ func (h *HealthCheck) ModuleExecute() (err error) {
 			h.context.Log().Errorf("health check ModuleExecute run panic: %v", msg)
 		}
 	}()
-	rand.Seed(time.Now().UTC().UnixNano())
-	scheduleInMinutes := h.scheduleInMinutes()
-
-	randomSeconds := rand.Intn(scheduleInMinutes * 60)
-
-	// First call updateHealth once
-	go h.updateHealth()
-
-	// Wait randomSeconds and schedule recurrent updateHealth calls
-	next := time.Duration(randomSeconds) * time.Second
-	go func(h *HealthCheck) {
-		select {
-		case <-time.After(next):
-			go h.scheduleUpdateHealth()
-		}
-	}(h)
-
-	return
+	return h.scheduleUpdateHealth()
 }
 
 // ModuleStop handles the termination of the health check module job
 func (h *HealthCheck) ModuleStop() (err error) {
+	h.healthJobMutex.Lock()
+	defer h.healthJobMutex.Unlock()
 	if h.healthJob != nil {
 		h.context.Log().Info("stopping update instance health job.")
-		h.healthJob.Quit <- true
+		h.healthJob.Stop()
 	}
 	return nil
 }

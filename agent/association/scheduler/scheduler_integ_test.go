@@ -21,29 +21,20 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/mocks/context"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-var pollCalls int = 0
-
-func TestCreatingScheduler(t *testing.T) {
+func TestCreatingAndStoppingScheduler(t *testing.T) {
 	context := context.NewMockDefault()
-	//override sleepMilli so it will not sleep before the poll
-	sleepMilli = func(pollStartTime time.Time, sleepDurationInMilliseconds int) {}
-	var testPollFrequencyInMinutes = 10
-
-	job, err := CreateScheduler(context.Log(), incrementPollCalls, testPollFrequencyInMinutes)
-	if err != nil {
-		time.Sleep(100 * time.Millisecond)
-		assert.True(t, pollCalls == 1)
-
-		ScheduleNextRun(job)
-		time.Sleep(100 * time.Millisecond)
-		assert.True(t, pollCalls == 2)
+	job, err := CreateScheduler(context.Log(), func() {}, appconfig.DefaultConfig().Ssm)
+	require.NoError(t, err)
+	t.Cleanup(func() { Stop(job) })
+	Stop(job)
+	select {
+	case <-job.Done():
+	case <-time.After(time.Second):
+		t.Fatal("scheduler did not stop during its delay")
 	}
-}
-
-func incrementPollCalls() {
-	pollCalls++
 }

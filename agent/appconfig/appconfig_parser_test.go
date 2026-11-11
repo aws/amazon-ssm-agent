@@ -14,6 +14,7 @@
 package appconfig
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -22,6 +23,35 @@ import (
 
 	"github.com/stretchr/testify/assert"
 )
+
+func TestPollingJitterConfigOverrides(t *testing.T) {
+	for _, test := range []struct {
+		name        string
+		json        string
+		early, late int
+	}{
+		{"older config", `{"Ssm":{"HealthFrequencyMinutes":12}}`, 5, 5},
+		{"early disabled", `{"Ssm":{"PollingJitterEarlySeconds":0}}`, 0, 5},
+		{"late disabled", `{"Ssm":{"PollingJitterLateSeconds":0}}`, 5, 0},
+		{"both disabled", `{"Ssm":{"PollingJitterEarlySeconds":0,"PollingJitterLateSeconds":0}}`, 0, 0},
+		{"independent bounds", `{"Ssm":{"PollingJitterEarlySeconds":2,"PollingJitterLateSeconds":9}}`, 2, 9},
+		{"maximum bounds", `{"Ssm":{"PollingJitterEarlySeconds":60,"PollingJitterLateSeconds":60}}`, 60, 60},
+		{"negative early", `{"Ssm":{"PollingJitterEarlySeconds":-1,"PollingJitterLateSeconds":9}}`, 5, 9},
+		{"excessive early", `{"Ssm":{"PollingJitterEarlySeconds":61,"PollingJitterLateSeconds":0}}`, 5, 0},
+		{"negative late", `{"Ssm":{"PollingJitterEarlySeconds":8,"PollingJitterLateSeconds":-1}}`, 8, 5},
+		{"excessive late", `{"Ssm":{"PollingJitterEarlySeconds":0,"PollingJitterLateSeconds":61}}`, 0, 5},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			config := DefaultConfig()
+			if !assert.NoError(t, json.Unmarshal([]byte(test.json), &config)) {
+				return
+			}
+			parser(&config)
+			assert.Equal(t, test.early, config.Ssm.PollingJitterEarlySeconds)
+			assert.Equal(t, test.late, config.Ssm.PollingJitterLateSeconds)
+		})
+	}
+}
 
 // getStringValue Tests
 
